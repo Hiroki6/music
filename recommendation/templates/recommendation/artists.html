@@ -1,0 +1,21 @@
+{% extends 'bases/base.html' %}
+
+{% block title %}アーティスト一覧{% endblock title %}
+
+{% block main %}
+
+<h2>アーティスト一覧({{ artist_number }})</h2>
+<div class = "artist-search">
+  {% for string in initial_strings %}
+    <a href="/recommendation/artists/{{ string }}">{{ string }}</a>
+  {% endfor %}
+</div>
+<div id = "main">
+  <div class = "clearfix">
+    {% for artist in artists %}
+    <a href="/recommendation/artist/{{ artist.id }}" class = "artist_name">{{ artist.name }}</a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock main %}
+

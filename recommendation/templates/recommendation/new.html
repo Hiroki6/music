@@ -1,0 +1,9 @@
+
+{% block title %}ユーザー作成{% endblock title %}
+
+  <p>{{ error_msg }}</p>
+  <form action="/recommendation/new/" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type = "submit" value = "ユーザーを登録する" />
+  </form>
