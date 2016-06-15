@@ -140,3 +140,44 @@ select option::selection{
 .user-link, .artist-list, .search{
   margin: 0 5px;
 }
+
+.like-form{
+  display: inline;
+}
+
+.song-info{
+  float: left;
+  margin: 5px 0 0;
+}
+
+.preference-button{
+  background-color: #f0ffff;
+  border: none;
+  font-size: 18px;
+  margin-left: 10px;
+}
+
+.like-button{
+  color: #FC9DA5;
+}
+
+.like-button:hover{
+  color: #EA4256;
+}
+
+.erase-button{
+  color: #52a2c5;
+}
+
+.erase-button:hover{
+  color: #2860a3;
+}
+
+.logout{
+  float: right;
+  color: #ffffe0;
+}
+
+.logout:hover{
+  color: #f0e68c;
+}

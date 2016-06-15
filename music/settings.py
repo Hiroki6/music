@@ -136,3 +136,5 @@ STATICFILES_DIRS = (
         )
 
 LOGIN_REDIRECT_URL = '/recommendation/'
+
+APPEND_SLASH = False

@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^artists/(?P<init_string>\w+)$', views.artists_initial, name = 'artists_initial'),
     url(r'^artist/(?P<artist_id>\d+)/$', views.artist, name = 'artist'),
     url(r'^user/$', views.user, name = 'user'),
+    url(r'^recommend_song/$', views.recommend_song, name = 'recommend_song'),
     ]

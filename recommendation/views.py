@@ -13,14 +13,23 @@ from django.contrib.auth.models import User
 
 initial_strings = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 # Create your views here.
+# @login_required
+# def index(request):
+#     songs = Song.objects.all()[:5]
+#     feedbacks = ["calm", "tense", "aggressive", "lively", "peaceful"]
+#     template = loader.get_template('recommendation/index.html')
+#     context = Context({'songs': songs}, {'feedbacks': feedbacks})
+#     return render(request, 'recommendation/index.html', {'songs': songs, 'feedbacks': feedbacks, 'feedback_loop': range(2), 'user': request.user})
+    #return HttpResponse(template.render(context))
 @login_required
 def index(request):
-    songs = Song.objects.all()[:5]
-    feedbacks = ["calm", "tense", "aggressive", "lively", "peaceful"]
-    template = loader.get_template('recommendation/index.html')
-    context = Context({'songs': songs}, {'feedbacks': feedbacks})
-    return render(request, 'recommendation/index.html', {'songs': songs, 'feedbacks': feedbacks, 'feedback_loop': range(2), 'user': request.user})
-    #return HttpResponse(template.render(context))
+    if request.method == 'POST':
+        song_id = request.POST['song_id']
+        Preference.objects.filter(user_id=request.user.id, song_id=song_id).delete()
+    user = request.user
+    user_id = user.id
+    results = Preference.objects.filter(user=user_id)
+    return render(request, 'recommendation/index.html', {'user': user, 'results': results})
 
 # フィードバック
 @login_required
@@ -38,6 +47,16 @@ def search(request):
     results = []
     artist = ""
     song = ""
+    if request.method == 'POST':
+        like_type = request.POST['like_type']
+        if like_type == "1":
+            song_id = request.POST['song_id']
+            song = Preference(user_id=request.user.id, song_id=song_id)
+            song.save()
+        else:
+            song_id = request.POST['song_id']
+            Preference.objects.filter(user_id=request.user.id, song_id=song_id).delete()
+        return redirect('/recommendation/search/')
     if request.method == 'GET':
         form = MusicSearchForm(request.GET)
         if form.data.has_key('artist') and form.data.has_key('song'):
@@ -61,7 +80,8 @@ def search(request):
     else:
         form = MusicSearchForm()
     is_result = True if len(results) == 0 else False
-    return render(request, 'recommendation/search.html', {'form': form, 'artist': artist, 'song': song, 'results': results, 'is_result': is_result, 'user': request.user})
+    songs = get_user_preference(request.user.id)
+    return render(request, 'recommendation/search.html', {'form': form, 'artist': artist, 'song': song, 'results': results, 'is_result': is_result, 'user': request.user, 'songs': songs})
 
 # アーティスト一覧
 @login_required
@@ -73,8 +93,19 @@ def artists(request):
 # アーティストごとの楽曲
 @login_required
 def artist(request, artist_id):
+    if request.method == 'POST':
+        like_type = request.POST['like_type']
+        if like_type == "1":
+            song_id = request.POST['song_id']
+            song = Preference(user_id=request.user.id, song_id=song_id)
+            song.save()
+        else:
+            song_id = request.POST['song_id']
+            Preference.objects.filter(user_id=request.user.id, song_id=song_id).delete()
+        return redirect('/recommendation/artist/'+artist_id+"/")
+    songs = get_user_preference(request.user.id)
     results = Song.objects.filter(artist__id=artist_id)
-    return render(request, 'recommendation/artist.html', {'results': results, 'user': request.user})
+    return render(request, 'recommendation/artist.html', {'results': results, 'user': request.user, 'songs': songs})
 
 # 指定した頭文字から始まるアーティスト名
 @login_required
@@ -109,3 +140,28 @@ def user(request):
     result = Preference.objects.filter(user=user_id)
     return render(request, 'recommendation/user.html', {'user': user})
 
+"""
+この部分でFMを使う
+"""
+@login_required
+def recommend_song(request):
+    user = request.user
+    songs = get_user_not_listening_songs(user.id)
+    return render(request, 'recommendation/recommend_song.html', {'user': user, 'songs': songs[:10]})
+
+# そのユーザーの好みの楽曲リスト取得
+def get_user_preference(user_id):
+
+    songs = []
+    preferences = Preference.objects.filter(user_id=user_id)
+    for preference in preferences:
+        songs.append(preference.song_id)
+
+    return songs
+
+# ユーザーがまだ聞いていない楽曲のリスト取得
+def get_user_not_listening_songs(user_id):
+
+    listening_songs = get_user_preference(user_id)
+    songs = Song.objects.exclude(id__in=listening_songs)
+    return songs

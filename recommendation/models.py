@@ -26,3 +26,12 @@ class Song(models.Model):
 class Preference(models.Model):
     user = models.ForeignKey(User)
     song = models.ForeignKey(Song)
+
+class MusicCluster(models.Model):
+    song = models.ForeignKey(Song)
+    aggressive = models.FloatField
+    calm = models.FloatField
+    lively = models.FloatField
+    peaceful = models.FloatField
+    tense = models.FloatField
+

@@ -1,27 +1,20 @@
 {% extends 'bases/base.html' %}
 
-{% block title %}音楽探索システム{% endblock title %}
+{% block title %}{{ user.username }}{% endblock title %}
 
 {% block main %}
-<div id = "main">
-{% for song in songs %}
+<h2>好みの楽曲</h2>
+{% for song in results %}
   <div class = "content">
-    <iframe width = "420" height = "315" src = "https://www.youtube.com/embed/{{ song.url }}" frameborder="0" allowfullscreen></iframe>
-    <p class = "song-info">{{ song.artist.name }} / {{ song.name }}</p>
-    <form action=" url 'recommendation:feedback' %}" method="post">
-    {% csrf_token %}
-    <select name="example" size="1">
-      <option value="default">フィードバック</option>
-      {% for i in feedback_loop %}
-        {% for feedback in feedbacks %}
-        <option value="{{ i }}{{ feedback }}">{% if i == 0 %}&uarr; {% else %}&darr; {% endif %} {{ feedback }}</option>
-        {% endfor %}
-      {% endfor %}
-    </select>
-    <input type="submit" value="送信">
-    </form>
-    <a>アーティスト一覧へ</a>
-  </div>
+      <iframe width = "420" height = "315" src = "https://www.youtube.com/embed/{{ song.song.url }}" frameborder="0" allowfullscreen></iframe>
+      <p class = "song-info">{{ song.song.artist.name }} / {{ song.song.name }}</p>
+      <form class = "like-form" name = "like" method = "POST" action = "/recommendation/">
+        {% csrf_token %}
+        <button class = "preference-button erase-button" type = "submit" name = "song_id" value = {{song.song_id}}>
+          取り消す
+        </button>
+      </form>
+    </div>
 {% endfor %}
-</div>
 {% endblock main %}
+

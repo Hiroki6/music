@@ -7,6 +7,21 @@
     <div class = "content">
       <iframe width = "420" height = "315" src = "https://www.youtube.com/embed/{{ song.url }}" frameborder="0" allowfullscreen></iframe>
       <p class = "song-info">{{ song.artist.name }} / {{ song.name }}</p>
+      <!--<a href = "" class = "like-button">like <i class="fa fa-thumbs-o-up" hidden="true"></i></a>-->
+      <form class = "like-form" name = "like" method = "POST" action = "/recommendation/artist/{{ song.artist.id }}/">
+        {% csrf_token %}
+        {% if song.id not in songs %}
+        <input type = "hidden" name = "like_type" value = 1>
+        <button class = "preference-button like-button" type = "submit" name = "song_id" value = {{song.id}}>
+          like <i class="fa fa-thumbs-o-up" hidden="true"></i>
+        </button>
+        {% else %}
+        <input type = "hidden" name = "like_type" value = 0>
+        <button class = "preference-button erase-button" type = "submit" name = "song_id" value = {{song.id}}>
+          取り消す
+        </button>
+        {% endif %}
+      </form>
     </div>
   {% endfor %}
 </div>
