@@ -147,7 +147,8 @@ def user(request):
 def recommend_song(request):
     user = request.user
     songs = get_user_not_listening_songs(user.id)
-    return render(request, 'recommendation/recommend_song.html', {'user': user, 'songs': songs[:10]})
+    feedback_dict = get_feedback_dict()
+    return render(request, 'recommendation/recommend_song.html', {'user': user, 'songs': songs[:10], 'feedback_dict': feedback_dict})
 
 # そのユーザーの好みの楽曲リスト取得
 def get_user_preference(user_id):
@@ -165,3 +166,14 @@ def get_user_not_listening_songs(user_id):
     listening_songs = get_user_preference(user_id)
     songs = Song.objects.exclude(id__in=listening_songs)
     return songs
+
+def get_feedback_dict():
+
+    feedbacks = ["calm", "tense", "aggressive", "lively", "peaceful"]
+    feedback_dict = {}
+    for i in xrange(2):
+        for index, feedback in enumerate(feedbacks):
+            key = i * 5 + index
+            feedback_dict[key] = feedback
+
+    return feedback_dict

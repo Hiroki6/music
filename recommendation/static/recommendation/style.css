@@ -11,7 +11,7 @@ a:hover{
   cursor: pointer;
 }
 
-#main{
+.main{
   width: 85%;
   margin-left: auto;
   margin-right: auto;
@@ -50,11 +50,15 @@ select{
   background-color: #fff;
   height: 30px;
   font-weight: bold;
-  font-size: 80%;
+  font-size: 100%;
+  position: absolute;
+  bottom: 0;
+  right: 30px;
 }
 
 
 .content{
+  position: relative;
   margin: 10px;
   width: 450px;
   float: left;
@@ -176,6 +180,7 @@ select option::selection{
 .logout{
   float: right;
   color: #ffffe0;
+  margin-right: 10px;
 }
 
 .logout:hover{
