@@ -93,6 +93,7 @@ def artists(request):
 # アーティストごとの楽曲
 @login_required
 def artist(request, artist_id):
+    page = 0
     if request.method == 'POST':
         like_type = request.POST['like_type']
         if like_type == "1":
@@ -103,8 +104,15 @@ def artist(request, artist_id):
             song_id = request.POST['song_id']
             Preference.objects.filter(user_id=request.user.id, song_id=song_id).delete()
         return redirect('/recommendation/artist/'+artist_id+"/")
+    # elif request.method == 'GET':
+    #     page = request.GET['page']
+    page *= 10
     songs = get_user_preference(request.user.id)
     results = Song.objects.filter(artist__id=artist_id)
+    if len(results) >= page+10:
+        results = results[page:page+10]
+    else:
+        results = results[page:]
     return render(request, 'recommendation/artist.html', {'results': results, 'user': request.user, 'songs': songs})
 
 # 指定した頭文字から始まるアーティスト名
