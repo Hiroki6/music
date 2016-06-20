@@ -10,6 +10,9 @@ from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from django.core.context_processors import csrf
 from django.contrib.auth.models import User
+import recommendlib
+import sys
+sys.dont_write_bytecode = True 
 
 initial_strings = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 # Create your views here.
@@ -154,9 +157,11 @@ def user(request):
 @login_required
 def recommend_song(request):
     user = request.user
-    songs = get_user_not_listening_songs(user.id)
+    rm_obj = recommendlib.create_recommend_obj(user.id, 16)
+    song = rm_obj.get_top_song_cython()
+    #songs = get_user_not_listening_songs(user.id)
     feedback_dict = get_feedback_dict()
-    return render(request, 'recommendation/recommend_song.html', {'user': user, 'songs': songs[:10], 'feedback_dict': feedback_dict})
+    return render(request, 'recommendation/recommend_song.html', {'user': user, 'song': song, 'feedback_dict': feedback_dict})
 
 # そのユーザーの好みの楽曲リスト取得
 def get_user_preference(user_id):

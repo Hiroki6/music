@@ -3,6 +3,7 @@
 import numpy as np
 cimport numpy as np
 cimport cython
+import sys
 
 np.import_array()
 
@@ -83,4 +84,22 @@ cdef class CyRecommendFm:
         python側から呼び出せる回帰予測結果取得
         """
         return self._calc_rating(matrix)
+    
+    def get_top_song(self, np.ndarray[DOUBLE, ndim=2, mode="c"] matrixes, np.ndarray[INTEGER, ndim=1, mode="c"] songs):
 
+        cdef:
+            double top_value = -sys.maxint
+            np.ndarray top_matrix = matrixes[0]
+            int top_song = songs[0]
+            np.ndarray matrix
+            int song
+            double predict_value
+
+        for matrix, song in zip(matrixes, songs):
+            predict_value = self.predict(matrix)
+            if top_value < predict_value:
+                top_value = predict_value
+                top_matrix = matrix
+                top_song = song
+
+        return top_song

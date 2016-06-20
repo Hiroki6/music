@@ -1,7 +1,8 @@
 # -*- coding:utf-8 -*-
 import sys
 sys.dont_write_bytecode = True 
-from Recommend import recommend
+import recommend
+from .models import *
 
 def create_recommend_obj(user, K):
 
@@ -10,8 +11,8 @@ def create_recommend_obj(user, K):
 
 def get_top_song(rm_obj):
 
-    top_value, top_song, top_matrix = rm_obj.get_top_song()
-    return top_value, top_song, top_matrix
+    top_song = rm_obj.get_top_song()
+    return top_song
 
 def get_rankings(rm_obj, rank):
 
