@@ -106,14 +106,14 @@ def artist(request, artist_id):
         return redirect('/recommendation/artist/'+artist_id+"/")
     # elif request.method == 'GET':
     #     page = request.GET['page']
-    page *= 10
+    index = page * 10
     songs = get_user_preference(request.user.id)
     results = Song.objects.filter(artist__id=artist_id)
-    if len(results) >= page+10:
-        results = results[page:page+10]
+    if len(results) >= index+10:
+        results = results[index:index+10]
     else:
-        results = results[page:]
-    return render(request, 'recommendation/artist.html', {'results': results, 'user': request.user, 'songs': songs})
+        results = results[index:]
+    return render(request, 'recommendation/artist.html', {'results': results, 'user': request.user, 'songs': songs, 'artist': artist_id, 'page': page})
 
 # 指定した頭文字から始まるアーティスト名
 @login_required
