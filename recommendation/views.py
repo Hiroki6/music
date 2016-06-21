@@ -158,10 +158,10 @@ def user(request):
 def recommend_song(request):
     user = request.user
     rm_obj = recommendlib.create_recommend_obj(user.id, 16)
-    song = rm_obj.get_top_song_cython()
+    songs = rm_obj.get_top_song_cython()
     #songs = get_user_not_listening_songs(user.id)
     feedback_dict = get_feedback_dict()
-    return render(request, 'recommendation/recommend_song.html', {'user': user, 'song': song, 'feedback_dict': feedback_dict})
+    return render(request, 'recommendation/recommend_song.html', {'user': user, 'songs': songs, 'feedback_dict': feedback_dict})
 
 # そのユーザーの好みの楽曲リスト取得
 def get_user_preference(user_id):
