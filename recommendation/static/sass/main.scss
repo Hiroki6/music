@@ -1,0 +1,151 @@
+html, body{
+  margin: 0;
+}
+
+* html .clearfix{
+    height: 1%;
+}
+
+body{
+  background-color: #f0ffff;
+  header{
+    background-color: #000;
+    padding: 10px;
+    h1{
+      color: #fff;
+    }
+    .search{
+      color: #7fffd4;
+      &:hover{
+        color: #66cc99;
+      }
+    }
+    .artist-list{
+      color: #ffc0cb;
+      &:hover{
+        color: #cc99cc;
+      }
+    }
+    .artist-list, .search{
+      margin: 0 5px;
+    }
+    .logout{
+      float: right;
+      color: #ffffe0;
+      margin-right: 10px;
+      &:hover{
+        color: #f0e68c;
+      }
+    }
+  }
+  .clearfix{
+    display:inline-table;
+    display:block;
+    &:after{
+      content: "."; 
+      display: block; 
+      height: 0; 
+      font-size: 0;	
+      clear: both; 
+      visibility: hidden;
+    }
+  }
+  a{
+    &:hover{
+      text-decoration: none;
+      cursor: pointer;
+    }
+  }
+  .artist-search{
+    margin: 5px 0;
+  }
+  .search-form{
+    margin: 10px;
+    border: solid 3px #0000cd;
+    display: inline-block;
+    padding: 5px;
+    border-radius: 10px;
+  }
+  .main{
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    select{
+      border: none;
+      background-color: #fff;
+      height: 30px;
+      font-weight: bold;
+      font-size: 100%;
+      position: absolute;
+      bottom: 0;
+      right: 30px;
+      option{
+        background-color: #fff;
+        color: #00bfff;
+        padding: 5px;
+        border-radius: 5px;
+        text-align: center;
+        float: left;
+        margin: 2px;
+        &:hover{
+          color: #fff;
+          background-color: #00bfff;
+        }
+        &::selection{
+          color: #fff !important;
+          background-color: #00bfff !important;
+        }
+      }
+    }
+    .content{
+      position: relative;
+      margin: 10px;
+      width: 450px;
+      float: left;
+      position: relative;
+      input{
+        margin-left: 20px;
+        background-color: #00bfff;
+        border-radius: 5px;
+        border: none;
+        color: #fff;
+      }
+      .like-form{
+        display: inline;
+        .preference-button{
+          background-color: #f0ffff;
+          border: none;
+          font-size: 18px;
+          margin-left: 10px;
+        }
+        .like-button{
+          color: #FC9DA5;
+          &:hover{
+            color: #EA4256;
+          }
+        }
+        .erase-button{
+          color: #52a2c5;
+          &:hover{
+            color: #2860a3;
+          }
+        }
+      }
+      .song-info{
+        float: left;
+        margin: 5px 0 0;
+      }
+    }
+    .artist-name{
+      margin: 10px 0;
+      float: left;
+      width: 450px;
+      font-size: 20px;
+      color: #000;
+      &:hover{
+        color: #ffc0cb;
+      }
+    }
+  }
+}

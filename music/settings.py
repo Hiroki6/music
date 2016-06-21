@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sass_processor'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -138,3 +139,5 @@ STATICFILES_DIRS = (
 LOGIN_REDIRECT_URL = '/recommendation/'
 
 APPEND_SLASH = False
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'recommendation', 'static')
