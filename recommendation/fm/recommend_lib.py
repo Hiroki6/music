@@ -2,7 +2,6 @@
 import sys
 sys.dont_write_bytecode = True 
 import recommend
-from .models import *
 
 def create_recommend_obj(user, K):
 

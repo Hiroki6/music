@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.feature_extraction import DictVectorizer
 import random
 import MySQLdb
-from .models import *
+from .. import models
 import sys
 sys.dont_write_bytecode = True 
 from django.contrib.auth.models import User
@@ -20,7 +20,7 @@ def get_user_map():
 
     user_map = {}
     idx = 0
-    for line in open(os.path.join(BASE, "data/user.csv")):
+    for line in open(os.path.join(BASE, "../data/user.csv")):
         user = line.replace("\n","")
         user_map[user] = str(idx)
         idx += 1
@@ -34,8 +34,8 @@ def get_user_map():
 
 def get_song_tags():
 
-    results = SongTag.objects.all().values()
-    tag_obj = Tag.objects.all()
+    results = models.SongTag.objects.all().values()
+    tag_obj = models.Tag.objects.all()
     tags_map = {}
     for index, tag in enumerate(tag_obj):
         tags_map[tag.name] = index
@@ -144,7 +144,7 @@ def get_ratelist():
     rate_dic = {}
     usermap = get_user_map()
 
-    for line in open(os.path.join(BASE, "data/song_listening_data.csv")):
+    for line in open(os.path.join(BASE, "../data/song_listening_data.csv")):
         rate = line.replace("\n","").split(',')
         user = usermap[rate[0]]
         song_id = rate[1]
@@ -152,7 +152,7 @@ def get_ratelist():
             rate_dic.setdefault(user, [])
         rate_dic[user].append(song_id)
     
-    app_preferences = Preference.objects.all()
+    app_preferences = models.Preference.objects.all()
     for app_preference in app_preferences:
         user = usermap[str(app_preference.user_id)]
         song_id = str(app_preference.song_id)
@@ -164,7 +164,7 @@ def get_ratelist():
 
 def get_tags():
 
-    tag_obj = Tag.objects.all()
+    tag_obj = models.Tag.objects.all()
     tags = []
     for tag in tag_obj:
         tags.append(tag.name)

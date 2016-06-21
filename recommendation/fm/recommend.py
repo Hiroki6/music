@@ -5,7 +5,7 @@ import redis
 from Recommend import cy_recommend as cyFm
 import sys
 import MySQLdb
-from .models import *
+from .. import models
 import sys
 sys.dont_write_bytecode = True 
 
@@ -112,8 +112,8 @@ class RecommendFm(object):
         """
         まだ視聴していない楽曲のid配列を取得
         """
-        results = SongTag.objects.exclude(id__in=Preference.objects.filter(user_id=self.user)).values()
-        tag_obj = Tag.objects.all()
+        results = models.SongTag.objects.exclude(id__in=models.Preference.objects.filter(user_id=self.user)).values()
+        tag_obj = models.Tag.objects.all()
         tags_map = {}
         for index, tag in enumerate(tag_obj):
             tags_map[tag.name] = index
