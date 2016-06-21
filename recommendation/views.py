@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from django.core.context_processors import csrf
 from django.contrib.auth.models import User
-import recommendlib
+import recommend_lib
 import sys
 sys.dont_write_bytecode = True 
 
