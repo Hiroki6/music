@@ -8,6 +8,10 @@ import MySQLdb
 from .models import *
 import sys
 sys.dont_write_bytecode = True 
+from django.contrib.auth.models import User
+import os.path
+
+BASE = os.path.dirname(os.path.abspath(__file__))
 
 """
 @return(user_map) {"値":id}の辞書
@@ -16,11 +20,16 @@ def get_user_map():
 
     user_map = {}
     idx = 0
-    for line in open("data/user.csv"):
+    for line in open(os.path.join(BASE, "data/user.csv")):
         user = line.replace("\n","")
         user_map[user] = str(idx)
         idx += 1
 
+    app_users = User.objects.all()
+    for app_user in app_users:
+        user_map[str(app_user.id)] = str(idx)
+        idx += 1
+    
     return user_map
 
 def get_song_tags():
@@ -78,6 +87,8 @@ def create_matrix_with_tag_dicVec():
     print "学習用データ作成"
     for user, songs in ratelist.items():
         for song in songs:
+            if not song_tags.has_key(song):
+                continue
             rate_dic = {}
             rate_dic["user"] = user
             rate_dic["song"] = song
@@ -95,6 +106,7 @@ def create_matrix_with_tag_dicVec():
         tag_index = labels.index(tag)
         tag_map[index] = tag_index
     
+    print "正規化用データ変形"
     regs_matrix = create_test_matrix(regs_data, labels, tag_map, regs_num)
 
     return rate_matrix, regs_matrix, labels, targets, tag_map, ratelist
@@ -132,10 +144,18 @@ def get_ratelist():
     rate_dic = {}
     usermap = get_user_map()
 
-    for line in open("data/song_listening_data.csv"):
+    for line in open(os.path.join(BASE, "data/song_listening_data.csv")):
         rate = line.replace("\n","").split(',')
         user = usermap[rate[0]]
         song_id = rate[1]
+        if not rate_dic.has_key(user):
+            rate_dic.setdefault(user, [])
+        rate_dic[user].append(song_id)
+    
+    app_preferences = Preference.objects.all()
+    for app_preference in app_preferences:
+        user = usermap[str(app_preference.user_id)]
+        song_id = str(app_preference.song_id)
         if not rate_dic.has_key(user):
             rate_dic.setdefault(user, [])
         rate_dic[user].append(song_id)
