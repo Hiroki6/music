@@ -15,7 +15,7 @@ class RecommendFm(object):
         self.K = K
         self.user = user
         self.get_range_params()
-        self.cy_fm = cyFm.CyRecommendFm(self.w_0, self.W, self.V, self.adagrad_w_0, self.adagrad_W, self.adagrad_V, self.regs, len(self.W), K)
+        self.cy_fm = cyFm.CyRecommendFm(self.w_0, self.W, self.V, self.adagrad_w_0, self.adagrad_W, self.adagrad_V, self.regs, len(self.W), K, 0.005)
         self.get_not_learn_songs()
 
     def get_range_params(self):
@@ -139,6 +139,11 @@ class RecommendFm(object):
                 self.matrixes[col][song_index] = 1.0
                 for index, tag_value in enumerate(self.song_tag_map[song_id]):
                     self.matrixes[col][self.tag_map[index]] = tag_value
+
+    def relearning(self, top_matrix, feedback_matrix, feature_indexes):
+        feature_num = len(feature_indexes)
+        self.cy_fm.relearning(top_matrix, feedback_matrix, feature_indexes, feature_num)
+        self.save_redis()
 
     def save_redis(self):
         """
