@@ -2,11 +2,11 @@
 
 import numpy as np
 import math
-from FmSgd import fm_sgd_opt
+import fm_sgd_opt
 import sys
 sys.dont_write_bytecode = True 
 
-class CyFmSgdOpt(cyFM):
+class CyFmSgdOpt():
     """
     parameters
     R : 学習データ配列(FMフォーマット形式) N * n

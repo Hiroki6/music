@@ -1,11 +1,11 @@
 # -*- coding:utf-8 -*-
 
-from FmSgd import fm_lib
 import create_matrix
 import redis
 import sys
 sys.dont_write_bytecode = True 
-
+sys.path.append('./FmSgd')
+from FmSgd import fm_lib
 
 """
 学習データの読み込み
@@ -14,7 +14,7 @@ def learning():
 
     learning_matrix, regs_matrix, labels, targets, tag_map, ratelist = create_matrix.create_matrix_with_tag_dicVec()
     print "FMクラス初期化"
-    FM_obj = fm_lib.CyFmSgdOpt(target_data, regs_matrix, labels, targets)
+    FM_obj = fm_lib.CyFmSgdOpt(learning_matrix, regs_matrix, labels, targets)
     print "SGDで学習開始"
     FM_obj.learning(0.005, step=1)
     FM_obj.save_redis()
