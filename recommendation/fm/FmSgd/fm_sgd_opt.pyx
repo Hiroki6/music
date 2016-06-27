@@ -65,7 +65,7 @@ cdef class CyFmSgdOpt:
         int K
         int step
         double error
-        double epsilon
+        double now_error
 
     def __cinit__(self,
                     np.ndarray[DOUBLE, ndim=2, mode="c"] R,
@@ -145,7 +145,7 @@ cdef class CyFmSgdOpt:
             double grad_value = 0.0
             double update_value = 0.0
 
-        grad_value = 2 * self.l_rate*(self.E[data_index] + self.regs[0]*self.w_0)
+        grad_value = 2 * self.l_rate*(self.now_error + self.regs[0]*self.w_0)
  
         self.adagrad_w_0 += grad_value * grad_value
         update_value = self.l_rate * grad_value / sqrt(self.adagrad_w_0)
@@ -159,7 +159,7 @@ cdef class CyFmSgdOpt:
             double grad_value = 0.0
             double update_value = 0.0
 
-        grad_value = 2 * (self.E[data_index]*self.R[data_index][i] + self.regs[1]*self.W[i])
+        grad_value = 2 * (self.now_error*self.R[data_index][i] + self.regs[1]*self.W[i])
         self.adagrad_W[i] += grad_value * grad_value
         update_value = self.l_rate * grad_value / sqrt(self.adagrad_W[i])
         self.W[i] -= update_value
@@ -175,7 +175,7 @@ cdef class CyFmSgdOpt:
         
         h = np.dot(self.V[:,f], self.R[data_index]) - self.V[i][f]*self.R[data_index][i]
         h *= self.R[data_index][i]
-        grad_value = 2 * (self.E[data_index]*h + self.regs[f+2]*self.V[i][f])
+        grad_value = 2 * (self.now_error*h + self.regs[f+2]*self.V[i][f])
         self.adagrad_V[i][f] += grad_value * grad_value
         update_value = self.l_rate * grad_value / sqrt(self.adagrad_V[i][f])
         self.V[i][f] -= update_value
@@ -202,6 +202,7 @@ cdef class CyFmSgdOpt:
             if nan_flag:
                 break
             print "data_index %d" % data_index
+            self.now_error = self._calc_error(data_index)
             self._update_w_0(data_index)
             for i in xrange(self.n):
                 if self.R[data_index][i] <= 0:
@@ -246,9 +247,9 @@ cdef class CyFmSgdOpt:
             double iterations = 0.0
             int f
 
-        features = np.dot(self.W, self.R_v[data_index])
+        features = np.dot(self.W, self.R[data_index])
         for f in xrange(self.K):
-            iterations += pow(np.dot(self.V[:,f], self.R_v[data_index]), 2) - np.dot(self.V[:,f]**2, self.R_v[data_index]**2)
+            iterations += pow(np.dot(self.V[:,f], self.R[data_index]), 2) - np.dot(self.V[:,f]**2, self.R[data_index]**2)
 
         return (self.w_0 + features + iterations/2) - 1.0
 
@@ -262,11 +263,11 @@ cdef class CyFmSgdOpt:
         self.adagrad_w_0 = 0.0
         self.adagrad_W = np.zeros(self.n)
         self.adagrad_V = np.zeros((self.n, self.K))
-        self.get_all_error()
+        #self.get_all_error()
         for s in xrange(self.step):
             print "Step %d" % s
             self.repeat_optimization()
-            self.get_all_error()
+            #self.get_all_error()
             self.get_sum_error()
             if self.error <= 100:
                 break
@@ -293,153 +294,6 @@ cdef class CyFmSgdOpt:
         python側から呼び出せる回帰予測結果取得
         """
         return self._calc_rating(matrix)
-
-
-    def relearning(self, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, np.ndarray[DOUBLE, ndim=1, mode="c"] feedback_matrix, np.ndarray[INTEGER, ndim=1, mode="c"] feature_indexes, int feature_num):
-        """
-        フィードバックによる再学習
-        top_matrix: 推薦された楽曲の特徴ベクトル
-        feedback_matrix: フィードバックを考慮した楽曲の特徴ベクトル
-        feature_indexes: ユーザーとフィードバックに関連するタグのインデックス
-        """
-        cdef:
-            double top_predict
-            double feedback_predict
-            int count
-
-        self.feature_indexes = feature_indexes
-        self.feedback_R = feedback_matrix
-        self.top_R = top_matrix
-        self._decition_epsilon(top_matrix, feedback_matrix)  # epsilonの決定
-        top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix)
-        print feedback_error
-        count = 0
-        while feedback_error > 0.0:
-            print count
-            self.relearning_optimization(top_predict, feedback_predict, feature_num)
-            top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix)
-            print feedback_error
-            count += 1
-            if(count > 1000):
-                break
-
-    def relearning_optimization(self, double top_predict, double feedback_predict, int feature_num):
-        """
-        再学習による最適化
-        """
-        cdef:
-            long i
-            int f
-            long index
-
-        for i in xrange(feature_num):
-            index = self.feature_indexes[i]
-            self._reupdate_W(index)
-            for f in xrange(self.K):
-                self._reupdate_V(index, f)
-
-    def calc_feedback_error(self, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, np.ndarray[DOUBLE, ndim=1, mode="c"] feedback_matrix):
-        """
-        誤差の計算{ε-y(X_f)+y(X_t)}
-        @returns(top_predict) 推薦曲の予測値
-        @returns(feed_predict) フィードバックを考慮したもの予測値
-        """
-        top_predict = self.predict(top_matrix)
-        feedback_predict = self.predict(feedback_matrix)
-        feedback_error = self.epsilon - feedback_predict + top_predict
-
-        return top_predict, feedback_predict, feedback_error
-
-    cdef void _decition_epsilon(self, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, np.ndarray[DOUBLE, ndim=1, mode="c"] feedback_matrix):
-        """
-        εの決定
-        """
-        top_predict = self.predict(top_matrix)
-        feedback_predict = self.predict(feedback_matrix)
-        # もともと値が大きい時
-        if feedback_predict > top_predict:
-            self.epsilon = 2 * (feedback_predict - top_predict)
-        # 値が小さい時
-        else:
-            self.epsilon = - (feedback_predict - top_predict)
-    
-    def set_epsilon(self, epsilon):
-        """
-        python側からのεの設定
-        """
-        self.epsilon = epsilon
-
-    cdef void _reupdate_W(self, long i):
-        """
-        W[i]の再更新
-        """
-        cdef:
-            double grad_value = 0.0
-            double update_value = 0.0
-    
-        grad_value = -self.feedback_R[i] + self.top_R[i] + 2*self.regs[1]*self.W[i]
-        self.adagrad_W[i] += grad_value * grad_value
-        update_value = self.l_rate * grad_value / sqrt(self.adagrad_W[i])
-        self.W[i] -= update_value
-
-    cdef void _reupdate_V(self, long i, int f):
-        """
-        V[i][f]の再更新
-        """
-        cdef:
-            double grad_value = 0.0
-            double update_value = 0.0
-            double h_f = 0.0 # feedback部分
-            double h_t = 0.0 # top部分
-        
-        h_f = np.dot(self.V[:,f], self.feedback_R) - self.V[i][f]*self.feedback_R[i]
-        h_f *= self.feedback_R[i]
-        h_t = np.dot(self.V[:,f], self.top_R) - self.V[i][f]*self.top_R[i]
-        h_t *= self.top_R[i]
-        grad_value = -h_f + h_t + 2*self.regs[f+2]*self.V[i][f]
-        self.adagrad_V[i][f] += grad_value * grad_value
-        update_value = self.l_rate * grad_value / sqrt(self.adagrad_V[i][f])
-        self.V[i][f] -= update_value
-
-    def get_parameter(self):
-        """
-        パラメータの取得
-        入力した値によって取得するパラメータを選択する
-        """
-        cdef:
-            bint input_validate = True
-        self._print_input_description()
-        parameter_args = range(6)
-        while input_validate:
-            arg = int(raw_input())
-            if arg in parameter_args:
-                input_validate = False
-                self.get_parameter_by_arg(arg)
-            else:
-                self._print_input_description()
-
-    cdef void _print_input_description(self):
-        print "please input value"
-        print "0: w_0\n1: W\n2:V\n3: E\n4: error\n5: epsilon"
-
-    def get_parameter_by_arg(self, arg):
-        """
-        引数argによる各パラメータの取得
-        """
-        if arg == 0:
-            return self.w_0
-        elif arg == 1:
-            return self.W
-        elif arg == 2:
-            return self.V
-        elif arg == 3:
-            return self.E
-        elif arg == 4:
-            return self.error
-        elif arg == 5:
-            return self.epsilon
-        else:
-            return 0
 
     def get_w_0(self):
         return self.w_0

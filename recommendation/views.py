@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from django.core.context_processors import csrf
 from django.contrib.auth.models import User
-import recommend_lib
+from fm import recommend_lib
 import sys
 sys.dont_write_bytecode = True 
 
@@ -37,8 +37,8 @@ def index(request):
 # フィードバック
 @login_required
 def feedback(request):
-    feedback_value = request.get['example']
-    songs = Song.objects.all()[3:8]
+    feedback_value = request.post['feedback']
+    song_id = request.post['song']
     feedbacks = ["calm", "tense", "aggressive", "lively", "peaceful"]
     template = loader.get_template('recommendation/login.html')
     return render(request, 'recommendation/index.html', {'songs': songs, 'feedbacks': feedbacks, 'feedback_loop': range(2), 'user': request.user})
@@ -157,7 +157,7 @@ def user(request):
 @login_required
 def recommend_song(request):
     user = request.user
-    rm_obj = recommendlib.create_recommend_obj(user.id, 16)
+    rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
     songs = rm_obj.get_top_song_cython()
     #songs = get_user_not_listening_songs(user.id)
     feedback_dict = get_feedback_dict()

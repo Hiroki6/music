@@ -146,6 +146,55 @@ class RecommendFm(object):
                 for index, tag_value in enumerate(self.song_tag_map[song_id]):
                     self.matrixes[col][self.tag_map[index]] = tag_value
 
+    def get_feedback(self):
+
+        self.connect_db()
+
+        get_tags_by_cluter_sql = "select tag.id-1, tag.name from recommendation_tag as tag inner join recommendation_cluster as cluster on tag.cluster_id = cluster.id where cluster.name = '%s'" % (self.feedback)
+        self.cursor.execute(get_tags_by_cluter_sql)
+        tags = self.cursor.fetchall()
+        
+        self.close_db()
+        return tags
+    
+    def create_feedback_matrix(self, feedback):
+        """
+        特定のユーザーによるフィードバックを反映させた楽曲の特徴ベクトル生成
+        @returns(top_matrix): 推薦された楽曲配列の楽曲の部分だけ0にしたもの
+        @returns(feedback_matrix): フィードバックを受けたタグの部分だけ値を大きくしたもの
+        """
+        self.get_tags_by_feedback(feedback)
+        self.feature_indexes = np.zeros(1+len(self.tags),dtype=np.int)
+        self.feedback_matrix = np.array(self.top_matrix)
+        song_label_name = "song=" + str(self.top_song)
+        song_index = self.labels.index(song_label_name)
+        self.feedback_matrix[song_index] = 0.0
+        self.top_matrix[song_index] = 0.0
+        alpha = 0.05
+        user_index = self.labels.index("user="+str(self.user))
+        self.feature_indexes[0] = user_index
+        for i, tag in enumerate(self.tags):
+            index = tag[0]
+            self.feature_indexes[i+1] = self.tag_map[index]
+            self.feedback_matrix[self.tag_map[index]] += alpha/self.feedback_matrix[self.tag_map[index]]
+
+    def get_tags_by_feedback(self, feedback):
+
+        self.connect_db()
+
+        get_tags_by_cluter_sql = "select tag.id-1, tag.name from recommendation_tag as tag inner join recommendation_cluster as cluster on tag.cluster_id = cluster.id where cluster.name = '%s'" % (feedback)
+        self.cursor.execute(get_tags_by_cluter_sql)
+        tags = self.cursor.fetchall()
+        
+        self.close_db()
+        self.tags = tags
+
+    def relearning(self, feedback):
+        self.create_feedback_matrix(feedback)
+        feature_num = len(self.feature_indexes)
+        self.cy_fm.relearning(self.top_matrix, self.feedback_matrix, self.feature_indexes, feature_num)
+        self.save_redis()
+
     def save_redis(self):
         """
         パラメータのredisへの保存
@@ -158,41 +207,49 @@ class RecommendFm(object):
         """
         w_0, W, Vの保存
         """
-        w_0 = self.cython_FM.get_w_0()
+        w_0 = self.cy_fm.get_w_0()
         # w_0の保存
-        self.save_scalar(r, "bias", "w_0", w_0)
+        self._save_scalar(r, "bias", "w_0", w_0)
         # Wの保存
-        self.save_one_dim_array(r, "W", self.W)
+        self._save_one_dim_array(r, "W", self.W)
         # Vの保存
-        self.save_two_dim_array(r, "V_", self.V)
+        self._save_two_dim_array(r, "V_", self.V)
 
         """
         regsの保存
         """
-        self.save_one_dim_array(r, "regs", self.regs)
+        self._save_one_dim_array(r, "regs", self.regs)
         
         """
         adagradの保存
         """
-        adagrad_w_0 = self.cython_FM.get_adagrad_w_0()
-        adagrad_W = self.cython_FM.get_adagrad_W()
-        adagrad_V = self.cython_FM.get_adagrad_V()
+        adagrad_w_0 = self.cy_fm.get_adagrad_w_0()
+        adagrad_W = self.cy_fm.get_adagrad_W()
+        adagrad_V = self.cy_fm.get_adagrad_V()
         # adagrad_w_0の保存
-        self.save_scalar("bias", "adagrad", adagrad_w_0)
+        self._save_scalar("bias", "adagrad", adagrad_w_0)
         # adagrad_Wの保存
-        self.save_one_dim_array(r, "adagrad_W", adagrad_W)
+        self._save_one_dim_array(r, "adagrad_W", adagrad_W)
         # adagrad_Vの保存
-        self.save_two_dim_array(r, "adagrad_V_", adagrad_V)
+        self._save_two_dim_array(r, "adagrad_V_", adagrad_V)
 
-    def save_scalar(self, redis_obj, table, key, param):
+        self._save_one_dim_array(r, "labels", self.labels)
+        self._save_tag_map(r)
+
+    def _save_scalar(self, redis_obj, table, key, param):
         redis_obj.hset(table, key, param)
 
-    def save_one_dim_array(self, redis_obj, key, params):
+    def _save_one_dim_array(self, redis_obj, key, params):
         for param in params:
             redis_obj.rpush(key, param)
 
-    def save_two_dim_array(self, redis_obj, pre_key, params):
+    def _save_two_dim_array(self, redis_obj, pre_key, params):
         for i in xrange(len(params)):
             key = pre_key + str(i)
             for param in params[i]:
                 redis_obj.rpush(key, param)
+    
+    def _save_tag_map(self, r):
+
+        for key, value in self.tag_map.items():
+            r.hset("tag_map", key, value)
