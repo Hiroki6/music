@@ -15,15 +15,6 @@ import sys
 sys.dont_write_bytecode = True 
 
 initial_strings = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-# Create your views here.
-# @login_required
-# def index(request):
-#     songs = Song.objects.all()[:5]
-#     feedbacks = ["calm", "tense", "aggressive", "lively", "peaceful"]
-#     template = loader.get_template('recommendation/index.html')
-#     context = Context({'songs': songs}, {'feedbacks': feedbacks})
-#     return render(request, 'recommendation/index.html', {'songs': songs, 'feedbacks': feedbacks, 'feedback_loop': range(2), 'user': request.user})
-    #return HttpResponse(template.render(context))
 @login_required
 def index(request):
     if request.method == 'POST':

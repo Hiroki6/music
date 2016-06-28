@@ -101,33 +101,34 @@ def create_matrix_with_tag_dicVec():
     X = v.fit_transform(rate_array)
     rate_matrix = X.toarray()
     labels = v.get_feature_names()
+    data_labels = dict(zip(labels, range(0, len(labels))))
     targets = np.array(targets)
     for index, tag in enumerate(tags):
         tag_index = labels.index(tag)
         tag_map[index] = tag_index
     
     print "正規化用データ変形"
-    regs_matrix = create_test_matrix(regs_data, labels, tag_map, regs_num)
+    regs_matrix = create_regs_matrix(regs_data, data_labels, tag_map, regs_num)
 
     return rate_matrix, regs_matrix, labels, targets, tag_map, ratelist
 
 """
 テストデータのFM配列作成
 """
-def create_test_matrix(test_data, data_labels, tag_map, test_nums):
+def create_regs_matrix(test_data, data_labels, tag_map, test_nums):
 
     song_tags = get_song_tags()
     test_matrix = np.zeros((test_nums, len(data_labels)))
     col = 0
     for user, songs in test_data.items():
-        user_index = data_labels.index("user="+user)
+        user_index = data_labels["user="+user]
         not_learn_songs = []
         for index, song in enumerate(songs):
             song_label_name = "song=" + song
-            if song_label_name not in data_labels:
+            if not data_labels.has_key(song_label_name):
                 not_learn_songs.append(song)
             else:
-                song_index = data_labels.index(song_label_name)
+                song_index = data_labels[song_label_name]
                 test_matrix[col][user_index] = 1.0
                 test_matrix[col][song_index] = 1.0
                 for tag_index, tag_value in enumerate(song_tags[song]):
