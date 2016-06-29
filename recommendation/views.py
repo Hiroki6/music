@@ -15,15 +15,6 @@ import sys
 sys.dont_write_bytecode = True 
 
 initial_strings = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-# Create your views here.
-# @login_required
-# def index(request):
-#     songs = Song.objects.all()[:5]
-#     feedbacks = ["calm", "tense", "aggressive", "lively", "peaceful"]
-#     template = loader.get_template('recommendation/index.html')
-#     context = Context({'songs': songs}, {'feedbacks': feedbacks})
-#     return render(request, 'recommendation/index.html', {'songs': songs, 'feedbacks': feedbacks, 'feedback_loop': range(2), 'user': request.user})
-    #return HttpResponse(template.render(context))
 @login_required
 def index(request):
     if request.method == 'POST':
@@ -37,12 +28,12 @@ def index(request):
 # フィードバック
 @login_required
 def feedback(request):
-    feedback_value = request.post['feedback']
-    song_id = request.post['song']
-    feedbacks = ["calm", "tense", "aggressive", "lively", "peaceful"]
-    template = loader.get_template('recommendation/login.html')
-    return render(request, 'recommendation/index.html', {'songs': songs, 'feedbacks': feedbacks, 'feedback_loop': range(2), 'user': request.user})
-    #return HttpResponse(template.render(request))
+    try:
+        feedback_value = request.POST['select-feedback']
+        song_id = request.POST['song']
+    except KeyError:
+        pass
+    return redirect('/recommendation/recommend_song/')
 
 # 検索
 @login_required
@@ -65,21 +56,7 @@ def search(request):
         if form.data.has_key('artist') and form.data.has_key('song'):
             artist = form.data['artist']
             song = form.data['song']
-        # search by artist and song
-        if len(artist) > 0 and len(song) > 0:
-            results = Song.objects.filter(artist__name__icontains=artist).filter(name__icontains=song)
-            pass
-        # search by artist
-        elif len(artist) > 0:
-            results = Song.objects.filter(artist__name__icontains=artist)
-            pass
-        # search by song
-        elif len(song) > 0:
-            results = Song.objects.filter(name__icontains=song)
-            pass
-        # none
-        else:
-            pass
+        results = search_song(artist, song)
     else:
         form = MusicSearchForm()
     is_result = True if len(results) == 0 else False
@@ -157,9 +134,9 @@ def user(request):
 @login_required
 def recommend_song(request):
     user = request.user
-    rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
-    songs = rm_obj.get_top_song_cython()
-    #songs = get_user_not_listening_songs(user.id)
+    # rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
+    # songs = rm_obj.get_top_song_cython()
+    songs = get_user_not_listening_songs(user.id)
     feedback_dict = get_feedback_dict()
     return render(request, 'recommendation/recommend_song.html', {'user': user, 'songs': songs, 'feedback_dict': feedback_dict})
 
@@ -178,7 +155,7 @@ def get_user_not_listening_songs(user_id):
 
     listening_songs = get_user_preference(user_id)
     songs = Song.objects.exclude(id__in=listening_songs)
-    return songs
+    return songs[:2]
 
 def get_feedback_dict():
 
@@ -190,3 +167,19 @@ def get_feedback_dict():
             feedback_dict[key] = feedback
 
     return feedback_dict
+
+def search_song(artist, song):
+    results = []
+    if len(artist) > 0 and len(song) > 0:
+        results = Song.objects.filter(artist__name__icontains=artist).filter(name__icontains=song)
+    # search by artist
+    elif len(artist) > 0:
+        results = Song.objects.filter(artist__name__icontains=artist)
+    # search by song
+    elif len(song) > 0:
+        results = Song.objects.filter(name__icontains=song)
+    # none
+    else:
+        pass
+
+    return results
