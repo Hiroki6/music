@@ -11,6 +11,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.context_processors import csrf
 from django.contrib.auth.models import User
 from fm import recommend_lib
+from django.contrib.sites.models import Site
 import sys
 sys.dont_write_bytecode = True 
 
@@ -41,6 +42,7 @@ def search(request):
     results = []
     artist = ""
     song = ""
+    page = 0
     if request.method == 'POST':
         like_type = request.POST['like_type']
         if like_type == "1":
@@ -59,9 +61,17 @@ def search(request):
         results = search_song(artist, song)
     else:
         form = MusicSearchForm()
+    if request.GET.has_key("page"):
+        page = int(request.GET["page"])
+    index = page * 10
+    next_page = len(results) > index+10
     is_result = True if len(results) == 0 else False
+    if len(results) >= index+10:
+        results = results[index:index+10]
+    else:
+        results = results[index:]
     songs = get_user_preference(request.user.id)
-    return render(request, 'recommendation/search.html', {'form': form, 'artist': artist, 'song': song, 'results': results, 'is_result': is_result, 'user': request.user, 'songs': songs})
+    return render(request, 'recommendation/search.html', {'form': form, 'artist': artist, 'song': song, 'results': results, 'is_result': is_result, 'user': request.user, 'songs': songs, 'page': page, 'next_page': next_page})
 
 # アーティスト一覧
 @login_required
@@ -84,16 +94,17 @@ def artist(request, artist_id):
             song_id = request.POST['song_id']
             Preference.objects.filter(user_id=request.user.id, song_id=song_id).delete()
         return redirect('/recommendation/artist/'+artist_id+"/")
-    # elif request.method == 'GET':
-    #     page = request.GET['page']
+    if request.GET.has_key("page"):
+        page = int(request.GET["page"])
     index = page * 10
     songs = get_user_preference(request.user.id)
     results = Song.objects.filter(artist__id=artist_id)
+    next_page = len(results) > index+10
     if len(results) >= index+10:
         results = results[index:index+10]
     else:
         results = results[index:]
-    return render(request, 'recommendation/artist.html', {'results': results, 'user': request.user, 'songs': songs, 'artist': artist_id, 'page': page})
+    return render(request, 'recommendation/artist.html', {'results': results, 'user': request.user, 'songs': songs, 'artist': artist_id, 'page': page, 'next_page': next_page})
 
 # 指定した頭文字から始まるアーティスト名
 @login_required

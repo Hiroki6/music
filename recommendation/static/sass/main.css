@@ -114,5 +114,7 @@ body {
       color: #000; }
       body .main .artist-name:hover {
         color: #ffc0cb; }
+  body .pagination {
+    float: right; }
 
 /*# sourceMappingURL=../../../../../../../../static/sass/main.css.map */
