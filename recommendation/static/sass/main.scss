@@ -104,13 +104,6 @@ body{
       width: 450px;
       float: left;
       position: relative;
-      input{
-        margin-left: 20px;
-        background-color: #00bfff;
-        border-radius: 5px;
-        border: none;
-        color: #fff;
-      }
       .feedback-form{
         position: absolute;
         bottom: -35px;
@@ -140,6 +133,16 @@ body{
         float: left;
         margin: 5px 0 0;
       }
+    }
+    .recommend-song {
+      margin: 0 auto;
+    }
+    input{
+      margin-left: 20px;
+      background-color: #00bfff;
+      border-radius: 5px;
+      border: none;
+      color: #fff;
     }
     .artist-name{
       margin: 10px 0;

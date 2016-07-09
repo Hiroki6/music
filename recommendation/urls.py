@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^artist/(?P<artist_id>\d+)$', views.artist, name = 'artist'),
     url(r'^user/$', views.user, name = 'user'),
     url(r'^recommend_song/$', views.recommend_song, name = 'recommend_song'),
+    url(r'^recommend_songs/$', views.recommend_songs, name = 'recommend_songs'),
     ]
