@@ -35,6 +35,8 @@ def feedback(request):
         song_id = request.POST['song']
     except KeyError:
         pass
+    rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
+    rm_obj.relearning(feedback)
     return redirect('/recommendation/recommend_song/')
 
 # 検索

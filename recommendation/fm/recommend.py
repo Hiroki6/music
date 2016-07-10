@@ -32,7 +32,7 @@ class RecommendFm(object):
         self.adagrad_w_0 = self._get_param(r, "bias", "adagrad")
         self.adagrad_W = self._get_one_dim_params(r, "adagrad_W")
         self.adagrad_V = self._get_two_dim_params(r, "adagrad_V_")
-        self.labels = self._get_one_dim_params(r, "labels", "str")
+        self._get_labels()
         self._get_tag_map(r)
   
     def _get_tag_map(self, redis_obj):
@@ -65,6 +65,15 @@ class RecommendFm(object):
             v = np.array(v, dtype=np.float64)
             V[i] = v
         return V
+
+    def _get_labels(self, redis_obj):
+    
+        self.labels = {}
+        keys = redis_obj.lrange("label_keys", 0, -1)
+        values = redis_obj.lrange("label_keys", 0, -1)
+        values = np.array(values, dtype=np.int)
+        for key, value in zip(keys, values):
+            self.labels[key] = value
 
     def change_type_into_float(self, array):
         """
@@ -155,7 +164,7 @@ class RecommendFm(object):
         song_index = self.labels.index(song_label_name)
         self.feedback_matrix[song_index] = 0.0
         self.top_matrix[song_index] = 0.0
-        alpha = 0.05
+        alpha = 0.05 if self.plus_or_minus == 1 else -0.05 # フィードバックによって+-を分ける
         user_index = self.labels.index("user="+str(self.user))
         self.feature_indexes[0] = user_index
         for i, tag in enumerate(self.tags):
@@ -164,8 +173,15 @@ class RecommendFm(object):
             self.feedback_matrix[self.tag_map[index]] += alpha/self.feedback_matrix[self.tag_map[index]]
 
     def get_tags_by_feedback(self, feedback):
-
-        tags = Tag.objects.filter(cluster__name=feedback)
+        """
+        feedback: 1~10
+        """
+        feedback = int(feedback)
+        if(feedback <= 5):
+            self.plus_or_minus = 1
+        else:
+            self.plus_or_minus = -1
+        tags = Tag.objects.filter(cluster__id=feedback)
         self.tags = [(tag.id-1, tag.name) for tag in tags]
 
     def relearning(self, feedback):
@@ -212,8 +228,8 @@ class RecommendFm(object):
         # adagrad_Vの保存
         self._save_two_dim_array(r, "adagrad_V_", adagrad_V)
 
-        self._save_one_dim_array(r, "labels", self.labels)
         self._save_tag_map(r)
+        self._save_labels(r)
 
     def _save_scalar(self, redis_obj, table, key, param):
         redis_obj.hset(table, key, param)
@@ -232,3 +248,10 @@ class RecommendFm(object):
 
         for key, value in self.tag_map.items():
             r.hset("tag_map", key, value)
+
+    def _save_labels(self, redis_obj):
+
+        for key, value in self.labels.items():
+            redis_obj.rpush("label_keys", key)
+            redis_obj.rpush("label_values", value)
+
