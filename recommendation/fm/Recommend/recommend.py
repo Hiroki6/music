@@ -4,7 +4,6 @@ import numpy as np
 import redis
 import cy_recommend as cyFm
 import sys
-import MySQLdb
 
 HOST = 'localhost'
 PORT = 6379
@@ -101,28 +100,20 @@ class RecommendFm(object):
         """
         まだ視聴していない楽曲のid配列を取得
         """
-        self.connect_db()
-        sql = "select song_tag.* from recommendation_song as song join recommendation_songtag as song_tag on song.id = song_tag.song_id where song.id not in (select song_id from recommendation_preference where user_id = '%s')" % (self.user)
-        self.cursor.execute(sql)
-        results = self.cursor.fetchall()
-        sql = "select name from recommendation_tag"
-        self.cursor.execute(sql)
-        tag_results = self.cursor.fetchall()
-        tags = []
-        for tag_result in tag_results:
-            tags.append(tag_result[0])
+        q = Preference.objects.filter(user=self.user).values('song')
+        results = SongTag.objects.exclude(song__in=q).values()
+        tag_obj = Tag.objects.all()
+        tags = [tag.name for tag in tag_obj]
 
-        self.song_tag_map = {}
-        self.songs = []
+        self.song_tag_map = {} # {song_id: List[tag_value]}
+        self.songs = [] # List[song_id]
         result_length = len(results[0])
         for result in results:
-            song_id = result[0]
+            song_id = result['song_id']
             self.songs.append(song_id)
             self.song_tag_map.setdefault(song_id, [])
-            for tag_index in xrange(1,result_length-1):
-                self.song_tag_map[song_id].append(result[tag_index])
-        
-        self.close_db()
+            for tag in tags:
+                self.song_tag_map[song_id].append(result[tag])
 
     def get_matrixes_by_song(self):
         """
@@ -140,17 +131,6 @@ class RecommendFm(object):
                 for index, tag_value in enumerate(self.song_tag_map[song_id]):
                     self.matrixes[col][self.tag_map[index]] = tag_value
 
-    def get_feedback(self):
-
-        self.connect_db()
-
-        get_tags_by_cluter_sql = "select tag.id-1, tag.name from recommendation_tag as tag inner join recommendation_cluster as cluster on tag.cluster_id = cluster.id where cluster.name = '%s'" % (self.feedback)
-        self.cursor.execute(get_tags_by_cluter_sql)
-        tags = self.cursor.fetchall()
-        
-        self.close_db()
-        return tags
-    
     def create_feedback_matrix(self, feedback):
         """
         特定のユーザーによるフィードバックを反映させた楽曲の特徴ベクトル生成
@@ -174,14 +154,8 @@ class RecommendFm(object):
 
     def get_tags_by_feedback(self, feedback):
 
-        self.connect_db()
-
-        get_tags_by_cluter_sql = "select tag.id-1, tag.name from recommendation_tag as tag inner join recommendation_cluster as cluster on tag.cluster_id = cluster.id where cluster.name = '%s'" % (feedback)
-        self.cursor.execute(get_tags_by_cluter_sql)
-        tags = self.cursor.fetchall()
-        
-        self.close_db()
-        self.tags = tags
+        tags = Tag.objects.filter(cluster__name=feedback)
+        self.tags = [(tag.id-1, tag.name) for tag in tags]
 
     def relearning(self, feedback):
         self.create_feedback_matrix(feedback)
@@ -247,12 +221,3 @@ class RecommendFm(object):
 
         for key, value in self.tag_map.items():
             r.hset("tag_map", key, value)
-
-    def connect_db(self):
-        self.connection = MySQLdb.connect(host="localhost", db="music", user="fujino", passwd="fujino", charset="utf8")
-        self.cursor = self.connection.cursor()
-
-    def close_db(self):
-        self.cursor.close()
-        self.connection.close()
-
