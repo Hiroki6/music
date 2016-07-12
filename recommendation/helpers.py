@@ -44,3 +44,12 @@ def search_song(artist, song):
         pass
 
     return results
+
+def add_perference_song(user_id, song_id, like_type):
+
+    if like_type == "1":
+        song = Preference(user_id=user_id, song_id=song_id)
+        song.save()
+    else:
+        Preference.objects.filter(user_id=user_id, song_id=song_id).delete()
+

@@ -14,8 +14,8 @@ def get_top_song(rm_obj):
     top_song = rm_obj.get_top_song_cython()
     return top_song
 
-def get_rankings(rm_obj, rank):
+def get_rankings(rm_obj):
     
     rm_obj.get_matrixes_by_song()
-    rankings = rm_obj.get_rankings(rank)
+    rankings = rm_obj.get_rankings(10)
     return rankings

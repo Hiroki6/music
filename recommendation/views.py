@@ -48,13 +48,8 @@ def search(request):
     page = 0
     if request.method == 'POST':
         like_type = request.POST['like_type']
-        if like_type == "1":
-            song_id = request.POST['song_id']
-            song = Preference(user_id=request.user.id, song_id=song_id)
-            song.save()
-        else:
-            song_id = request.POST['song_id']
-            Preference.objects.filter(user_id=request.user.id, song_id=song_id).delete()
+        song_id = request.POST['song_id']
+        add_perference_song(request.user.id, song_id, like_type)
         return redirect('/recommendation/search/')
     if request.method == 'GET':
         form = MusicSearchForm(request.GET)
@@ -86,13 +81,8 @@ def artist(request, artist_id):
     page = 0
     if request.method == 'POST':
         like_type = request.POST['like_type']
-        if like_type == "1":
-            song_id = request.POST['song_id']
-            song = Preference(user_id=request.user.id, song_id=song_id)
-            song.save()
-        else:
-            song_id = request.POST['song_id']
-            Preference.objects.filter(user_id=request.user.id, song_id=song_id).delete()
+        song_id = request.POST['song_id']
+        add_perference_song(request.user.id, song_id, like_type)
         return redirect('/recommendation/artist/'+artist_id+"/")
     if request.GET.has_key("page"):
         page = int(request.GET["page"])
