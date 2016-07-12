@@ -10,10 +10,12 @@ def create_recommend_obj(user, K):
 
 def get_top_song(rm_obj):
 
-    top_song = rm_obj.get_top_song()
+    rm_obj.get_matrixes_by_song()
+    top_song = rm_obj.get_top_song_cython()
     return top_song
 
 def get_rankings(rm_obj, rank):
-
+    
+    rm_obj.get_matrixes_by_song()
     rankings = rm_obj.get_rankings(rank)
     return rankings

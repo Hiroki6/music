@@ -35,8 +35,8 @@ def feedback(request):
         song_id = request.POST['song']
     except KeyError:
         pass
-    rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
-    rm_obj.relearning(feedback)
+    rm_obj = recommend_lib.create_recommend_obj(request.user.id, 16)
+    rm_obj.relearning(feedback_value)
     return redirect('/recommendation/recommend_song/')
 
 # 検索
@@ -148,15 +148,16 @@ def user(request):
 @login_required
 def recommend_song(request):
     user = request.user
-    # rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
-    # songs = rm_obj.get_top_song_cython()
-    songs = get_user_not_listening_songs(user.id)
+    rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
+    songs = recommend_lib.get_top_song(rm_obj)
+    #songs = get_user_not_listening_songs(user.id)
     feedback_dict = get_feedback_dict()
     return render(request, 'recommendation/recommend_song.html', {'user': user, 'song': songs[4], 'feedback_dict': feedback_dict})
 
 def recommend_songs(request):
     user = request.user
-    # rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
-    # songs = rm_obj.get_top_song_cython()
-    songs = get_user_not_listening_songs(user.id)
+    rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
+    songs = recommend_lib.get_rankings(rm_obj)
+    songs = songs[:10]
+    #songs = get_user_not_listening_songs(user.id)
     return render(request, 'recommendation/recommend_songs.html', {'user': user, 'songs': songs[:50]})
