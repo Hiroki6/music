@@ -19,8 +19,16 @@ body {
       color: #ffc0cb; }
       body header .artist-list:hover {
         color: #cc99cc; }
-    body header .artist-list, body header .search {
+    body header .artist-list, body header .search, body header .interaction, body header .recommend-songs {
       margin: 0 5px; }
+    body header .interaction {
+      color: #ff7f50; }
+      body header .interaction:hover {
+        color: #dc143c; }
+    body header .recommend-songs {
+      color: #77eeff; }
+      body header .recommend-songs:hover {
+        color: #00bfff; }
     body header .logout {
       float: right;
       color: #ffffe0;

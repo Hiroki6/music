@@ -35,6 +35,8 @@ def feedback(request):
         song_id = request.POST['song']
     except KeyError:
         pass
+    rm_obj = recommend_lib.create_recommend_obj(request.user.id, 16)
+    rm_obj.relearning(feedback_value)
     return redirect('/recommendation/recommend_song/')
 
 # 検索
@@ -46,13 +48,8 @@ def search(request):
     page = 0
     if request.method == 'POST':
         like_type = request.POST['like_type']
-        if like_type == "1":
-            song_id = request.POST['song_id']
-            song = Preference(user_id=request.user.id, song_id=song_id)
-            song.save()
-        else:
-            song_id = request.POST['song_id']
-            Preference.objects.filter(user_id=request.user.id, song_id=song_id).delete()
+        song_id = request.POST['song_id']
+        add_perference_song(request.user.id, song_id, like_type)
         return redirect('/recommendation/search/')
     if request.method == 'GET':
         form = MusicSearchForm(request.GET)
@@ -67,10 +64,7 @@ def search(request):
     index = page * 10
     next_page = len(results) > index+10
     is_result = True if len(results) == 0 else False
-    if len(results) >= index+10:
-        results = results[index:index+10]
-    else:
-        results = results[index:]
+    results = results[index:index+10] if len(results) >= index+10 else results[index:]
     songs = get_user_preference(request.user.id)
     return render(request, 'recommendation/search.html', {'form': form, 'artist': artist, 'song': song, 'results': results, 'is_result': is_result, 'user': request.user, 'songs': songs, 'page': page, 'next_page': next_page})
 
@@ -87,13 +81,8 @@ def artist(request, artist_id):
     page = 0
     if request.method == 'POST':
         like_type = request.POST['like_type']
-        if like_type == "1":
-            song_id = request.POST['song_id']
-            song = Preference(user_id=request.user.id, song_id=song_id)
-            song.save()
-        else:
-            song_id = request.POST['song_id']
-            Preference.objects.filter(user_id=request.user.id, song_id=song_id).delete()
+        song_id = request.POST['song_id']
+        add_perference_song(request.user.id, song_id, like_type)
         return redirect('/recommendation/artist/'+artist_id+"/")
     if request.GET.has_key("page"):
         page = int(request.GET["page"])
@@ -101,10 +90,7 @@ def artist(request, artist_id):
     songs = get_user_preference(request.user.id)
     results = Song.objects.filter(artist__id=artist_id)
     next_page = len(results) > index+10
-    if len(results) >= index+10:
-        results = results[index:index+10]
-    else:
-        results = results[index:]
+    results = results[index:index+10] if len(results) >= index+10 else results[index:]
     return render(request, 'recommendation/artist.html', {'results': results, 'user': request.user, 'songs': songs, 'artist': artist_id, 'page': page, 'next_page': next_page})
 
 # 指定した頭文字から始まるアーティスト名
@@ -146,15 +132,16 @@ def user(request):
 @login_required
 def recommend_song(request):
     user = request.user
-    # rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
-    # songs = rm_obj.get_top_song_cython()
-    songs = get_user_not_listening_songs(user.id)
+    rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
+    songs = recommend_lib.get_top_song(rm_obj)
+    #songs = get_user_not_listening_songs(user.id)
     feedback_dict = get_feedback_dict()
     return render(request, 'recommendation/recommend_song.html', {'user': user, 'song': songs[4], 'feedback_dict': feedback_dict})
 
 def recommend_songs(request):
     user = request.user
-    # rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
-    # songs = rm_obj.get_top_song_cython()
-    songs = get_user_not_listening_songs(user.id)
+    rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
+    songs = recommend_lib.get_rankings(rm_obj)
+    songs = songs[:10]
+    #songs = get_user_not_listening_songs(user.id)
     return render(request, 'recommendation/recommend_songs.html', {'user': user, 'songs': songs[:50]})

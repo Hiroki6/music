@@ -17,8 +17,7 @@ class RecommendFm(object):
         self.K = K
         self.user = user
         self.get_range_params()
-        self.cy_fm = cyFm.CyRecommendFm(self.w_0, self.W, self.V, self.adagrad_w_0, self.adagrad_W, self.adagrad_V, self.regs, len(self.W), K)
-        self.get_matrixes_by_song()
+        self.cy_fm = cyFm.CyRecommendFm(self.w_0, self.W, self.V, self.adagrad_w_0, self.adagrad_W, self.adagrad_V, self.regs, len(self.W), K, 0.005)
 
     def get_range_params(self):
         """
@@ -32,7 +31,7 @@ class RecommendFm(object):
         self.adagrad_w_0 = self._get_param(r, "bias", "adagrad")
         self.adagrad_W = self._get_one_dim_params(r, "adagrad_W")
         self.adagrad_V = self._get_two_dim_params(r, "adagrad_V_")
-        self.labels = self._get_one_dim_params(r, "labels", "str")
+        self._get_labels(r)
         self._get_tag_map(r)
   
     def _get_tag_map(self, redis_obj):
@@ -65,6 +64,15 @@ class RecommendFm(object):
             v = np.array(v, dtype=np.float64)
             V[i] = v
         return V
+
+    def _get_labels(self, redis_obj):
+    
+        self.labels = {}
+        keys = redis_obj.lrange("label_keys", 0, -1)
+        values = redis_obj.lrange("label_values", 0, -1)
+        values = np.array(values, dtype=np.int)
+        for key, value in zip(keys, values):
+            self.labels[key] = value
 
     def change_type_into_float(self, array):
         """
@@ -132,11 +140,11 @@ class RecommendFm(object):
         """
         self.get_not_learn_songs()
         self.matrixes = np.zeros((len(self.song_tag_map), len(self.W)))
-        user_index = self.labels.index("user="+str(self.user))
+        user_index = self.labels["user="+str(self.user)]
         for col, song_id in enumerate(self.songs):
             song_label_name = "song="+str(song_id)
             if song_label_name in self.labels:
-                song_index = self.labels.index(song_label_name)
+                song_index = self.labels[song_label_name]
                 self.matrixes[col][user_index] = 1.0
                 self.matrixes[col][song_index] = 1.0
                 for index, tag_value in enumerate(self.song_tag_map[song_id]):
@@ -152,11 +160,11 @@ class RecommendFm(object):
         self.feature_indexes = np.zeros(1+len(self.tags),dtype=np.int)
         self.feedback_matrix = np.array(self.top_matrix)
         song_label_name = "song=" + str(self.top_song)
-        song_index = self.labels.index(song_label_name)
+        song_index = self.labels[song_label_name]
         self.feedback_matrix[song_index] = 0.0
         self.top_matrix[song_index] = 0.0
-        alpha = 0.05
-        user_index = self.labels.index("user="+str(self.user))
+        alpha = 0.05 if self.plus_or_minus == 1 else -0.05 # フィードバックによって+-を分ける
+        user_index = self.labels["user="+str(self.user)]
         self.feature_indexes[0] = user_index
         for i, tag in enumerate(self.tags):
             index = tag[0]
@@ -164,8 +172,15 @@ class RecommendFm(object):
             self.feedback_matrix[self.tag_map[index]] += alpha/self.feedback_matrix[self.tag_map[index]]
 
     def get_tags_by_feedback(self, feedback):
-
-        tags = Tag.objects.filter(cluster__name=feedback)
+        """
+        feedback: 1~10
+        """
+        feedback = int(feedback)
+        if(feedback <= 5):
+            self.plus_or_minus = 1
+        else:
+            self.plus_or_minus = -1
+        tags = models.Tag.objects.filter(cluster__id=feedback)
         self.tags = [(tag.id-1, tag.name) for tag in tags]
 
     def relearning(self, feedback):
@@ -211,9 +226,8 @@ class RecommendFm(object):
         self._save_one_dim_array(r, "adagrad_W", adagrad_W)
         # adagrad_Vの保存
         self._save_two_dim_array(r, "adagrad_V_", adagrad_V)
-
-        self._save_one_dim_array(r, "labels", self.labels)
         self._save_tag_map(r)
+        self._save_labels(r)
 
     def _save_scalar(self, redis_obj, table, key, param):
         redis_obj.hset(table, key, param)
@@ -232,3 +246,10 @@ class RecommendFm(object):
 
         for key, value in self.tag_map.items():
             r.hset("tag_map", key, value)
+
+    def _save_labels(self, redis_obj):
+
+        for key, value in self.labels.items():
+            redis_obj.rpush("label_keys", key)
+            redis_obj.rpush("label_values", value)
+
