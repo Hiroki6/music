@@ -69,10 +69,7 @@ def search(request):
     index = page * 10
     next_page = len(results) > index+10
     is_result = True if len(results) == 0 else False
-    if len(results) >= index+10:
-        results = results[index:index+10]
-    else:
-        results = results[index:]
+    results = results[index:index+10] if len(results) >= index+10 else results[index:]
     songs = get_user_preference(request.user.id)
     return render(request, 'recommendation/search.html', {'form': form, 'artist': artist, 'song': song, 'results': results, 'is_result': is_result, 'user': request.user, 'songs': songs, 'page': page, 'next_page': next_page})
 
@@ -103,10 +100,7 @@ def artist(request, artist_id):
     songs = get_user_preference(request.user.id)
     results = Song.objects.filter(artist__id=artist_id)
     next_page = len(results) > index+10
-    if len(results) >= index+10:
-        results = results[index:index+10]
-    else:
-        results = results[index:]
+    results = results[index:index+10] if len(results) >= index+10 else results[index:]
     return render(request, 'recommendation/artist.html', {'results': results, 'user': request.user, 'songs': songs, 'artist': artist_id, 'page': page, 'next_page': next_page})
 
 # 指定した頭文字から始まるアーティスト名
