@@ -12,28 +12,9 @@ import os.path
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 
-"""
-@return(user_map) {"値":id}の辞書
-"""
-def get_user_map():
-
-    user_map = {}
-    idx = 0
-    for line in open(os.path.join(BASE, "../data/user.csv")):
-        user = line.replace("\n","")
-        user_map[user] = str(idx)
-        idx += 1
-
-    app_users = User.objects.all()
-    for app_user in app_users:
-        user_map[str(app_user.id)] = str(idx)
-        idx += 1
-    
-    return user_map
-
 def get_song_tags():
 
-    results = models.SongTag.objects.all().values()
+    results = models.Song.objects.all().values()
     tag_obj = models.Tag.objects.all()
     tags_map = {}
     for index, tag in enumerate(tag_obj):
@@ -45,11 +26,18 @@ def get_song_tags():
         song_id = str(result["id"])
         song_tag_map.setdefault(song_id, np.zeros(len(tags_map)))
         for tag, tag_value in result.items():
-            if tag == "id" or tag == "song_id":
-                continue
-            song_tag_map[song_id][tags_map[tag]] = tag_value
+            if tags_map.has_key(tag):
+                song_tag_map[song_id][tags_map[tag]] = tag_value
 
     return song_tag_map
+
+def get_all_song_id_set():
+
+    song_nums = models.Song.objects.count()
+    songs = np.arange(song_nums)+1
+    songs = songs.astype(str)
+    songs = set(songs)
+    return songs
 
 """
 return(rate_matrix) FM用のデータ
@@ -64,9 +52,10 @@ rate_matrix, test_matrix, labels, targets, tag_map, ratelist
 """
 def create_matrix_with_tag_dicVec():
 
-    usermap = get_user_map()
-    ratelist = get_ratelist()
-    song_tags = get_song_tags()
+    ratelist = get_ratelist() # {user: [songs]}
+    song_tags = get_song_tags() # {song: [tags]}
+    all_song_set = get_all_song_id_set() # 楽曲のidの集合
+    already_song_set = set() # すでに出現した楽曲
     tags = get_tags()
     rate_array= []
     tag_map = {} # {tag: tag_index}
@@ -87,14 +76,28 @@ def create_matrix_with_tag_dicVec():
     for user, songs in ratelist.items():
         for song in songs:
             if not song_tags.has_key(song):
+                already_song_set.add(song)
                 continue
             rate_dic = {}
             rate_dic["user"] = user
             rate_dic["song"] = song
+            if song not in already_song_set:
+                already_song_set.add(song)
             for tag, value in zip(tags, song_tags[song]):
                 rate_dic[tag] = float(value)
             targets.append(1)
             rate_array.append(rate_dic)
+    
+    print "楽曲補充"
+    # 視聴履歴に含まれていない楽曲を入れる
+    all_song_set.difference_update(already_song_set)
+    for song in all_song_set:
+        rate_dic = {}
+        rate_dic["user"] = user
+        rate_dic["song"] = song
+        for tag, value in zip(tags, song_tags[song]):
+            rate_dic[tag] = float(value)
+        rate_array.append(rate_dic)
 
     v = DictVectorizer()
     X = v.fit_transform(rate_array)
@@ -109,7 +112,7 @@ def create_matrix_with_tag_dicVec():
     print "正規化用データ変形"
     regs_matrix = create_regs_matrix(regs_data, data_labels, tag_map, regs_num)
 
-    return rate_matrix, regs_matrix, labels, targets, tag_map, ratelist
+    return rate_matrix[:len(targets)], regs_matrix, labels, targets, tag_map, ratelist
 
 """
 テストデータのFM配列作成
@@ -142,11 +145,10 @@ def create_regs_matrix(test_data, data_labels, tag_map, test_nums):
 def get_ratelist():
 
     rate_dic = {}
-    usermap = get_user_map()
 
-    for line in open(os.path.join(BASE, "../data/song_listening_data.csv")):
+    for line in open(os.path.join(BASE, "../data_10/song_listening_data_10.csv")):
         rate = line.replace("\n","").split(',')
-        user = usermap[rate[0]]
+        user = rate[0]
         song_id = rate[1]
         if not rate_dic.has_key(user):
             rate_dic.setdefault(user, [])
@@ -154,7 +156,7 @@ def get_ratelist():
     
     app_preferences = models.Preference.objects.all()
     for app_preference in app_preferences:
-        user = usermap[str(app_preference.user_id)]
+        user = str(app_preference.user_id)
         song_id = str(app_preference.song_id)
         if not rate_dic.has_key(user):
             rate_dic.setdefault(user, [])
