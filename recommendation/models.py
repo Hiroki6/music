@@ -22,21 +22,6 @@ class Song(models.Model):
     artist = models.ForeignKey(Artist)
     name = models.CharField(max_length=255)
     url = models.CharField(max_length=255, null=True)
-
-class Preference(models.Model):
-    user = models.ForeignKey(User)
-    song = models.ForeignKey(Song)
-
-class MusicCluster(models.Model):
-    song = models.ForeignKey(Song)
-    aggressive = models.FloatField(null=True, blank=True)
-    calm = models.FloatField(null=True, blank=True)
-    lively = models.FloatField(null=True, blank=True)
-    peaceful = models.FloatField(null=True, blank=True)
-    tense = models.FloatField(null=True, blank=True)
-
-class SongTag(models.Model):
-    song = models.ForeignKey(Song)
     aggressive = models.FloatField(null=True, blank=True)
     ambitious = models.FloatField(null=True, blank=True)
     angry = models.FloatField(null=True, blank=True)
@@ -81,3 +66,14 @@ class SongTag(models.Model):
     warm = models.FloatField(null=True, blank=True)
     weary = models.FloatField(null=True, blank=True)
 
+class Preference(models.Model):
+    user = models.ForeignKey(User)
+    song = models.ForeignKey(Song)
+
+class MusicCluster(models.Model):
+    song = models.ForeignKey(Song)
+    aggressive = models.FloatField(null=True, blank=True)
+    calm = models.FloatField(null=True, blank=True)
+    lively = models.FloatField(null=True, blank=True)
+    peaceful = models.FloatField(null=True, blank=True)
+    tense = models.FloatField(null=True, blank=True)
