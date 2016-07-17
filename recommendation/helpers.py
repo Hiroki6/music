@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 from .models import Song, Artist, Preference
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # そのユーザーの好みの楽曲リスト取得
 def get_user_preference(user_id):
 
@@ -31,13 +31,13 @@ def get_feedback_dict():
 
 def search_song(artist, song):
     results = []
-    if len(artist) > 0 and len(song) > 0:
+    if artist != None and song != None:
         results = Song.objects.filter(artist__name__icontains=artist).filter(name__icontains=song)
     # search by artist
-    elif len(artist) > 0:
+    elif artist != None:
         results = Song.objects.filter(artist__name__icontains=artist)
     # search by song
-    elif len(song) > 0:
+    elif song != None:
         results = Song.objects.filter(name__icontains=song)
     # none
     else:
@@ -53,3 +53,13 @@ def add_perference_song(user_id, song_id, like_type):
     else:
         Preference.objects.filter(user_id=user_id, song_id=song_id).delete()
 
+def get_pagination_contents(paginator, page):
+
+    try:
+        contents = paginator.page(page)
+    except PageNotAnInteger:
+        contents = paginator.page(1)
+    except EmptyPage:
+        contents = paginator.page(paginator.num_pages)
+
+    return contents
