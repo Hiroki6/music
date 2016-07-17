@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 from fm import recommend_lib
 from django.contrib.sites.models import Site
 from helpers import *
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import sys
 sys.dont_write_bytecode = True 
 
@@ -46,6 +47,7 @@ def search(request):
     artist = ""
     song = ""
     page = 0
+    is_result = 0
     if request.method == 'POST':
         like_type = request.POST['like_type']
         song_id = request.POST['song_id']
@@ -56,14 +58,14 @@ def search(request):
         if form.data.has_key('artist') and form.data.has_key('song'):
             artist = form.data['artist']
             song = form.data['song']
-        results = search_song(artist, song)
+            results = search_song(artist, song)
+            is_result = 1 if len(results) == 0 else 2
     else:
         form = MusicSearchForm()
     if request.GET.has_key("page"):
         page = int(request.GET["page"])
     index = page * 10
     next_page = len(results) > index+10
-    is_result = True if len(results) == 0 else False
     results = results[index:index+10] if len(results) >= index+10 else results[index:]
     songs = get_user_preference(request.user.id)
     return render(request, 'recommendation/search.html', {'form': form, 'artist': artist, 'song': song, 'results': results, 'is_result': is_result, 'user': request.user, 'songs': songs, 'page': page, 'next_page': next_page})

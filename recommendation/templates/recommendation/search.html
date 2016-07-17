@@ -14,9 +14,10 @@
   <input type = "submit" value = "検索">
 </form>
 </div>
-{% if is_result %}
+{% ifequal is_result 1 %}
   <p>見つかりませんでした</p>
-{% else %}
+{% endifequal %}
+{% ifequal is_result 2 %}
 <div class = "main">
   <div class = "clearfix">
   {% for song in results %}
@@ -26,20 +27,20 @@
       <form class = "like-form" name = "like" method = "POST" action = "{% url 'recommendation:search' %}">
         {% csrf_token %}
         {% if song.id not in songs %}
-        <input type = "hidden" name = "like_type" value = 1>
-        <button class = "preference-button like-button" type = "submit" name = "song_id" value = {{song.id}}>
-          like <i class="fa fa-thumbs-o-up" hidden="true"></i>
-        </button>
-        {% else %}
-        <input type = "hidden" name = "like_type" value = 0>
-        <button class = "preference-button erase-button" type = "submit" name = "song_id" value = {{song.id}}>
-          取り消す
-        </button>
+          <input type = "hidden" name = "like_type" value = 1>
+          <button class = "preference-button like-button" type = "submit" name = "song_id" value = {{song.id}}>
+            like <i class="fa fa-thumbs-o-up" hidden="true"></i>
+          </button>
+          {% else %}
+          <input type = "hidden" name = "like_type" value = 0>
+          <button class = "preference-button erase-button" type = "submit" name = "song_id" value = {{song.id}}>
+            取り消す
+          </button>
         {% endif %}
       </form>
     </div>
   {% endfor %}
   </div>
 </div>
-{% endif %}
+{% endifequal %}
 {% endblock main %}
