@@ -56,6 +56,14 @@ body {
     display: inline-block;
     padding: 5px;
     border-radius: 10px; }
+    body .search-form .search-submit {
+      color: #fff;
+      border-radius: 10px;
+      background-color: #0000cd;
+      border: none; }
+      body .search-form .search-submit:hover {
+        color: #0000cd;
+        background-color: #fff; }
   body .main {
     width: 85%;
     margin-left: auto;
@@ -124,6 +132,13 @@ body {
       color: #000; }
       body .main .artist-name:hover {
         color: #ffc0cb; }
+    body .main .paginator {
+      padding-bottom: 10px; }
+      body .main .paginator a, body .main .paginator strong {
+        font-size: 20px;
+        color: #0000cd; }
+        body .main .paginator a:hover, body .main .paginator strong:hover {
+          color: #afeeee; }
   body .pagination {
     float: right; }
 

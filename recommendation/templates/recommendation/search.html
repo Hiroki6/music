@@ -7,11 +7,10 @@
 <div>
 <h2>楽曲検索フォーム</h2>
 <form class = "search-form" action = "{% url 'recommendation:search' %}" method = "get">
-  {% csrf_token %}
   <table>
     {{ form.as_table }}
   </table>
-  <input type = "submit" value = "検索">
+  <input class = "search-submit" type = "submit" value = "検索">
 </form>
 </div>
 {% ifequal is_result 1 %}
@@ -25,7 +24,7 @@
       <iframe width = "420" height = "315" src = "https://www.youtube.com/embed/{{ song.url }}" frameborder="0" allowfullscreen></iframe>
       <p class = "song-info">{{ song.artist.name }} / {{ song.name }}</p>
       <form class = "like-form" name = "like" method = "POST" action = "{% url 'recommendation:search' %}">
-        {% csrf_token %}
+      {% csrf_token %}
         {% if song.id not in songs %}
           <input type = "hidden" name = "like_type" value = 1>
           <button class = "preference-button like-button" type = "submit" name = "song_id" value = {{song.id}}>
@@ -40,6 +39,25 @@
       </form>
     </div>
   {% endfor %}
+  </div>
+  <div class="paginator">
+    {% if results.has_previous %}
+    <a href="?page={{ results.previous_page_number }}&artist={{ artist }}&song={{ song }}">前へ</a> 
+    {% endif %}
+
+    {% for page in results.paginator.page_range %}
+      <!-- 現在のページへはリンクを貼らない -->
+      {% if page == results.number %}
+      <strong>{{ page }}</strong> 
+      <!-- 現在表示しているページの前後5ページへのリンクを表示 -->
+      {% elif results.number|add:"-5" <= page and results.number|add:"5" >= page %}
+        <a href="?page={{ page }}&artist={{ artist }}&song={{ song }}">{{ page }}</a> 
+      {% endif %}
+    {% endfor %}
+
+    {% if results.has_next %}
+      <a href="?page={{ results.next_page_number }}&artist={{ artist }}&song={{ song }}">次へ</a>
+    {% endif %}
   </div>
 </div>
 {% endifequal %}
