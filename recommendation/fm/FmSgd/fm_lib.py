@@ -3,6 +3,7 @@
 import numpy as np
 import math
 import fm_sgd_opt
+import redis
 import sys
 sys.dont_write_bytecode = True 
 
