@@ -134,13 +134,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'static'),
+        os.path.join(BASE_DIR, 'recommendation', 'static'),
         )
+
+SASS_PROCESSOR_ROOT = 'static'
 
 LOGIN_REDIRECT_URL = '/recommendation/'
 
 APPEND_SLASH = False
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'recommendation', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 SITE_ID = "1"
