@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 from .models import Song, Artist, Preference
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # そのユーザーの好みの楽曲リスト取得
 def get_user_preference(user_id):
 

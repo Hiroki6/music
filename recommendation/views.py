@@ -62,7 +62,6 @@ def search(request):
             is_result = 1 if len(results) == 0 else 2
     else:
         form = MusicSearchForm()
-    is_result = 1 if len(results) == 0 else 2
     paginator = Paginator(results, 10)
     page = request.GET.get("page")
     contents = get_pagination_contents(paginator, page)
@@ -90,10 +89,11 @@ def artist(request, artist_id):
     index = page * 10
     songs = get_user_preference(request.user.id)
     results = Song.objects.filter(artist__id=artist_id)
+    artist_name = results[0].artist.name
     paginator = Paginator(results, 10)
     page = request.GET.get("page")
     contents = get_pagination_contents(paginator, page)
-    return render(request, 'recommendation/artist.html', {'results': contents, 'user': request.user, 'songs': songs, 'artist': artist_id, 'page': page})
+    return render(request, 'recommendation/artist.html', {'results': contents, 'user': request.user, 'songs': songs, 'artist': artist_id, 'page': page, 'artist_name': artist_name})
 
 # 指定した頭文字から始まるアーティスト名
 @login_required

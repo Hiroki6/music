@@ -141,5 +141,13 @@ body {
           color: #afeeee; }
   body .pagination {
     float: right; }
+  body footer {
+    background-color: #000;
+    padding: 10px;
+    border-top: solid 1px #f0ffff; }
+    body footer p {
+      color: #fff;
+      text-align: center;
+      margin: 0; }
 
 /*# sourceMappingURL=../../../../../../../../static/sass/main.css.map */
