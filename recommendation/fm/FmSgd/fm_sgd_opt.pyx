@@ -101,18 +101,21 @@ cdef class CyFmSgdOpt:
         self.step = step
 
     def get_sum_error(self):
-        """
-        目的関数の計算
-        """
+
         cdef:
             long data_index
             int f
+            double sum_error = 0.0
 
-        self.error = np.sum(self.E**2)
-
-        self.error += self.regs[0] * pow(self.w_0,2) + self.regs[1] * np.sum(self.W**2)
+        for data_index in xrange(self.N):
+            self.ixs = np.nonzero(self.R[data_index])[0]
+            sum_error += pow(self._calc_error(data_index), 2)
+        
+        self.error = sum_error
+        self.error += self.regs[0] * pow(self.w_0, 2) + self.regs[1] * np.sum(self.W**2)
         for f in xrange(self.K):
-            self.error += self.regs[f+2] * np.sum(self.V[:,f]**2)
+            self.error += self.regs[f+2] * np.sum(np.transpose(self.V)[f]**2)
+
         
     def get_all_error(self):
         """
@@ -249,7 +252,6 @@ cdef class CyFmSgdOpt:
                 dot_r_v_pre += self.R_v[random_index][ix] * pre_V[ix][f]
                 dot_sum += self.R_v[random_index][ix] * self.R_v[random_index][ix] * self.V[ix][f] * pre_V[ix][f]
             new_r = self.regs[f+2] - self.l_rate * (err * -2 * self.l_rate * dot_r_v * dot_r_v_pre - dot_sum)
-            #new_r = self.regs[f+2] - self.l_rate * (err * -2 * self.l_rate * (np.dot(self.R_v[random_index], self.V[:,f]) * np.dot(self.R_v[random_index], pre_V[:,f]) - np.sum((self.R_v[random_index]**2)*self.V[:,f]*pre_V[:,f])))
             self.regs[f+2] = new_r if new_r >= 0 else 0
 
     cdef double _calc_error(self, long data_index):
@@ -314,11 +316,9 @@ cdef class CyFmSgdOpt:
         self.adagrad_w_0 = 0.0
         self.adagrad_W = np.zeros(self.n)
         self.adagrad_V = np.zeros((self.n, self.K))
-        #self.get_all_error()
         for s in xrange(self.step):
             print "Step %d" % s
             self.repeat_optimization()
-            #self.get_all_error()
             self.get_sum_error()
             if self.error <= 100:
                 break

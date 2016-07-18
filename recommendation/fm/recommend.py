@@ -157,7 +157,6 @@ class RecommendFm(object):
         @returns(feedback_matrix): フィードバックを受けたタグの部分だけ値を大きくしたもの
         """
         self.get_tags_by_feedback(feedback)
-        self.feature_indexes = np.zeros(1+len(self.tags),dtype=np.int)
         self.feedback_matrix = np.array(self.top_matrix)
         song_label_name = "song=" + str(self.top_song)
         song_index = self.labels[song_label_name]
@@ -165,10 +164,8 @@ class RecommendFm(object):
         self.top_matrix[song_index] = 0.0
         alpha = 0.05 if self.plus_or_minus == 1 else -0.05 # フィードバックによって+-を分ける
         user_index = self.labels["user="+str(self.user)]
-        self.feature_indexes[0] = user_index
         for i, tag in enumerate(self.tags):
             index = tag[0]
-            self.feature_indexes[i+1] = self.tag_map[index]
             self.feedback_matrix[self.tag_map[index]] += alpha/self.feedback_matrix[self.tag_map[index]]
 
     def get_tags_by_feedback(self, feedback):
@@ -185,8 +182,7 @@ class RecommendFm(object):
 
     def relearning(self, feedback):
         self.create_feedback_matrix(feedback)
-        feature_num = len(self.feature_indexes)
-        self.cy_fm.relearning(self.top_matrix, self.feedback_matrix, self.feature_indexes, feature_num)
+        self.cy_fm.relearning(self.top_matrix, self.feedback_matrix)
         self.save_redis()
 
     def save_redis(self):

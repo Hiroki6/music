@@ -29,6 +29,7 @@ cdef class CyRecommendFm:
     epsilon: 再学習の条件(epsilon - P(f) + P(t))
     top_R: 推薦された楽曲の特徴ベクトル
     feedback_R: フィードバックを考慮した楽曲の特徴ベクトル
+    ixs: 0でない要素のインデックス
     """
 
     cdef:
@@ -39,7 +40,6 @@ cdef class CyRecommendFm:
         np.ndarray adagrad_V
         np.ndarray top_R
         np.ndarray feedback_R
-        np.ndarray feature_indexes
         np.ndarray regs
         double adagrad_w_0
         double w_0
@@ -47,6 +47,7 @@ cdef class CyRecommendFm:
         int K
         double epsilon
         double l_rate
+        long[:] ixs
     
     def __cinit__(self,
                     double w_0,
@@ -109,48 +110,46 @@ cdef class CyRecommendFm:
 
         return top_song
 
-    def relearning(self, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, np.ndarray[DOUBLE, ndim=1, mode="c"] feedback_matrix, np.ndarray[INTEGER, ndim=1, mode="c"] feature_indexes, int feature_num):
+    def relearning(self, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, np.ndarray[DOUBLE, ndim=1, mode="c"] feedback_matrix):
         """
         フィードバックによる再学習
         top_matrix: 推薦された楽曲の特徴ベクトル
         feedback_matrix: フィードバックを考慮した楽曲の特徴ベクトル
-        feature_indexes: ユーザーとフィードバックに関連するタグのインデックス
         """
         cdef:
             double top_predict
             double feedback_predict
             int count
 
-        self.feature_indexes = feature_indexes
         self.feedback_R = feedback_matrix
         self.top_R = top_matrix
+        self.ixs = np.nonzero(top_matrix)[0]
         self._decition_epsilon(top_matrix, feedback_matrix)  # epsilonの決定
         top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix)
         print feedback_error
         count = 0
         while feedback_error > 0.0:
             print count
-            self.relearning_optimization(top_predict, feedback_predict, feature_num)
+            self.relearning_optimization(top_predict, feedback_predict)
             top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix)
             print feedback_error
             count += 1
             if(count > 1000):
                 break
 
-    def relearning_optimization(self, double top_predict, double feedback_predict, int feature_num):
+    def relearning_optimization(self, double top_predict, double feedback_predict):
         """
         再学習による最適化
         """
         cdef:
-            long i
+            long ix
             int f
             long index
-
-        for i in xrange(feature_num):
-            index = self.feature_indexes[i]
-            self._reupdate_W(index)
+    
+        for ix in self.ixs:
+            self._reupdate_W(ix)
             for f in xrange(self.K):
-                self._reupdate_V(index, f)
+                self._reupdate_V(ix, f)
 
     def calc_feedback_error(self, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, np.ndarray[DOUBLE, ndim=1, mode="c"] feedback_matrix):
         """
@@ -203,12 +202,19 @@ cdef class CyRecommendFm:
         cdef:
             double grad_value = 0.0
             double update_value = 0.0
+            double h_f_pre = 0.0
+            double h_t_pre = 0.0
             double h_f = 0.0 # feedback部分
             double h_t = 0.0 # top部分
-        
-        h_f = np.dot(self.V[:,f], self.feedback_R) - self.V[i][f]*self.feedback_R[i]
+            
+        for ix in self.ixs:
+            h_f_pre += self.V[ix][f] * self.feedback_R[ix]
+            h_t_pre += self.V[ix][f] * self.top_R[ix]
+        h_f = h_f_pre - self.V[i][f] * self.feedback_R[i]
+        #h_f = np.dot(self.V[:,f], self.feedback_R) - self.V[i][f]*self.feedback_R[i]
         h_f *= self.feedback_R[i]
-        h_t = np.dot(self.V[:,f], self.top_R) - self.V[i][f]*self.top_R[i]
+        #h_t = np.dot(self.V[:,f], self.top_R) - self.V[i][f]*self.top_R[i]
+        h_t = h_t_pre - self.V[i][f] * self.top_R[i]
         h_t *= self.top_R[i]
         grad_value = -h_f + h_t + 2*self.regs[f+2]*self.V[i][f]
         self.adagrad_V[i][f] += grad_value * grad_value

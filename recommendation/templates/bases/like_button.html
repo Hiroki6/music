@@ -1,0 +1,12 @@
+{% if song.id not in songs %}
+  <input type = "hidden" name = "like_type" value = 1>
+  <button class = "preference-button like-button" type = "submit" name = "song_id" value = {{song.id}}>
+    like <i class="fa fa-thumbs-o-up" hidden="true"></i>
+  </button>
+  {% else %}
+  <input type = "hidden" name = "like_type" value = 0>
+  <button class = "preference-button erase-button" type = "submit" name = "song_id" value = {{song.id}}>
+    取り消す
+  </button>
+{% endif %}
+
