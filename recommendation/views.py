@@ -27,7 +27,10 @@ def index(request):
     user = request.user
     user_id = user.id
     results = Preference.objects.filter(user=user_id)
-    return render(request, 'recommendation/index.html', {'user': user, 'results': results})
+    paginator = Paginator(results, 10)
+    page = request.GET.get("page")
+    contents = get_pagination_contents(paginator, page)
+    return render(request, 'recommendation/index.html', {'user': user, 'results': contents})
 
 # フィードバック
 @login_required
@@ -66,7 +69,8 @@ def search(request):
     page = request.GET.get("page")
     contents = get_pagination_contents(paginator, page)
     songs = get_user_preference(request.user.id)
-    return render(request, 'recommendation/search.html', {'form': form, 'artist': artist, 'song': song, 'results': contents, 'is_result': is_result, 'user': request.user, 'songs': songs, 'page': page})
+    params = "&artist=" + artist + "&song=" + song
+    return render(request, 'recommendation/search.html', {'form': form, 'artist': artist, 'song': song, 'results': contents, 'is_result': is_result, 'user': request.user, 'songs': songs, 'page': page, 'params': params})
 
 # アーティスト一覧
 @login_required
