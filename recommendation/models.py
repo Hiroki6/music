@@ -77,3 +77,8 @@ class MusicCluster(models.Model):
     lively = models.FloatField(null=True, blank=True)
     peaceful = models.FloatField(null=True, blank=True)
     tense = models.FloatField(null=True, blank=True)
+
+class RecommendSong(models.Model):
+    user = models.ForeignKey(User)
+    count = models.IntegerField()
+    song = models.ForeignKey(Song)

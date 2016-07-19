@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 from .models import Song, Artist, Preference
+import redis
+import numpy as np
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # そのユーザーの好みの楽曲リスト取得
 def get_user_preference(user_id):
@@ -63,3 +65,23 @@ def get_pagination_contents(paginator, page):
         contents = paginator.page(paginator.num_pages)
 
     return contents
+
+def get_song_obj(songs):
+    
+    results = Song.objects.filter(id__in=songs)
+
+    return results
+
+def get_top_k_songs(user):
+
+    r = redis.Redis(host='localhost', port=6379, db=0)
+    key = "rankings_" + str(user)
+    songs = r.lrange(key, 0, -1)
+    songs = np.array(songs, dtype=np.int64)
+    return songs
+
+def get_top_song(user):
+
+    r = redis.Redis(host='localhost', port=6379, db=0)
+    song = r.hget("top_song", str(user))
+    return int(song)

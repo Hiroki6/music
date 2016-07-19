@@ -7,16 +7,16 @@
   <div class = "clearfix">
     {% for song in results %}
       <div class = "content">
-        {% include "bases/song_iframe.html" %}
+        {% include "parts/song_iframe.html" %}
         <iframe width = "420" height = "315" src = "https://www.youtube.com/embed/{{ song.url }}" frameborder="0" allowfullscreen></iframe>
         <p class = "song-info">{{ song.artist.name }} / {{ song.name }}</p>
         <form class = "like-form" name = "like" method = "POST" action = "/recommendation/artist/{{ song.artist.id }}">
           {% csrf_token %}
-          {% include "bases/like_button.html" %}
+          {% include "parts/like_button.html" %}
         </form>
       </div>
     {% endfor %}
   </div>
-  {% include "bases/paginator.html" %}
+  {% include "parts/paginator.html" %}
 </div>
 {% endblock main %}
