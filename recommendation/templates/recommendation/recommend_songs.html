@@ -5,9 +5,9 @@
 <div class = "main">
   <h2>オススメの楽曲(10曲推薦バージョン)</h2>
   <div class = "clearfix">
-    {% for song in songs %}
+    {% for song in results %}
       <div class = "content">
-        {% include "bases/song_iframe.html" %}
+        {% include "parts/song_iframe.html" %}
       </div>
     {% endfor %}
   </div>

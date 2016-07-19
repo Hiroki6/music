@@ -112,7 +112,7 @@ def create_matrix_with_tag_dicVec():
     print "正規化用データ変形"
     regs_matrix = create_regs_matrix(regs_data, data_labels, tag_map, regs_num)
 
-    return rate_matrix[:len(targets)], regs_matrix, labels, targets, tag_map, ratelist
+    return rate_matrix[:len(targets)], regs_matrix, data_labels, targets, tag_map, ratelist
 
 """
 テストデータのFM配列作成

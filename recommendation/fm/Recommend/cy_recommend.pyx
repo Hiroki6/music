@@ -48,6 +48,7 @@ cdef class CyRecommendFm:
         double epsilon
         double l_rate
         long[:] ixs
+        dict labels
     
     def __cinit__(self,
                     double w_0,
@@ -59,7 +60,8 @@ cdef class CyRecommendFm:
                     np.ndarray[DOUBLE, ndim=1, mode="c"] regs,
                     long n,
                     int K,
-                    double l_rate):
+                    double l_rate,
+                    dict labels):
         self.w_0 = w_0
         self.W = W
         self.V = V
@@ -70,27 +72,41 @@ cdef class CyRecommendFm:
         self.n = n
         self.K = K
         self.l_rate = l_rate
+        self.labels = labels
 
-    cdef double _calc_rating(self, np.ndarray[DOUBLE, ndim=1, mode="c"] matrix):
+    cdef double _calc_rating(self,
+            np.ndarray[DOUBLE, ndim=1, mode="c"] matrix, char* song, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):
         """
         回帰予測
         """
         cdef:
+            # 各特徴量の重み
             double features = 0.0
+            # 相互作用の重み
             double iterations = 0.0
             int f
-
-        features = np.dot(self.W, matrix)
+            double dot_sum = 0.0
+            double dot_sum_square = 0.0
+            long ix
+        
+        ixs[-1] = self.labels["song="+song]
+        for ix in ixs:
+            features += self.W[ix] * matrix[ix]
         for f in xrange(self.K):
-            iterations += pow(np.dot(self.V[:,f], matrix), 2) - np.dot(self.V[:,f]**2, matrix**2)
+            dot_sum = 0.0
+            dot_sum_square = 0.0
+            for ix in ixs:
+                dot_sum += self.V[ix][f] * matrix[ix]
+                dot_sum_square += self.V[ix][f] * self.V[ix][f] * matrix[ix] * matrix[ix]
+            iterations += dot_sum * dot_sum - dot_sum_square
         return self.w_0 + features + iterations/2
 
-    def predict(self, np.ndarray[DOUBLE, ndim=1, mode="c"] matrix):
+    def predict(self, np.ndarray[DOUBLE, ndim=1, mode="c"] matrix, char* song, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):
         """
         python側から呼び出せる回帰予測結果取得
         """
-        return self._calc_rating(matrix)
-    
+        return self._calc_rating(matrix, song, ixs)
+
     def get_top_song(self, np.ndarray[DOUBLE, ndim=2, mode="c"] matrixes, np.ndarray[INTEGER, ndim=1, mode="c"] songs):
 
         cdef:
@@ -147,7 +163,7 @@ cdef class CyRecommendFm:
             long index
     
         for ix in self.ixs:
-            self._reupdate_W(ix)
+            #self._reupdate_W(ix)
             for f in xrange(self.K):
                 self._reupdate_V(ix, f)
 
@@ -211,9 +227,7 @@ cdef class CyRecommendFm:
             h_f_pre += self.V[ix][f] * self.feedback_R[ix]
             h_t_pre += self.V[ix][f] * self.top_R[ix]
         h_f = h_f_pre - self.V[i][f] * self.feedback_R[i]
-        #h_f = np.dot(self.V[:,f], self.feedback_R) - self.V[i][f]*self.feedback_R[i]
         h_f *= self.feedback_R[i]
-        #h_t = np.dot(self.V[:,f], self.top_R) - self.V[i][f]*self.top_R[i]
         h_t = h_t_pre - self.V[i][f] * self.top_R[i]
         h_t *= self.top_R[i]
         grad_value = -h_f + h_t + 2*self.regs[f+2]*self.V[i][f]

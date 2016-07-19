@@ -3,7 +3,6 @@
 import numpy as np
 import redis
 from Recommend import cy_recommend as cyFm
-import sys
 from .. import models
 import sys
 sys.dont_write_bytecode = True 
@@ -17,7 +16,7 @@ class RecommendFm(object):
         self.K = K
         self.user = user
         self.get_range_params()
-        self.cy_fm = cyFm.CyRecommendFm(self.w_0, self.W, self.V, self.adagrad_w_0, self.adagrad_W, self.adagrad_V, self.regs, len(self.W), K, 0.005)
+        self.cy_fm = cyFm.CyRecommendFm(self.w_0, self.W, self.V, self.adagrad_w_0, self.adagrad_W, self.adagrad_V, self.regs, len(self.W), K, 0.005, self.labels)
 
     def get_range_params(self):
         """
@@ -93,19 +92,28 @@ class RecommendFm(object):
 
     def get_top_song(self):
         """
-        １位の楽曲の予測値、楽曲ID、配列を取得
+        １位の楽曲の楽曲ID、配列をredisに保存
         """
+        r = redis.Redis(host='localhost', port=6379, db=0)
         top_value = -sys.maxint
         top_matrix = self.matrixes[0]
         top_song = self.songs[0]
+        ixs = np.zeros(len(self.tag_map) + 2, dtype=np.int64)
+
+        for tag, value in self.tag_map.items():
+            ixs[index] = value
+            index += 1
+        user_index = self.labels["user="+str(self.user)]
+        ixs[-2] = user_index
+        
         for matrix, song in zip(self.matrixes, self.songs):
-            predict_value = self.cy_fm.predict(matrix)
+            predict_value = self.cy_fm.predict(matrix, str(song), ixs)
             if top_value < predict_value:
                 top_value = predict_value
                 top_matrix = matrix
                 top_song = song
-        top_song_obj = Song.objects.filter(id=top_song)
-        return top_song_obj
+        self._save_top_matrix(r, "top_matrix_" + str(self.user), top_matrix)
+        self._save_scalar(r, "top_song", str(self.user), top_song)
 
     def get_top_song_cython(self):
 
@@ -119,7 +127,7 @@ class RecommendFm(object):
         まだ視聴していない楽曲のid配列を取得
         """
         q = models.Preference.objects.filter(user=self.user).values('song')
-        results = models.SongTag.objects.exclude(song__in=q).values()
+        results = models.Song.objects.exclude(id__in=q).values()
         tag_obj = models.Tag.objects.all()
         tags = [tag.name for tag in tag_obj]
 
@@ -127,7 +135,7 @@ class RecommendFm(object):
         self.songs = [] # List[song_id]
         result_length = len(results[0])
         for result in results:
-            song_id = result['song_id']
+            song_id = result['id']
             self.songs.append(song_id)
             self.song_tag_map.setdefault(song_id, [])
             for tag in tags:
@@ -181,15 +189,16 @@ class RecommendFm(object):
         self.tags = [(tag.id-1, tag.name) for tag in tags]
 
     def relearning(self, feedback):
+        self.top_matrix = self._get_one_dim_params(r, "top_matrix_" + str(self.user), "float")
         self.create_feedback_matrix(feedback)
         self.cy_fm.relearning(self.top_matrix, self.feedback_matrix)
-        self.save_redis()
+        self._save_redis_relearning()
 
     def save_redis(self):
         """
         パラメータのredisへの保存
         """
-        r = redis.Redis(host='localhost', port=6379, db=1)
+        r = redis.Redis(host='localhost', port=6379, db=0)
         """
         一度全て消す
         """
@@ -225,8 +234,29 @@ class RecommendFm(object):
         self._save_tag_map(r)
         self._save_labels(r)
 
-    def _save_scalar(self, redis_obj, table, key, param):
-        redis_obj.hset(table, key, param)
+    def _save_redis_relearning(self):
+        """
+        再学習の時のredisの保存
+        まず、既存のVとadagrad_Vを削除してから保存する
+        """
+        r = redis.Redis(host='localhost', port=6379, db=1)
+        self._delete_V_array(r, "V_", "adagrad_V_", self.n)
+        self._save_two_dim_array(r, "V_", self.V)
+        adagrad_V = self.cy_fm.get_adagrad_V()
+        self._save_two_dim_array(r, "adagrad_V_", adagrad_V)
+
+    def _delete_V_array(self, redis_obj, v_pre_key, adagrad_v_pre_key, param_nums):
+        """
+        既存のVとadagrad_Vの削除
+        """
+        for i in xrange(param_nums):
+            key = v_pre_key + str(i)
+            redis_obj.delete(key)
+            key = adagrad_v_pre_key + str(i)
+            redis_obj.delete(key)
+
+    def _save_scalar(self, redis_obj, field, key, param):
+        redis_obj.hset(field, key, param)
 
     def _save_one_dim_array(self, redis_obj, key, params):
         for param in params:
@@ -248,4 +278,8 @@ class RecommendFm(object):
         for key, value in self.labels.items():
             redis_obj.rpush("label_keys", key)
             redis_obj.rpush("label_values", value)
-
+    
+    def _save_top_matrix(self, redis_obj, key, params):
+        redis_obj.delete(key)
+        for param in params:
+            redis_obj.rpush(key, param)

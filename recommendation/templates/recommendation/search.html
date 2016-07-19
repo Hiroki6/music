@@ -22,15 +22,15 @@
   <div class = "clearfix">
   {% for song in results %}
     <div class = "content">
-      {% include "bases/song_iframe.html" %}
+      {% include "parts/song_iframe.html" %}
       <form class = "like-form" name = "like" method = "POST" action = "{% url 'recommendation:search' %}">
         {% csrf_token %}
-        {% include "bases/like_button.html" %}
+        {% include "parts/like_button.html" %}
       </form>
     </div>
   {% endfor %}
   </div>
-  {% include "bases/paginator.html" %}
+  {% include "parts/paginator.html" %}
 </div>
 {% endifequal %}
 {% endblock main %}

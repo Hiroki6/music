@@ -138,16 +138,14 @@ def user(request):
 @login_required
 def recommend_song(request):
     user = request.user
-    rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
-    songs = recommend_lib.get_top_song(rm_obj)
-    #songs = get_user_not_listening_songs(user.id)
+    song = get_top_song(user)
+    song_obj = Song.objects.filter(id=song)
     feedback_dict = get_feedback_dict()
-    return render(request, 'recommendation/recommend_song.html', {'user': user, 'song': songs[4], 'feedback_dict': feedback_dict})
+    return render(request, 'recommendation/recommend_song.html', {'user': user, 'song': song_obj, 'feedback_dict': feedback_dict})
 
 def recommend_songs(request):
     user = request.user
-    rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
-    songs = recommend_lib.get_rankings(rm_obj)
-    songs = songs[:10]
-    #songs = get_user_not_listening_songs(user.id)
-    return render(request, 'recommendation/recommend_songs.html', {'user': user, 'songs': songs[:50]})
+    songs = get_top_k_songs(user)
+    songs = np.array([ 2390, 35883, 52823, 51681, 38205, 39490, 30230, 54557, 50731, 14275])
+    results = Song.objects.filter(id__in=songs)
+    return render(request, 'recommendation/recommend_songs.html', {'user': user, 'results': results})

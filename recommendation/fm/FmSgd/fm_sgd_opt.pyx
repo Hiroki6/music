@@ -13,6 +13,7 @@ import time
 import numpy as np
 cimport numpy as np
 cimport cython
+import redis
 
 np.import_array()
 
@@ -42,6 +43,10 @@ cdef class CyFmSgdOpt:
     epsilon: 再学習の条件(epsilon - P(f) + P(t))
     top_R: 推薦された楽曲の特徴ベクトル
     feedback_R: フィードバックを考慮した楽曲の特徴ベクトル
+    error: 目的関数
+    now_error: その視聴履歴の学習誤差
+    ixs: nonzeroインデックス配列
+    reg_ixs: 正規化項目のインデックス配列
     """
 
     cdef:
@@ -69,6 +74,7 @@ cdef class CyFmSgdOpt:
         double now_error
         long[:] ixs
         long[:] reg_ixs
+        dict labels
 
     def __cinit__(self,
                     np.ndarray[DOUBLE, ndim=2, mode="c"] R,
@@ -84,7 +90,8 @@ cdef class CyFmSgdOpt:
                     np.ndarray[DOUBLE, ndim=1, mode="c"] regs,
                     double l_rate,
                     int K,
-                    int step):
+                    int step,
+                    dict labels):
         self.R = R
         self.R_v = R_v
         self.targets = targets
@@ -99,6 +106,7 @@ cdef class CyFmSgdOpt:
         self.l_rate = l_rate
         self.K = K
         self.step = step
+        self.labels = labels
 
     def get_sum_error(self):
 
@@ -324,7 +332,7 @@ cdef class CyFmSgdOpt:
                 break
 
     cdef double _calc_rating(self,
-                    np.ndarray[DOUBLE, ndim=1, mode="c"] matrix):
+            np.ndarray[DOUBLE, ndim=1, mode="c"] matrix, char* song, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):
         """
         回帰予測
         """
@@ -334,17 +342,89 @@ cdef class CyFmSgdOpt:
             # 相互作用の重み
             double iterations = 0.0
             int f
-
-        features = np.dot(self.W, matrix)
+            double dot_sum = 0.0
+            double dot_sum_square = 0.0
+            long ix
+        
+        ixs[-1] = self.labels["song="+song]
+        for ix in ixs:
+            features += self.W[ix] * matrix[ix]
         for f in xrange(self.K):
-            iterations += pow(np.dot(self.V[:,f], matrix), 2) - np.dot(self.V[:,f]**2, matrix**2)
+            dot_sum = 0.0
+            dot_sum_square = 0.0
+            for ix in ixs:
+                dot_sum += self.V[ix][f] * matrix[ix]
+                dot_sum_square += self.V[ix][f] * self.V[ix][f] * matrix[ix] * matrix[ix]
+            iterations += dot_sum * dot_sum - dot_sum_square
         return self.w_0 + features + iterations/2
 
-    def predict(self, np.ndarray[DOUBLE, ndim=1, mode="c"] matrix):
+    def get_rankings(self, np.ndarray[DOUBLE, ndim=2, mode="c"] matrixes, np.ndarray[INTEGER, ndim=1, mode="c"] songs, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):
+        """
+        ランキングを取得
+        """
+        rankings = [(self.predict(matrix, ixs, str(song)), song) for matrix, song in zip(matrixes, songs)]
+        return rankings
+
+    def predict(self, np.ndarray[DOUBLE, ndim=1, mode="c"] matrix, char* song, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):
         """
         python側から呼び出せる回帰予測結果取得
         """
-        return self._calc_rating(matrix)
+        return self._calc_rating(matrix, song, ixs)
+
+    def save_redis(self):
+        """
+        パラメータのredisへの保存
+        """
+        r = redis.Redis(host='localhost', port=6379, db=0)
+        
+        """
+        全て消す
+        """
+        r.flushall()
+        """
+        w_0, W, Vの保存
+        """
+        # w_0の保存
+        self.save_scalar(r, "bias", "w_0", self.w_0)
+        # Wの保存
+        self.save_one_dim_array(r, "W", self.W)
+        # Vの保存
+        self.save_two_dim_array(r, "V_", self.V)
+        """
+        regsの保存
+        """
+        self.save_one_dim_array(r, "regs", self.regs)
+        """
+        adagradの保存
+        """
+        # adagrad_w_0の保存
+        self.save_scalar(r, "bias", "adagrad", self.adagrad_w_0)
+        # adagrad_Wの保存
+        self.save_one_dim_array(r, "adagrad_W", self.adagrad_W)
+        # adagrad_Vの保存
+        self.save_two_dim_array(r, "adagrad_V_", self.adagrad_V)
+
+    def save_scalar(self, redis_obj, char* key, char* field, double value):
+        redis_obj.hset(key, field, value)
+
+    def save_one_dim_array(self, redis_obj, char* key, np.ndarray[DOUBLE, ndim=1, mode="c"] params):
+
+        cdef:
+            double param
+
+        for param in params:
+            redis_obj.rpush(key, param)
+
+    def save_two_dim_array(self, redis_obj, char* pre_key, np.ndarray[DOUBLE, ndim=2, mode="c"] params):
+
+        cdef:
+            long i
+            double param
+        
+        for i in xrange(self.n):
+            key = pre_key + str(i)
+            for param in params[i]:
+                redis_obj.rpush(key, param)
 
     def get_w_0(self):
         return self.w_0
