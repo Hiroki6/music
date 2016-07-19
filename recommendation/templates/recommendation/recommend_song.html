@@ -6,6 +6,7 @@
 <div class = "main clearfix">
   <h2>オススメの楽曲（インタラクションバーション）</h2>
   <div class = "recommend-song">
+    {% for song in songs %}
     {% include "parts/song_iframe.html" %}
     <form class = "feedback-form" name = "feedback" method = "POST" action = "/recommendation/feedback/">
       {% csrf_token %}
@@ -18,6 +19,7 @@
       <input type = "hidden" name = "song" value = {{ song.id }}>
       <input type = "submit" value = "フィードバックをする">
       </form>
+      {% endfor %}
   </div>
 </div>
 

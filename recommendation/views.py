@@ -40,7 +40,7 @@ def feedback(request):
         song_id = request.POST['song']
     except KeyError:
         pass
-    rm_obj = recommend_lib.create_recommend_obj(request.user.id, 16)
+    rm_obj = recommend_lib.create_recommend_obj(request.user.id, 8)
     rm_obj.relearning(feedback_value)
     return redirect('/recommendation/recommend_song/')
 
@@ -92,7 +92,7 @@ def artist(request, artist_id):
         page = int(request.GET["page"])
     index = page * 10
     songs = get_user_preference(request.user.id)
-    results = Song.objects.filter(artist__id=artist_id)
+    results = Song.objects.filter(artist=artist_id)
     artist_name = results[0].artist.name
     paginator = Paginator(results, 10)
     page = request.GET.get("page")
@@ -138,10 +138,11 @@ def user(request):
 @login_required
 def recommend_song(request):
     user = request.user
-    song = get_top_song(user)
+    #song = get_top_song(user)
+    song = 39391
     song_obj = Song.objects.filter(id=song)
     feedback_dict = get_feedback_dict()
-    return render(request, 'recommendation/recommend_song.html', {'user': user, 'song': song_obj, 'feedback_dict': feedback_dict})
+    return render(request, 'recommendation/recommend_song.html', {'user': user, 'songs': song_obj, 'feedback_dict': feedback_dict})
 
 def recommend_songs(request):
     user = request.user

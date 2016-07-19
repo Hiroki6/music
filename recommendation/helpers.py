@@ -84,4 +84,5 @@ def get_top_song(user):
 
     r = redis.Redis(host='localhost', port=6379, db=0)
     song = r.hget("top_song", str(user))
+    print song
     return int(song)
