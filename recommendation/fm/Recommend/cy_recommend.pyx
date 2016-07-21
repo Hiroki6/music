@@ -89,7 +89,8 @@ cdef class CyRecommendFm:
             double dot_sum_square = 0.0
             long ix
         
-        ixs[-1] = self.labels["song="+song]
+        if self.labels.has_key("song="+song):
+            ixs[-1] = self.labels["song="+song]
         for ix in ixs:
             features += self.W[ix] * matrix[ix]
         for f in xrange(self.K):
@@ -136,18 +137,22 @@ cdef class CyRecommendFm:
             double top_predict
             double feedback_predict
             int count
+            np.ndarray ixs
 
         self.feedback_R = feedback_matrix
         self.top_R = top_matrix
         self.ixs = np.nonzero(top_matrix)[0]
-        self._decition_epsilon(top_matrix, feedback_matrix)  # epsilonの決定
-        top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix)
+        ixs = np.array(self.ixs)
+        self._decition_epsilon(top_matrix, feedback_matrix, ixs)  # epsilonの決定
+        top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix, ixs)
+        print top_predict
+        print feedback_predict
         print feedback_error
         count = 0
         while feedback_error > 0.0:
             print count
             self.relearning_optimization(top_predict, feedback_predict)
-            top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix)
+            top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix, ixs)
             print feedback_error
             count += 1
             if(count > 1000):
@@ -167,24 +172,24 @@ cdef class CyRecommendFm:
             for f in xrange(self.K):
                 self._reupdate_V(ix, f)
 
-    def calc_feedback_error(self, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, np.ndarray[DOUBLE, ndim=1, mode="c"] feedback_matrix):
+    def calc_feedback_error(self, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, np.ndarray[DOUBLE, ndim=1, mode="c"] feedback_matrix, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):
         """
         誤差の計算{ε-y(X_f)+y(X_t)}
         @returns(top_predict) 推薦曲の予測値
         @returns(feed_predict) フィードバックを考慮したもの予測値
         """
-        top_predict = self.predict(top_matrix)
-        feedback_predict = self.predict(feedback_matrix)
+        top_predict = self.predict(top_matrix, "", ixs)
+        feedback_predict = self.predict(feedback_matrix, "", ixs)
         feedback_error = self.epsilon - feedback_predict + top_predict
 
         return top_predict, feedback_predict, feedback_error
 
-    cdef void _decition_epsilon(self, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, np.ndarray[DOUBLE, ndim=1, mode="c"] feedback_matrix):
+    cdef void _decition_epsilon(self, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, np.ndarray[DOUBLE, ndim=1, mode="c"] feedback_matrix, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):
         """
         εの決定
         """
-        top_predict = self.predict(top_matrix)
-        feedback_predict = self.predict(feedback_matrix)
+        top_predict = self.predict(top_matrix, "", ixs)
+        feedback_predict = self.predict(feedback_matrix, "", ixs)
         # もともと値が大きい時
         if feedback_predict > top_predict:
             self.epsilon = 2 * (feedback_predict - top_predict)
@@ -234,3 +239,30 @@ cdef class CyRecommendFm:
         self.adagrad_V[i][f] += grad_value * grad_value
         update_value = self.l_rate * grad_value / sqrt(self.adagrad_V[i][f])
         self.V[i][f] -= update_value
+
+    def get_w_0(self):
+        return self.w_0
+
+    def get_W(self):
+        return self.W
+
+    def get_V(self):
+        return self.V
+
+    def get_E(self):
+        return self.E
+
+    def get_self_error(self):
+        return self.error
+
+    def get_epsilon(self):
+        return self.epsilon
+
+    def get_adagrad_w_0(self):
+        return self.adagrad_w_0
+
+    def get_adagrad_W(self):
+        return self.adagrad_W
+
+    def get_adagrad_V(self):
+        return self.adagrad_V

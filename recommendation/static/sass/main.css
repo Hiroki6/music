@@ -89,6 +89,11 @@ body {
         body .main select option::selection {
           color: #fff !important;
           background-color: #00bfff !important; }
+    body .main .recommend-song-list {
+      font-size: 20px;
+      color: #00ff7f; }
+      body .main .recommend-song-list:hover {
+        color: #32cd32; }
     body .main .search-result {
       font-size: 20px;
       font-weight: bold; }

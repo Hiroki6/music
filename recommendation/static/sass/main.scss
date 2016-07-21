@@ -120,6 +120,13 @@ body{
         }
       }
     }
+    .recommend-song-list{
+      font-size: 20px;
+      color: #00ff7f;
+      &:hover{
+        color: #32cd32;
+      }
+    }
     .search-result{
       font-size: 20px;
       font-weight: bold;

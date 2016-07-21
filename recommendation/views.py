@@ -40,7 +40,7 @@ def feedback(request):
         song_id = request.POST['song']
     except KeyError:
         pass
-    rm_obj = recommend_lib.create_recommend_obj(request.user.id, 16)
+    rm_obj = recommend_lib.create_recommend_obj(request.user.id, 8)
     rm_obj.relearning(feedback_value)
     return redirect('/recommendation/recommend_song/')
 
@@ -92,7 +92,7 @@ def artist(request, artist_id):
         page = int(request.GET["page"])
     index = page * 10
     songs = get_user_preference(request.user.id)
-    results = Song.objects.filter(artist__id=artist_id)
+    results = Song.objects.filter(artist=artist_id)
     artist_name = results[0].artist.name
     paginator = Paginator(results, 10)
     page = request.GET.get("page")
@@ -140,12 +140,20 @@ def recommend_song(request):
     user = request.user
     song = get_top_song(user)
     song_obj = Song.objects.filter(id=song)
+    add_user_recommend_song(user.id, song)
     feedback_dict = get_feedback_dict()
-    return render(request, 'recommendation/recommend_song.html', {'user': user, 'song': song_obj, 'feedback_dict': feedback_dict})
+    finish_flag = 1 if count_recommend_songs(user.id) >= 10 else 0
+    return render(request, 'recommendation/recommend_song.html', {'user': user, 'songs': song_obj, 'feedback_dict': feedback_dict, 'finish_flag': finish_flag})
 
+@login_required
 def recommend_songs(request):
     user = request.user
     songs = get_top_k_songs(user)
-    songs = np.array([ 2390, 35883, 52823, 51681, 38205, 39490, 30230, 54557, 50731, 14275])
     results = Song.objects.filter(id__in=songs)
     return render(request, 'recommendation/recommend_songs.html', {'user': user, 'results': results})
+
+@login_required
+def interaction_songs(request):
+    user = request.user
+    results = RecommendSong.objects.filter(user=user.id)
+    return render(request, 'recommendation/interaction_songs.html', {'user': user, 'results': results})

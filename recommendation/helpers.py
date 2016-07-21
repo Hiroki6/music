@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from .models import Song, Artist, Preference
+from .models import Song, Artist, Preference, RecommendSong
 import redis
 import numpy as np
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -75,7 +75,7 @@ def get_song_obj(songs):
 def get_top_k_songs(user):
 
     r = redis.Redis(host='localhost', port=6379, db=0)
-    key = "rankings_" + str(user)
+    key = "rankings_" + str(user.id)
     songs = r.lrange(key, 0, -1)
     songs = np.array(songs, dtype=np.int64)
     return songs
@@ -83,5 +83,13 @@ def get_top_k_songs(user):
 def get_top_song(user):
 
     r = redis.Redis(host='localhost', port=6379, db=0)
-    song = r.hget("top_song", str(user))
+    song = r.hget("top_song", str(user.id))
     return int(song)
+
+def add_user_recommend_song(user_id, song_id):
+
+    obj, created = RecommendSong.objects.get_or_create(user_id=user_id, song_id=song_id)
+
+def count_recommend_songs(user_id):
+
+    return RecommendSong.objects.filter(user_id=user_id).count()

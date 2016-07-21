@@ -5,6 +5,7 @@ import math
 from FmSgd import fm_sgd_opt
 import redis
 from .. import models
+import time
 import sys
 sys.dont_write_bytecode = True 
 
@@ -67,14 +68,18 @@ class CyFmSgdOpt():
 
         self.get_matrixes_by_song()
         print "ランキング取得"
+        start_time = time.time()
         rankings = self.get_rankings()
         r = redis.Redis(host='localhost', port=6379, db=0)
         key = "rankings_" + str(self.user)
         top_k_songs = []
         for ranking in rankings:
             top_k_songs.append(ranking[1])
+        print time.time() - start_time
+        print "redisに保存"
         self._save_redis_top_k_songs(r, key, top_k_songs) # top_k保存
         self._save_redis_top_song(r, "top_song", str(self.user), top_k_songs[0]) # top_song保存{ "top_song": "user_id": song }
+        self._save_top_matrix(r, self.user, top_k_songs[0])
 
     def get_rankings(self, rank = 10):
         """
@@ -100,16 +105,15 @@ class CyFmSgdOpt():
         """
         self.get_not_learn_songs()
         print "配列作成"
-        self.matrixes = np.zeros((len(self.song_tag_map), len(self.W)))
+        self.matrixes = np.zeros((len(self.song_tag_map), self.n))
         user_index = self.labels["user="+str(self.user)]
         for col, song_id in enumerate(self.songs):
             song_label_name = "song="+str(song_id)
-            if song_label_name in self.labels:
-                song_index = self.labels[song_label_name]
-                self.matrixes[col][user_index] = 1.0
-                self.matrixes[col][song_index] = 1.0
-                for index, tag_value in enumerate(self.song_tag_map[song_id]):
-                    self.matrixes[col][self.tag_map[index]] = tag_value
+            song_index = self.labels[song_label_name]
+            self.matrixes[col][user_index] = 1.0
+            self.matrixes[col][song_index] = 1.0
+            for index, tag_value in enumerate(self.song_tag_map[song_id]):
+                self.matrixes[col][self.tag_map[index]] = tag_value
 
 
     def get_not_learn_songs(self):
@@ -138,3 +142,21 @@ class CyFmSgdOpt():
 
     def _save_redis_top_song(self, redis_obj, key, field, song):
         redis_obj.hset(key, field, song)
+
+    def _save_top_matrix(self, redis_obj, user, song):
+        top_matrix = self.get_one_song_matrix(song)
+        for param in top_matrix:
+            redis_obj.rpush("top_matrix_" + str(user), param)
+
+    def get_one_song_matrix(self, song_id):
+
+        top_matrix = np.zeros(self.n)
+        song_index = self.labels["song="+str(song_id)]
+        user_index = self.labels["user="+str(self.user)]
+        top_matrix[user_index] = 1.0
+        top_matrix[song_index] = 1.0
+        for index, tag_value in enumerate(self.song_tag_map[song_id]):
+            top_matrix[self.tag_map[index]] = tag_value
+
+        return top_matrix
+       

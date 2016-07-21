@@ -6,18 +6,26 @@
 <div class = "main clearfix">
   <h2>オススメの楽曲（インタラクションバーション）</h2>
   <div class = "recommend-song">
+    {% for song in songs %}
     {% include "parts/song_iframe.html" %}
-    <form class = "feedback-form" name = "feedback" method = "POST" action = "/recommendation/feedback/">
-      {% csrf_token %}
-      <select name="select-feedback">
-        <option value="">フィードバックを選択してください</option>
-        {% for index, value in feedback_dict.items %}
-        <option value={{ index }}>{% if index < 5 %}&uarr;{% else %}&darr;{% endif %}{{ value }}</option>
-        {% endfor %}
-      </select>
-      <input type = "hidden" name = "song" value = {{ song.id }}>
-      <input type = "submit" value = "フィードバックをする">
-      </form>
+      {% if not finish_flag %}
+      <h3>合計１０曲推薦されました! </br>
+          以下のリンクを押してください</h3>
+        <a class = "recommend-song-list" href = "/recommendation/interaction_songs/">推薦された楽曲一覧へ</a>
+      {% else %}
+        <form class = "feedback-form" name = "feedback" method = "POST" action = "/recommendation/feedback/">
+          {% csrf_token %}
+          <select name="select-feedback">
+            <option value="">フィードバックを選択してください</option>
+            {% for index, value in feedback_dict.items %}
+            <option value={{ index }}>{% if index < 5 %}&uarr;{% else %}&darr;{% endif %}{{ value }}</option>
+            {% endfor %}
+          </select>
+          <input type = "hidden" name = "song" value = {{ song.id }}>
+          <input type = "submit" value = "フィードバックをする">
+        </form>
+      {% endif %}
+    {% endfor %}
   </div>
 </div>
 

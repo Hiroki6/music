@@ -347,6 +347,7 @@ cdef class CyFmSgdOpt:
             long ix
         
         ixs[-1] = self.labels["song="+song]
+        print ixs
         for ix in ixs:
             features += self.W[ix] * matrix[ix]
         for f in xrange(self.K):
