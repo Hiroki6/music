@@ -124,6 +124,15 @@ body {
       body .main .content .song-info {
         float: left;
         margin: 5px 0 0; }
+    body .main .refresh-form {
+      margin-left: 10px; }
+      body .main .refresh-form .refresh-button {
+        background-color: #00ff7f;
+        border: none;
+        border-radius: 5px;
+        color: #fff; }
+        body .main .refresh-form .refresh-button:hover {
+          background-color: #32cd32; }
     body .main .recommend-song {
       margin: 0 auto; }
     body .main input {

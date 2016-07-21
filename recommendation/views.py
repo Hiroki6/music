@@ -154,6 +154,10 @@ def recommend_songs(request):
 
 @login_required
 def interaction_songs(request):
+    if request.method == 'POST':
+        user_id = request.POST['user_id']
+        refrash_recommend_songs(user_id)
+        return redirect('/recommendation/recommend_song/')
     user = request.user
     results = RecommendSong.objects.filter(user=user.id)
     return render(request, 'recommendation/interaction_songs.html', {'user': user, 'results': results})
