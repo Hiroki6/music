@@ -9,10 +9,6 @@
     {% for song in songs %}
     {% include "parts/song_iframe.html" %}
       {% if not finish_flag %}
-      <h3>合計１０曲推薦されました! </br>
-          以下のリンクを押してください</h3>
-        <a class = "recommend-song-list" href = "/recommendation/interaction_songs/">推薦された楽曲一覧へ</a>
-      {% else %}
         <form class = "feedback-form" name = "feedback" method = "POST" action = "/recommendation/feedback/">
           {% csrf_token %}
           <select name="select-feedback">
@@ -24,6 +20,10 @@
           <input type = "hidden" name = "song" value = {{ song.id }}>
           <input type = "submit" value = "フィードバックをする">
         </form>
+      {% else %}
+        <h3>合計１０曲推薦されました! </br>
+          以下のリンクを押してください</h3>
+        <a class = "recommend-song-list" href = "/recommendation/interaction_songs/">推薦された楽曲一覧へ</a>
       {% endif %}
     {% endfor %}
   </div>

@@ -93,3 +93,7 @@ def add_user_recommend_song(user_id, song_id):
 def count_recommend_songs(user_id):
 
     return RecommendSong.objects.filter(user_id=user_id).count()
+
+def refrash_recommend_songs(user_id):
+
+    RecommendSong.objects.filter(user_id=user_id).delete()

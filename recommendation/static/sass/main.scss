@@ -167,6 +167,18 @@ body{
         margin: 5px 0 0;
       }
     }
+    .refresh-form{
+      margin-left: 10px;
+      .refresh-button{
+        background-color: #00ff7f;
+        border: none;
+        border-radius: 5px;
+        color: #fff;
+        &:hover{
+          background-color: #32cd32;
+        }
+      }
+    }
     .recommend-song {
       margin: 0 auto;
     }

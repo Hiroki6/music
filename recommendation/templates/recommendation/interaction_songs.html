@@ -11,6 +11,12 @@
       </div>
     {% endfor %}
   </div>
+  <form class = "refresh-form" name = "refresh" method = "POST" action = "/recommendation/interaction_songs/">
+    {% csrf_token %}
+    <button class = "refresh-button" type = "submit" name = "user_id" value = {{user.id}}>
+      もう一度推薦を始める
+    </button>
+  </form>
 </div>
 {% endblock main %}
 
