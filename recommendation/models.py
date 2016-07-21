@@ -80,5 +80,4 @@ class MusicCluster(models.Model):
 
 class RecommendSong(models.Model):
     user = models.ForeignKey(User)
-    count = models.IntegerField()
     song = models.ForeignKey(Song)

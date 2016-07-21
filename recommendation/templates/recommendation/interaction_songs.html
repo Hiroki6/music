@@ -1,0 +1,16 @@
+{% extends 'bases/base.html' %}
+{% block title %}推薦楽曲一覧{% endblock title %}
+
+{% block main %}
+<div class = "main">
+  <h2>推薦された楽曲</h2>
+  <div class = "clearfix">
+    {% for song in results %}
+      <div class = "content">
+        {% include "parts/song_iframe_ref.html" %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock main %}
+
