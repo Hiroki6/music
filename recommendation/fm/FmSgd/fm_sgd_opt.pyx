@@ -9,9 +9,11 @@ Factorization Machineをcythonを使って高速化
 from libc.math cimport pow, sqrt
 import math
 import random
+import time
 import numpy as np
 cimport numpy as np
 cimport cython
+import redis
 
 np.import_array()
 
@@ -41,6 +43,10 @@ cdef class CyFmSgdOpt:
     epsilon: 再学習の条件(epsilon - P(f) + P(t))
     top_R: 推薦された楽曲の特徴ベクトル
     feedback_R: フィードバックを考慮した楽曲の特徴ベクトル
+    error: 目的関数
+    now_error: その視聴履歴の学習誤差
+    ixs: nonzeroインデックス配列
+    reg_ixs: 正規化項目のインデックス配列
     """
 
     cdef:
@@ -66,6 +72,9 @@ cdef class CyFmSgdOpt:
         int step
         double error
         double now_error
+        long[:] ixs
+        long[:] reg_ixs
+        dict labels
 
     def __cinit__(self,
                     np.ndarray[DOUBLE, ndim=2, mode="c"] R,
@@ -81,7 +90,8 @@ cdef class CyFmSgdOpt:
                     np.ndarray[DOUBLE, ndim=1, mode="c"] regs,
                     double l_rate,
                     int K,
-                    int step):
+                    int step,
+                    dict labels):
         self.R = R
         self.R_v = R_v
         self.targets = targets
@@ -96,20 +106,24 @@ cdef class CyFmSgdOpt:
         self.l_rate = l_rate
         self.K = K
         self.step = step
+        self.labels = labels
 
     def get_sum_error(self):
-        """
-        目的関数の計算
-        """
+
         cdef:
             long data_index
             int f
+            double sum_error = 0.0
 
-        self.error = np.sum(self.E**2)
-
-        self.error += self.regs[0] * pow(self.w_0,2) + self.regs[1] * np.sum(self.W**2)
+        for data_index in xrange(self.N):
+            self.ixs = np.nonzero(self.R[data_index])[0]
+            sum_error += pow(self._calc_error(data_index), 2)
+        
+        self.error = sum_error
+        self.error += self.regs[0] * pow(self.w_0, 2) + self.regs[1] * np.sum(self.W**2)
         for f in xrange(self.K):
-            self.error += self.regs[f+2] * np.sum(self.V[:,f]**2)
+            self.error += self.regs[f+2] * np.sum(np.transpose(self.V)[f]**2)
+
         
     def get_all_error(self):
         """
@@ -130,10 +144,10 @@ cdef class CyFmSgdOpt:
             double features = 0.0
             double iterations = 0.0
             int f
-
+    
         features = np.dot(self.W, self.R[data_index])
         for f in xrange(self.K):
-            iterations += pow(np.dot(self.V[:,f], self.R[data_index]), 2) - np.dot(self.V[:,f]**2, self.R[data_index]**2)
+            iterations += pow(np.dot(self.V[:,f], self.R[data_index]), 2) - np.dot(self.V[:,f]*self.V[:,f], self.R[data_index]*self.R[data_index])
 
         self.E[data_index] = (self.w_0 + features + iterations/2) - self.targets[data_index]
 
@@ -172,8 +186,12 @@ cdef class CyFmSgdOpt:
             double grad_value = 0.0
             double update_value = 0.0
             double h = 0.0
-        
-        h = np.dot(self.V[:,f], self.R[data_index]) - self.V[i][f]*self.R[data_index][i]
+            double h_pre = 0.0
+            long ix
+
+        for ix in self.ixs:
+            h_pre += self.V[ix][f] * self.R[data_index][f]
+        h = h_pre - self.V[i][f]*self.R[data_index][i]
         h *= self.R[data_index][i]
         grad_value = 2 * (self.now_error*h + self.regs[f+2]*self.V[i][f])
         self.adagrad_V[i][f] += grad_value * grad_value
@@ -183,14 +201,14 @@ cdef class CyFmSgdOpt:
     def repeat_optimization(self):
  
         cdef:
-            long i
+            long ix
             int f
             long data_index
-            bint nan_flag = False
             double pre_w_0
+            double s
             np.ndarray[DOUBLE, ndim=1, mode="c"] pre_W
             np.ndarray[DOUBLE, ndim=2, mode="c"] pre_V
-       
+
         for data_index in xrange(self.N):
             """
             パラメータの最適化
@@ -199,20 +217,14 @@ cdef class CyFmSgdOpt:
             pre_w_0 = self.w_0
             pre_W = self.W
             pre_V = self.V
-            if nan_flag:
-                break
             print "data_index %d" % data_index
+            self.ixs = np.nonzero(self.R[data_index])[0]
             self.now_error = self._calc_error(data_index)
             self._update_w_0(data_index)
-            for i in xrange(self.n):
-                if self.R[data_index][i] <= 0:
-                    continue
-                self._update_W(data_index, i)
+            for ix in self.ixs:
+                self._update_W(data_index, ix)
                 for f in xrange(self.K):
-                    self._update_V(data_index, i, f)
-                    if math.isnan(self.V[i][f]):
-                        nan_flag = True
-                        break
+                    self._update_V(data_index, ix, f)
             self._calc_regs(pre_w_0, pre_W, pre_V)
 
     cdef void _calc_regs(self, double pre_w_0, np.ndarray[DOUBLE, ndim=1, mode="c"] pre_W, np.ndarray[DOUBLE, ndim=2, mode="c"] pre_V):
@@ -222,10 +234,15 @@ cdef class CyFmSgdOpt:
         cdef:
             double new_r
             double err
+            long ix
             int f
             long random_index
+            double dot_r_v = 0.0
+            double dot_r_v_pre = 0.0
+            double dot_sum = 0.0
         
         random_index = random.randint(0, self.N_v-1)
+        self.reg_ixs = np.nonzero(self.R_v[random_index])[0]
         err = 2 * self._calc_error(random_index)
         # lambda_0
         new_r = self.regs[0] - self.l_rate * (err * -2 * self.l_rate * pre_w_0)
@@ -235,7 +252,14 @@ cdef class CyFmSgdOpt:
         self.regs[1] = new_r if new_r >= 0 else 0
         for f in xrange(self.K):
             # lambda_v_f
-            new_r = self.regs[f+2] - self.l_rate * (err * -2 * self.l_rate * (np.dot(self.R_v[random_index], self.V[:,f]) * np.dot(self.R_v[random_index], pre_V[:,f]) - np.sum((self.R_v[random_index]**2)*self.V[:,f]*pre_V[:,f])))
+            dot_r_v = 0.0
+            dot_r_v_pre = 0.0
+            dot_sum = 0.0
+            for ix in self.reg_ixs:
+                dot_r_v += self.R_v[random_index][ix] * self.V[ix][f]
+                dot_r_v_pre += self.R_v[random_index][ix] * pre_V[ix][f]
+                dot_sum += self.R_v[random_index][ix] * self.R_v[random_index][ix] * self.V[ix][f] * pre_V[ix][f]
+            new_r = self.regs[f+2] - self.l_rate * (err * -2 * self.l_rate * dot_r_v * dot_r_v_pre - dot_sum)
             self.regs[f+2] = new_r if new_r >= 0 else 0
 
     cdef double _calc_error(self, long data_index):
@@ -246,10 +270,47 @@ cdef class CyFmSgdOpt:
             double features = 0.0
             double iterations = 0.0
             int f
+            double dot_sum = 0.0
+            double dot_square_sum = 0.0
+            long ix
+            double start_time
 
-        features = np.dot(self.W, self.R[data_index])
+        for ix in self.ixs:
+            features += self.W[ix] * self.R[data_index][ix]
+            # 間違えている可能性がある
         for f in xrange(self.K):
-            iterations += pow(np.dot(self.V[:,f], self.R[data_index]), 2) - np.dot(self.V[:,f]**2, self.R[data_index]**2)
+            dot_sum = 0.0
+            dot_square_sum = 0.0
+            for ix in self.ixs:
+                dot_sum += self.V[ix][f] * self.R[data_index][ix]
+                dot_square_sum += self.V[ix][f] * self.V[ix][f] * self.R[data_index][ix] * self.R[data_index][ix]
+            iterations += dot_sum * dot_sum - dot_square_sum
+
+        return (self.w_0 + features + iterations/2) - 1.0
+    
+    cdef double _calc_error_regs(self, long data_index):
+        """
+        ２乗誤差の計算(正規化項用)
+        """
+        cdef:
+            double features = 0.0
+            double iterations = 0.0
+            int f
+            double dot_sum = 0.0
+            double dot_square_sum = 0.0
+            long ix
+            double start_time
+
+        for ix in self.reg_ixs:
+            features += self.W[ix] * self.R_v[data_index][ix]
+            # 間違えている可能性がある
+        for f in xrange(self.K):
+            dot_sum = 0.0
+            dot_square_sum = 0.0
+            for ix in self.reg_ixs:
+                dot_sum += self.V[ix][f] * self.R_v[data_index][ix]
+                dot_square_sum += self.V[ix][f] * self.V[ix][f] * self.R_v[data_index][ix] * self.R_v[data_index][ix]
+            iterations += dot_sum * dot_sum - dot_square_sum
 
         return (self.w_0 + features + iterations/2) - 1.0
 
@@ -263,17 +324,15 @@ cdef class CyFmSgdOpt:
         self.adagrad_w_0 = 0.0
         self.adagrad_W = np.zeros(self.n)
         self.adagrad_V = np.zeros((self.n, self.K))
-        #self.get_all_error()
         for s in xrange(self.step):
             print "Step %d" % s
             self.repeat_optimization()
-            #self.get_all_error()
             self.get_sum_error()
             if self.error <= 100:
                 break
 
     cdef double _calc_rating(self,
-                    np.ndarray[DOUBLE, ndim=1, mode="c"] matrix):
+            np.ndarray[DOUBLE, ndim=1, mode="c"] matrix, char* song, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):
         """
         回帰予測
         """
@@ -283,17 +342,90 @@ cdef class CyFmSgdOpt:
             # 相互作用の重み
             double iterations = 0.0
             int f
-
-        features = np.dot(self.W, matrix)
+            double dot_sum = 0.0
+            double dot_sum_square = 0.0
+            long ix
+        
+        ixs[-1] = self.labels["song="+song]
+        print ixs
+        for ix in ixs:
+            features += self.W[ix] * matrix[ix]
         for f in xrange(self.K):
-            iterations += pow(np.dot(self.V[:,f], matrix), 2) - np.dot(self.V[:,f]**2, matrix**2)
+            dot_sum = 0.0
+            dot_sum_square = 0.0
+            for ix in ixs:
+                dot_sum += self.V[ix][f] * matrix[ix]
+                dot_sum_square += self.V[ix][f] * self.V[ix][f] * matrix[ix] * matrix[ix]
+            iterations += dot_sum * dot_sum - dot_sum_square
         return self.w_0 + features + iterations/2
 
-    def predict(self, np.ndarray[DOUBLE, ndim=1, mode="c"] matrix):
+    def get_rankings(self, np.ndarray[DOUBLE, ndim=2, mode="c"] matrixes, np.ndarray[INTEGER, ndim=1, mode="c"] songs, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):
+        """
+        ランキングを取得
+        """
+        rankings = [(self.predict(matrix, ixs, str(song)), song) for matrix, song in zip(matrixes, songs)]
+        return rankings
+
+    def predict(self, np.ndarray[DOUBLE, ndim=1, mode="c"] matrix, char* song, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):
         """
         python側から呼び出せる回帰予測結果取得
         """
-        return self._calc_rating(matrix)
+        return self._calc_rating(matrix, song, ixs)
+
+    def save_redis(self):
+        """
+        パラメータのredisへの保存
+        """
+        r = redis.Redis(host='localhost', port=6379, db=0)
+        
+        """
+        全て消す
+        """
+        r.flushall()
+        """
+        w_0, W, Vの保存
+        """
+        # w_0の保存
+        self.save_scalar(r, "bias", "w_0", self.w_0)
+        # Wの保存
+        self.save_one_dim_array(r, "W", self.W)
+        # Vの保存
+        self.save_two_dim_array(r, "V_", self.V)
+        """
+        regsの保存
+        """
+        self.save_one_dim_array(r, "regs", self.regs)
+        """
+        adagradの保存
+        """
+        # adagrad_w_0の保存
+        self.save_scalar(r, "bias", "adagrad", self.adagrad_w_0)
+        # adagrad_Wの保存
+        self.save_one_dim_array(r, "adagrad_W", self.adagrad_W)
+        # adagrad_Vの保存
+        self.save_two_dim_array(r, "adagrad_V_", self.adagrad_V)
+
+    def save_scalar(self, redis_obj, char* key, char* field, double value):
+        redis_obj.hset(key, field, value)
+
+    def save_one_dim_array(self, redis_obj, char* key, np.ndarray[DOUBLE, ndim=1, mode="c"] params):
+
+        cdef:
+            double param
+
+        for param in params:
+            redis_obj.rpush(key, param)
+
+    def save_two_dim_array(self, redis_obj, char* pre_key, np.ndarray[DOUBLE, ndim=2, mode="c"] params):
+
+        cdef:
+            long i
+            double param
+        
+        for i in xrange(self.n):
+            key = pre_key + str(i)
+            for param in params[i]:
+                redis_obj.rpush(key, param)
 
     def get_w_0(self):
         return self.w_0

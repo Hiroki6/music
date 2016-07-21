@@ -14,6 +14,7 @@ from fm import recommend_lib
 from django.contrib.sites.models import Site
 from helpers import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.csrf import csrf_protect
 import sys
 sys.dont_write_bytecode = True 
 
@@ -26,7 +27,10 @@ def index(request):
     user = request.user
     user_id = user.id
     results = Preference.objects.filter(user=user_id)
-    return render(request, 'recommendation/index.html', {'user': user, 'results': results})
+    paginator = Paginator(results, 10)
+    page = request.GET.get("page")
+    contents = get_pagination_contents(paginator, page)
+    return render(request, 'recommendation/index.html', {'user': user, 'results': contents})
 
 # フィードバック
 @login_required
@@ -36,7 +40,7 @@ def feedback(request):
         song_id = request.POST['song']
     except KeyError:
         pass
-    rm_obj = recommend_lib.create_recommend_obj(request.user.id, 16)
+    rm_obj = recommend_lib.create_recommend_obj(request.user.id, 8)
     rm_obj.relearning(feedback_value)
     return redirect('/recommendation/recommend_song/')
 
@@ -46,7 +50,6 @@ def search(request):
     results = []
     artist = ""
     song = ""
-    page = 0
     is_result = 0
     if request.method == 'POST':
         like_type = request.POST['like_type']
@@ -62,13 +65,12 @@ def search(request):
             is_result = 1 if len(results) == 0 else 2
     else:
         form = MusicSearchForm()
-    if request.GET.has_key("page"):
-        page = int(request.GET["page"])
-    index = page * 10
-    next_page = len(results) > index+10
-    results = results[index:index+10] if len(results) >= index+10 else results[index:]
+    paginator = Paginator(results, 10)
+    page = request.GET.get("page")
+    contents = get_pagination_contents(paginator, page)
     songs = get_user_preference(request.user.id)
-    return render(request, 'recommendation/search.html', {'form': form, 'artist': artist, 'song': song, 'results': results, 'is_result': is_result, 'user': request.user, 'songs': songs, 'page': page, 'next_page': next_page})
+    params = "&artist=" + artist + "&song=" + song
+    return render(request, 'recommendation/search.html', {'form': form, 'artist': artist, 'song': song, 'results': contents, 'is_result': is_result, 'user': request.user, 'songs': songs, 'page': page, 'params': params})
 
 # アーティスト一覧
 @login_required
@@ -85,15 +87,17 @@ def artist(request, artist_id):
         like_type = request.POST['like_type']
         song_id = request.POST['song_id']
         add_perference_song(request.user.id, song_id, like_type)
-        return redirect('/recommendation/artist/'+artist_id+"/")
+        return redirect('/recommendation/artist/'+artist_id)
     if request.GET.has_key("page"):
         page = int(request.GET["page"])
     index = page * 10
     songs = get_user_preference(request.user.id)
-    results = Song.objects.filter(artist__id=artist_id)
-    next_page = len(results) > index+10
-    results = results[index:index+10] if len(results) >= index+10 else results[index:]
-    return render(request, 'recommendation/artist.html', {'results': results, 'user': request.user, 'songs': songs, 'artist': artist_id, 'page': page, 'next_page': next_page})
+    results = Song.objects.filter(artist=artist_id)
+    artist_name = results[0].artist.name
+    paginator = Paginator(results, 10)
+    page = request.GET.get("page")
+    contents = get_pagination_contents(paginator, page)
+    return render(request, 'recommendation/artist.html', {'results': contents, 'user': request.user, 'songs': songs, 'artist': artist_id, 'page': page, 'artist_name': artist_name})
 
 # 指定した頭文字から始まるアーティスト名
 @login_required
@@ -134,16 +138,22 @@ def user(request):
 @login_required
 def recommend_song(request):
     user = request.user
-    rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
-    songs = recommend_lib.get_top_song(rm_obj)
-    #songs = get_user_not_listening_songs(user.id)
+    song = get_top_song(user)
+    song_obj = Song.objects.filter(id=song)
+    add_user_recommend_song(user.id, song)
     feedback_dict = get_feedback_dict()
-    return render(request, 'recommendation/recommend_song.html', {'user': user, 'song': songs[4], 'feedback_dict': feedback_dict})
+    finish_flag = 1 if count_recommend_songs(user.id) >= 10 else 0
+    return render(request, 'recommendation/recommend_song.html', {'user': user, 'songs': song_obj, 'feedback_dict': feedback_dict, 'finish_flag': finish_flag})
 
+@login_required
 def recommend_songs(request):
     user = request.user
-    rm_obj = recommend_lib.create_recommend_obj(user.id, 16)
-    songs = recommend_lib.get_rankings(rm_obj)
-    songs = songs[:10]
-    #songs = get_user_not_listening_songs(user.id)
-    return render(request, 'recommendation/recommend_songs.html', {'user': user, 'songs': songs[:50]})
+    songs = get_top_k_songs(user)
+    results = Song.objects.filter(id__in=songs)
+    return render(request, 'recommendation/recommend_songs.html', {'user': user, 'results': results})
+
+@login_required
+def interaction_songs(request):
+    user = request.user
+    results = RecommendSong.objects.filter(user=user.id)
+    return render(request, 'recommendation/interaction_songs.html', {'user': user, 'results': results})

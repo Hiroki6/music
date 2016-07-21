@@ -77,6 +77,16 @@ body{
     display: inline-block;
     padding: 5px;
     border-radius: 10px;
+    .search-submit{
+      color: #fff;
+      border-radius: 10px;
+      background-color: #0000cd;
+      border: none;
+      &:hover{
+        color: #0000cd;
+        background-color: #fff;
+      }
+    }
   }
   .main{
     width: 85%;
@@ -109,6 +119,17 @@ body{
           background-color: #00bfff !important;
         }
       }
+    }
+    .recommend-song-list{
+      font-size: 20px;
+      color: #00ff7f;
+      &:hover{
+        color: #32cd32;
+      }
+    }
+    .search-result{
+      font-size: 20px;
+      font-weight: bold;
     }
     .content{
       position: relative;
@@ -166,8 +187,26 @@ body{
         color: #ffc0cb;
       }
     }
+    .paginator{
+      padding-bottom: 10px;
+      a, strong{
+        font-size: 20px;
+        color: #0000cd;
+        &:hover{
+          color: #afeeee;
+        }
+      }
+    }
   }
   .pagination{
     float: right;
+  }
+  footer{
+    padding: 10px;
+    p{
+      color: #000;
+      text-align: center;
+      margin: 0;
+    }
   }
 }
