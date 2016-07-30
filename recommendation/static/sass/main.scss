@@ -181,6 +181,19 @@ body{
     }
     .recommend-song {
       margin: 0 auto;
+      display: inline-block;
+    }
+    .feedback-explanation {
+      float: right;
+      padding-right: 200px;
+      padding-top: 80px;
+      font-size: 25px;
+      ul {
+        list-style: none;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: #afeeee;
+      }
     }
     input{
       margin-left: 20px;

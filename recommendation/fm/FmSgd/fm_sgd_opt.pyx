@@ -328,6 +328,7 @@ cdef class CyFmSgdOpt:
             print "Step %d" % s
             self.repeat_optimization()
             self.get_sum_error()
+            print self.error
             if self.error <= 100:
                 break
 
@@ -347,7 +348,6 @@ cdef class CyFmSgdOpt:
             long ix
         
         ixs[-1] = self.labels["song="+song]
-        print ixs
         for ix in ixs:
             features += self.W[ix] * matrix[ix]
         for f in xrange(self.K):
@@ -386,23 +386,30 @@ cdef class CyFmSgdOpt:
         w_0, W, Vの保存
         """
         # w_0の保存
+        print "w_0保存"
         self.save_scalar(r, "bias", "w_0", self.w_0)
         # Wの保存
+        print "W保存"
         self.save_one_dim_array(r, "W", self.W)
         # Vの保存
+        print "V保存"
         self.save_two_dim_array(r, "V_", self.V)
         """
         regsの保存
         """
+        print "regs保存"
         self.save_one_dim_array(r, "regs", self.regs)
         """
         adagradの保存
         """
         # adagrad_w_0の保存
+        print "adagrad_w_0保存"
         self.save_scalar(r, "bias", "adagrad", self.adagrad_w_0)
         # adagrad_Wの保存
+        print "adagrad_W保存"
         self.save_one_dim_array(r, "adagrad_W", self.adagrad_W)
         # adagrad_Vの保存
+        print "adagrad_V保存"
         self.save_two_dim_array(r, "adagrad_V_", self.adagrad_V)
 
     def save_scalar(self, redis_obj, char* key, char* field, double value):
@@ -422,9 +429,13 @@ cdef class CyFmSgdOpt:
             long i
             double param
         
-        for i in xrange(self.n):
+        # for i in xrange(self.n):
+        #     key = pre_key + str(i)
+        #     for param in params[i]:
+        #         redis_obj.rpush(key, param)
+        for i in xrange(self.K):
             key = pre_key + str(i)
-            for param in params[i]:
+            for param in np.transpose(params)[i]:
                 redis_obj.rpush(key, param)
 
     def get_w_0(self):
@@ -453,3 +464,23 @@ cdef class CyFmSgdOpt:
 
     def get_adagrad_V(self):
         return self.adagrad_V
+
+    def set_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] W):
+
+        self.W = W
+
+    def set_V(self, np.ndarray[DOUBLE, ndim=2, mode="c"] V):
+
+        self.V = V
+
+    def set_adagrad_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] adagrad_W):
+
+        self.adagrad_W = adagrad_W
+
+    def set_adagrad_V(self, np.ndarray[DOUBLE, ndim=2, mode="c"] adagrad_V):
+
+        self.adagrad_V = adagrad_V
+
+    def set_n(self, n):
+
+        self.n = n

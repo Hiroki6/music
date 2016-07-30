@@ -15,6 +15,7 @@ from django.contrib.sites.models import Site
 from helpers import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_protect
+import time
 import sys
 sys.dont_write_bytecode = True 
 
@@ -40,8 +41,10 @@ def feedback(request):
         song_id = request.POST['song']
     except KeyError:
         pass
+    start_time = time.time()
     rm_obj = recommend_lib.create_recommend_obj(request.user.id, 8)
     rm_obj.relearning(feedback_value)
+    print time.time() - start_time
     return redirect('/recommendation/recommend_song/')
 
 # 検索

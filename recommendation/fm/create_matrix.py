@@ -106,8 +106,7 @@ def create_matrix_with_tag_dicVec():
     data_labels = dict(zip(labels, range(0, len(labels))))
     targets = np.array(targets)
     for index, tag in enumerate(tags):
-        tag_index = labels.index(tag)
-        tag_map[index] = tag_index
+        tag_map[index] = data_labels[tag]
     
     print "正規化用データ変形"
     regs_matrix = create_regs_matrix(regs_data, data_labels, tag_map, regs_num)

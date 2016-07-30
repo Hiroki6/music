@@ -76,7 +76,7 @@ def get_top_k_songs(user):
 
     r = redis.Redis(host='localhost', port=6379, db=0)
     key = "rankings_" + str(user.id)
-    songs = r.lrange(key, 0, -1)
+    songs = r.lrange(key, 0, 9)
     songs = np.array(songs, dtype=np.int64)
     return songs
 

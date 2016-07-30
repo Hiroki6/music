@@ -81,7 +81,7 @@ class CyFmSgdOpt():
         self._save_redis_top_song(r, "top_song", str(self.user), top_k_songs[0]) # top_song保存{ "top_song": "user_id": song }
         self._save_top_matrix(r, self.user, top_k_songs[0])
 
-    def get_rankings(self, rank = 10):
+    def get_rankings(self, rank = 5000):
         """
         ランキングを取得
         """
@@ -128,7 +128,6 @@ class CyFmSgdOpt():
 
         self.song_tag_map = {} # {song_id: List[tag_value]}
         self.songs = [] # List[song_id]
-        result_length = len(results[0])
         for result in results:
             song_id = result['id']
             self.songs.append(song_id)
@@ -160,3 +159,44 @@ class CyFmSgdOpt():
 
         return top_matrix
        
+    def arrange_user(self):
+        """
+        学習用のユーザーに関するデータを全て消す
+        """
+        print "ユーザー削除"
+        learn_user_indexes = [] # 学習用のユーザーの配列のインデックス
+        buffer_labels = [0] * self.n
+        # [key]配列
+        for key, index in self.labels.items():
+            buffer_labels[index] = key
+        
+        new_index = 0
+        new_labels = {}
+        # 学習用のユーザーを取り除いた新しいラベル作成
+        for index, key in enumerate(buffer_labels):
+            if "user=u" in key:
+                learn_user_indexes.append(index)
+                continue
+            new_labels[key] = new_index
+            new_index += 1
+        
+        self.labels = new_labels
+        self.n = len(self.labels)
+        # cy_fmへセット
+        self.cy_fm.set_n(self.n)
+        adagrad_V = self.cy_fm.get_adagrad_V()
+        adagrad_W = self.cy_fm.get_adagrad_W()
+        self.V = np.delete(self.V, learn_user_indexes, 0)
+        self.W = np.delete(self.W, learn_user_indexes)
+        adagrad_V = np.delete(adagrad_V, learn_user_indexes, 0)
+        adagrad_W = np.delete(adagrad_W, learn_user_indexes)
+        tag_obj = models.Tag.objects.all()
+        tags = [tag.name for tag in tag_obj]
+        for index, tag in enumerate(tags):
+            self.tag_map[index] = self.labels[tag]
+
+        self.cy_fm.set_W(self.W)
+        self.cy_fm.set_V(self.V)
+        self.cy_fm.set_adagrad_V(adagrad_V)
+        self.cy_fm.set_adagrad_W(adagrad_W)
+

@@ -4,6 +4,7 @@ import numpy as np
 import redis
 from Recommend import cy_recommend as cyFm
 from .. import models
+import time
 import sys
 sys.dont_write_bytecode = True 
 
@@ -23,15 +24,22 @@ class RecommendFm(object):
         redisに保存されているパラメータを取得
         """
         r = redis.Redis(host=HOST, port=PORT, db=DB)
+        r.set_response_callback("lrange", float)
+        s = time.time()
         self.w_0 = self._get_param(r, "bias", "w_0")
+        start_time = time.time()
         self.W = self._get_one_dim_params(r, "W", "float")
+        print "W読み込みタイム: %.5f" % (time.time() - start_time)
+        start_time = time.time()
         self.V = self._get_two_dim_params(r, "V_")
+        print "V読み込みタイム: %.5f" % (time.time() - start_time)
         self.regs = self._get_one_dim_params(r, "regs")
         self.adagrad_w_0 = self._get_param(r, "bias", "adagrad")
         self.adagrad_W = self._get_one_dim_params(r, "adagrad_W")
         self.adagrad_V = self._get_two_dim_params(r, "adagrad_V_")
         self._get_labels(r)
         self._get_tag_map(r)
+        print "redis読み込みタイム: %.5f" % (time.time() - s)
   
     def _get_tag_map(self, redis_obj):
 
@@ -56,13 +64,21 @@ class RecommendFm(object):
 
     def _get_two_dim_params(self, redis_obj, pre_key):
 
-        V = np.ones((len(self.W), self.K))
-        for i in xrange(len(self.W)):
+        # V = np.ones((len(self.W), self.K))
+        # for i in xrange(len(self.W)):
+        #     key = pre_key + str(i)
+        #     v = redis_obj.lrange(key, 0, -1)
+        #     v = np.array(v, dtype=np.float64)
+        #     V[i] = v
+        V = np.ones((self.K, len(self.W)))
+        for i in xrange(self.K):
             key = pre_key + str(i)
             v = redis_obj.lrange(key, 0, -1)
-            v = np.array(v, dtype=np.float64)
+            #v = np.array(v, dtype=np.float64)
             V[i] = v
-        return V
+        # copy(order='C')によってC-連続アレイに変換する
+        V = np.array(V, dtype=np.float64)
+        return V.T.copy(order='C')
 
     def _get_labels(self, redis_obj):
     
@@ -95,10 +111,19 @@ class RecommendFm(object):
         １位の楽曲の楽曲ID、配列をredisに保存
         """
         print "１位の楽曲取得"
+        start_time = time.time()
         rankings = self.get_rankings()
+        print time.time() - start_time
         print "楽曲をredisに保存"
-        r = redis.Redis(host='localhost', port=6379, db=0)
-        top_song = rankings[0][1] if self.top_song != rankings[0][1] else rankings[1][1]
+        r = redis.Redis(host=HOST, port=PORT, db=DB)
+        recommended_song_obj = models.RecommendSong.objects.filter(user=self.user)
+        recommended_songs = [song.song_id for song in recommended_song_obj]
+        print rankings[0][1]
+        for ranking in rankings:
+            if ranking[1] not in recommended_songs:
+                top_song = ranking[1]
+                break
+        #top_song = rankings[0][1] if self.top_song != rankings[0][1] else rankings[1][1]
         print top_song
         self._save_scalar(r, "top_song", str(self.user), top_song)
         self._save_top_matrix(r, self.user, top_song)
@@ -115,7 +140,8 @@ class RecommendFm(object):
         まだ視聴していない楽曲のid配列を取得
         """
         q = models.Preference.objects.filter(user=self.user).values('song')
-        results = models.Song.objects.exclude(id__in=q).values()
+        top_k_songs = self._get_top_k_songs()
+        results = models.Song.objects.exclude(id__in=q).filter(id__in=top_k_songs).values()
         tag_obj = models.Tag.objects.all()
         tags = [tag.name for tag in tag_obj]
 
@@ -169,22 +195,29 @@ class RecommendFm(object):
         feedback: 1~10
         """
         feedback = int(feedback)
-        if(feedback <= 5):
+        if(feedback <= 4):
             self.plus_or_minus = 1
         else:
             self.plus_or_minus = -1
             feedback -= 5
+        feedback += 1
         tags = models.Tag.objects.filter(cluster__id=feedback)
         self.tags = [(tag.id-1, tag.name) for tag in tags]
 
     def relearning(self, feedback):
         r = redis.Redis(host=HOST, port=PORT, db=DB)
+        start_time = time.time()
         self.top_matrix = self._get_one_dim_params(r, "top_matrix_" + str(self.user), "float") # 前回推薦の楽曲の特徴ベクトル配列取得
         self._get_top_song_by_redis(r) # self.top_songに前回推薦の楽曲のID格納
         self.create_feedback_matrix(feedback) # フィードバック用の配列取得
+        print "配列構築タイム: %.5f" % (time.time() - start_time)
+        start_time = time.time()
         self.cy_fm.relearning(self.top_matrix, self.feedback_matrix) # 再学習
+        print "再学習タイム: %.5f" % (time.time() - start_time)
         self._set_ixs()
+        start_time = time.time()
         self._save_redis_relearning() # 更新されたVとadagrad_VをDBに保存
+        print "redis更新タイム: %.5f" % (time.time() - start_time)
         self.get_matrixes_by_song()
         self.save_top_song()
 
@@ -203,7 +236,7 @@ class RecommendFm(object):
         """
         パラメータのredisへの保存
         """
-        r = redis.Redis(host='localhost', port=6379, db=0)
+        r = redis.Redis(host=HOST, port=PORT, db=DB)
         """
         一度全て消す
         """
@@ -244,21 +277,20 @@ class RecommendFm(object):
         まず、既存のVとadagrad_Vを削除してから保存する
         """
         print "redis更新"
-        r = redis.Redis(host='localhost', port=6379, db=1)
+        r = redis.Redis(host=HOST, port=PORT, db=DB)
         self.adagrad_V = self.cy_fm.get_adagrad_V()
-        self._update_V_array(r, "V_", "adagrad_V_", len(self.ixs))
+        self._update_V_array(r, "V_", "adagrad_V_")
 
-    def _update_V_array(self, redis_obj, v_pre_key, adagrad_v_pre_key, param_nums):
+    def _update_V_array(self, redis_obj, v_pre_key, adagrad_v_pre_key):
         """
         既存のVとadagrad_Vの削除
         """
-        for i in xrange(param_nums-1):
-            key = v_pre_key + str(self.ixs[i])
-            redis_obj.delete(key)
-            self._save_one_dim_array(redis_obj, key, self.V[self.ixs[i]])
-            key = adagrad_v_pre_key + str(self.ixs[i])
-            redis_obj.delete(key)
-            self._save_one_dim_array(redis_obj, key, self.adagrad_V[self.ixs[i]])
+        for f in xrange(self.K):
+            v_key = v_pre_key + str(f)
+            adagrad_v_key = adagrad_v_pre_key + str(f)
+            for ixs in self.ixs:
+                redis_obj.lset(v_key, ixs, self.V[ixs][f])
+                redis_obj.lset(adagrad_v_key, ixs, self.adagrad_V[ixs][f])
 
     def _save_scalar(self, redis_obj, field, key, param):
         redis_obj.hset(field, key, param)
@@ -306,4 +338,11 @@ class RecommendFm(object):
         redis_obj.delete(key)
         for param in top_matrix:
             redis_obj.rpush(key, param)
+
+    def _get_top_k_songs(self):
+        r = redis.Redis(host=HOST, port=PORT, db=DB)
+        key = "rankings_" + str(self.user)
+        top_k_songs = r.lrange(key, 0, -1)
+        top_k_songs = np.array(top_k_songs, dtype=np.int64)
+        return top_k_songs
 

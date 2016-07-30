@@ -134,7 +134,18 @@ body {
         body .main .refresh-form .refresh-button:hover {
           background-color: #32cd32; }
     body .main .recommend-song {
-      margin: 0 auto; }
+      margin: 0 auto;
+      display: inline-block; }
+    body .main .feedback-explanation {
+      float: right;
+      padding-right: 200px;
+      padding-top: 80px;
+      font-size: 25px; }
+      body .main .feedback-explanation ul {
+        list-style: none;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: #afeeee; }
     body .main input {
       margin-left: 20px;
       background-color: #00bfff;

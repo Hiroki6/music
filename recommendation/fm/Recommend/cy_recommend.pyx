@@ -150,13 +150,12 @@ cdef class CyRecommendFm:
         print feedback_error
         count = 0
         while feedback_error > 0.0:
-            print count
             self.relearning_optimization(top_predict, feedback_predict)
             top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix, ixs)
-            print feedback_error
             count += 1
             if(count > 1000):
                 break
+        print count
 
     def relearning_optimization(self, double top_predict, double feedback_predict):
         """
@@ -192,10 +191,10 @@ cdef class CyRecommendFm:
         feedback_predict = self.predict(feedback_matrix, "", ixs)
         # もともと値が大きい時
         if feedback_predict > top_predict:
-            self.epsilon = 2 * (feedback_predict - top_predict)
+            self.epsilon = 1.5 * (feedback_predict - top_predict)
         # 値が小さい時
         else:
-            self.epsilon = - (feedback_predict - top_predict)
+            self.epsilon = -0.5 * (feedback_predict - top_predict)
     
     def set_epsilon(self, epsilon):
         """
