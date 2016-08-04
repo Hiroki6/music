@@ -81,3 +81,15 @@ class MusicCluster(models.Model):
 class RecommendSong(models.Model):
     user = models.ForeignKey(User)
     song = models.ForeignKey(Song)
+
+class LikeSong(models.Model):
+    user = models.ForeignKey(User)
+    song = models.ForeignKey(Song)
+    recommend_type = models.IntegerField(null=False, blank=False)
+
+class Questionnaire(models.Model):
+    user = models.ForeignKey(User)
+    comparison = models.IntegerField(null=False, blank=False)
+    interaction_rate = models.IntegerField(null=False, blank=False)
+    recommend_rate = models.IntegerField(null=False, blank=False)
+    free_content = models.CharField(max_length=255, null=True, blank=True)
