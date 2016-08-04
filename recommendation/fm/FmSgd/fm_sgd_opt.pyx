@@ -75,6 +75,7 @@ cdef class CyFmSgdOpt:
         long[:] ixs
         long[:] reg_ixs
         dict labels
+        int feature_nums = 43
 
     def __cinit__(self,
                     np.ndarray[DOUBLE, ndim=2, mode="c"] R,
@@ -437,6 +438,26 @@ cdef class CyFmSgdOpt:
             key = pre_key + str(i)
             for param in np.transpose(params)[i]:
                 redis_obj.rpush(key, param)
+
+    """
+    スムージングの実装
+    """
+    def smoothing(self):
+        return
+
+    cdef double calc_feature_distances(self, np.ndarray[DOUBLE, ndim=1, mode="c"] vector1, np.ndarray[DOUBLE, ndim=1, mode="c"] vector2):
+
+        cdef:
+            double euclid_distance = 0.0
+            double sum_distance = 0.0
+            double distance
+            int index
+
+        for index in xrange(self.feature_nums):
+            sum_distance += pow(vector1[index] - vector2[index], 2)
+
+        distance = sqrt(sum_distance)
+        return distance
 
     def get_w_0(self):
         return self.w_0
