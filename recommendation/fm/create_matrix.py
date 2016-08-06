@@ -100,9 +100,8 @@ def create_matrix_with_tag_dicVec():
         rate_array.append(rate_dic)
 
     v = DictVectorizer()
-    #X = v.fit_transform(rate_array)
-    #rate_matrix = X.toarray()
-    rate_matrix = v.fit_transform(rate_array).todense()
+    X = v.fit_transform(rate_array)
+    rate_matrix = X.toarray()
     labels = v.get_feature_names()
     data_labels = dict(zip(labels, range(0, len(labels))))
     targets = np.array(targets)
