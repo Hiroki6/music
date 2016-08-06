@@ -164,3 +164,41 @@ def interaction_songs(request):
     user = request.user
     results = RecommendSong.objects.filter(user=user.id)
     return render(request, 'recommendation/interaction_songs.html', {'user': user, 'results': results})
+
+@login_required
+def select_song(request):
+    user = request.user
+    next_page = 2
+    if request.method == 'POST':
+        recommend_type = request.POST['recommend_type']
+        if request.POST.has_key("like_by_recommend"):
+            song_id = request.POST['like_by_recommend']
+            next_page = create_like_song(user.id, song_id, recommend_type)
+            print recommend_type
+    if next_page == 1:
+        return redirect('/recommendation/recommend_song/')
+    elif next_page == 2:
+        return redirect('/recommendation/recommend_songs/')
+    else:
+        return redirect('/recommendation/questionnaire/')
+
+@login_required
+def questionnaire(request):
+    results = get_select_songs(request.user.id)
+    error_msg = ""
+    if request.method == 'POST':
+        if request.POST.has_key('q1') and request.POST.has_key('q2') and request.POST.has_key('q3') and request.POST.has_key('free_content'):
+            comparison = request.POST['q1']
+            interaction_rate = request.POST['q2']
+            recommend_rate = request.POST['q3']
+            free_content = request.POST['free_content']
+            save_questionnaire(request.user.id, comparison, interaction_rate, recommend_rate, free_content)
+            return redirect('/recommendation/end/')
+        else:
+            error_msg = "全て選択してください"
+    print error_msg
+    return render(request, 'recommendation/questionnaire.html', {'results': results, 'error_msg': error_msg})
+
+@login_required
+def end(request):
+    return render(request, 'recommendation/end.html')

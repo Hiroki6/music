@@ -93,6 +93,12 @@ body{
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
+    .annotation{
+      color: #ff0000;
+    }
+    .error-msg {
+      color: #ff0000;
+    }
     select{
       border: none;
       background-color: #fff;
@@ -135,11 +141,15 @@ body{
       position: relative;
       margin: 10px;
       width: 450px;
+      height: 380px;
       float: left;
       position: relative;
       .feedback-form{
         position: absolute;
         bottom: -35px;
+      }
+      .best-song-button{
+        margin-top: 8px;
       }
       .like-form{
         display: inline;
@@ -167,9 +177,19 @@ body{
         margin: 5px 0 0;
       }
     }
+    .select-song{
+      margin: 10px;
+      .select-song-submit{
+        float: right;
+        margin-right: 100px;
+        background-color: #FC9DA5;
+        font-size: 20px;
+      }
+    }
     .refresh-form{
       margin-left: 10px;
       .refresh-button{
+        float: left;
         background-color: #00ff7f;
         border: none;
         border-radius: 5px;
@@ -178,6 +198,11 @@ body{
           background-color: #32cd32;
         }
       }
+    }
+    .questionnaire{
+      margin-top: 30px;
+      background-color: #f0f8ff;
+      padding: 30px;
     }
     .recommend-song {
       margin: 0 auto;
