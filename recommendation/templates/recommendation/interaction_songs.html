@@ -3,13 +3,20 @@
 
 {% block main %}
 <div class = "main">
-  <h2>推薦された楽曲</h2>
+  <h2>インタラクションを通して推薦された楽曲</h2>
+  <h2 class = "annotation">提示された楽曲のうち、最も好きな楽曲を選んでください</h2>
   <div class = "clearfix">
+    <form class = "select-song" name = "select_song" method = "POST" action = "/recommendation/select_song/">
+    {% csrf_token %}
     {% for song in results %}
       <div class = "content">
         {% include "parts/song_iframe_ref.html" %}
+        <label><input class = "best-song-button" type="radio" name="like_by_recommend" value={{song.song.id}} > この曲が一番好き</label>
       </div>
     {% endfor %}
+    <input type = "hidden" name = "recommend_type" value = 1>
+    <input class = "select-song-submit" type = "submit" value = "選んだ曲を送信">
+    </form>
   </div>
   <form class = "refresh-form" name = "refresh" method = "POST" action = "/recommendation/interaction_songs/">
     {% csrf_token %}
