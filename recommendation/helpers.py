@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-from .models import Song, Artist, Preference, RecommendSong
+from .models import Song, Artist, Preference, RecommendSong, LikeSong, Questionnaire
 import redis
 import numpy as np
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -97,3 +97,32 @@ def count_recommend_songs(user_id):
 def refrash_recommend_songs(user_id):
 
     RecommendSong.objects.filter(user_id=user_id).delete()
+
+"""
+next_page:
+    1: interaction_page
+    2: recommend_song_page
+    3: questionnaire_page
+"""
+def create_like_song(user_id, song_id, recommend_type):
+
+    next_page = 1 if recommend_type else 2
+    like_song_by_type = LikeSong.objects.filter(user_id=user_id, recommend_type=recommend_type)
+    if len(like_song_by_type) != 0:
+        like_song_by_type.update(song_id=song_id)
+    else:
+        obj, created = LikeSong.objects.get_or_create(user_id=user_id, song_id=song_id, recommend_type=recommend_type)
+
+    like_counts = LikeSong.objects.filter(user_id=user_id)
+    if len(like_counts) == 2:
+        next_page = 3
+
+    return next_page
+
+def get_select_songs(user_id):
+    return LikeSong.objects.filter(user_id=user_id)
+
+def save_questionnaire(user_id, comparison, interaction_rate, recommend_rate, free_content):
+
+    obj, created = Questionnaire.objects.get_or_create(user_id=user_id, comparison=comparison, interaction_rate=interaction_rate, recommend_rate=recommend_rate, free_content=free_content)
+
