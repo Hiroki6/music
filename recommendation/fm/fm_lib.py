@@ -209,7 +209,7 @@ class CyFmSgdOpt():
         start_time = time.time()
         self.get_divided_learning_songs()
         learn_song_norm = self.get_learn_song_norm()
-        self.cy_fm.smoothing(self.not_learned_song_tag_map, self.learned_song_tag_map, learned_song_norm)
+        self.cy_fm.smoothing(self.not_learned_song_tag_map, self.learned_song_tag_map, learn_song_norm)
         print time.time() - start_time
 
     def get_learn_song_norm(self):
@@ -217,7 +217,7 @@ class CyFmSgdOpt():
         learn_song_norm = {}
         
         for learn_song, learn_tags in self.learned_song_tag_map.items():
-            learned_song_norm[learn_song] = np.linalg.norm(learn_tags)
+            learn_song_norm[learn_song] = np.linalg.norm(learn_tags)
 
         return learn_song_norm
 
