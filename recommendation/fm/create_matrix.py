@@ -52,7 +52,7 @@ rate_matrix, test_matrix, labels, targets, tag_map, ratelist
 """
 def create_matrix_with_tag_dicVec():
 
-    ratelist = get_ratelist() # {user: [songs]}
+    ratelist, rate_nums = get_ratelist() # {user: [songs]}
     song_tags = get_song_tags() # {song: [tags]}
     all_song_set = get_all_song_id_set() # 楽曲のidの集合
     already_song_set = set() # すでに出現した楽曲
@@ -114,6 +114,78 @@ def create_matrix_with_tag_dicVec():
     return rate_matrix[:len(targets)], regs_matrix, data_labels, targets, tag_map, ratelist
 
 """
+ラベルの作成
+"""
+def get_data_labels_and_tag_map():
+
+    labels = []
+    tag_map = {}
+    tags = get_tags()
+    songs = get_uniq_songs()
+    users = get_uniq_users()
+    for tag in tags:
+        labels.append(tag)
+    
+    for song in songs:
+        labels.append("song="+song)
+
+    for user in users:
+        labels.append("user="+user)
+    
+    data_labels = dict(zip(labels, range(0, len(labels))))
+
+    for index, tag in enumerate(tags):
+        tag_map[index] = data_labels[tag]
+
+    return data_labels, tag_map
+
+def create_fm_matrix():
+
+    data_labels, tag_map = get_data_labels_and_tag_map()
+    ratelist, rate_nums = get_ratelist() # {user: [songs]}
+
+    print "正規化項用データ作成"
+    regs_data = {}
+    regs_num = int(len(ratelist) * 0.05)
+    for i in xrange(regs_num):
+        user = random.choice(ratelist.keys())
+        index = random.randint(0, len(ratelist[user])-1)
+        song = ratelist[user].pop(index)
+        if not regs_data.has_key(user):
+            regs_data.setdefault(user, [])
+        regs_data[user].append(song)
+ 
+    print "学習用データ変形"
+    rate_matrix = create_regs_matrix(ratelist, data_labels, tag_map, rate_nums)
+    print "正規化用データ変形"
+    regs_matrix = create_regs_matrix(regs_data, data_labels, tag_map, regs_num)
+
+    targets = np.ones(len(rate_matrix))
+
+    return rate_matrix, regs_matrix, data_labels, targets, tag_map, ratelist
+
+def get_uniq_users():
+   
+    uniq_users = []
+    with open(os.path.join(BASE, "../data_10/uniq_user.csv")) as f:
+        for line in f:
+            user = line.replace("\n","")
+            uniq_users.append(user)
+
+    for users in models.Preference.objects.values("user_id").distinct():
+        uniq_users.append(str(users["user_id"]))
+
+    return uniq_users
+
+def get_uniq_songs():
+
+    uniq_songs = []
+    for song in models.Song.objects.values("id").distinct():
+        uniq_songs.append(str(song["id"]))
+
+    return uniq_songs
+
+"""
 テストデータのFM配列作成
 """
 def create_regs_matrix(test_data, data_labels, tag_map, test_nums):
@@ -144,7 +216,8 @@ def create_regs_matrix(test_data, data_labels, tag_map, test_nums):
 def get_ratelist():
 
     rate_dic = {}
-
+    
+    rate_nums = 0
     for line in open(os.path.join(BASE, "../data_10/song_listening_data_10.csv")):
         rate = line.replace("\n","").split(',')
         user = rate[0]
@@ -152,7 +225,8 @@ def get_ratelist():
         if not rate_dic.has_key(user):
             rate_dic.setdefault(user, [])
         rate_dic[user].append(song_id)
-    
+        rate_nums += 1
+
     app_preferences = models.Preference.objects.all()
     for app_preference in app_preferences:
         user = str(app_preference.user_id)
@@ -160,8 +234,9 @@ def get_ratelist():
         if not rate_dic.has_key(user):
             rate_dic.setdefault(user, [])
         rate_dic[user].append(song_id)
+        rate_nums += 1
 
-    return rate_dic
+    return rate_dic, rate_nums
 
 def get_tags():
 

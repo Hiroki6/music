@@ -14,7 +14,7 @@ import fm_lib
 def learning():
 
     start_time = time.time()
-    learning_matrix, regs_matrix, labels, targets, tag_map, ratelist = create_matrix.create_matrix_with_tag_dicVec()
+    learning_matrix, regs_matrix, labels, targets, tag_map, ratelist = create_matrix.create_fm_matrix()
     print "FMクラス初期化"
     FM_obj = fm_lib.CyFmSgdOpt(learning_matrix, regs_matrix, labels, targets, tag_map)
     print "SGDで学習開始"
