@@ -438,7 +438,7 @@ cdef class CyFmSgdOpt:
     """
     スムージングの実装
     """
-    def smoothing(self, dict not_learned_song_tag_map, dict learned_song_tag_map):
+    def smoothing(self, dict not_learned_song_tag_map, dict learned_song_tag_map, dict learn_song_norm):
 
         cdef:
             long target_song
@@ -450,15 +450,19 @@ cdef class CyFmSgdOpt:
             double distance
             double sum_distance = 0.0
             long index = 0
-
+            double target_norm = 0.0
+        
         for target_song, target_tags in not_learned_song_tag_map.items():
             index += 1
             print index
             target_song_index = self.labels["song="+str(target_song)]
             sum_distance = 0.0
             self.V[target_song_index] = 0.0 # 初期化
+            target_norm = np.linalg.norm(target_tags)
             for learn_song, learn_tags in learned_song_tag_map.items():
-                distance = self.calc_feature_distances(target_tags, learn_tags)
+                distance = self.calc_cosine_similarity(target_tags, learn_tags, target_norm, learn_song_norm[learn_song])
+                if distance < 0:
+                    print distance
                 learn_song_index = self.labels["song="+str(learn_song)]
                 self.W[target_song_index] += self.W[learn_song_index] * distance
                 self.V[target_song_index] += self.V[learn_song_index] * distance
@@ -503,6 +507,10 @@ cdef class CyFmSgdOpt:
         if den == 0: return 0
 
         return num/den
+    
+    cdef double calc_cosine_similarity(self, np.ndarray[DOUBLE, ndim=1] vector1, np.ndarray[DOUBLE, ndim=1] vector2, double vector1_norm, double vector2_norm):
+
+        return np.dot(vector1, vector2) / (vector1_norm * vector2_norm)
 
     def get_w_0(self):
         return self.w_0

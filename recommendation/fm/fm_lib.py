@@ -208,24 +208,18 @@ class CyFmSgdOpt():
         """
         start_time = time.time()
         self.get_divided_learning_songs()
-        self.cy_fm.smoothing(self.not_learned_song_tag_map, self.learned_song_tag_map)
+        learn_song_norm = self.get_learn_song_norm()
+        self.cy_fm.smoothing(self.not_learned_song_tag_map, self.learned_song_tag_map, learned_song_norm)
         print time.time() - start_time
-        # for target_song, target_tags in self.not_learned_song_tag_map.items():
-        #     # スムージング対象の楽曲のインデックス
-        #     target_song_index = self.labels["song="+str(target_song)]
-        #     sum_distance = 0.0
-        #     for learn_song, learn_tags in self.learned_song_tag_map.items():
-        #         # 学習された楽曲のインデックス
-        #         learn_song_index = self.labels["song="+str(learn_song)]
-        #         distance = self.cy_fm.calc_feature_distances(target_tags, learn_tags)
-        #         learn_song_index = self.labels["song="+str(learn_song)]
-        #         self.W[target_song_index] += self.W[learn_song_index] * distance
-        #         self.V[target_song_index] += self.V[learn_song_index] * distance
-        #         sum_distance += distance
-        #
-        #     self.W[target_song_index] /= sum_distance
-        #    self.V[target_song_index] /= sum_distance
 
+    def get_learn_song_norm(self):
+
+        learn_song_norm = {}
+        
+        for learn_song, learn_tags in self.learned_song_tag_map.items():
+            learned_song_norm[learn_song] = np.linalg.norm(learn_tags)
+
+        return learn_song_norm
 
     def get_divided_learning_songs(self):
         """
