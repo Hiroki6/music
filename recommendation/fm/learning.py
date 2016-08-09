@@ -20,6 +20,7 @@ def learning():
     print "SGDで学習開始"
     FM_obj.learning(0.005, K=8, step=1)
     FM_obj.arrange_user()
+    FM_obj.smoothing()
     print "redisに保存"
     FM_obj.cy_fm.save_redis()
     labels = FM_obj.labels
