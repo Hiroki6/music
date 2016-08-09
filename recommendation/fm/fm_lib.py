@@ -8,6 +8,8 @@ from .. import models
 import time
 import sys
 sys.dont_write_bytecode = True 
+import os.path
+BASE = os.path.dirname(os.path.abspath(__file__))
 
 class CyFmSgdOpt():
     """
@@ -200,3 +202,114 @@ class CyFmSgdOpt():
         self.cy_fm.set_adagrad_V(adagrad_V)
         self.cy_fm.set_adagrad_W(adagrad_W)
 
+    def smoothing(self):
+        """
+        学習されていない楽曲のモデルに対してスムージングを行う
+        """
+        start_time = time.time()
+        self.get_divided_learning_songs()
+        self.cy_fm.smoothing(self.not_learned_song_tag_map, self.learned_song_tag_map)
+        print time.time() - start_time
+        # for target_song, target_tags in self.not_learned_song_tag_map.items():
+        #     # スムージング対象の楽曲のインデックス
+        #     target_song_index = self.labels["song="+str(target_song)]
+        #     sum_distance = 0.0
+        #     for learn_song, learn_tags in self.learned_song_tag_map.items():
+        #         # 学習された楽曲のインデックス
+        #         learn_song_index = self.labels["song="+str(learn_song)]
+        #         distance = self.cy_fm.calc_feature_distances(target_tags, learn_tags)
+        #         learn_song_index = self.labels["song="+str(learn_song)]
+        #         self.W[target_song_index] += self.W[learn_song_index] * distance
+        #         self.V[target_song_index] += self.V[learn_song_index] * distance
+        #         sum_distance += distance
+        #
+        #     self.W[target_song_index] /= sum_distance
+        #    self.V[target_song_index] /= sum_distance
+
+
+    def get_divided_learning_songs(self):
+        """
+        学習済みの楽曲と学習されていない楽曲に分ける{'song': [tags]}
+        """
+        tag_obj = models.Tag.objects.all()
+        tags = [tag.name for tag in tag_obj]
+
+        self.song_tag_map = {} # {song_id: List[tag_value]}
+        learned_songs, not_learned_songs = self.divide_songs_obj()
+        self.learned_song_tag_map = {} # {song_id: List[tag_value]}
+        self.not_learned_song_tag_map = {} # {song_id: List[tag_value]}
+        # 学習済みの楽曲の印象dict作成
+        for song_obj in learned_songs:
+            song_id = song_obj['id']
+            self.learned_song_tag_map.setdefault(song_id, [])
+            for tag in tags:
+                self.learned_song_tag_map[song_id].append(song_obj[tag])
+            self.learned_song_tag_map[song_id] = np.array(self.learned_song_tag_map[song_id])
+        
+        # 学習されていない楽曲の印象dict作成
+        for song_obj in not_learned_songs:
+            song_id = song_obj['id']
+            self.not_learned_song_tag_map.setdefault(song_id, [])
+            for tag in tags:
+                self.not_learned_song_tag_map[song_id].append(song_obj[tag])
+            self.not_learned_song_tag_map[song_id] = np.array(self.not_learned_song_tag_map[song_id])
+       
+
+    def divide_songs_obj(self):
+        """
+        学習済みのsong配列取得
+        """
+        learned_songs = []
+        with open(os.path.join(BASE, "../data_10/uniq_songs.csv")) as f:
+            for line in f:
+                song = line.replace("\n","").split(",")[0]
+                learned_songs.append(int(song))
+        
+        preference_songs = models.Preference.objects.all().values("song").distinct()
+        for preference_song in preference_songs:
+            song = preference_song["song"]
+            if song not in learned_songs:
+                learned_songs.append(song)
+
+        learned_songs_obj = models.Song.objects.filter(id__in=learned_songs).values()
+        not_learned_songs_obj = models.Song.objects.exclude(id__in=learned_songs).values()
+
+        return learned_songs_obj, not_learned_songs_obj
+
+
+def divide_songs_obj():
+    """
+    学習済みのsong配列取得
+    """
+    tag_obj = models.Tag.objects.all()
+    tags = [tag.name for tag in tag_obj]
+
+    learned_songs = []
+    with open(os.path.join(BASE, "../data_10/uniq_songs.csv")) as f:
+        for line in f:
+            song = line.replace("\n","").split(",")[0]
+            learned_songs.append(int(song))
+    
+    preference_songs = models.Preference.objects.all().values("song").distinct()
+    for preference_song in preference_songs:
+        song = preference_song["song"]
+        if song not in learned_songs:
+            learned_songs.append(song)
+
+    learned_songs_obj = models.Song.objects.filter(id__in=learned_songs).values()
+    not_learned_songs_obj = models.Song.objects.exclude(id__in=learned_songs).values()
+    learned_song_tag_map = {} # {song_id: List[tag_value]}
+    not_learned_song_tag_map = {} # {song_id: List[tag_value]}
+    for learned_song in learned_songs_obj:
+        song_id = learned_song['id']
+        learned_song_tag_map.setdefault(song_id, [])
+        for tag in tags:
+            learned_song_tag_map[song_id].append(learned_song[tag])
+    
+    for not_learned_song in not_learned_songs_obj:
+        song_id = not_learned_song['id']
+        not_learned_song_tag_map.setdefault(song_id, [])
+        for tag in tags:
+            not_learned_song_tag_map[song_id].append(not_learned_song[tag])
+
+    return learned_song_tag_map, not_learned_song_tag_map

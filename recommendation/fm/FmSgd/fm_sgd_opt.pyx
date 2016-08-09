@@ -20,6 +20,7 @@ np.import_array()
 ctypedef np.float64_t DOUBLE
 ctypedef np.int64_t INTEGER
 
+FEATURE_NUM = 43
 cdef class CyFmSgdOpt:
     """
     parameters
@@ -75,7 +76,6 @@ cdef class CyFmSgdOpt:
         long[:] ixs
         long[:] reg_ixs
         dict labels
-        int feature_nums = 43
 
     def __cinit__(self,
                     np.ndarray[DOUBLE, ndim=2, mode="c"] R,
@@ -430,10 +430,6 @@ cdef class CyFmSgdOpt:
             long i
             double param
         
-        # for i in xrange(self.n):
-        #     key = pre_key + str(i)
-        #     for param in params[i]:
-        #         redis_obj.rpush(key, param)
         for i in xrange(self.K):
             key = pre_key + str(i)
             for param in np.transpose(params)[i]:
@@ -442,8 +438,33 @@ cdef class CyFmSgdOpt:
     """
     スムージングの実装
     """
-    def smoothing(self):
-        return
+    def smoothing(self, dict not_learned_song_tag_map, dict learned_song_tag_map):
+
+        cdef:
+            long target_song
+            long learn_song
+            np.ndarray target_tags
+            np.ndarray learn_tags
+            long target_song_index
+            long learn_song_index
+            double distance
+            double sum_distance = 0.0
+            long index = 0
+
+        for target_song, target_tags in not_learned_song_tag_map.items():
+            index += 1
+            print index
+            target_song_index = self.labels["song="+str(target_song)]
+            sum_distance = 0.0
+            self.V[target_song_index] = 0.0 # 初期化
+            for learn_song, learn_tags in learned_song_tag_map.items():
+                distance = self.calc_feature_distances(target_tags, learn_tags)
+                learn_song_index = self.labels["song="+str(learn_song)]
+                self.W[target_song_index] += self.W[learn_song_index] * distance
+                self.V[target_song_index] += self.V[learn_song_index] * distance
+                sum_distance += distance
+
+            self.V[target_song_index] /= sum_distance
 
     cdef double calc_feature_distances(self, np.ndarray[DOUBLE, ndim=1, mode="c"] vector1, np.ndarray[DOUBLE, ndim=1, mode="c"] vector2):
 
@@ -453,11 +474,35 @@ cdef class CyFmSgdOpt:
             double distance
             int index
 
-        for index in xrange(self.feature_nums):
+        for index in xrange(FEATURE_NUM):
             sum_distance += pow(vector1[index] - vector2[index], 2)
 
         distance = sqrt(sum_distance)
         return distance
+
+    cdef double calc_pearson_distance(self, np.ndarray[DOUBLE, ndim=1] vector1, np.ndarray[DOUBLE, ndim=1] vector2):
+
+        cdef:
+            double sum_vector1 = 0.0
+            double sum_vector2 = 0.0
+            double sum_vector1_sq = 0.0
+            double sum_vector2_sq = 0.0
+            double p_sum = 0.0
+            double num = 0.0
+            double den = 0.0
+            long index
+
+        sum_vector1 = np.sum(vector1)
+        sum_vector2 = np.sum(vector2)
+        sum_vector1_sq = np.sum(vector1**2)
+        sum_vector2_sq = np.sum(vector2**2)
+        p_sum = np.dot(vector1, vector2)
+
+        num = p_sum - (sum_vector1 * sum_vector2 / FEATURE_NUM)
+        den = sqrt((sum_vector1_sq - pow(sum_vector1, 2)/FEATURE_NUM) * (sum_vector2_sq - pow(sum_vector2, 2)/FEATURE_NUM))
+        if den == 0: return 0
+
+        return num/den
 
     def get_w_0(self):
         return self.w_0
