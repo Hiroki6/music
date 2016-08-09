@@ -160,7 +160,7 @@ def create_fm_matrix():
     print "正規化用データ変形"
     regs_matrix = create_regs_matrix(regs_data, data_labels, tag_map, regs_num)
 
-    targets = np.ones(len(rate_matrix))
+    targets = np.ones(len(rate_matrix), dtype=np.int64)
 
     return rate_matrix, regs_matrix, data_labels, targets, tag_map, ratelist
 
