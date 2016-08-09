@@ -147,6 +147,11 @@ body{
       .feedback-form{
         position: absolute;
         bottom: -35px;
+        .indicator{
+          background-color: rgb(204, 255, 85);
+          padding: 10px;
+          min-height: 200px;
+        }
       }
       .best-song-button{
         margin-top: 8px;

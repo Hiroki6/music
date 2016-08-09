@@ -153,7 +153,7 @@ cdef class CyRecommendFm:
             self.relearning_optimization(top_predict, feedback_predict)
             top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix, ixs)
             count += 1
-            if(count > 1000):
+            if(count > 100):
                 break
         print count
 

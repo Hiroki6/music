@@ -18,7 +18,7 @@
             {% endfor %}
           </select>
           <input type = "hidden" name = "song" value = {{ song.id }}>
-          <input type = "submit" value = "フィードバックをする">
+          <input type = "submit" id = "indicator" value = "フィードバックをする">
         </form>
       {% else %}
         <h3>合計１０曲推薦されました! </br>
@@ -37,5 +37,4 @@
     </ul>
   </div>
 </div>
-
 {% endblock main %}
