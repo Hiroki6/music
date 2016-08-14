@@ -120,7 +120,8 @@ def create_like_song(user_id, song_id, recommend_type):
     return next_page
 
 def get_select_songs(user_id):
-    return LikeSong.objects.filter(user_id=user_id)
+    results = LikeSong.objects.filter(user_id=user_id).order_by('recommend_type')
+    return results
 
 def save_questionnaire(user_id, comparison, interaction_rate, recommend_rate, free_content):
 

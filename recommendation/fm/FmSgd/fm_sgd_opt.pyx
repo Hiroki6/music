@@ -454,7 +454,6 @@ cdef class CyFmSgdOpt:
         
         for target_song, target_tags in not_learned_song_tag_map.items():
             index += 1
-            print index
             target_song_index = self.labels["song="+str(target_song)]
             sum_distance = 0.0
             self.V[target_song_index] = 0.0 # 初期化
