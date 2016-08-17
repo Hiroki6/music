@@ -1,0 +1,23 @@
+{% load sass_tags %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel = "stylesheet" type = "text/css" href = "{% static 'bootstrap/bootstrap-theme.min.css' %}"/>
+  <link rel = "stylesheet" type = "text/css" href = "{% static 'bootstrap/bootstrap.min.css' %}" />
+  <!--<link rel = "stylesheet" type = "text/css" href = "{% static 'recommendation/style.css' %}" />-->
+  <link rel = "stylesheet" type = "text/css" href = "{% static 'css/font-awesome.min.css' %}" />
+  <link rel = "stylesheet" href = "{% sass_src 'sass/main.scss' %}" />
+</head>
+<body>
+<div class = "login-main">
+    {% block main %}
+    {% endblock %}
+  <footer>
+    <p>&copy; hasida_lab All Rights Reserved.</p>
+  </footer>
+</div>
+</body>
+</html>

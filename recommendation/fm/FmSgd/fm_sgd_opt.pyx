@@ -482,6 +482,7 @@ cdef class CyFmSgdOpt:
             sum_distance += pow(vector1[index] - vector2[index], 2)
 
         distance = sqrt(sum_distance)
+        print 1/distance
         return distance
 
     cdef double calc_pearson_distance(self, np.ndarray[DOUBLE, ndim=1] vector1, np.ndarray[DOUBLE, ndim=1] vector2):
