@@ -463,9 +463,9 @@ cdef class CyFmSgdOpt:
             for learn_song, learn_tags in learned_song_tag_map.items():
                 distance = self.calc_feature_distances(target_tags, learn_tags)
                 learn_song_index = self.labels["song="+str(learn_song)]
-                self.W[target_song_index] = self.W[learn_song_index] / distance
-                self.V[target_song_index] = self.V[learn_song_index] / distance
-                sum_distance += 1 / distance
+                self.W[target_song_index] += (self.W[learn_song_index] / distance)
+                self.V[target_song_index] += (self.V[learn_song_index] / distance)
+                sum_distance += (1 / distance)
 
             self.V[target_song_index] /= sum_distance
             self.W[target_song_index] /= sum_distance

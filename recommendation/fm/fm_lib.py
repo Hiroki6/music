@@ -217,7 +217,7 @@ class CyFmSgdOpt():
         learn_song_norm = {}
         
         for learn_song, learn_tags in self.learned_song_tag_map.items():
-            learned_song_norm[learn_song] = np.linalg.norm(learn_tags)
+            learn_song_norm[learn_song] = np.linalg.norm(learn_tags)
 
         return learn_song_norm
 
