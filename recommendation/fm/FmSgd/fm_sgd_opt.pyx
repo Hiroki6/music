@@ -459,13 +459,12 @@ cdef class CyFmSgdOpt:
             sum_distance = 0.0
             self.V[target_song_index] = 0.0 # 初期化
             #target_norm = np.linalg.norm(target_tags)
-            d_index = 0
             for learn_song, learn_tags in learned_song_tag_map.items():
                 distance = self.calc_feature_distances(target_tags, learn_tags)
                 learn_song_index = self.labels["song="+str(learn_song)]
-                self.W[target_song_index] += (self.W[learn_song_index] / distance)
-                self.V[target_song_index] += (self.V[learn_song_index] / distance)
-                sum_distance += (1 / distance)
+                self.W[target_song_index] += self.W[learn_song_index] * distance
+                self.V[target_song_index] += self.V[learn_song_index] * distance
+                sum_distance += distance
 
             self.V[target_song_index] /= sum_distance
             self.W[target_song_index] /= sum_distance
@@ -481,8 +480,7 @@ cdef class CyFmSgdOpt:
         for index in xrange(FEATURE_NUM):
             sum_distance += pow(vector1[index] - vector2[index], 2)
 
-        distance = sqrt(sum_distance)
-        print 1/distance
+        distance = 1/sqrt(sum_distance)
         return distance
 
     cdef double calc_pearson_distance(self, np.ndarray[DOUBLE, ndim=1] vector1, np.ndarray[DOUBLE, ndim=1] vector2):

@@ -16,7 +16,7 @@
 
 			//インジケータ表示
 			var indicator = this.indicator({
-				message: 'フィードバックを反映しています',
+				message: 'フィードバックを反映しています<br/>20秒程度かかります。',
 				target : document.body
 			}).show();
 
