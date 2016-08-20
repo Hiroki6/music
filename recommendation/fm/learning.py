@@ -9,7 +9,7 @@ sys.path.append('./FmSgd')
 import fm_lib
 
 """
-学習データの読み込み
+学習
 """
 def learning():
 
@@ -27,6 +27,25 @@ def learning():
     save_params_into_radis(labels, tag_map) # labelsをredisに保存
     print "top_k_ranking保存"
     FM_obj.save_top_k_ranking_all_user()
+    print time.time() - start_time
+
+"""
+スムージングの精度評価
+"""
+def smoothing_learning():
+
+    start_time = time.time()
+    learning_matrix, regs_matrix, labels, targets, tag_map, ratelist, train_songs, validation_songs = create_matrix.create_smoothing_fm_matrix()
+    print "FMクラス初期化"
+    FM_obj = fm_lib.CyFmSgdOpt(learning_matrix, regs_matrix, labels, targets, tag_map)
+    print "SGDで学習開始"
+    FM_obj.learning(0.005, K=8, step=1)
+    FM_obj.arrange_user()
+    FM_obj.smoothing()
+    print "redisに保存"
+    FM_obj.cy_fm.save_redis(1)
+    labels = FM_obj.labels
+    save_params_into_radis(labels, tag_map) # labelsをredisに保存
     print time.time() - start_time
 
 def save_params_into_radis(labels, tag_map):

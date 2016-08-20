@@ -373,11 +373,11 @@ cdef class CyFmSgdOpt:
         """
         return self._calc_rating(matrix, song, ixs)
 
-    def save_redis(self):
+    def save_redis(self, int db = 0):
         """
         パラメータのredisへの保存
         """
-        r = redis.Redis(host='localhost', port=6379, db=0)
+        r = redis.Redis(host='localhost', port=6379, db=db)
         
         """
         全て消す

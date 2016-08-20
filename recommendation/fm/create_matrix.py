@@ -246,3 +246,82 @@ def get_tags():
         tags.append(tag.name)
 
     return tags
+
+def get_cross_validation_song():
+
+    uniq_songs = []
+    validation_songs = []
+    with open(os.path.join(BASE, "../data_10/uniq_songs.csv")) as f:
+        for line in f:
+            contents = line.replace("\n","").split(",")
+            song = contents[0]
+            uniq_songs.append(song)
+
+    validation_nums = int(len(uniq_songs) * 0.2)
+    
+    for i in xrange(validation_nums):
+        index = random.randint(0, len(uniq_songs)-1)
+        song = uniq_songs.pop(index)
+        validation_songs.append(song)
+
+    return uniq_songs, validation_songs
+
+"""
+スムージングの精度評価用の配列作成
+"""
+def create_smoothing_fm_matrix():
+
+    data_labels, tag_map = get_data_labels_and_tag_map()
+    ratelist, rate_nums, train_songs, validation_songs = get_smoothing_ratelist() # {user: [songs]}
+
+    print "正規化項用データ作成"
+    regs_data = {}
+    regs_num = int(len(ratelist) * 0.05)
+    for i in xrange(regs_num):
+        user = random.choice(ratelist.keys())
+        index = random.randint(0, len(ratelist[user])-1)
+        song = ratelist[user].pop(index)
+        if not regs_data.has_key(user):
+            regs_data.setdefault(user, [])
+        regs_data[user].append(song)
+ 
+    print "学習用データ変形"
+    rate_matrix = create_regs_matrix(ratelist, data_labels, tag_map, rate_nums)
+    print "正規化用データ変形"
+    regs_matrix = create_regs_matrix(regs_data, data_labels, tag_map, regs_num)
+
+    targets = np.ones(len(rate_matrix), dtype=np.int64)
+
+    return rate_matrix, regs_matrix, data_labels, targets, tag_map, ratelist, train_songs, validation_songs
+
+"""
+スムージング用の楽曲を抜いた視聴履歴を取得
+"""
+def get_smoothing_ratelist():
+
+    rate_dic = {}
+    train_songs, validation_songs = get_cross_validation_song()
+    
+    rate_nums = 0
+    for line in open(os.path.join(BASE, "../data_10/song_listening_data_10.csv")):
+        rate = line.replace("\n","").split(',')
+        user = rate[0]
+        song_id = rate[1]
+        if song_id in validation_songs:
+            continue
+        if not rate_dic.has_key(user):
+            rate_dic.setdefault(user, [])
+        rate_dic[user].append(song_id)
+        rate_nums += 1
+
+    app_preferences = models.Preference.objects.all()
+    for app_preference in app_preferences:
+        user = str(app_preference.user_id)
+        song_id = str(app_preference.song_id)
+        if not rate_dic.has_key(user):
+            rate_dic.setdefault(user, [])
+        rate_dic[user].append(song_id)
+        rate_nums += 1
+
+    return rate_dic, rate_nums, train_songs, validation_songs
+
