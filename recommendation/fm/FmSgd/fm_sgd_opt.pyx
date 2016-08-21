@@ -382,7 +382,7 @@ cdef class CyFmSgdOpt:
         """
         全て消す
         """
-        r.flushall()
+        #r.flushall()
         """
         w_0, W, Vの保存
         """

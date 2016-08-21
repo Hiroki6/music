@@ -2004,7 +2004,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
 static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_10get_rankings(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_matrixes, PyArrayObject *__pyx_v_songs, PyArrayObject *__pyx_v_ixs); /* proto */
 static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_12predict(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_matrix, char *__pyx_v_song, PyArrayObject *__pyx_v_ixs); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, int __pyx_v_db); /* proto */
 static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_16save_scalar(CYTHON_UNUSED struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_key, char *__pyx_v_field, double __pyx_v_value); /* proto */
 static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_18save_one_dim_array(CYTHON_UNUSED struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_key, PyArrayObject *__pyx_v_params); /* proto */
 static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_20save_two_dim_array(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_pre_key, PyArrayObject *__pyx_v_params); /* proto */
@@ -6896,7 +6896,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_12predict(struct __pyx_obj_1
  *         """
  *         return self._calc_rating(matrix, song, ixs)             # <<<<<<<<<<<<<<
  * 
- *     def save_redis(self):
+ *     def save_redis(self, int db = 0):
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = PyFloat_FromDouble(((struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self->__pyx_vtab)->_calc_rating(__pyx_v_self, ((PyArrayObject *)__pyx_v_matrix), __pyx_v_song, ((PyArrayObject *)__pyx_v_ixs))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 374; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -6936,26 +6936,73 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_12predict(struct __pyx_obj_1
 /* "fm_sgd_opt.pyx":376
  *         return self._calc_rating(matrix, song, ixs)
  * 
- *     def save_redis(self):             # <<<<<<<<<<<<<<
+ *     def save_redis(self, int db = 0):             # <<<<<<<<<<<<<<
  *         """
  *         redis
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_15save_redis(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_15save_redis(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static char __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_14save_redis[] = "\n        \343\203\221\343\203\251\343\203\241\343\203\274\343\202\277\343\201\256redis\343\201\270\343\201\256\344\277\235\345\255\230\n        ";
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_15save_redis(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_15save_redis(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  int __pyx_v_db;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("save_redis (wrapper)", 0);
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self));
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_db,0};
+    PyObject* values[1] = {0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (kw_args > 0) {
+          PyObject* value = PyDict_GetItem(__pyx_kwds, __pyx_n_s_db);
+          if (value) { values[0] = value; kw_args--; }
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "save_redis") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 376; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+      }
+    } else {
+      switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+    }
+    if (values[0]) {
+      __pyx_v_db = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_db == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 376; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    } else {
+      __pyx_v_db = ((int)0);
+    }
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("save_redis", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 376; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.save_redis", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self), __pyx_v_db);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self) {
+static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, int __pyx_v_db) {
   PyObject *__pyx_v_r = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -6973,7 +7020,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
   /* "fm_sgd_opt.pyx":380
  *         redis
  *         """
- *         r = redis.Redis(host='localhost', port=6379, db=0)             # <<<<<<<<<<<<<<
+ *         r = redis.Redis(host='localhost', port=6379, db=db)             # <<<<<<<<<<<<<<
  * 
  *         """
  */
@@ -6986,7 +7033,10 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_host, __pyx_n_s_localhost) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 380; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_port, __pyx_int_6379) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 380; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_db, __pyx_int_0) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 380; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_db); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 380; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_db, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 380; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 380; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -7386,7 +7436,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
   /* "fm_sgd_opt.pyx":376
  *         return self._calc_rating(matrix, song, ixs)
  * 
- *     def save_redis(self):             # <<<<<<<<<<<<<<
+ *     def save_redis(self, int db = 0):             # <<<<<<<<<<<<<<
  *         """
  *         redis
  */
@@ -24260,7 +24310,7 @@ static PyMethodDef __pyx_methods_10fm_sgd_opt_CyFmSgdOpt[] = {
   {"learning", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_9learning, METH_NOARGS, __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_8learning},
   {"get_rankings", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_11get_rankings, METH_VARARGS|METH_KEYWORDS, __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_10get_rankings},
   {"predict", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_13predict, METH_VARARGS|METH_KEYWORDS, __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_12predict},
-  {"save_redis", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_15save_redis, METH_NOARGS, __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_14save_redis},
+  {"save_redis", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_15save_redis, METH_VARARGS|METH_KEYWORDS, __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_14save_redis},
   {"save_scalar", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_17save_scalar, METH_VARARGS|METH_KEYWORDS, 0},
   {"save_one_dim_array", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_19save_one_dim_array, METH_VARARGS|METH_KEYWORDS, 0},
   {"save_two_dim_array", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_21save_two_dim_array, METH_VARARGS|METH_KEYWORDS, 0},
