@@ -18,8 +18,8 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'recommendation/login.html'}),
-    url(r'^logout/$', 'django.contrib.auth.views.logout', {'template_name': 'recommendation/logged_out.html'}),
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'recommendation/login.html'}),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'template_name': 'recommendation/logged_out.html'}),
     url(r'^recommendation/', include('recommendation.urls')),
     url(r'^admin/', admin.site.urls),
 ]

@@ -20,6 +20,7 @@ np.import_array()
 ctypedef np.float64_t DOUBLE
 ctypedef np.int64_t INTEGER
 
+FEATURE_NUM = 43
 cdef class CyFmSgdOpt:
     """
     parameters
@@ -372,16 +373,16 @@ cdef class CyFmSgdOpt:
         """
         return self._calc_rating(matrix, song, ixs)
 
-    def save_redis(self):
+    def save_redis(self, int db = 0):
         """
         パラメータのredisへの保存
         """
-        r = redis.Redis(host='localhost', port=6379, db=0)
+        r = redis.Redis(host='localhost', port=6379, db=db)
         
         """
         全て消す
         """
-        r.flushall()
+        #r.flushall()
         """
         w_0, W, Vの保存
         """
@@ -429,14 +430,89 @@ cdef class CyFmSgdOpt:
             long i
             double param
         
-        # for i in xrange(self.n):
-        #     key = pre_key + str(i)
-        #     for param in params[i]:
-        #         redis_obj.rpush(key, param)
         for i in xrange(self.K):
             key = pre_key + str(i)
             for param in np.transpose(params)[i]:
                 redis_obj.rpush(key, param)
+
+    """
+    スムージングの実装
+    """
+    def smoothing(self, dict not_learned_song_tag_map, dict learned_song_tag_map, dict learn_song_norm):
+
+        cdef:
+            long target_song
+            long learn_song
+            np.ndarray target_tags
+            np.ndarray learn_tags
+            long target_song_index
+            long learn_song_index
+            double distance
+            double sum_distance = 0.0
+            long index = 0
+            double target_norm = 0.0
+            double learn_norm = 0.0
+        
+        for target_song, target_tags in not_learned_song_tag_map.items():
+            index += 1
+            print index
+            target_song_index = self.labels["song="+str(target_song)]
+            sum_distance = 0.0
+            self.V[target_song_index] = 0.0 # 初期化
+            target_norm = np.linalg.norm(target_tags)
+            for learn_song, learn_tags in learned_song_tag_map.items():
+                #distance = self.calc_feature_distances(target_tags, learn_tags)
+                learn_norm = learn_song_norm[learn_song]
+                distance = self.calc_cosine_similarity(target_tags, learn_tags, target_norm, learn_norm)
+                learn_song_index = self.labels["song="+str(learn_song)]
+                self.W[target_song_index] += self.W[learn_song_index] * distance
+                self.V[target_song_index] += self.V[learn_song_index] * distance
+                sum_distance += distance
+
+            self.V[target_song_index] /= sum_distance
+            self.W[target_song_index] /= sum_distance
+
+    cdef double calc_feature_distances(self, np.ndarray[DOUBLE, ndim=1, mode="c"] vector1, np.ndarray[DOUBLE, ndim=1, mode="c"] vector2):
+
+        cdef:
+            double euclid_distance = 0.0
+            double sum_distance = 0.0
+            double distance
+            int index
+
+        for index in xrange(FEATURE_NUM):
+            sum_distance += pow(vector1[index] - vector2[index], 2)
+
+        distance = 1/sqrt(sum_distance)
+        return distance
+
+    cdef double calc_pearson_distance(self, np.ndarray[DOUBLE, ndim=1] vector1, np.ndarray[DOUBLE, ndim=1] vector2):
+
+        cdef:
+            double sum_vector1 = 0.0
+            double sum_vector2 = 0.0
+            double sum_vector1_sq = 0.0
+            double sum_vector2_sq = 0.0
+            double p_sum = 0.0
+            double num = 0.0
+            double den = 0.0
+            long index
+
+        sum_vector1 = np.sum(vector1)
+        sum_vector2 = np.sum(vector2)
+        sum_vector1_sq = np.sum(vector1**2)
+        sum_vector2_sq = np.sum(vector2**2)
+        p_sum = np.dot(vector1, vector2)
+
+        num = p_sum - (sum_vector1 * sum_vector2 / FEATURE_NUM)
+        den = sqrt((sum_vector1_sq - pow(sum_vector1, 2)/FEATURE_NUM) * (sum_vector2_sq - pow(sum_vector2, 2)/FEATURE_NUM))
+        if den == 0: return 0
+
+        return num/den
+    
+    cdef double calc_cosine_similarity(self, np.ndarray[DOUBLE, ndim=1] vector1, np.ndarray[DOUBLE, ndim=1] vector2, double vector1_norm, double vector2_norm):
+
+        return np.dot(vector1, vector2) / (vector1_norm * vector2_norm)
 
     def get_w_0(self):
         return self.w_0

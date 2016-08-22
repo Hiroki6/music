@@ -3877,7 +3877,7 @@ static PyObject *__pyx_pf_12cy_recommend_13CyRecommendFm_6relearning(struct __py
  *             self.relearning_optimization(top_predict, feedback_predict)
  *             top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix, ixs)             # <<<<<<<<<<<<<<
  *             count += 1
- *             if(count > 1000):
+ *             if(count > 100):
  */
     __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_calc_feedback_error); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_6);
@@ -3981,7 +3981,7 @@ static PyObject *__pyx_pf_12cy_recommend_13CyRecommendFm_6relearning(struct __py
  *             self.relearning_optimization(top_predict, feedback_predict)
  *             top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix, ixs)
  *             count += 1             # <<<<<<<<<<<<<<
- *             if(count > 1000):
+ *             if(count > 100):
  *                 break
  */
     __pyx_v_count = (__pyx_v_count + 1);
@@ -3989,16 +3989,16 @@ static PyObject *__pyx_pf_12cy_recommend_13CyRecommendFm_6relearning(struct __py
     /* "cy_recommend.pyx":156
  *             top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix, ixs)
  *             count += 1
- *             if(count > 1000):             # <<<<<<<<<<<<<<
+ *             if(count > 100):             # <<<<<<<<<<<<<<
  *                 break
  *         print count
  */
-    __pyx_t_11 = ((__pyx_v_count > 0x3E8) != 0);
+    __pyx_t_11 = ((__pyx_v_count > 0x64) != 0);
     if (__pyx_t_11) {
 
       /* "cy_recommend.pyx":157
  *             count += 1
- *             if(count > 1000):
+ *             if(count > 100):
  *                 break             # <<<<<<<<<<<<<<
  *         print count
  * 
@@ -4008,7 +4008,7 @@ static PyObject *__pyx_pf_12cy_recommend_13CyRecommendFm_6relearning(struct __py
       /* "cy_recommend.pyx":156
  *             top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix, ixs)
  *             count += 1
- *             if(count > 1000):             # <<<<<<<<<<<<<<
+ *             if(count > 100):             # <<<<<<<<<<<<<<
  *                 break
  *         print count
  */
@@ -4017,7 +4017,7 @@ static PyObject *__pyx_pf_12cy_recommend_13CyRecommendFm_6relearning(struct __py
   __pyx_L6_break:;
 
   /* "cy_recommend.pyx":158
- *             if(count > 1000):
+ *             if(count > 100):
  *                 break
  *         print count             # <<<<<<<<<<<<<<
  * 
