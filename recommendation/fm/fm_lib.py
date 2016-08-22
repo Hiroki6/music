@@ -202,14 +202,15 @@ class CyFmSgdOpt():
         self.cy_fm.set_adagrad_V(adagrad_V)
         self.cy_fm.set_adagrad_W(adagrad_W)
 
-    def smoothing(self):
+    def smoothing(self, smoothing_evaluate=False):
         """
         学習されていない楽曲のモデルに対してスムージングを行う
         """
+        self.smoothing_evaluate = smoothing_evaluate
         start_time = time.time()
         self.get_divided_learning_songs()
-        #learn_song_norm = self.get_learn_song_norm()
-        self.cy_fm.smoothing(self.not_learned_song_tag_map, self.learned_song_tag_map)
+        learn_song_norm = self.get_learn_song_norm()
+        self.cy_fm.smoothing(self.not_learned_song_tag_map, self.learned_song_tag_map, learn_song_norm)
         print time.time() - start_time
 
     def get_learn_song_norm(self):
@@ -254,24 +255,34 @@ class CyFmSgdOpt():
         学習済みのsong配列取得
         """
         learned_songs = []
-        with open(os.path.join(BASE, "../data_10/uniq_songs.csv")) as f:
-            for line in f:
-                song = line.replace("\n","").split(",")[0]
-                learned_songs.append(int(song))
+        if self.smoothing_evaluate:
+            r = redis.Redis(host='localhost', port=6379, db=1)
+            learned_songs = r.lrange("train_songs", 0, -1)
+            learned_songs = map(int, learned_songs)
+            not_learned_songs = r.lrange("validation_songs", 0, -1)
+            not_learned_songs = map(int, not_learned_songs)
+            not_learned_songs_obj = models.Song.objects.filter(id__in=not_learned_songs).values()
+        else:
+            with open(os.path.join(BASE, "../data_10/uniq_songs.csv")) as f:
+                for line in f:
+                    song = line.replace("\n","").split(",")[0]
+                    learned_songs.append(int(song))
         
-        preference_songs = models.Preference.objects.all().values("song").distinct()
-        for preference_song in preference_songs:
-            song = preference_song["song"]
-            if song not in learned_songs:
-                learned_songs.append(song)
+            preference_songs = models.Preference.objects.all().values("song").distinct()
+            for preference_song in preference_songs:
+                song = preference_song["song"]
+                if song not in learned_songs:
+                    learned_songs.append(song)
+            not_learned_songs_obj = models.Song.objects.exclude(id__in=learned_songs).values()
 
         learned_songs_obj = models.Song.objects.filter(id__in=learned_songs).values()
-        not_learned_songs_obj = models.Song.objects.exclude(id__in=learned_songs).values()
+        print len(learned_songs_obj)
+        print len(not_learned_songs_obj)
 
         return learned_songs_obj, not_learned_songs_obj
 
 
-def divide_songs_obj():
+def divide_songs_obj(smoothing_evaluate=False):
     """
     学習済みのsong配列取得
     """
@@ -279,10 +290,16 @@ def divide_songs_obj():
     tags = [tag.name for tag in tag_obj]
 
     learned_songs = []
-    with open(os.path.join(BASE, "../data_10/uniq_songs.csv")) as f:
-        for line in f:
-            song = line.replace("\n","").split(",")[0]
-            learned_songs.append(int(song))
+    if smoothing_evaluate:
+        r = redis.Redis(host='localhost', port=6379, db=1)
+        learned_songs = redis_obj.lrange("train_songs", 0, -1)
+        learned_songs = map(int, learned_songs)
+       
+    else:
+        with open(os.path.join(BASE, "../data_10/uniq_songs.csv")) as f:
+            for line in f:
+                song = line.replace("\n","").split(",")[0]
+                learned_songs.append(int(song))
     
     preference_songs = models.Preference.objects.all().values("song").distinct()
     for preference_song in preference_songs:
@@ -307,3 +324,4 @@ def divide_songs_obj():
             not_learned_song_tag_map[song_id].append(not_learned_song[tag])
 
     return learned_song_tag_map, not_learned_song_tag_map
+

@@ -31,88 +31,6 @@ def get_song_tags():
 
     return song_tag_map
 
-def get_all_song_id_set():
-
-    song_nums = models.Song.objects.count()
-    songs = np.arange(song_nums)+1
-    songs = songs.astype(str)
-    songs = set(songs)
-    return songs
-
-"""
-return(rate_matrix) FM用のデータ
-userとsongとartist名とtagを用いる
-rate_matrix, test_matrix, labels, targets, tag_map, ratelist
-@params(learn_matrix): 学習用データ(FMフォーマット)
-@params(regs_matrix): 正規化パラメータ決定のための交差regsデータ(FMフォーマット)
-@params(labels): 学習用データラベル
-@params(targets): 教師ラベル 1次元np.array
-@params(tag_map): {インデックス: 教師データ上のインデックス}
-@params(ratelist): {user: songs[]}
-"""
-def create_matrix_with_tag_dicVec():
-
-    ratelist, rate_nums = get_ratelist() # {user: [songs]}
-    song_tags = get_song_tags() # {song: [tags]}
-    all_song_set = get_all_song_id_set() # 楽曲のidの集合
-    already_song_set = set() # すでに出現した楽曲
-    tags = get_tags()
-    rate_array= []
-    tag_map = {} # {tag: tag_index}
-    targets = [] # 教師データ
-
-    print "正規化項用データ作成"
-    regs_data = {}
-    regs_num = int(len(ratelist) * 0.05)
-    for i in xrange(regs_num):
-        user = random.choice(ratelist.keys())
-        index = random.randint(0, len(ratelist[user])-1)
-        song = ratelist[user].pop(index)
-        if not regs_data.has_key(user):
-            regs_data.setdefault(user, [])
-        regs_data[user].append(song)
-
-    print "学習用データ作成"
-    for user, songs in ratelist.items():
-        for song in songs:
-            if not song_tags.has_key(song):
-                already_song_set.add(song)
-                continue
-            rate_dic = {}
-            rate_dic["user"] = user
-            rate_dic["song"] = song
-            if song not in already_song_set:
-                already_song_set.add(song)
-            for tag, value in zip(tags, song_tags[song]):
-                rate_dic[tag] = float(value)
-            targets.append(1)
-            rate_array.append(rate_dic)
-    
-    print "楽曲補充"
-    # 視聴履歴に含まれていない楽曲を入れる
-    all_song_set.difference_update(already_song_set)
-    for song in all_song_set:
-        rate_dic = {}
-        rate_dic["user"] = user
-        rate_dic["song"] = song
-        for tag, value in zip(tags, song_tags[song]):
-            rate_dic[tag] = float(value)
-        rate_array.append(rate_dic)
-
-    v = DictVectorizer()
-    X = v.fit_transform(rate_array)
-    rate_matrix = X.toarray()
-    labels = v.get_feature_names()
-    data_labels = dict(zip(labels, range(0, len(labels))))
-    targets = np.array(targets)
-    for index, tag in enumerate(tags):
-        tag_map[index] = data_labels[tag]
-    
-    print "正規化用データ変形"
-    regs_matrix = create_regs_matrix(regs_data, data_labels, tag_map, regs_num)
-
-    return rate_matrix[:len(targets)], regs_matrix, data_labels, targets, tag_map, ratelist
-
 """
 ラベルの作成
 """
@@ -142,23 +60,12 @@ def get_data_labels_and_tag_map():
 def create_fm_matrix():
 
     data_labels, tag_map = get_data_labels_and_tag_map()
-    ratelist, rate_nums = get_ratelist() # {user: [songs]}
+    ratelist, rate_nums, regs_data, regs_nums = get_ratelist() # {user: [songs]}
 
-    print "正規化項用データ作成"
-    regs_data = {}
-    regs_num = int(len(ratelist) * 0.05)
-    for i in xrange(regs_num):
-        user = random.choice(ratelist.keys())
-        index = random.randint(0, len(ratelist[user])-1)
-        song = ratelist[user].pop(index)
-        if not regs_data.has_key(user):
-            regs_data.setdefault(user, [])
-        regs_data[user].append(song)
- 
     print "学習用データ変形"
-    rate_matrix = create_regs_matrix(ratelist, data_labels, tag_map, rate_nums)
+    rate_matrix = transform_matrix(ratelist, data_labels, tag_map, rate_nums)
     print "正規化用データ変形"
-    regs_matrix = create_regs_matrix(regs_data, data_labels, tag_map, regs_num)
+    regs_matrix = transform_matrix(regs_data, data_labels, tag_map, regs_nums)
 
     targets = np.ones(len(rate_matrix), dtype=np.int64)
 
@@ -188,7 +95,7 @@ def get_uniq_songs():
 """
 テストデータのFM配列作成
 """
-def create_regs_matrix(test_data, data_labels, tag_map, test_nums):
+def transform_matrix(test_data, data_labels, tag_map, test_nums):
 
     song_tags = get_song_tags()
     test_matrix = np.zeros((test_nums, len(data_labels)))
@@ -215,17 +122,7 @@ def create_regs_matrix(test_data, data_labels, tag_map, test_nums):
 
 def get_ratelist():
 
-    rate_dic = {}
-    
-    rate_nums = 0
-    for line in open(os.path.join(BASE, "../data_10/song_listening_data_10.csv")):
-        rate = line.replace("\n","").split(',')
-        user = rate[0]
-        song_id = rate[1]
-        if not rate_dic.has_key(user):
-            rate_dic.setdefault(user, [])
-        rate_dic[user].append(song_id)
-        rate_nums += 1
+    rate_dic, rate_nums = get_dic_and_nums_by_file("../data_10/train.csv")
 
     app_preferences = models.Preference.objects.all()
     for app_preference in app_preferences:
@@ -236,7 +133,29 @@ def get_ratelist():
         rate_dic[user].append(song_id)
         rate_nums += 1
 
-    return rate_dic, rate_nums
+    regs_dic, regs_nums = get_dic_and_nums_by_file("../data_10/regulation.csv")
+
+    return rate_dic, rate_nums, regs_dic, regs_nums
+
+"""
+fileから視聴履歴の辞書と視聴数を取得する
+"""
+def get_dic_and_nums_by_file(filepass, validation_songs = None):
+
+    dic = {}
+    nums = 0
+    for line in open(os.path.join(BASE, filepass)):
+        rate = line.replace("\n","").split(',')
+        user = rate[0]
+        song_id = rate[1]
+        if validation_songs is not None and song_id in validation_songs:
+            continue
+        if not dic.has_key(user):
+            dic.setdefault(user, [])
+        dic[user].append(song_id)
+        nums += 1
+
+    return dic, nums
 
 def get_tags():
 
@@ -246,3 +165,62 @@ def get_tags():
         tags.append(tag.name)
 
     return tags
+
+def get_cross_validation_song():
+
+    uniq_songs = []
+    validation_songs = []
+    with open(os.path.join(BASE, "../data_10/uniq_songs.csv")) as f:
+        for line in f:
+            contents = line.replace("\n","").split(",")
+            song = contents[0]
+            uniq_songs.append(song)
+
+    validation_nums = int(len(uniq_songs) * 0.2)
+    
+    for i in xrange(validation_nums):
+        index = random.randint(0, len(uniq_songs)-1)
+        song = uniq_songs.pop(index)
+        validation_songs.append(song)
+
+    return uniq_songs, validation_songs
+
+"""
+スムージングの精度評価用の配列作成
+"""
+def create_smoothing_fm_matrix():
+
+    data_labels, tag_map = get_data_labels_and_tag_map()
+    ratelist, rate_nums, regs_data, regs_nums, train_songs, validation_songs = get_smoothing_matrix() # {user: [songs]}
+
+    print "学習用データ変形"
+    rate_matrix = transform_matrix(ratelist, data_labels, tag_map, rate_nums)
+    print "正規化用データ変形"
+    regs_matrix = transform_matrix(regs_data, data_labels, tag_map, regs_nums)
+
+    targets = np.ones(len(rate_matrix), dtype=np.int64)
+
+    return rate_matrix, regs_matrix, data_labels, targets, tag_map, ratelist, train_songs, validation_songs
+
+"""
+スムージング用の楽曲を抜いた視聴履歴を取得
+"""
+def get_smoothing_matrix():
+
+    train_songs, validation_songs = get_cross_validation_song()
+    
+    rate_dic, rate_nums = get_dic_and_nums_by_file("../data_10/train.csv", validation_songs)
+
+    app_preferences = models.Preference.objects.all()
+    for app_preference in app_preferences:
+        user = str(app_preference.user_id)
+        song_id = str(app_preference.song_id)
+        if not rate_dic.has_key(user):
+            rate_dic.setdefault(user, [])
+        rate_dic[user].append(song_id)
+        rate_nums += 1
+
+    regs_dic, regs_nums = get_dic_and_nums_by_file("../data_10/regulation.csv", validation_songs)
+
+    return rate_dic, rate_nums, regs_dic, regs_nums, train_songs, validation_songs
+

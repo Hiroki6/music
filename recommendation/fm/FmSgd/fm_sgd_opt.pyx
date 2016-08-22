@@ -373,16 +373,16 @@ cdef class CyFmSgdOpt:
         """
         return self._calc_rating(matrix, song, ixs)
 
-    def save_redis(self):
+    def save_redis(self, int db = 0):
         """
         パラメータのredisへの保存
         """
-        r = redis.Redis(host='localhost', port=6379, db=0)
+        r = redis.Redis(host='localhost', port=6379, db=db)
         
         """
         全て消す
         """
-        r.flushall()
+        #r.flushall()
         """
         w_0, W, Vの保存
         """
@@ -438,7 +438,7 @@ cdef class CyFmSgdOpt:
     """
     スムージングの実装
     """
-    def smoothing(self, dict not_learned_song_tag_map, dict learned_song_tag_map):
+    def smoothing(self, dict not_learned_song_tag_map, dict learned_song_tag_map, dict learn_song_norm):
 
         cdef:
             long target_song
@@ -450,7 +450,8 @@ cdef class CyFmSgdOpt:
             double distance
             double sum_distance = 0.0
             long index = 0
-            #double target_norm = 0.0
+            double target_norm = 0.0
+            double learn_norm = 0.0
         
         for target_song, target_tags in not_learned_song_tag_map.items():
             index += 1
@@ -458,9 +459,11 @@ cdef class CyFmSgdOpt:
             target_song_index = self.labels["song="+str(target_song)]
             sum_distance = 0.0
             self.V[target_song_index] = 0.0 # 初期化
-            #target_norm = np.linalg.norm(target_tags)
+            target_norm = np.linalg.norm(target_tags)
             for learn_song, learn_tags in learned_song_tag_map.items():
-                distance = self.calc_feature_distances(target_tags, learn_tags)
+                #distance = self.calc_feature_distances(target_tags, learn_tags)
+                learn_norm = learn_song_norm[learn_song]
+                distance = self.calc_cosine_similarity(target_tags, learn_tags, target_norm, learn_norm)
                 learn_song_index = self.labels["song="+str(learn_song)]
                 self.W[target_song_index] += self.W[learn_song_index] * distance
                 self.V[target_song_index] += self.V[learn_song_index] * distance
