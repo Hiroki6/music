@@ -36,8 +36,13 @@ def index(request):
 # フィードバック
 @login_required
 def feedback(request):
+    error_msg = ""
     try:
         feedback_value = request.POST['select-feedback']
+        if len(feedback_value) <= 0:
+            error_msg = "フィードバックを選択してください"
+            #return redirect('/recommendation/recommend_song/')
+            return recommend_song(request, error_msg)
         song_id = request.POST['song']
     except KeyError:
         pass
@@ -139,14 +144,14 @@ def user(request):
 この部分でFMを使う
 """
 @login_required
-def recommend_song(request):
+def recommend_song(request, error_msg = ""):
     user = request.user
     song = get_top_song(user)
     song_obj = Song.objects.filter(id=song)
     add_user_recommend_song(user.id, song)
     feedback_dict = get_feedback_dict()
     finish_flag = 1 if count_recommend_songs(user.id) >= 10 else 0
-    return render(request, 'recommendation/recommend_song.html', {'user': user, 'songs': song_obj, 'feedback_dict': feedback_dict, 'finish_flag': finish_flag})
+    return render(request, 'recommendation/recommend_song.html', {'user': user, 'songs': song_obj, 'feedback_dict': feedback_dict, 'finish_flag': finish_flag, 'error_msg': error_msg})
 
 @login_required
 def recommend_songs(request):
