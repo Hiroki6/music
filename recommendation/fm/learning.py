@@ -34,6 +34,7 @@ def train():
 """
 スムージングの精度評価
 db=1に保存
+保存するのはスムージング前と後のWとV
 """
 def smoothing_validation():
 
@@ -48,30 +49,10 @@ def smoothing_validation():
     FM_obj.learning(0.005, K=8, step=1)
     FM_obj.arrange_user()
     FM_obj.smoothing(smoothing_evaluate=True)
-    print "redisに保存"
-    FM_obj.cy_fm.save_redis(db=1)
-    labels = FM_obj.labels
-    save_params_into_radis(labels, tag_map, db=1) # labelsをredisに保存
-    print time.time() - start_time
-
-"""
-学習
-db=0に保存
-"""
-def smoothing_train():
-
-    start_time = time.time()
-    learning_matrix, regs_matrix, labels, targets, tag_map, ratelist = create_matrix.create_fm_matrix()
-    print "FMクラス初期化"
-    FM_obj = fm_lib.CyFmSgdOpt(learning_matrix, regs_matrix, labels, targets, tag_map)
-    print "SGDで学習開始"
-    FM_obj.learning(0.005, K=8, step=1)
-    FM_obj.arrange_user()
-    print "redisに保存"
-    redis_flush()
-    FM_obj.cy_fm.save_redis()
-    labels = FM_obj.labels
-    save_params_into_radis(labels, tag_map) # labelsをredisに保存
+    # print "redisに保存"
+    # FM_obj.cy_fm.save_redis(db=1)
+    # labels = FM_obj.labels
+    # save_params_into_radis(labels, tag_map, db=1) # labelsをredisに保存
     print time.time() - start_time
 
 def save_songs(key, songs):

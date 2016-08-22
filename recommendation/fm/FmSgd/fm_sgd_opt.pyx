@@ -438,7 +438,7 @@ cdef class CyFmSgdOpt:
     """
     スムージングの実装
     """
-    def smoothing(self, dict not_learned_song_tag_map, dict learned_song_tag_map, dict learn_song_norm):
+    def smoothing(self, dict not_learned_song_tag_map, dict learned_song_tag_map):
 
         cdef:
             long target_song
@@ -458,12 +458,13 @@ cdef class CyFmSgdOpt:
             print index
             target_song_index = self.labels["song="+str(target_song)]
             sum_distance = 0.0
+            self.W[target_song_index] = 0.0 # 初期化
             self.V[target_song_index] = 0.0 # 初期化
-            target_norm = np.linalg.norm(target_tags)
+            #target_norm = np.linalg.norm(target_tags)
             for learn_song, learn_tags in learned_song_tag_map.items():
-                #distance = self.calc_feature_distances(target_tags, learn_tags)
-                learn_norm = learn_song_norm[learn_song]
-                distance = self.calc_cosine_similarity(target_tags, learn_tags, target_norm, learn_norm)
+                distance = self.calc_feature_distances(target_tags, learn_tags)
+                #learn_norm = learn_song_norm[learn_song]
+                #distance = self.calc_cosine_similarity(target_tags, learn_tags, target_norm, learn_norm)
                 learn_song_index = self.labels["song="+str(learn_song)]
                 self.W[target_song_index] += self.W[learn_song_index] * distance
                 self.V[target_song_index] += self.V[learn_song_index] * distance
