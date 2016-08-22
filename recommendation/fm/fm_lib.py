@@ -209,8 +209,8 @@ class CyFmSgdOpt():
         self.smoothing_evaluate = smoothing_evaluate
         start_time = time.time()
         self.get_divided_learning_songs()
-        #learn_song_norm = self.get_learn_song_norm()
-        self.cy_fm.smoothing(self.not_learned_song_tag_map, self.learned_song_tag_map)
+        learn_song_norm = self.get_learn_song_norm()
+        self.cy_fm.smoothing(self.not_learned_song_tag_map, self.learned_song_tag_map, learn_song_norm)
         print time.time() - start_time
 
     def get_learn_song_norm(self):

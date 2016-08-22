@@ -11,6 +11,7 @@ class EvaluationSmoothing():
         self.get_redis_obj()
         self.get_params()
         self.get_labels()
+        self.get_validation_songs()
 
     def get_redis_obj(self):
 
@@ -59,18 +60,18 @@ class EvaluationSmoothing():
     def W_evaluation(self):
         
         rmse = np.sum((self.W_train - self.W_validation)**2)
-        self.rmse_w = sqrt(rmse)
+        self.rmse_w = sqrt(rmse/len(self.validation_songs))
 
     """
     VについてRMSEを計測する
     """
     def V_evaluation(self):
-
+    
         rmse = 0
         for song in self.validation_songs:
-            song_index = self.labels("song=" + song)
+            song_index = self.labels["song=" + song]
             rmse = np.sum((self.V_train[song_index] - self.V_validation[song_index]) ** 2)
-        self.rmse_v = sqrt(rmse)
+        self.rmse_v = sqrt(rmse/len(self.validation_songs))
         
     def get_labels(self):
     
@@ -83,5 +84,5 @@ class EvaluationSmoothing():
 
     def get_validation_songs(self):
 
-        validation_songs = r_validation.lrange("validation_songs", 0, -1)
-        self.validation_songs = map(int, validation_songs)
+        self.validation_songs = self.r_validation.lrange("validation_songs", 0, -1)
+        #self.validation_songs = map(int, validation_songs)
