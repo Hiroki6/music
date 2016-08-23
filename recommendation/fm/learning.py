@@ -49,10 +49,6 @@ def smoothing_validation():
     FM_obj.learning(0.005, K=8, step=1)
     FM_obj.arrange_user()
     FM_obj.smoothing(smoothing_evaluate=True)
-    # print "redisに保存"
-    # FM_obj.cy_fm.save_redis(db=1)
-    # labels = FM_obj.labels
-    # save_params_into_radis(labels, tag_map, db=1) # labelsをredisに保存
     print time.time() - start_time
 
 def save_songs(key, songs):
