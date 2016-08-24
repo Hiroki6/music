@@ -438,7 +438,7 @@ cdef class CyFmSgdOpt:
     """
     スムージングの実装
     """
-    def smoothing(self, dict not_learned_song_tag_map, dict learned_song_tag_map):
+    def smoothing(self, dict not_learned_song_tag_map, dict learned_song_tag_map, dict learn_song_norm, int rank):
 
         cdef:
             long target_song
@@ -452,6 +452,8 @@ cdef class CyFmSgdOpt:
             long index = 0
             double target_norm = 0.0
             double learn_norm = 0.0
+            list top_10
+            tuple top
         
         for target_song, target_tags in not_learned_song_tag_map.items():
             index += 1
@@ -460,15 +462,23 @@ cdef class CyFmSgdOpt:
             sum_distance = 0.0
             self.W[target_song_index] = 0.0 # 初期化
             self.V[target_song_index] = 0.0 # 初期化
-            #target_norm = np.linalg.norm(target_tags)
+            target_norm = np.linalg.norm(target_tags)
+            top_10 = []
             for learn_song, learn_tags in learned_song_tag_map.items():
-                distance = self.calc_feature_distances(target_tags, learn_tags)
-                #learn_norm = learn_song_norm[learn_song]
-                #distance = self.calc_cosine_similarity(target_tags, learn_tags, target_norm, learn_norm)
+                #distance = self.calc_feature_distances(target_tags, learn_tags)
+                learn_norm = learn_song_norm[learn_song]
+                distance = self.calc_cosine_similarity(target_tags, learn_tags, target_norm, learn_norm)
                 learn_song_index = self.labels["song="+str(learn_song)]
-                self.W[target_song_index] += self.W[learn_song_index] * distance
-                self.V[target_song_index] += self.V[learn_song_index] * distance
-                sum_distance += distance
+                top_10.append((distance, learn_song_index))
+                # self.W[target_song_index] += self.W[learn_song_index] * distance
+                # self.V[target_song_index] += self.V[learn_song_index] * distance
+                # sum_distance += distance
+            top_10.sort()
+            top_10.reverse()
+            for top in top_10[:rank]:
+                self.W[target_song_index] += self.W[top[1]] * top[0]
+                self.V[target_song_index] += self.V[top[1]] * top[0]
+                sum_distance += top[0]
 
             self.V[target_song_index] /= sum_distance
             self.W[target_song_index] /= sum_distance

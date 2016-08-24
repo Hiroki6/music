@@ -202,15 +202,15 @@ class CyFmSgdOpt():
         self.cy_fm.set_adagrad_V(adagrad_V)
         self.cy_fm.set_adagrad_W(adagrad_W)
 
-    def smoothing(self, smoothing_evaluate=False):
+    def smoothing(self, smoothing_evaluate=False, rank = 10):
         """
         学習されていない楽曲のモデルに対してスムージングを行う
         """
         self.smoothing_evaluate = smoothing_evaluate
         start_time = time.time()
         self.get_divided_learning_songs()
-        #learn_song_norm = self.get_learn_song_norm()
-        self.cy_fm.smoothing(self.not_learned_song_tag_map, self.learned_song_tag_map)
+        learn_song_norm = self.get_learn_song_norm()
+        self.cy_fm.smoothing(self.not_learned_song_tag_map, self.learned_song_tag_map, learn_song_norm, rank)
         # スムージング後の値
         if smoothing_evaluate:
             r = redis.Redis(host='localhost', port=6379, db=1)
