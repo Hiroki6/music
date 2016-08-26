@@ -267,7 +267,7 @@ class CyFmSgdOpt():
             not_learned_songs = r.lrange("validation_songs", 0, -1)
             not_learned_songs = map(int, not_learned_songs)
             # スムージング前の楽曲の保存
-            self.save_W_and_V(r, "W", "V_")
+            #self.save_W_and_V(r, "W", "V_")
             # スムージング対象の楽曲のインデックス保存
             self.save_smoothing_labels(r, not_learned_songs)
             not_learned_songs_obj = models.Song.objects.filter(id__in=not_learned_songs).values()

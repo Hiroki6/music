@@ -5,6 +5,7 @@ import redis
 import time
 import sys
 sys.dont_write_bytecode = True 
+import smoothing_lib
 sys.path.append('./FmSgd')
 import fm_lib
 
@@ -21,7 +22,8 @@ def train():
     print "SGDで学習開始"
     FM_obj.learning(0.005, K=8, step=1)
     FM_obj.arrange_user()
-    FM_obj.smoothing()
+    smoothing()
+    #FM_obj.smoothing()
     print "redisに保存"
     redis_flush()
     FM_obj.cy_fm.save_redis()
@@ -48,8 +50,19 @@ def smoothing_validation():
     print "SGDで学習開始"
     FM_obj.learning(0.005, K=8, step=1)
     FM_obj.arrange_user()
-    FM_obj.smoothing(smoothing_evaluate=True)
+    FM_obj.cy_fm.save_redis(db=1)
+    labels = FM_obj.labels
+    save_params_into_radis(labels, tag_map) # labelsをredisに保存
+
+    #FM_obj.smoothing(smoothing_evaluate=True)
+    smoothing(smoothing_evaluate=True)
     print time.time() - start_time
+
+def smoothing(smoothing_evaluate=False):
+
+    s_obj = smoothing_lib.SmoothingFm(8, smoothing_evaluate)
+    s_obj.learning()
+    s_obj.smoothing()
 
 def save_songs(key, songs):
 

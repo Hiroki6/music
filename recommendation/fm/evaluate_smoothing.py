@@ -5,7 +5,16 @@ import redis
 from math import sqrt
 
 class EvaluationSmoothing():
-
+    """
+    parameters
+    K: Vの次元
+    W_train: 学習済みのW配列
+    W_validation: 交差検定により予測されたW配列
+    V_train: 学習済みのV配列
+    V_validation: 交差検定により予測されたV配列
+    rmse_w: WのRMSE
+    rmse_v: VのRMSE
+    """
     def __init__(self, K):
         self.K = K
         self.get_redis_obj()
@@ -51,12 +60,20 @@ class EvaluationSmoothing():
         
         rmse_w = 0
         rmse_v = 0
+        mae_w = 0
+        mae_v = 0
+        count = 0
         for index in self.indexes:
             if self.W_train[index] != 0.0:
                 rmse_w += pow(self.W_train[index] - self.W_validation[index], 2)
                 rmse_v += np.sum((self.V_train[index] - self.V_validation[index]) ** 2)
-        self.rmse_w = sqrt(rmse_w/len(self.indexes))
-        self.rmse_v = sqrt(rmse_v/len(self.indexes))
+                mae_w += abs(self.W_train[index] - self.W_validation[index])
+                mae_v += np.sum(abs(self.V_train[index] - self.V_validation[index]))
+                count += 1
+        self.rmse_w = sqrt(rmse_w/count)
+        self.rmse_v = sqrt(rmse_v/count)
+        self.mae_w = mae_w / count
+        self.mae_v = mae_v / count
 
     def get_validation_song_indexes(self):
 
