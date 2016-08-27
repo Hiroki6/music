@@ -19,6 +19,7 @@
             {% for index, value in feedback_dict.items %}
             <option value={{ index }}>{% if index < 5 %}&uarr;{% else %}&darr;{% endif %}{{ value }}</option>
             {% endfor %}
+            <option value=11>再推薦する</option>
           </select>
           <input type = "hidden" name = "song" value = {{ song.id }}>
           <input type = "submit" id = "indicator" value = "フィードバックをする">

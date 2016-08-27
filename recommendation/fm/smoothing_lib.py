@@ -27,11 +27,11 @@ class SmoothingFm():
         self.get_params()
         self.get_labels()
 
-    def learning(self, l_rate = 0.005, beta = 0.02):
+    def learning(self, l_rate = 0.005, beta = 0.1):
         self.get_divided_learning_songs()
         #self.s_W = np.random.rand(self.K+1, 43)
         np.random.seed(seed=20)
-        self.s_W = np.random.normal(scale=0.01,size=(self.K+1, 43))
+        self.s_W = np.random.normal(scale=0.001,size=(self.K+1, 43))
         self.s_w0 = np.zeros(self.K+1)
         self.cy_s = cy_smoothing.CySmoothing(self.s_W, self.s_w0, self.W, self.V, self.K+1, self.learned_song_tag_map)
         self.cy_s.learning(l_rate, beta)
@@ -139,6 +139,7 @@ class SmoothingFm():
         """
         スムージングの対象インデックスのredisへの保存
         """
+        self.r.delete("smoothing_songs")
         for song in not_learned_songs:
             index = self.labels["song=" + str(song)]
             self.r.rpush("smoothing_songs", index)
@@ -157,13 +158,11 @@ class SmoothingFm():
         """
         スムージングを行う
         """
-        i = 0
         for song_index, song_tags in self.not_learned_song_tag_map.items():
             """
             WとVの更新
             """
             self.W[song_index], self.V[song_index] = self.cy_s.regression_all_params(song_tags)
-            i += 1
         # 交差検定の場合は*_sに保存
         if self.evaluation_flag:
             self.save_W_and_V("W_s", "V_s_")

@@ -36,6 +36,7 @@ cdef class CySmoothing:
         np.ndarray target_params
         double l_rate
         double beta
+        np.ndarray regs
 
     def __cinit__(self,
             np.ndarray[DOUBLE, ndim = 2, mode="c"] s_W,
@@ -60,6 +61,7 @@ cdef class CySmoothing:
 
         self.l_rate = l_rate
         self.beta = beta
+        self.regs = np.zeros(self.param_dim)
         for index in xrange(self.param_dim):
             # 対象ベクトル取得
             if index == 0:
@@ -85,7 +87,7 @@ cdef class CySmoothing:
             before_error = self.all_error
             self.calc_errors(index)
             print self.all_error
-            if self.all_error < 1 or before_error - self.all_error < 0.0001:
+            if self.all_error < 0.1 or before_error - self.all_error < 0.001:
                 break
 
     def update(self, int index):
@@ -97,13 +99,29 @@ cdef class CySmoothing:
             np.ndarray song_tags
             double predict_value
             double error
+            np.ndarray pre_s_W
 
         for song_index, song_tags in self.learned_song_tag_map.items():
             predict_value = self.predict(index, song_tags)
             error = self.target_params[song_index] - predict_value
             self.s_w0[index] += self.l_rate * error
+            pre_s_W = self.s_W[index]
             for tag_index, tag_value in enumerate(song_tags):
-                self.s_W[index][tag_index] += 2 * self.l_rate * (error * tag_value - self.beta * self.s_W[index][tag_index])
+                self.s_W[index][tag_index] += 2 * self.l_rate * (error * tag_value - self.regs[index] * self.s_W[index][tag_index])
+            self._calc_regs(pre_s_W, index)
+
+    cdef void _calc_regs(self, np.ndarray[DOUBLE, ndim=1, mode="c"] pre_s_W, int index):
+
+        cdef:
+            double new_r
+            np.ndarray song_tags
+            double err
+            long song_index
+
+        (song_index, song_tags) = random.choice(self.learned_song_tag_map.items())
+        err = 2 * self.predict(index, song_tags)
+        new_r = self.regs[index] - self.l_rate * (err * -2 * self.l_rate * np.dot(pre_s_W, song_tags))
+        self.regs[index] = new_r if new_r >= 0 else 0
 
     def calc_errors(self, int index):
         """
@@ -116,6 +134,7 @@ cdef class CySmoothing:
             double error
             double all_error
             double predict_value
+            double regs_sum = 0.0
     
         all_error = 0.0
         for song_index, song_tags in self.learned_song_tag_map.items():
@@ -123,7 +142,10 @@ cdef class CySmoothing:
             error = self.target_params[song_index] - predict_value
             all_error += pow(error, 2)
 
-        self.all_error = all_error + self.beta * (np.linalg.norm(self.s_W))
+        for i in xrange(self.param_dim):
+            regs_sum += self.regs[i] * np.sum(self.s_W[index] ** 2)
+
+        self.all_error = all_error + regs_sum
         #self.all_error = all_error
 
     cdef double predict(self, int index, np.ndarray song_tags):
