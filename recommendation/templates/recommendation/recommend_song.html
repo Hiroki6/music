@@ -15,7 +15,7 @@
         <form class = "feedback-form" name = "feedback" method = "POST" action = "/recommendation/feedback/">
           {% csrf_token %}
           <select name="select-feedback">
-            <option value="">フィードバックを選択してください</option>
+            <option value=-1>フィードバックを選択してください</option>
             {% for index, value in feedback_dict.items %}
             <option value={{ index }}>{% if index < 5 %}&uarr;{% else %}&darr;{% endif %}{{ value }}</option>
             {% endfor %}

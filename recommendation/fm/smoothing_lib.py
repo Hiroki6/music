@@ -11,13 +11,17 @@ from Smoothing import cy_smoothing
 import os
 BASE = os.path.dirname(os.path.abspath(__file__))
 
+FEATURE_NUM = 43
+HOST = "localhost"
+PORT = 6379
+
 class SmoothingFm():
     """
     parameters
     K: Vの次元
     evaluate_smoothing: 交差検定用かどうか
     W: 学習済みのtrain配列
-    s_W: スムージング用の重み配列: K+1 * 43
+    s_W: スムージング用の重み配列: K+1 * FEATURE_NUM
     s_w0: スムージング用のバイアス: K+1
     """
     def __init__(self, K, evaluation_flag = False):
@@ -27,14 +31,16 @@ class SmoothingFm():
         self.get_params()
         self.get_labels()
 
-    def learning(self, l_rate = 0.005, beta = 0.1):
+    def learning(self, w_rate = 0.005, v_rate = 0.001, beta = 0.1):
         self.get_divided_learning_songs()
-        #self.s_W = np.random.rand(self.K+1, 43)
+        #self.s_W = np.random.rand(self.K+1, FEATURE_NUM)
         np.random.seed(seed=20)
-        self.s_W = np.random.normal(scale=0.001,size=(self.K+1, 43))
-        self.s_w0 = np.zeros(self.K+1)
-        self.cy_s = cy_smoothing.CySmoothing(self.s_W, self.s_w0, self.W, self.V, self.K+1, self.learned_song_tag_map)
-        self.cy_s.learning(l_rate, beta)
+        self.s_w0 = 0.0
+        self.s_W = np.zeros(FEATURE_NUM)
+        self.s_V = np.random.normal(scale=0.001,size=(self.K, FEATURE_NUM))
+        self.s_v0 = np.zeros(self.K)
+        self.cy_s = cy_smoothing.CySmoothing(self.s_W, self.s_V, self.s_w0, self.s_v0, self.W, self.V, self.K, self.learned_song_tag_map)
+        self.cy_s.learning(w_rate, v_rate, beta)
 
     def get_redis_obj(self):
 
@@ -42,7 +48,8 @@ class SmoothingFm():
         if self.evaluation_flag:
             db = 1
 
-        self.r = redis.Redis(host="localhost", port=6379, db=db)
+        print "redis db: %d" % (db)
+        self.r = redis.Redis(host=HOST, port=PORT, db=db)
 
     def get_params(self):
 
@@ -146,7 +153,7 @@ class SmoothingFm():
 
     def get_labels(self):
     
-        r = redis.Redis(host="localhost", port=6379, db=0)
+        r = redis.Redis(host=HOST, port=PORT, db=0)
         self.labels = {}
         keys = r.lrange("label_keys", 0, -1)
         values = r.lrange("label_values", 0, -1)

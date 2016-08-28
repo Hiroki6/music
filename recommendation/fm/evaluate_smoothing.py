@@ -66,9 +66,9 @@ class EvaluationSmoothing():
         for index in self.indexes:
             if self.W_train[index] != 0.0:
                 rmse_w += pow(self.W_train[index] - self.W_validation[index], 2)
-                rmse_v += np.sum((self.V_train[index] - self.V_validation[index]) ** 2)
+                rmse_v += np.sum((self.V_train[index] - self.V_validation[index]) ** 2)/self.K
                 mae_w += abs(self.W_train[index] - self.W_validation[index])
-                mae_v += np.sum(abs(self.V_train[index] - self.V_validation[index]))
+                mae_v += np.sum(abs(self.V_train[index] - self.V_validation[index]))/self.K
                 count += 1
         self.rmse_w = sqrt(rmse_w/count)
         self.rmse_v = sqrt(rmse_v/count)
