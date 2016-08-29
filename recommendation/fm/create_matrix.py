@@ -93,7 +93,7 @@ def get_uniq_songs():
     return uniq_songs
 
 """
-テストデータのFM配列作成
+FMの配列の形に変形
 """
 def transform_matrix(test_data, data_labels, tag_map, test_nums):
 
@@ -190,37 +190,8 @@ def get_cross_validation_song():
 """
 def create_smoothing_fm_matrix():
 
-    data_labels, tag_map = get_data_labels_and_tag_map()
-    ratelist, rate_nums, regs_data, regs_nums, train_songs, validation_songs = get_smoothing_matrix() # {user: [songs]}
-
-    print "学習用データ変形"
-    rate_matrix = transform_matrix(ratelist, data_labels, tag_map, rate_nums)
-    print "正規化用データ変形"
-    regs_matrix = transform_matrix(regs_data, data_labels, tag_map, regs_nums)
-
-    targets = np.ones(len(rate_matrix), dtype=np.int64)
-
-    return rate_matrix, regs_matrix, data_labels, targets, tag_map, ratelist, train_songs, validation_songs
-
-"""
-スムージング用の楽曲を抜いた視聴履歴を取得
-"""
-def get_smoothing_matrix():
-
     train_songs, validation_songs = get_cross_validation_song()
-    
-    rate_dic, rate_nums = get_dic_and_nums_by_file("../data_10/train.csv", validation_songs)
 
-    app_preferences = models.Preference.objects.all()
-    for app_preference in app_preferences:
-        user = str(app_preference.user_id)
-        song_id = str(app_preference.song_id)
-        if not rate_dic.has_key(user):
-            rate_dic.setdefault(user, [])
-        rate_dic[user].append(song_id)
-        rate_nums += 1
+    rate_matrix, regs_matrix, labels, targets, tag_map, ratelist = create_fm_matrix()
 
-    regs_dic, regs_nums = get_dic_and_nums_by_file("../data_10/regulation.csv", validation_songs)
-
-    return rate_dic, rate_nums, regs_dic, regs_nums, train_songs, validation_songs
-
+    return rate_matrix, regs_matrix, labels, targets, tag_map, ratelist, train_songs, validation_songs
