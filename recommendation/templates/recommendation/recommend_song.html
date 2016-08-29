@@ -5,6 +5,9 @@
 
 <div class = "main clearfix">
   <h2>オススメの楽曲（インタラクションバーション）</h2>
+  {% if error_msg %}
+    <h3 class = "error-msg">{{ error_msg }}</h3>
+  {% endif %}
   <div class = "recommend-song">
     {% for song in songs %}
     {% include "parts/song_iframe.html" %}
