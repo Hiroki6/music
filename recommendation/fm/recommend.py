@@ -64,12 +64,6 @@ class RecommendFm(object):
 
     def _get_two_dim_params(self, redis_obj, pre_key):
 
-        # V = np.ones((len(self.W), self.K))
-        # for i in xrange(len(self.W)):
-        #     key = pre_key + str(i)
-        #     v = redis_obj.lrange(key, 0, -1)
-        #     v = np.array(v, dtype=np.float64)
-        #     V[i] = v
         V = np.ones((self.K, len(self.W)))
         for i in xrange(self.K):
             key = pre_key + str(i)
@@ -94,7 +88,6 @@ class RecommendFm(object):
         配列をfloat型のnumpy配列に変換
         """
         array = np.array(array, dtype=np.float64)
-        #array = array.astype(np.float64_t)
         return array
 
     def get_rankings(self, rank = 100):
