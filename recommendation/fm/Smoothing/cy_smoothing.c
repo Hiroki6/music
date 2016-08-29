@@ -2280,7 +2280,7 @@ static PyObject *__pyx_pf_12cy_smoothing_11CySmoothing_4repeat_optimization(stru
  *             before_error = self.all_error
  *             self.calc_errors(index)             # <<<<<<<<<<<<<<
  *             print self.all_error
- *             if self.all_error < 0.1 or abs(before_error - self.all_error) < 0.0001:
+ *             if self.all_error < 0.1 or abs(before_error - self.all_error) < 0.001:
  */
     __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_calc_errors); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 99; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
@@ -2318,7 +2318,7 @@ static PyObject *__pyx_pf_12cy_smoothing_11CySmoothing_4repeat_optimization(stru
  *             before_error = self.all_error
  *             self.calc_errors(index)
  *             print self.all_error             # <<<<<<<<<<<<<<
- *             if self.all_error < 0.1 or abs(before_error - self.all_error) < 0.0001:
+ *             if self.all_error < 0.1 or abs(before_error - self.all_error) < 0.001:
  *                 break
  */
     __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->all_error); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -2329,7 +2329,7 @@ static PyObject *__pyx_pf_12cy_smoothing_11CySmoothing_4repeat_optimization(stru
     /* "cy_smoothing.pyx":101
  *             self.calc_errors(index)
  *             print self.all_error
- *             if self.all_error < 0.1 or abs(before_error - self.all_error) < 0.0001:             # <<<<<<<<<<<<<<
+ *             if self.all_error < 0.1 or abs(before_error - self.all_error) < 0.001:             # <<<<<<<<<<<<<<
  *                 break
  * 
  */
@@ -2339,14 +2339,14 @@ static PyObject *__pyx_pf_12cy_smoothing_11CySmoothing_4repeat_optimization(stru
       __pyx_t_8 = __pyx_t_10;
       goto __pyx_L7_bool_binop_done;
     }
-    __pyx_t_10 = ((fabs((__pyx_v_before_error - __pyx_v_self->all_error)) < 0.0001) != 0);
+    __pyx_t_10 = ((fabs((__pyx_v_before_error - __pyx_v_self->all_error)) < 0.001) != 0);
     __pyx_t_8 = __pyx_t_10;
     __pyx_L7_bool_binop_done:;
     if (__pyx_t_8) {
 
       /* "cy_smoothing.pyx":102
  *             print self.all_error
- *             if self.all_error < 0.1 or abs(before_error - self.all_error) < 0.0001:
+ *             if self.all_error < 0.1 or abs(before_error - self.all_error) < 0.001:
  *                 break             # <<<<<<<<<<<<<<
  * 
  *     def update_W(self):
@@ -2356,7 +2356,7 @@ static PyObject *__pyx_pf_12cy_smoothing_11CySmoothing_4repeat_optimization(stru
       /* "cy_smoothing.pyx":101
  *             self.calc_errors(index)
  *             print self.all_error
- *             if self.all_error < 0.1 or abs(before_error - self.all_error) < 0.0001:             # <<<<<<<<<<<<<<
+ *             if self.all_error < 0.1 or abs(before_error - self.all_error) < 0.001:             # <<<<<<<<<<<<<<
  *                 break
  * 
  */

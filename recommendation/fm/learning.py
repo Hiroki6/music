@@ -22,13 +22,13 @@ def train():
     print "SGDで学習開始"
     FM_obj.learning(0.005, K=8, step=1)
     FM_obj.arrange_user()
-    smoothing()
     #FM_obj.smoothing()
     print "redisに保存"
     redis_flush()
     FM_obj.cy_fm.save_redis()
     labels = FM_obj.labels
     save_params_into_radis(labels, tag_map) # labelsをredisに保存
+    smoothing()
     print "top_k_ranking保存"
     FM_obj.save_top_k_ranking_all_user()
     print time.time() - start_time
