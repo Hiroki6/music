@@ -176,7 +176,6 @@ body{
       font-weight: bold;
     }
     .content{
-      position: relative;
       margin: 10px;
       width: 450px;
       height: 380px;
@@ -218,6 +217,19 @@ body{
       .song-info{
         float: left;
         margin: 5px 0 0;
+      }
+    }
+    .min-content {
+      margin: 10px;
+      width: 200px;
+      height: 200px;
+      float: left;
+      position: relative;
+      .song-info {
+        font-size: 12px;
+      }
+      input {
+        margin: 0;
       }
     }
     .select-song{

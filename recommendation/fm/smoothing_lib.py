@@ -31,7 +31,7 @@ class SmoothingFm():
         self.get_params()
         self.get_labels()
 
-    def learning(self, w_rate = 0.005, v_rate = 0.001, beta = 0.1):
+    def learning(self, w_rate = 0.005, v_rate = 0.001, beta = 0.0005):
         self.get_divided_learning_songs()
         #self.s_W = np.random.rand(self.K+1, FEATURE_NUM)
         np.random.seed(seed=20)
@@ -172,9 +172,11 @@ class SmoothingFm():
             self.W[song_index], self.V[song_index] = self.cy_s.regression_all_params(song_tags)
         # 交差検定の場合は*_sに保存
         if self.evaluation_flag:
+            print "W_sとV_sに保存"
             self.save_W_and_V("W_s", "V_s_")
         # 交差検定でない場合は上書き
         else:
+            print "WとV上書き"
             self.save_W_and_V("W", "V_")
 
     def save_W_and_V(self, w_key, v_pre_key):
