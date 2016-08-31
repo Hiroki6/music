@@ -339,3 +339,15 @@ class RecommendFm(object):
         top_k_songs = np.array(top_k_songs, dtype=np.int64)
         return top_k_songs
 
+    def save_top_songs_into_file(self):
+
+        rankings = self.get_rankings()
+        top_songs = []
+        for ranking in rankings:
+            top_songs.append(ranking[1])
+        f = codecs.open("top_songs.csv", "a")
+        songs = top_songs[:100]
+        for song in songs:
+            f.write(str(song) + "\n")
+
+        f.close()

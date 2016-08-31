@@ -132,7 +132,6 @@ body {
       font-size: 20px;
       font-weight: bold; }
     body .main .content {
-      position: relative;
       margin: 10px;
       width: 450px;
       height: 380px;
@@ -165,6 +164,16 @@ body {
       body .main .content .song-info {
         float: left;
         margin: 5px 0 0; }
+    body .main .min-content {
+      margin: 10px;
+      width: 200px;
+      height: 200px;
+      float: left;
+      position: relative; }
+      body .main .min-content .song-info {
+        font-size: 12px; }
+      body .main .min-content input {
+        margin: 0; }
     body .main .select-song {
       margin: 10px; }
       body .main .select-song .select-song-submit {

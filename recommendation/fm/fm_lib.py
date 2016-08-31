@@ -6,10 +6,13 @@ from FmSgd import fm_sgd_opt
 import redis
 from .. import models
 import time
+import codecs
 import sys
 sys.dont_write_bytecode = True 
 import os.path
 BASE = os.path.dirname(os.path.abspath(__file__))
+HOST = 'localhost'
+PORT = 6379
 
 class CyFmSgdOpt():
     """
@@ -55,10 +58,17 @@ class CyFmSgdOpt():
         # 学習
         self.cy_fm.learning()
 
-    def save_top_k_ranking_all_user(self):
+    def save_top_k_ranking_all_user(self, smoothing_flag = False):
         """
         アプリのユーザーの未視聴のうちのtop10曲を予測し、redisに保存する
         """
+        # スムージングをした場合は、WとVを再読み込み
+        if smoothing_flag:
+            print "新しいパラメータ取得"
+            self.set_W_and_V()
+            self.cy_fm.set_W(self.W)
+            self.cy_fm.set_V(self.V)
+
         uniq_users = models.Preference.objects.all().values_list("user", flat=True).order_by("user").distinct()
         if len(uniq_users) == 0:
             return
@@ -72,11 +82,12 @@ class CyFmSgdOpt():
         print "ランキング取得"
         start_time = time.time()
         rankings = self.get_rankings()
-        r = redis.Redis(host='localhost', port=6379, db=0)
+        r = redis.Redis(host=HOST, port=PORT, db=0)
         key = "rankings_" + str(self.user)
         top_k_songs = []
         for ranking in rankings:
             top_k_songs.append(ranking[1])
+        #self.save_top_songs_into_file(top_k_songs)
         print time.time() - start_time
         print "redisに保存"
         self._save_redis_top_k_songs(r, key, top_k_songs) # top_k保存
@@ -138,6 +149,7 @@ class CyFmSgdOpt():
                 self.song_tag_map[song_id].append(result[tag])
     
     def _save_redis_top_k_songs(self, redis_obj, key, songs):
+        redis_obj.delete(key)
         for song in songs:
             redis_obj.rpush(key, song)
 
@@ -146,8 +158,10 @@ class CyFmSgdOpt():
 
     def _save_top_matrix(self, redis_obj, user, song):
         top_matrix = self.get_one_song_matrix(song)
+        key = "top_matrix_"+ str(user)
+        redis_obj.delete(key)
         for param in top_matrix:
-            redis_obj.rpush("top_matrix_" + str(user), param)
+            redis_obj.rpush(key, param)
 
     def get_one_song_matrix(self, song_id):
 
@@ -213,7 +227,7 @@ class CyFmSgdOpt():
         self.cy_fm.smoothing(self.not_learned_song_tag_map, self.learned_song_tag_map, learn_song_norm, rank)
         # スムージング後の値
         if smoothing_evaluate:
-            r = redis.Redis(host='localhost', port=6379, db=1)
+            r = redis.Redis(host=HOST, port=PORT, db=1)
             self.save_W_and_V(r, "W_s", "V_s_")
 
         print time.time() - start_time
@@ -261,7 +275,7 @@ class CyFmSgdOpt():
         """
         learned_songs = []
         if self.smoothing_evaluate:
-            r = redis.Redis(host='localhost', port=6379, db=1)
+            r = redis.Redis(host=HOST, port=PORT, db=1)
             learned_songs = r.lrange("train_songs", 0, -1)
             learned_songs = map(int, learned_songs)
             not_learned_songs = r.lrange("validation_songs", 0, -1)
@@ -304,3 +318,42 @@ class CyFmSgdOpt():
         """
         self.cy_fm.save_one_dim_array(redis_obj, w_key, self.W)
         self.cy_fm.save_two_dim_array(redis_obj, v_pre_key, self.V)
+
+    def save_top_songs_into_file(self, top_songs):
+
+        f = codecs.open("top_songs.csv", "a")
+        songs = top_songs[:100]
+        for song in songs:
+            f.write(str(song) + "\n")
+
+        f.close()
+
+    def set_W_and_V(self):
+
+        self.r = redis.Redis(host=HOST, port=PORT, db=0)
+        self.get_W()
+        self.get_V(len(self.W))
+
+    def get_W(self):
+
+        W = self.r.lrange("W", 0, -1)
+        self.W = self.change_array_into_float(W)
+
+    def get_V(self, n):
+
+        self.V = self.get_two_dim_by_redis(self.r, "V_", n)
+
+    def change_array_into_float(self, params):
+
+        return np.array(params, dtype=np.float64)
+
+    def get_two_dim_by_redis(self, redis_obj, pre_key, n):
+
+        V = np.ones((self.K, n))
+        for i in xrange(self.K):
+            key = pre_key + str(i)
+            v = redis_obj.lrange(key, 0, -1)
+            V[i] = v
+        V = np.array(V, dtype=np.float64)
+        return V.T.copy(order='C')
+

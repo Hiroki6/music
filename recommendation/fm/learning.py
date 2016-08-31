@@ -28,9 +28,11 @@ def train():
     FM_obj.cy_fm.save_redis()
     labels = FM_obj.labels
     save_params_into_radis(labels, tag_map) # labelsをredisに保存
+    #print "top_k_ranking保存"
+    #FM_obj.save_top_k_ranking_all_user()
     smoothing()
     print "top_k_ranking保存"
-    FM_obj.save_top_k_ranking_all_user()
+    FM_obj.save_top_k_ranking_all_user(smoothing_flag = True)
     print time.time() - start_time
 
 """
