@@ -190,19 +190,28 @@ def select_song(request):
 @login_required
 def questionnaire(request):
     results = get_select_songs(request.user.id)
+    recommend_all_songs = get_recommend_all_songs(request.user)
+    recommend_all_song_map = dict(zip(range(0, len(recommend_all_songs)), recommend_all_songs))
     error_msg = ""
+    # すでに回答しているかどうか
+    is_answer = judge_answer(request.user.id)
     if request.method == 'POST':
-        if request.POST.has_key('q1') and request.POST.has_key('q2') and request.POST.has_key('q3') and request.POST.has_key('free_content'):
+        if request.POST.has_key('q1') and request.POST.has_key('q2') and request.POST.has_key('q3') and request.POST.has_key('q4') and request.POST.has_key('free_content'):
             comparison = request.POST['q1']
             interaction_rate = request.POST['q2']
             recommend_rate = request.POST['q3']
+            compare_method = request.POST['q4']
+            song_nums = 0
+            for i in xrange(len(recommend_all_song_map)):
+                if request.POST[str(i)] == "1":
+                    song_nums += 1
             free_content = request.POST['free_content']
-            save_questionnaire(request.user.id, comparison, interaction_rate, recommend_rate, free_content)
+            save_questionnaire(request.user.id, comparison, interaction_rate, recommend_rate, song_nums, compare_method, free_content)
             return redirect('/recommendation/end/')
         else:
             error_msg = "全て選択してください"
     print error_msg
-    return render(request, 'recommendation/questionnaire.html', {'results': results, 'error_msg': error_msg})
+    return render(request, 'recommendation/questionnaire.html', {'results': results, 'error_msg': error_msg, 'recommend_all_song_map': recommend_all_song_map, 'is_answer': is_answer})
 
 @login_required
 def end(request):
