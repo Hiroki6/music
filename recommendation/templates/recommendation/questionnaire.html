@@ -7,6 +7,9 @@
   {% ifnotequal error_messages "" %}
     <h2 class = "error-msg">{{ error_msg }}</h2>
   {% endifnotequal %}
+  {% if is_answer %}
+  <h2>アンケートの回答は完了しています。</h2>
+  {% else %}
   <h2>アンケートにお答えください</h2>
   <div class = "clearfix">
   {% for song in results %}
@@ -39,7 +42,10 @@
       <label><input type = "radio" name = "q3" value = 3>どちらともいえない</label>
       <label><input type = "radio" name = "q3" value = 4>どちらかといえば合っていた</label>
       <label><input type = "radio" name = "q3" value = 5>合っていた</label>
-      <h4>4.推薦される前から知っていた曲を全てチェックしてください</h4>
+      <h4>4.二つの推薦システムはどちらが使いやすかったですか？</h4>
+      <label><input type = "radio" name = "q4" value = 0>10曲推薦システム</label>
+      <label><input type = "radio" name = "q4" value = 1>インタラクションを用いた推薦システム</label>
+      <h4>5.推薦される前から知っていた曲を全てチェックしてください</h4>
       <div class = "clearfix">
         {% for index, song in recommend_all_song_map.items %}
           <div class = "min-content">
@@ -47,12 +53,13 @@
           </div>
         {% endfor %}
       </div>
-      <h4>5.ご自由にお書きください</h4>
+      <h4>6.ご自由にお書きください</h4>
       <textarea name = "free_content" cols = 120 rows = 5>
       </textarea>
       <input type = "submit" value = "アンケートを送信する">
     </form>
   </div>
+  {% endif %}
 </div>
 
 {% endblock main %}

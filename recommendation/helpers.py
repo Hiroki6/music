@@ -123,9 +123,9 @@ def create_like_song(user_id, song_id, recommend_type):
 def get_select_songs(user_id):
     return LikeSong.objects.filter(user_id=user_id).order_by("recommend_type")
 
-def save_questionnaire(user_id, comparison, interaction_rate, recommend_rate, free_content):
+def save_questionnaire(user_id, comparison, interaction_rate, recommend_rate, song_nums, compare_method, free_content):
 
-    obj, created = Questionnaire.objects.get_or_create(user_id=user_id, comparison=comparison, interaction_rate=interaction_rate, recommend_rate=recommend_rate, free_content=free_content)
+    obj, created = Questionnaire.objects.get_or_create(user_id=user_id, comparison=comparison, interaction_rate=interaction_rate, recommend_rate=recommend_rate, song_nums = song_nums, compare_method = compare_method, free_content=free_content)
 
 """
 推薦された楽曲全てを取得する
@@ -151,3 +151,6 @@ def get_interaction_songs(user):
     interaction_songs = np.array(interaction_songs)
     return interaction_songs
 
+def judge_answer(user_id):
+
+    return len(Questionnaire.objects.filter(user_id=user_id)) > 0

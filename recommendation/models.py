@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 from __future__ import unicode_literals
 
 from django.db import models
@@ -87,9 +88,19 @@ class LikeSong(models.Model):
     song = models.ForeignKey(Song)
     recommend_type = models.IntegerField(null=False, blank=False)
 
+"""
+comparison: どちらの曲が良かったか(0: 10曲推薦, 1: インタラクション)
+interaction_rate: インタラクションの評価
+recommend_rate: 10曲推薦の評価
+sung_nums: 知っていた曲の数
+compare_method: どちらの推薦が良かったか
+free_content: フリー回答
+"""
 class Questionnaire(models.Model):
     user = models.ForeignKey(User)
     comparison = models.IntegerField(null=False, blank=False)
     interaction_rate = models.IntegerField(null=False, blank=False)
     recommend_rate = models.IntegerField(null=False, blank=False)
+    song_nums = models.IntegerField(null=False, blank=False)
+    compare_method = models.IntegerField(null=False, blank=False)
     free_content = models.CharField(max_length=255, null=True, blank=True)
