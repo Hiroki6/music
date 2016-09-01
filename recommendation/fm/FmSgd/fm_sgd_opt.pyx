@@ -41,9 +41,6 @@ cdef class CyFmSgdOpt:
     K : Vの次元
     step : 学習ステップ数
     regs : regulations 配列 K+2 (0: w_0, 1: W, 2~K+2: V)
-    epsilon: 再学習の条件(epsilon - P(f) + P(t))
-    top_R: 推薦された楽曲の特徴ベクトル
-    feedback_R: フィードバックを考慮した楽曲の特徴ベクトル
     error: 目的関数
     now_error: その視聴履歴の学習誤差
     ixs: nonzeroインデックス配列
@@ -57,10 +54,8 @@ cdef class CyFmSgdOpt:
         np.ndarray W
         np.ndarray V
         np.ndarray E
-        np.ndarray adagrad_V
         np.ndarray adagrad_W
-        np.ndarray top_R
-        np.ndarray feedback_R
+        np.ndarray adagrad_V
         np.ndarray feature_indexes
         double adagrad_w_0
         double w_0
@@ -191,7 +186,7 @@ cdef class CyFmSgdOpt:
             long ix
 
         for ix in self.ixs:
-            h_pre += self.V[ix][f] * self.R[data_index][f]
+            h_pre += self.V[ix][f] * self.R[data_index][i]
         h = h_pre - self.V[i][f]*self.R[data_index][i]
         h *= self.R[data_index][i]
         grad_value = 2 * (self.now_error*h + self.regs[f+2]*self.V[i][f])
@@ -539,9 +534,6 @@ cdef class CyFmSgdOpt:
 
     def get_self_error(self):
         return self.error
-
-    def get_epsilon(self):
-        return self.epsilon
 
     def get_adagrad_w_0(self):
         return self.adagrad_w_0
