@@ -3672,7 +3672,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
  *             long ix
  * 
  *         for ix in self.ixs:             # <<<<<<<<<<<<<<
- *             h_pre += self.V[ix][f] * self.R[data_index][i]
+ *             h_pre += self.V[ix][f] * self.R[data_index][ix]
  *         h = h_pre - self.V[i][f]*self.R[data_index][i]
  */
   if (unlikely(!__pyx_v_self->ixs.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");{__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}}
@@ -3725,7 +3725,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
     /* "fm_sgd_opt.pyx":189
  * 
  *         for ix in self.ixs:
- *             h_pre += self.V[ix][f] * self.R[data_index][i]             # <<<<<<<<<<<<<<
+ *             h_pre += self.V[ix][f] * self.R[data_index][ix]             # <<<<<<<<<<<<<<
  *         h = h_pre - self.V[i][f]*self.R[data_index][i]
  *         h *= self.R[data_index][i]
  */
@@ -3738,7 +3738,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __pyx_t_6 = __Pyx_GetItemInt(((PyObject *)__pyx_v_self->R), __pyx_v_data_index, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(__pyx_t_6 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 189; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_8 = __Pyx_GetItemInt(__pyx_t_6, __pyx_v_i, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(__pyx_t_8 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 189; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+    __pyx_t_8 = __Pyx_GetItemInt(__pyx_t_6, __pyx_v_ix, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(__pyx_t_8 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 189; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
     __Pyx_GOTREF(__pyx_t_8);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __pyx_t_6 = PyNumber_Multiply(__pyx_t_7, __pyx_t_8); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 189; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -3757,7 +3757,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
  *             long ix
  * 
  *         for ix in self.ixs:             # <<<<<<<<<<<<<<
- *             h_pre += self.V[ix][f] * self.R[data_index][i]
+ *             h_pre += self.V[ix][f] * self.R[data_index][ix]
  *         h = h_pre - self.V[i][f]*self.R[data_index][i]
  */
   }
@@ -3765,7 +3765,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
 
   /* "fm_sgd_opt.pyx":190
  *         for ix in self.ixs:
- *             h_pre += self.V[ix][f] * self.R[data_index][i]
+ *             h_pre += self.V[ix][f] * self.R[data_index][ix]
  *         h = h_pre - self.V[i][f]*self.R[data_index][i]             # <<<<<<<<<<<<<<
  *         h *= self.R[data_index][i]
  *         grad_value = 2 * (self.now_error*h + self.regs[f+2]*self.V[i][f])
@@ -3795,7 +3795,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
   __pyx_v_h = __pyx_t_9;
 
   /* "fm_sgd_opt.pyx":191
- *             h_pre += self.V[ix][f] * self.R[data_index][i]
+ *             h_pre += self.V[ix][f] * self.R[data_index][ix]
  *         h = h_pre - self.V[i][f]*self.R[data_index][i]
  *         h *= self.R[data_index][i]             # <<<<<<<<<<<<<<
  *         grad_value = 2 * (self.now_error*h + self.regs[f+2]*self.V[i][f])

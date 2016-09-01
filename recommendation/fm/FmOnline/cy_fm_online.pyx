@@ -119,7 +119,7 @@ cdef class CyFmOnline:
             long ix
 
         for ix in self.ixs:
-            h_pre += self.V[ix][f] * self.train_data[i]
+            h_pre += self.V[ix][f] * self.train_data[ix]
         h = h_pre - self.V[i][f]*self.train_data[i]
         h *= self.train_data[i]
         grad_value = 2 * (self.now_error*h + self.regs[f+2]*self.V[i][f])

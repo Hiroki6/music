@@ -186,7 +186,7 @@ cdef class CyFmSgdOpt:
             long ix
 
         for ix in self.ixs:
-            h_pre += self.V[ix][f] * self.R[data_index][i]
+            h_pre += self.V[ix][f] * self.R[data_index][ix]
         h = h_pre - self.V[i][f]*self.R[data_index][i]
         h *= self.R[data_index][i]
         grad_value = 2 * (self.now_error*h + self.regs[f+2]*self.V[i][f])

@@ -2197,7 +2197,7 @@ static void __pyx_f_12cy_fm_online_10CyFmOnline__update_V(struct __pyx_obj_12cy_
  *             long ix
  * 
  *         for ix in self.ixs:             # <<<<<<<<<<<<<<
- *             h_pre += self.V[ix][f] * self.train_data[i]
+ *             h_pre += self.V[ix][f] * self.train_data[ix]
  *         h = h_pre - self.V[i][f]*self.train_data[i]
  */
   if (likely(PyList_CheckExact(((PyObject *)__pyx_v_self->ixs))) || PyTuple_CheckExact(((PyObject *)__pyx_v_self->ixs))) {
@@ -2246,7 +2246,7 @@ static void __pyx_f_12cy_fm_online_10CyFmOnline__update_V(struct __pyx_obj_12cy_
     /* "cy_fm_online.pyx":122
  * 
  *         for ix in self.ixs:
- *             h_pre += self.V[ix][f] * self.train_data[i]             # <<<<<<<<<<<<<<
+ *             h_pre += self.V[ix][f] * self.train_data[ix]             # <<<<<<<<<<<<<<
  *         h = h_pre - self.V[i][f]*self.train_data[i]
  *         h *= self.train_data[i]
  */
@@ -2257,7 +2257,7 @@ static void __pyx_f_12cy_fm_online_10CyFmOnline__update_V(struct __pyx_obj_12cy_
     __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_6, __pyx_v_f, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(__pyx_t_7 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 122; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = __Pyx_GetItemInt(((PyObject *)__pyx_v_self->train_data), __pyx_v_i, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(__pyx_t_6 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 122; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+    __pyx_t_6 = __Pyx_GetItemInt(((PyObject *)__pyx_v_self->train_data), __pyx_v_ix, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(__pyx_t_6 == NULL)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 122; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_8 = PyNumber_Multiply(__pyx_t_7, __pyx_t_6); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 122; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_8);
@@ -2275,7 +2275,7 @@ static void __pyx_f_12cy_fm_online_10CyFmOnline__update_V(struct __pyx_obj_12cy_
  *             long ix
  * 
  *         for ix in self.ixs:             # <<<<<<<<<<<<<<
- *             h_pre += self.V[ix][f] * self.train_data[i]
+ *             h_pre += self.V[ix][f] * self.train_data[ix]
  *         h = h_pre - self.V[i][f]*self.train_data[i]
  */
   }
@@ -2283,7 +2283,7 @@ static void __pyx_f_12cy_fm_online_10CyFmOnline__update_V(struct __pyx_obj_12cy_
 
   /* "cy_fm_online.pyx":123
  *         for ix in self.ixs:
- *             h_pre += self.V[ix][f] * self.train_data[i]
+ *             h_pre += self.V[ix][f] * self.train_data[ix]
  *         h = h_pre - self.V[i][f]*self.train_data[i]             # <<<<<<<<<<<<<<
  *         h *= self.train_data[i]
  *         grad_value = 2 * (self.now_error*h + self.regs[f+2]*self.V[i][f])
@@ -2310,7 +2310,7 @@ static void __pyx_f_12cy_fm_online_10CyFmOnline__update_V(struct __pyx_obj_12cy_
   __pyx_v_h = __pyx_t_9;
 
   /* "cy_fm_online.pyx":124
- *             h_pre += self.V[ix][f] * self.train_data[i]
+ *             h_pre += self.V[ix][f] * self.train_data[ix]
  *         h = h_pre - self.V[i][f]*self.train_data[i]
  *         h *= self.train_data[i]             # <<<<<<<<<<<<<<
  *         grad_value = 2 * (self.now_error*h + self.regs[f+2]*self.V[i][f])
