@@ -181,9 +181,9 @@ def select_song(request):
             next_page = create_like_song(user.id, song_id, recommend_type)
             print recommend_type
     if next_page == 1:
-        return redirect('/recommendation/recommend_song/')
-    elif next_page == 2:
         return redirect('/recommendation/recommend_songs/')
+    elif next_page == 2:
+        return redirect('/recommendation/recommend_song/')
     else:
         return redirect('/recommendation/questionnaire/')
 

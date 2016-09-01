@@ -78,7 +78,7 @@ class CyFmSgdOpt():
 
     def save_top_k_ranking_one_user(self):
 
-        self.get_matrixes_by_song()
+        #self.get_matrixes_by_song()
         print "ランキング取得"
         start_time = time.time()
         rankings = self.get_rankings()
@@ -98,6 +98,7 @@ class CyFmSgdOpt():
         """
         ランキングを取得
         """
+        self.get_not_learn_songs()
         self.songs = np.array(self.songs)
         # nonzeroのインデックス作成
         ixs = np.zeros(len(self.tag_map) + 2, dtype=np.int64)
@@ -107,7 +108,19 @@ class CyFmSgdOpt():
             index += 1
         user_index = self.labels["user="+str(self.user)]
         ixs[-2] = user_index
-        rankings = [(self.cy_fm.predict(matrix, str(song), ixs), song) for matrix, song in zip(self.matrixes, self.songs)]
+        rankings = []
+        print "配列作成"
+        for song_id in self.songs:
+            song_label_name = "song="+str(song_id)
+            song_index = self.labels[song_label_name]
+            matrix = np.zeros(self.n)
+            matrix[user_index] = 1.0
+            matrix[song_index] = 1.0
+            for index, tag_value in enumerate(self.song_tag_map[song_id]):
+                matrix[self.tag_map[index]] = tag_value
+            rankings.append((self.cy_fm.predict(matrix, str(song_id), ixs), song_id))
+
+        #rankings = [(self.cy_fm.predict(matrix, str(song), ixs), song) for matrix, song in zip(self.matrixes, self.songs)]
         rankings.sort()
         rankings.reverse()
         return rankings[:rank]
