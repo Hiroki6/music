@@ -8,6 +8,7 @@ sys.dont_write_bytecode = True
 import smoothing_lib
 sys.path.append('./FmSgd')
 import fm_lib
+import fm_online
 
 """
 学習
@@ -85,3 +86,16 @@ def redis_flush(db=0):
 
     r = redis.Redis(host='localhost', port=6379, db=db)
     r.flushdb()
+
+"""
+FMのオンライン学習
+逐次的にデータを読み込む(メモリ削減のため)
+"""
+def online_train():
+
+    data_labels, tag_map = create_matrix.get_data_labels_and_tag_map()
+
+    fm_obj = fm_online.FmOnline(data_labels, tag_map)
+    fm_obj.prepare_train(0.005, K=8, step=1)
+    fm_obj.fit(5)
+    fm_obj.calc_error()
