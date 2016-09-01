@@ -94,7 +94,22 @@ class RecommendFm(object):
         """
         ランキングを取得
         """
-        rankings = [(self.cy_fm.predict(matrix, str(song), self.ixs), song) for matrix, song in zip(self.matrixes, self.songs)]
+        user_index = self.labels["user="+str(self.user)]
+        self.get_not_learn_songs()
+        rankings = []
+        print "配列作成"
+        for song_id in self.songs:
+            song_label_name = "song="+str(song_id)
+            song_index = self.labels[song_label_name]
+            matrix = np.zeros(len(self.W))
+            matrix[user_index] = 1.0
+            matrix[song_index] = 1.0
+            for index, tag_value in enumerate(self.song_tag_map[song_id]):
+                matrix[self.tag_map[index]] = tag_value
+            rankings.append((self.cy_fm.predict(matrix, str(song_id), self.ixs), song_id))
+
+
+        #rankings = [(self.cy_fm.predict(matrix, str(song), self.ixs), song) for matrix, song in zip(self.matrixes, self.songs)]
         rankings.sort()
         rankings.reverse()
         return rankings[:rank]
@@ -105,6 +120,7 @@ class RecommendFm(object):
         """
         print "１位の楽曲取得"
         start_time = time.time()
+        self.get_not_learn_songs()
         rankings = self.get_rankings()
         print time.time() - start_time
         print "楽曲をredisに保存"
@@ -211,7 +227,7 @@ class RecommendFm(object):
         start_time = time.time()
         self._save_redis_relearning() # 更新されたVとadagrad_VをDBに保存
         print "redis更新タイム: %.5f" % (time.time() - start_time)
-        self.get_matrixes_by_song()
+        #self.get_matrixes_by_song()
         self.save_top_song()
 
     def _set_ixs(self):
