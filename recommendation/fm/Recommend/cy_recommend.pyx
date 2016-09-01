@@ -49,6 +49,7 @@ cdef class CyRecommendFm:
         double l_rate
         long[:] ixs
         dict labels
+        np.ndarray feedback_ixs
     
     def __cinit__(self,
                     double w_0,
@@ -92,8 +93,6 @@ cdef class CyRecommendFm:
         if self.labels.has_key("song="+song):
             ixs[-1] = self.labels["song="+song]
         for ix in ixs:
-            if ix == 63166:
-                print ix
             features += self.W[ix] * matrix[ix]
         for f in xrange(self.K):
             dot_sum = 0.0
@@ -129,7 +128,7 @@ cdef class CyRecommendFm:
 
         return top_song
 
-    def relearning(self, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, np.ndarray[DOUBLE, ndim=1, mode="c"] feedback_matrix):
+    def relearning(self, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, np.ndarray[DOUBLE, ndim=1, mode="c"] feedback_matrix, np.ndarray[INTEGER, ndim=1, mode="c"] feedback_ixs):
         """
         フィードバックによる再学習
         top_matrix: 推薦された楽曲の特徴ベクトル
@@ -143,6 +142,7 @@ cdef class CyRecommendFm:
 
         self.feedback_R = feedback_matrix
         self.top_R = top_matrix
+        self.feedback_ixs = feedback_ixs
         self.ixs = np.nonzero(top_matrix)[0]
         ixs = np.array(self.ixs)
         self._decition_epsilon(top_matrix, feedback_matrix, ixs)  # epsilonの決定
@@ -155,7 +155,7 @@ cdef class CyRecommendFm:
             self.relearning_optimization(top_predict, feedback_predict)
             top_predict, feedback_predict, feedback_error = self.calc_feedback_error(top_matrix, feedback_matrix, ixs)
             count += 1
-            if(count > 100):
+            if(count > 1000):
                 break
         print count
 
@@ -169,6 +169,7 @@ cdef class CyRecommendFm:
             long index
     
         for ix in self.ixs:
+        #for ix in self.feedback_ixs:
             #self._reupdate_W(ix)
             for f in xrange(self.K):
                 self._reupdate_V(ix, f)

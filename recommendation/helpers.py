@@ -107,7 +107,8 @@ next_page:
 """
 def create_like_song(user_id, song_id, recommend_type):
 
-    next_page = 1 if recommend_type else 2
+    next_page = 1 if recommend_type == "1" else 2
+    print next_page
     like_song_by_type = LikeSong.objects.filter(user_id=user_id, recommend_type=recommend_type)
     if len(like_song_by_type) != 0:
         like_song_by_type.update(song_id=song_id)

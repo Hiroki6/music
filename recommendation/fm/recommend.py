@@ -193,7 +193,7 @@ class RecommendFm(object):
         song_index = self.labels[song_label_name]
         self.feedback_matrix[song_index] = 0.0
         self.top_matrix[song_index] = 0.0
-        alpha = 0.1 if self.plus_or_minus == 1 else -0.1 # フィードバックによって+-を分ける
+        alpha = 0.3 if self.plus_or_minus == 1 else -0.1 # フィードバックによって+-を分ける
         user_index = self.labels["user="+str(self.user)]
         for i, tag in enumerate(self.tags):
             index = tag[0]
@@ -221,7 +221,8 @@ class RecommendFm(object):
         self.create_feedback_matrix(feedback) # フィードバック用の配列取得
         print "配列構築タイム: %.5f" % (time.time() - start_time)
         start_time = time.time()
-        self.cy_fm.relearning(self.top_matrix, self.feedback_matrix) # 再学習
+        self._set_feedback_ixs()
+        self.cy_fm.relearning(self.top_matrix, self.feedback_matrix, self.feedback_ixs) # 再学習
         print "再学習タイム: %.5f" % (time.time() - start_time)
         self._set_ixs()
         start_time = time.time()
@@ -229,6 +230,18 @@ class RecommendFm(object):
         print "redis更新タイム: %.5f" % (time.time() - start_time)
         #self.get_matrixes_by_song()
         self.save_top_song()
+
+    def _set_feedback_ixs(self):
+
+        self.feedback_ixs = np.zeros(len(self.tags) + 1, dtype=np.int64)
+        index = 0
+        for tag in self.tags:
+            tag_index = tag[0]
+            tag_index = self.tag_map[tag_index]
+            self.feedback_ixs[index] = tag_index
+            index += 1
+        user_index = self.labels["user="+str(self.user)]
+        self.feedback_ixs[-1] = user_index
 
     def _set_ixs(self):
     
