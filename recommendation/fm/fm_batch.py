@@ -2,7 +2,7 @@
 
 import numpy as np
 import math
-from FmSgd import fm_sgd_opt
+from FmBatch import cy_fm_batch
 import redis
 from .. import models
 import time
@@ -14,7 +14,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 HOST = 'localhost'
 PORT = 6379
 
-class CyFmSgdOpt():
+class FmBatch():
     """
     parameters
     R : 学習データ配列(FMフォーマット形式) N * n
@@ -54,7 +54,7 @@ class CyFmSgdOpt():
         self.regs = np.zeros(K+2)
         self.K = K
         # cythonクラスインスタンス初期化
-        self.cy_fm = fm_sgd_opt.CyFmSgdOpt(self.R, self.R_v, self.targets, self.W, self.V, self.w_0, self.n, self.N, self.N_v, self.E, self.regs, l_rate, K, step, self.labels)
+        self.cy_fm = cy_fm_batch.CyFmBatch(self.R, self.R_v, self.targets, self.W, self.V, self.w_0, self.n, self.N, self.N_v, self.E, self.regs, l_rate, K, step, self.labels)
         # 学習
         self.cy_fm.learning()
 

@@ -26,6 +26,8 @@ class FmOnline:
     n : 特徴量の総数
     labels: {feature: index}
     rate_dic: 学習用データ{artist: [songs]}
+    seed: 乱数しーど
+    init_stdev: 正規分布の合計値
     """
 
     def __init__(self, labels, tag_map, seed=20, init_stdev=0.01):
@@ -113,7 +115,7 @@ class FmOnline:
         print error
 
     """
-    ランキングの取得
+    各ユーザーの楽曲のランキングの取得
     """
     def save_top_k_ranking_all_user(self, smoothing_flag = False):
         """

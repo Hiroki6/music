@@ -38,6 +38,7 @@ cdef class CyFmOnline:
     labels: {feature: index}
     train_data: 学習データ
     regs_data: 正規化項用データ
+    ixs: nonzeroの要素のインデックス配列
     """
     cdef:
         np.ndarray W
@@ -128,7 +129,10 @@ cdef class CyFmOnline:
         self.V[i][f] -= update_value
 
     def fit(self, np.ndarray[DOUBLE, ndim=1, mode="c"] train_data, np.ndarray[DOUBLE, ndim=1, mode="c"] regs_data):
-        
+        """
+        fmの学習
+        データは逐次的に渡されるので、オンライン学習を行う
+        """
         cdef:
             long ix
             int f
@@ -186,10 +190,15 @@ cdef class CyFmOnline:
             self.regs[f+2] = new_r if new_r >= 0 else 0
 
     def calc_error(self, np.ndarray[DOUBLE, ndim=1, mode="c"] target_data):
+        """
+        誤差の計算
+        """
         return self._calc_rating(target_data, self.ixs) - 1.0
 
     def calc_all_regs(self):
-
+        """
+        正規化項の合計値
+        """
         cdef:
             double error = 0.0
             int f
@@ -274,10 +283,15 @@ cdef class CyFmOnline:
         self.save_two_dim_array(r, "adagrad_V_", self.adagrad_V)
 
     def save_scalar(self, redis_obj, char* key, char* field, double value):
+        """
+        スカラー値のredisへの保存
+        """
         redis_obj.hset(key, field, value)
 
     def save_one_dim_array(self, redis_obj, char* key, np.ndarray[DOUBLE, ndim=1, mode="c"] params):
-
+        """
+        一次元配列のredisへの保存
+        """
         cdef:
             double param
 
@@ -285,7 +299,9 @@ cdef class CyFmOnline:
             redis_obj.rpush(key, param)
 
     def save_two_dim_array(self, redis_obj, char* pre_key, np.ndarray[DOUBLE, ndim=2, mode="c"] params):
-
+        """
+        二次元配列のredisへの保存
+        """
         cdef:
             long i
             double param

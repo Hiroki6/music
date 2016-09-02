@@ -21,7 +21,7 @@ ctypedef np.float64_t DOUBLE
 ctypedef np.int64_t INTEGER
 
 FEATURE_NUM = 43
-cdef class CyFmSgdOpt:
+cdef class CyFmBatch:
     """
     parameters
     R : 学習データ配列(FMフォーマット形式) N * n
