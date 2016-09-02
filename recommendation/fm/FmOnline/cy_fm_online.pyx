@@ -38,6 +38,7 @@ cdef class CyFmOnline:
     labels: {feature: index}
     train_data: 学習データ
     regs_data: 正規化項用データ
+    ixs: nonzeroの要素のインデックス配列
     """
     cdef:
         np.ndarray W
@@ -128,7 +129,10 @@ cdef class CyFmOnline:
         self.V[i][f] -= update_value
 
     def fit(self, np.ndarray[DOUBLE, ndim=1, mode="c"] train_data, np.ndarray[DOUBLE, ndim=1, mode="c"] regs_data):
-        
+        """
+        fmの学習
+        データは逐次的に渡されるので、オンライン学習を行う
+        """
         cdef:
             long ix
             int f
@@ -186,33 +190,17 @@ cdef class CyFmOnline:
             self.regs[f+2] = new_r if new_r >= 0 else 0
 
     def calc_error(self, np.ndarray[DOUBLE, ndim=1, mode="c"] target_data):
-
-        cdef:
-            double features = 0.0
-            double iterations = 0.0
-            int f
-            double dot_sum = 0.0
-            double dot_square_sum = 0.0
-            long ix
-            double start_time
-
-        for ix in self.ixs:
-            features += self.W[ix] * target_data[ix]
-            # 間違えている可能性がある
-        for f in xrange(self.K):
-            dot_sum = 0.0
-            dot_square_sum = 0.0
-            for ix in self.ixs:
-                dot_sum += self.V[ix][f] * target_data[ix]
-                dot_square_sum += self.V[ix][f] * self.V[ix][f] * target_data[ix] * target_data[ix]
-            iterations += dot_sum * dot_sum - dot_square_sum
-
-        return (self.w_0 + features + iterations/2) - 1.0
+        """
+        誤差の計算
+        """
+        return self._calc_rating(target_data, self.ixs) - 1.0
 
     def calc_all_regs(self):
-
+        """
+        正規化項の合計値
+        """
         cdef:
-            double error
+            double error = 0.0
             int f
 
         error += self.regs[0] * pow(self.w_0, 2) + self.regs[1] * np.sum(self.W**2)
@@ -220,6 +208,39 @@ cdef class CyFmOnline:
             error += self.regs[f+2] * np.sum(np.transpose(self.V)[f]**2)
 
         return error
+
+    def predict(self, np.ndarray[DOUBLE, ndim=1, mode="c"] matrix, char* song, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):
+        """
+        python側から呼び出せる回帰予測結果取得
+        """
+        ixs[-1] = self.labels["song="+song]
+        return self._calc_rating(matrix, ixs)
+
+    cdef double _calc_rating(self,
+            np.ndarray[DOUBLE, ndim=1, mode="c"] matrix, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):
+        """
+        回帰予測
+        """
+        cdef:
+            # 各特徴量の重み
+            double features = 0.0
+            # 相互作用の重み
+            double iterations = 0.0
+            int f
+            double dot_sum = 0.0
+            double dot_sum_square = 0.0
+            long ix
+        
+        for ix in ixs:
+            features += self.W[ix] * matrix[ix]
+        for f in xrange(self.K):
+            dot_sum = 0.0
+            dot_sum_square = 0.0
+            for ix in ixs:
+                dot_sum += self.V[ix][f] * matrix[ix]
+                dot_sum_square += self.V[ix][f] * self.V[ix][f] * matrix[ix] * matrix[ix]
+            iterations += dot_sum * dot_sum - dot_sum_square
+        return self.w_0 + features + iterations/2
 
     def save_redis(self, int db = 0):
         """
@@ -262,10 +283,15 @@ cdef class CyFmOnline:
         self.save_two_dim_array(r, "adagrad_V_", self.adagrad_V)
 
     def save_scalar(self, redis_obj, char* key, char* field, double value):
+        """
+        スカラー値のredisへの保存
+        """
         redis_obj.hset(key, field, value)
 
     def save_one_dim_array(self, redis_obj, char* key, np.ndarray[DOUBLE, ndim=1, mode="c"] params):
-
+        """
+        一次元配列のredisへの保存
+        """
         cdef:
             double param
 
@@ -273,7 +299,9 @@ cdef class CyFmOnline:
             redis_obj.rpush(key, param)
 
     def save_two_dim_array(self, redis_obj, char* pre_key, np.ndarray[DOUBLE, ndim=2, mode="c"] params):
-
+        """
+        二次元配列のredisへの保存
+        """
         cdef:
             long i
             double param
@@ -301,3 +329,5 @@ cdef class CyFmOnline:
     def set_adagrad_V(self, np.ndarray[DOUBLE, ndim=2, mode="c"] adagrad_V):
         self.adagrad_V = adagrad_V
 
+    def set_n(self, n):
+        self.n = n

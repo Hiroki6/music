@@ -234,8 +234,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__fm_sgd_opt
-#define __PYX_HAVE_API__fm_sgd_opt
+#define __PYX_HAVE__cy_fm_batch
+#define __PYX_HAVE_API__cy_fm_batch
 #include "math.h"
 #include "string.h"
 #include "stdio.h"
@@ -473,7 +473,7 @@ static const char *__pyx_filename;
 
 
 static const char *__pyx_f[] = {
-  "fm_sgd_opt.pyx",
+  "cy_fm_batch.pyx",
   "__init__.pxd",
   "stringsource",
   "type.pxd",
@@ -760,23 +760,23 @@ typedef npy_double __pyx_t_5numpy_double_t;
  */
 typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
 
-/* "fm_sgd_opt.pyx":20
+/* "cy_fm_batch.pyx":20
  * np.import_array()
  * 
  * ctypedef np.float64_t DOUBLE             # <<<<<<<<<<<<<<
  * ctypedef np.int64_t INTEGER
  * 
  */
-typedef __pyx_t_5numpy_float64_t __pyx_t_10fm_sgd_opt_DOUBLE;
+typedef __pyx_t_5numpy_float64_t __pyx_t_11cy_fm_batch_DOUBLE;
 
-/* "fm_sgd_opt.pyx":21
+/* "cy_fm_batch.pyx":21
  * 
  * ctypedef np.float64_t DOUBLE
  * ctypedef np.int64_t INTEGER             # <<<<<<<<<<<<<<
  * 
  * FEATURE_NUM = 43
  */
-typedef __pyx_t_5numpy_int64_t __pyx_t_10fm_sgd_opt_INTEGER;
+typedef __pyx_t_5numpy_int64_t __pyx_t_11cy_fm_batch_INTEGER;
 #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
     typedef ::std::complex< float > __pyx_t_float_complex;
@@ -799,7 +799,7 @@ typedef __pyx_t_5numpy_int64_t __pyx_t_10fm_sgd_opt_INTEGER;
 
 
 /*--- Type declarations ---*/
-struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt;
+struct __pyx_obj_11cy_fm_batch_CyFmBatch;
 struct __pyx_array_obj;
 struct __pyx_MemviewEnum_obj;
 struct __pyx_memoryview_obj;
@@ -841,16 +841,16 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
 
-/* "fm_sgd_opt.pyx":24
+/* "cy_fm_batch.pyx":24
  * 
  * FEATURE_NUM = 43
- * cdef class CyFmSgdOpt:             # <<<<<<<<<<<<<<
+ * cdef class CyFmBatch:             # <<<<<<<<<<<<<<
  *     """
  *     parameters
  */
-struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt {
+struct __pyx_obj_11cy_fm_batch_CyFmBatch {
   PyObject_HEAD
-  struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt *__pyx_vtab;
+  struct __pyx_vtabstruct_11cy_fm_batch_CyFmBatch *__pyx_vtab;
   PyArrayObject *R;
   PyArrayObject *R_v;
   PyArrayObject *targets;
@@ -954,28 +954,28 @@ struct __pyx_memoryviewslice_obj {
 
 
 
-/* "fm_sgd_opt.pyx":24
+/* "cy_fm_batch.pyx":24
  * 
  * FEATURE_NUM = 43
- * cdef class CyFmSgdOpt:             # <<<<<<<<<<<<<<
+ * cdef class CyFmBatch:             # <<<<<<<<<<<<<<
  *     """
  *     parameters
  */
 
-struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt {
-  void (*_get_error)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, long);
-  void (*_update_w_0)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, long);
-  void (*_update_W)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, long, long);
-  void (*_update_V)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, long, long, int);
-  void (*_calc_regs)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, double, PyArrayObject *, PyArrayObject *);
-  double (*_calc_error)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, long);
-  double (*_calc_error_regs)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, long);
-  double (*_calc_rating)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, PyArrayObject *, char *, PyArrayObject *);
-  double (*calc_feature_distances)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, PyArrayObject *, PyArrayObject *);
-  double (*calc_pearson_distance)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, PyArrayObject *, PyArrayObject *);
-  double (*calc_cosine_similarity)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, PyArrayObject *, PyArrayObject *, double, double);
+struct __pyx_vtabstruct_11cy_fm_batch_CyFmBatch {
+  void (*_get_error)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, long);
+  void (*_update_w_0)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, long);
+  void (*_update_W)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, long, long);
+  void (*_update_V)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, long, long, int);
+  void (*_calc_regs)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, double, PyArrayObject *, PyArrayObject *);
+  double (*_calc_error)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, long);
+  double (*_calc_error_regs)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, long);
+  double (*_calc_rating)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, PyArrayObject *, char *, PyArrayObject *);
+  double (*calc_feature_distances)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, PyArrayObject *, PyArrayObject *);
+  double (*calc_pearson_distance)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, PyArrayObject *, PyArrayObject *);
+  double (*calc_cosine_similarity)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, PyArrayObject *, PyArrayObject *, double, double);
 };
-static struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt *__pyx_vtabptr_10fm_sgd_opt_CyFmSgdOpt;
+static struct __pyx_vtabstruct_11cy_fm_batch_CyFmBatch *__pyx_vtabptr_11cy_fm_batch_CyFmBatch;
 
 
 /* "View.MemoryView":304
@@ -1575,17 +1575,17 @@ static PyTypeObject *__Pyx_ImportType(const char *module_name, const char *class
 
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
-static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__get_error(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, long __pyx_v_data_index); /* proto*/
-static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_w_0(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, CYTHON_UNUSED long __pyx_v_data_index); /* proto*/
-static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_W(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, long __pyx_v_data_index, long __pyx_v_i); /* proto*/
-static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, long __pyx_v_data_index, long __pyx_v_i, int __pyx_v_f); /* proto*/
-static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, double __pyx_v_pre_w_0, PyArrayObject *__pyx_v_pre_W, PyArrayObject *__pyx_v_pre_V); /* proto*/
-static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, long __pyx_v_data_index); /* proto*/
-static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, long __pyx_v_data_index); /* proto*/
-static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_matrix, char *__pyx_v_song, PyArrayObject *__pyx_v_ixs); /* proto*/
-static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_feature_distances(CYTHON_UNUSED struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_vector1, PyArrayObject *__pyx_v_vector2); /* proto*/
-static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNUSED struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_vector1, PyArrayObject *__pyx_v_vector2); /* proto*/
-static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_cosine_similarity(CYTHON_UNUSED struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_vector1, PyArrayObject *__pyx_v_vector2, double __pyx_v_vector1_norm, double __pyx_v_vector2_norm); /* proto*/
+static void __pyx_f_11cy_fm_batch_9CyFmBatch__get_error(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, long __pyx_v_data_index); /* proto*/
+static void __pyx_f_11cy_fm_batch_9CyFmBatch__update_w_0(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, CYTHON_UNUSED long __pyx_v_data_index); /* proto*/
+static void __pyx_f_11cy_fm_batch_9CyFmBatch__update_W(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, long __pyx_v_data_index, long __pyx_v_i); /* proto*/
+static void __pyx_f_11cy_fm_batch_9CyFmBatch__update_V(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, long __pyx_v_data_index, long __pyx_v_i, int __pyx_v_f); /* proto*/
+static void __pyx_f_11cy_fm_batch_9CyFmBatch__calc_regs(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, double __pyx_v_pre_w_0, PyArrayObject *__pyx_v_pre_W, PyArrayObject *__pyx_v_pre_V); /* proto*/
+static double __pyx_f_11cy_fm_batch_9CyFmBatch__calc_error(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, long __pyx_v_data_index); /* proto*/
+static double __pyx_f_11cy_fm_batch_9CyFmBatch__calc_error_regs(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, long __pyx_v_data_index); /* proto*/
+static double __pyx_f_11cy_fm_batch_9CyFmBatch__calc_rating(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_matrix, char *__pyx_v_song, PyArrayObject *__pyx_v_ixs); /* proto*/
+static double __pyx_f_11cy_fm_batch_9CyFmBatch_calc_feature_distances(CYTHON_UNUSED struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_vector1, PyArrayObject *__pyx_v_vector2); /* proto*/
+static double __pyx_f_11cy_fm_batch_9CyFmBatch_calc_pearson_distance(CYTHON_UNUSED struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_vector1, PyArrayObject *__pyx_v_vector2); /* proto*/
+static double __pyx_f_11cy_fm_batch_9CyFmBatch_calc_cosine_similarity(CYTHON_UNUSED struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_vector1, PyArrayObject *__pyx_v_vector2, double __pyx_v_vector1_norm, double __pyx_v_vector2_norm); /* proto*/
 static char *__pyx_memoryview_get_item_pointer(struct __pyx_memoryview_obj *__pyx_v_self, PyObject *__pyx_v_index); /* proto*/
 static PyObject *__pyx_memoryview_is_slice(struct __pyx_memoryview_obj *__pyx_v_self, PyObject *__pyx_v_obj); /* proto*/
 static PyObject *__pyx_memoryview_setitem_slice_assignment(struct __pyx_memoryview_obj *__pyx_v_self, PyObject *__pyx_v_dst, PyObject *__pyx_v_src); /* proto*/
@@ -1631,8 +1631,8 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *, cha
 
 /* Module declarations from 'cython' */
 
-/* Module declarations from 'fm_sgd_opt' */
-static PyTypeObject *__pyx_ptype_10fm_sgd_opt_CyFmSgdOpt = 0;
+/* Module declarations from 'cy_fm_batch' */
+static PyTypeObject *__pyx_ptype_11cy_fm_batch_CyFmBatch = 0;
 static PyTypeObject *__pyx_array_type = 0;
 static PyTypeObject *__pyx_MemviewEnum_type = 0;
 static PyTypeObject *__pyx_memoryview_type = 0;
@@ -1674,13 +1674,13 @@ static void __pyx_memoryview_refcount_objects_in_slice_with_gil(char *, Py_ssize
 static void __pyx_memoryview_refcount_objects_in_slice(char *, Py_ssize_t *, Py_ssize_t *, int, int); /*proto*/
 static void __pyx_memoryview_slice_assign_scalar(__Pyx_memviewslice *, int, size_t, void *, int); /*proto*/
 static void __pyx_memoryview__slice_assign_scalar(char *, Py_ssize_t *, Py_ssize_t *, int, size_t, void *); /*proto*/
-static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE = { "DOUBLE", NULL, sizeof(__pyx_t_10fm_sgd_opt_DOUBLE), { 0 }, 0, 'R', 0, 0 };
-static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_INTEGER = { "INTEGER", NULL, sizeof(__pyx_t_10fm_sgd_opt_INTEGER), { 0 }, 0, IS_UNSIGNED(__pyx_t_10fm_sgd_opt_INTEGER) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_10fm_sgd_opt_INTEGER), 0 };
+static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE = { "DOUBLE", NULL, sizeof(__pyx_t_11cy_fm_batch_DOUBLE), { 0 }, 0, 'R', 0, 0 };
+static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_INTEGER = { "INTEGER", NULL, sizeof(__pyx_t_11cy_fm_batch_INTEGER), { 0 }, 0, IS_UNSIGNED(__pyx_t_11cy_fm_batch_INTEGER) ? 'U' : 'I', IS_UNSIGNED(__pyx_t_11cy_fm_batch_INTEGER), 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_long = { "long", NULL, sizeof(long), { 0 }, 0, IS_UNSIGNED(long) ? 'U' : 'I', IS_UNSIGNED(long), 0 };
-#define __Pyx_MODULE_NAME "fm_sgd_opt"
-int __pyx_module_is_main_fm_sgd_opt = 0;
+#define __Pyx_MODULE_NAME "cy_fm_batch"
+int __pyx_module_is_main_cy_fm_batch = 0;
 
-/* Implementation of 'fm_sgd_opt' */
+/* Implementation of 'cy_fm_batch' */
 static PyObject *__pyx_builtin_xrange;
 static PyObject *__pyx_builtin_zip;
 static PyObject *__pyx_builtin_ValueError;
@@ -2007,31 +2007,31 @@ static PyObject *__pyx_kp_s_w_0_2;
 static PyObject *__pyx_n_s_xrange;
 static PyObject *__pyx_n_s_zeros;
 static PyObject *__pyx_n_s_zip;
-static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_R, PyArrayObject *__pyx_v_R_v, PyArrayObject *__pyx_v_targets, PyArrayObject *__pyx_v_W, PyArrayObject *__pyx_v_V, double __pyx_v_w_0, long __pyx_v_n, long __pyx_v_N, long __pyx_v_N_v, PyArrayObject *__pyx_v_E, PyArrayObject *__pyx_v_regs, double __pyx_v_l_rate, int __pyx_v_K, int __pyx_v_step, PyObject *__pyx_v_labels); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_2get_sum_error(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_4get_all_error(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_10get_rankings(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_matrixes, PyArrayObject *__pyx_v_songs, PyArrayObject *__pyx_v_ixs); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_12predict(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_matrix, char *__pyx_v_song, PyArrayObject *__pyx_v_ixs); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, int __pyx_v_db); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_16save_scalar(CYTHON_UNUSED struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_key, char *__pyx_v_field, double __pyx_v_value); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_18save_one_dim_array(CYTHON_UNUSED struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_key, PyArrayObject *__pyx_v_params); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_20save_two_dim_array(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_pre_key, PyArrayObject *__pyx_v_params); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyObject *__pyx_v_not_learned_song_tag_map, PyObject *__pyx_v_learned_song_tag_map, PyObject *__pyx_v_learn_song_norm, int __pyx_v_rank); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_24get_w_0(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_26get_W(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_28get_V(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_30get_E(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_32get_self_error(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_34get_adagrad_w_0(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_36get_adagrad_W(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_38get_adagrad_V(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_40set_W(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_W); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_42set_V(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_V); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_44set_adagrad_W(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_adagrad_W); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_46set_adagrad_V(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_adagrad_V); /* proto */
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_48set_n(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyObject *__pyx_v_n); /* proto */
+static int __pyx_pf_11cy_fm_batch_9CyFmBatch___cinit__(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_R, PyArrayObject *__pyx_v_R_v, PyArrayObject *__pyx_v_targets, PyArrayObject *__pyx_v_W, PyArrayObject *__pyx_v_V, double __pyx_v_w_0, long __pyx_v_n, long __pyx_v_N, long __pyx_v_N_v, PyArrayObject *__pyx_v_E, PyArrayObject *__pyx_v_regs, double __pyx_v_l_rate, int __pyx_v_K, int __pyx_v_step, PyObject *__pyx_v_labels); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_2get_sum_error(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_4get_all_error(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_6repeat_optimization(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_8learning(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_10get_rankings(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_matrixes, PyArrayObject *__pyx_v_songs, PyArrayObject *__pyx_v_ixs); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_12predict(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_matrix, char *__pyx_v_song, PyArrayObject *__pyx_v_ixs); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_14save_redis(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, int __pyx_v_db); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_16save_scalar(CYTHON_UNUSED struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_key, char *__pyx_v_field, double __pyx_v_value); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_18save_one_dim_array(CYTHON_UNUSED struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_key, PyArrayObject *__pyx_v_params); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_20save_two_dim_array(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_pre_key, PyArrayObject *__pyx_v_params); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_22smoothing(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyObject *__pyx_v_not_learned_song_tag_map, PyObject *__pyx_v_learned_song_tag_map, PyObject *__pyx_v_learn_song_norm, int __pyx_v_rank); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_24get_w_0(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_26get_W(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_28get_V(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_30get_E(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_32get_self_error(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_34get_adagrad_w_0(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_36get_adagrad_W(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_38get_adagrad_V(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_40set_W(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_W); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_42set_V(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_V); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_44set_adagrad_W(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_adagrad_W); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_46set_adagrad_V(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_adagrad_V); /* proto */
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_48set_n(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyObject *__pyx_v_n); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
@@ -2066,7 +2066,7 @@ static PyObject *__pyx_memoryview___pyx_pf_15View_dot_MemoryView_10memoryview_20
 static PyObject *__pyx_memoryview___pyx_pf_15View_dot_MemoryView_10memoryview_22copy_fortran(struct __pyx_memoryview_obj *__pyx_v_self); /* proto */
 static void __pyx_memoryviewslice___pyx_pf_15View_dot_MemoryView_16_memoryviewslice___dealloc__(struct __pyx_memoryviewslice_obj *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_15View_dot_MemoryView_16_memoryviewslice_4base___get__(struct __pyx_memoryviewslice_obj *__pyx_v_self); /* proto */
-static PyObject *__pyx_tp_new_10fm_sgd_opt_CyFmSgdOpt(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static PyObject *__pyx_tp_new_11cy_fm_batch_CyFmBatch(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_array(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_Enum(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_memoryview(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -2107,7 +2107,7 @@ static PyObject *__pyx_tuple__25;
 static PyObject *__pyx_tuple__26;
 static PyObject *__pyx_tuple__27;
 
-/* "fm_sgd_opt.pyx":75
+/* "cy_fm_batch.pyx":75
  *         dict labels
  * 
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -2116,8 +2116,8 @@ static PyObject *__pyx_tuple__27;
  */
 
 /* Python wrapper */
-static int __pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static int __pyx_pw_11cy_fm_batch_9CyFmBatch_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_pw_11cy_fm_batch_9CyFmBatch_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_R = 0;
   PyArrayObject *__pyx_v_R_v = 0;
   PyArrayObject *__pyx_v_targets = 0;
@@ -2282,7 +2282,7 @@ static int __pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_1__cinit__(PyObject *__pyx_v_self,
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 15, 15, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
@@ -2294,7 +2294,7 @@ static int __pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_1__cinit__(PyObject *__pyx_v_self,
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_E), __pyx_ptype_5numpy_ndarray, 1, "E", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 85; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_regs), __pyx_ptype_5numpy_ndarray, 1, "regs", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 86; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_labels), (&PyDict_Type), 1, "labels", 1))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self), __pyx_v_R, __pyx_v_R_v, __pyx_v_targets, __pyx_v_W, __pyx_v_V, __pyx_v_w_0, __pyx_v_n, __pyx_v_N, __pyx_v_N_v, __pyx_v_E, __pyx_v_regs, __pyx_v_l_rate, __pyx_v_K, __pyx_v_step, __pyx_v_labels);
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch___cinit__(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self), __pyx_v_R, __pyx_v_R_v, __pyx_v_targets, __pyx_v_W, __pyx_v_V, __pyx_v_w_0, __pyx_v_n, __pyx_v_N, __pyx_v_N_v, __pyx_v_E, __pyx_v_regs, __pyx_v_l_rate, __pyx_v_K, __pyx_v_step, __pyx_v_labels);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2305,7 +2305,7 @@ static int __pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_1__cinit__(PyObject *__pyx_v_self,
   return __pyx_r;
 }
 
-static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_R, PyArrayObject *__pyx_v_R_v, PyArrayObject *__pyx_v_targets, PyArrayObject *__pyx_v_W, PyArrayObject *__pyx_v_V, double __pyx_v_w_0, long __pyx_v_n, long __pyx_v_N, long __pyx_v_N_v, PyArrayObject *__pyx_v_E, PyArrayObject *__pyx_v_regs, double __pyx_v_l_rate, int __pyx_v_K, int __pyx_v_step, PyObject *__pyx_v_labels) {
+static int __pyx_pf_11cy_fm_batch_9CyFmBatch___cinit__(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_R, PyArrayObject *__pyx_v_R_v, PyArrayObject *__pyx_v_targets, PyArrayObject *__pyx_v_W, PyArrayObject *__pyx_v_V, double __pyx_v_w_0, long __pyx_v_n, long __pyx_v_N, long __pyx_v_N_v, PyArrayObject *__pyx_v_E, PyArrayObject *__pyx_v_regs, double __pyx_v_l_rate, int __pyx_v_K, int __pyx_v_step, PyObject *__pyx_v_labels) {
   __Pyx_LocalBuf_ND __pyx_pybuffernd_E;
   __Pyx_Buffer __pyx_pybuffer_E;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_R;
@@ -2356,41 +2356,41 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
   __pyx_pybuffernd_regs.rcbuffer = &__pyx_pybuffer_regs;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_R.rcbuffer->pybuffer, (PyObject*)__pyx_v_R, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_R.rcbuffer->pybuffer, (PyObject*)__pyx_v_R, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_R.diminfo[0].strides = __pyx_pybuffernd_R.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_R.diminfo[0].shape = __pyx_pybuffernd_R.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_R.diminfo[1].strides = __pyx_pybuffernd_R.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_R.diminfo[1].shape = __pyx_pybuffernd_R.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_R_v.rcbuffer->pybuffer, (PyObject*)__pyx_v_R_v, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_R_v.rcbuffer->pybuffer, (PyObject*)__pyx_v_R_v, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_R_v.diminfo[0].strides = __pyx_pybuffernd_R_v.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_R_v.diminfo[0].shape = __pyx_pybuffernd_R_v.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_R_v.diminfo[1].strides = __pyx_pybuffernd_R_v.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_R_v.diminfo[1].shape = __pyx_pybuffernd_R_v.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_targets.rcbuffer->pybuffer, (PyObject*)__pyx_v_targets, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_INTEGER, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_targets.rcbuffer->pybuffer, (PyObject*)__pyx_v_targets, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_INTEGER, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_targets.diminfo[0].strides = __pyx_pybuffernd_targets.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_targets.diminfo[0].shape = __pyx_pybuffernd_targets.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_W.rcbuffer->pybuffer, (PyObject*)__pyx_v_W, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_W.rcbuffer->pybuffer, (PyObject*)__pyx_v_W, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_W.diminfo[0].strides = __pyx_pybuffernd_W.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_W.diminfo[0].shape = __pyx_pybuffernd_W.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_V.rcbuffer->pybuffer, (PyObject*)__pyx_v_V, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_V.rcbuffer->pybuffer, (PyObject*)__pyx_v_V, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_V.diminfo[0].strides = __pyx_pybuffernd_V.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_V.diminfo[0].shape = __pyx_pybuffernd_V.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_V.diminfo[1].strides = __pyx_pybuffernd_V.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_V.diminfo[1].shape = __pyx_pybuffernd_V.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_E.rcbuffer->pybuffer, (PyObject*)__pyx_v_E, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_E.rcbuffer->pybuffer, (PyObject*)__pyx_v_E, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_E.diminfo[0].strides = __pyx_pybuffernd_E.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_E.diminfo[0].shape = __pyx_pybuffernd_E.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_regs.rcbuffer->pybuffer, (PyObject*)__pyx_v_regs, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_regs.rcbuffer->pybuffer, (PyObject*)__pyx_v_regs, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_regs.diminfo[0].strides = __pyx_pybuffernd_regs.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_regs.diminfo[0].shape = __pyx_pybuffernd_regs.rcbuffer->pybuffer.shape[0];
 
-  /* "fm_sgd_opt.pyx":91
+  /* "cy_fm_batch.pyx":91
  *                     int step,
  *                     dict labels):
  *         self.R = R             # <<<<<<<<<<<<<<
@@ -2403,7 +2403,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(((PyObject *)__pyx_v_self->R));
   __pyx_v_self->R = ((PyArrayObject *)__pyx_v_R);
 
-  /* "fm_sgd_opt.pyx":92
+  /* "cy_fm_batch.pyx":92
  *                     dict labels):
  *         self.R = R
  *         self.R_v = R_v             # <<<<<<<<<<<<<<
@@ -2416,7 +2416,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(((PyObject *)__pyx_v_self->R_v));
   __pyx_v_self->R_v = ((PyArrayObject *)__pyx_v_R_v);
 
-  /* "fm_sgd_opt.pyx":93
+  /* "cy_fm_batch.pyx":93
  *         self.R = R
  *         self.R_v = R_v
  *         self.targets = targets             # <<<<<<<<<<<<<<
@@ -2429,7 +2429,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(((PyObject *)__pyx_v_self->targets));
   __pyx_v_self->targets = ((PyArrayObject *)__pyx_v_targets);
 
-  /* "fm_sgd_opt.pyx":94
+  /* "cy_fm_batch.pyx":94
  *         self.R_v = R_v
  *         self.targets = targets
  *         self.W = W             # <<<<<<<<<<<<<<
@@ -2442,7 +2442,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(((PyObject *)__pyx_v_self->W));
   __pyx_v_self->W = ((PyArrayObject *)__pyx_v_W);
 
-  /* "fm_sgd_opt.pyx":95
+  /* "cy_fm_batch.pyx":95
  *         self.targets = targets
  *         self.W = W
  *         self.V = V             # <<<<<<<<<<<<<<
@@ -2455,7 +2455,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(((PyObject *)__pyx_v_self->V));
   __pyx_v_self->V = ((PyArrayObject *)__pyx_v_V);
 
-  /* "fm_sgd_opt.pyx":96
+  /* "cy_fm_batch.pyx":96
  *         self.W = W
  *         self.V = V
  *         self.w_0 = w_0             # <<<<<<<<<<<<<<
@@ -2464,7 +2464,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
  */
   __pyx_v_self->w_0 = __pyx_v_w_0;
 
-  /* "fm_sgd_opt.pyx":97
+  /* "cy_fm_batch.pyx":97
  *         self.V = V
  *         self.w_0 = w_0
  *         self.n = n             # <<<<<<<<<<<<<<
@@ -2473,7 +2473,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
  */
   __pyx_v_self->n = __pyx_v_n;
 
-  /* "fm_sgd_opt.pyx":98
+  /* "cy_fm_batch.pyx":98
  *         self.w_0 = w_0
  *         self.n = n
  *         self.N = N             # <<<<<<<<<<<<<<
@@ -2482,7 +2482,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
  */
   __pyx_v_self->N = __pyx_v_N;
 
-  /* "fm_sgd_opt.pyx":99
+  /* "cy_fm_batch.pyx":99
  *         self.n = n
  *         self.N = N
  *         self.N_v = N_v             # <<<<<<<<<<<<<<
@@ -2491,7 +2491,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
  */
   __pyx_v_self->N_v = __pyx_v_N_v;
 
-  /* "fm_sgd_opt.pyx":100
+  /* "cy_fm_batch.pyx":100
  *         self.N = N
  *         self.N_v = N_v
  *         self.E = E             # <<<<<<<<<<<<<<
@@ -2504,7 +2504,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(((PyObject *)__pyx_v_self->E));
   __pyx_v_self->E = ((PyArrayObject *)__pyx_v_E);
 
-  /* "fm_sgd_opt.pyx":101
+  /* "cy_fm_batch.pyx":101
  *         self.N_v = N_v
  *         self.E = E
  *         self.regs = regs             # <<<<<<<<<<<<<<
@@ -2517,7 +2517,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(((PyObject *)__pyx_v_self->regs));
   __pyx_v_self->regs = ((PyArrayObject *)__pyx_v_regs);
 
-  /* "fm_sgd_opt.pyx":102
+  /* "cy_fm_batch.pyx":102
  *         self.E = E
  *         self.regs = regs
  *         self.l_rate = l_rate             # <<<<<<<<<<<<<<
@@ -2526,7 +2526,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
  */
   __pyx_v_self->l_rate = __pyx_v_l_rate;
 
-  /* "fm_sgd_opt.pyx":103
+  /* "cy_fm_batch.pyx":103
  *         self.regs = regs
  *         self.l_rate = l_rate
  *         self.K = K             # <<<<<<<<<<<<<<
@@ -2535,7 +2535,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
  */
   __pyx_v_self->K = __pyx_v_K;
 
-  /* "fm_sgd_opt.pyx":104
+  /* "cy_fm_batch.pyx":104
  *         self.l_rate = l_rate
  *         self.K = K
  *         self.step = step             # <<<<<<<<<<<<<<
@@ -2544,7 +2544,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
  */
   __pyx_v_self->step = __pyx_v_step;
 
-  /* "fm_sgd_opt.pyx":105
+  /* "cy_fm_batch.pyx":105
  *         self.K = K
  *         self.step = step
  *         self.labels = labels             # <<<<<<<<<<<<<<
@@ -2557,7 +2557,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(__pyx_v_self->labels);
   __pyx_v_self->labels = __pyx_v_labels;
 
-  /* "fm_sgd_opt.pyx":75
+  /* "cy_fm_batch.pyx":75
  *         dict labels
  * 
  *     def __cinit__(self,             # <<<<<<<<<<<<<<
@@ -2579,7 +2579,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_regs.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_targets.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   goto __pyx_L2;
   __pyx_L0:;
@@ -2595,7 +2595,7 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":107
+/* "cy_fm_batch.pyx":107
  *         self.labels = labels
  * 
  *     def get_sum_error(self):             # <<<<<<<<<<<<<<
@@ -2604,19 +2604,19 @@ static int __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt___cinit__(struct __pyx_obj_10fm_sg
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_3get_sum_error(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_3get_sum_error(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_3get_sum_error(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_3get_sum_error(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_sum_error (wrapper)", 0);
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_2get_sum_error(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_2get_sum_error(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_2get_sum_error(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_2get_sum_error(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self) {
   long __pyx_v_data_index;
   int __pyx_v_f;
   double __pyx_v_sum_error;
@@ -2641,7 +2641,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_2get_sum_error(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_sum_error", 0);
 
-  /* "fm_sgd_opt.pyx":112
+  /* "cy_fm_batch.pyx":112
  *             long data_index
  *             int f
  *             double sum_error = 0.0             # <<<<<<<<<<<<<<
@@ -2650,7 +2650,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_2get_sum_error(struct __pyx_
  */
   __pyx_v_sum_error = 0.0;
 
-  /* "fm_sgd_opt.pyx":114
+  /* "cy_fm_batch.pyx":114
  *             double sum_error = 0.0
  * 
  *         for data_index in xrange(self.N):             # <<<<<<<<<<<<<<
@@ -2661,7 +2661,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_2get_sum_error(struct __pyx_
   for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_data_index = __pyx_t_2;
 
-    /* "fm_sgd_opt.pyx":115
+    /* "cy_fm_batch.pyx":115
  * 
  *         for data_index in xrange(self.N):
  *             self.ixs = np.nonzero(self.R[data_index])[0]             # <<<<<<<<<<<<<<
@@ -2712,17 +2712,17 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_2get_sum_error(struct __pyx_
     __pyx_t_8.memview = NULL;
     __pyx_t_8.data = NULL;
 
-    /* "fm_sgd_opt.pyx":116
+    /* "cy_fm_batch.pyx":116
  *         for data_index in xrange(self.N):
  *             self.ixs = np.nonzero(self.R[data_index])[0]
  *             sum_error += pow(self._calc_error(data_index), 2)             # <<<<<<<<<<<<<<
  * 
  *         self.error = sum_error
  */
-    __pyx_v_sum_error = (__pyx_v_sum_error + pow(((struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self->__pyx_vtab)->_calc_error(__pyx_v_self, __pyx_v_data_index), 2.0));
+    __pyx_v_sum_error = (__pyx_v_sum_error + pow(((struct __pyx_vtabstruct_11cy_fm_batch_CyFmBatch *)__pyx_v_self->__pyx_vtab)->_calc_error(__pyx_v_self, __pyx_v_data_index), 2.0));
   }
 
-  /* "fm_sgd_opt.pyx":118
+  /* "cy_fm_batch.pyx":118
  *             sum_error += pow(self._calc_error(data_index), 2)
  * 
  *         self.error = sum_error             # <<<<<<<<<<<<<<
@@ -2731,7 +2731,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_2get_sum_error(struct __pyx_
  */
   __pyx_v_self->error = __pyx_v_sum_error;
 
-  /* "fm_sgd_opt.pyx":119
+  /* "cy_fm_batch.pyx":119
  * 
  *         self.error = sum_error
  *         self.error += self.regs[0] * pow(self.w_0, 2) + self.regs[1] * np.sum(self.W**2)             # <<<<<<<<<<<<<<
@@ -2799,7 +2799,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_2get_sum_error(struct __pyx_
   __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
   __pyx_v_self->error = __pyx_t_12;
 
-  /* "fm_sgd_opt.pyx":120
+  /* "cy_fm_batch.pyx":120
  *         self.error = sum_error
  *         self.error += self.regs[0] * pow(self.w_0, 2) + self.regs[1] * np.sum(self.W**2)
  *         for f in xrange(self.K):             # <<<<<<<<<<<<<<
@@ -2810,7 +2810,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_2get_sum_error(struct __pyx_
   for (__pyx_t_14 = 0; __pyx_t_14 < __pyx_t_13; __pyx_t_14+=1) {
     __pyx_v_f = __pyx_t_14;
 
-    /* "fm_sgd_opt.pyx":121
+    /* "cy_fm_batch.pyx":121
  *         self.error += self.regs[0] * pow(self.w_0, 2) + self.regs[1] * np.sum(self.W**2)
  *         for f in xrange(self.K):
  *             self.error += self.regs[f+2] * np.sum(np.transpose(self.V)[f]**2)             # <<<<<<<<<<<<<<
@@ -2902,7 +2902,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_2get_sum_error(struct __pyx_
     __pyx_v_self->error = __pyx_t_12;
   }
 
-  /* "fm_sgd_opt.pyx":107
+  /* "cy_fm_batch.pyx":107
  *         self.labels = labels
  * 
  *     def get_sum_error(self):             # <<<<<<<<<<<<<<
@@ -2923,7 +2923,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_2get_sum_error(struct __pyx_
   __Pyx_XDECREF(__pyx_t_9);
   __Pyx_XDECREF(__pyx_t_10);
   __Pyx_XDECREF(__pyx_t_11);
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.get_sum_error", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.get_sum_error", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2931,7 +2931,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_2get_sum_error(struct __pyx_
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":124
+/* "cy_fm_batch.pyx":124
  * 
  * 
  *     def get_all_error(self):             # <<<<<<<<<<<<<<
@@ -2940,20 +2940,20 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_2get_sum_error(struct __pyx_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_5get_all_error(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_4get_all_error[] = "\n        \345\205\250\343\201\246\343\201\256\345\255\246\347\277\222\343\203\207\343\203\274\343\202\277\343\201\256\350\252\244\345\267\256\343\202\222\350\250\210\347\256\227\n        ";
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_5get_all_error(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_5get_all_error(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_11cy_fm_batch_9CyFmBatch_4get_all_error[] = "\n        \345\205\250\343\201\246\343\201\256\345\255\246\347\277\222\343\203\207\343\203\274\343\202\277\343\201\256\350\252\244\345\267\256\343\202\222\350\250\210\347\256\227\n        ";
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_5get_all_error(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_all_error (wrapper)", 0);
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_4get_all_error(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_4get_all_error(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_4get_all_error(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_4get_all_error(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self) {
   long __pyx_v_data_index;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -2965,7 +2965,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_4get_all_error(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_all_error", 0);
 
-  /* "fm_sgd_opt.pyx":131
+  /* "cy_fm_batch.pyx":131
  *             long data_index
  * 
  *         for data_index in xrange(self.N):             # <<<<<<<<<<<<<<
@@ -2976,7 +2976,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_4get_all_error(struct __pyx_
   for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_data_index = __pyx_t_2;
 
-    /* "fm_sgd_opt.pyx":132
+    /* "cy_fm_batch.pyx":132
  * 
  *         for data_index in xrange(self.N):
  *             print data_index             # <<<<<<<<<<<<<<
@@ -2988,17 +2988,17 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_4get_all_error(struct __pyx_
     if (__Pyx_PrintOne(0, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 132; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "fm_sgd_opt.pyx":133
+    /* "cy_fm_batch.pyx":133
  *         for data_index in xrange(self.N):
  *             print data_index
  *             self._get_error(data_index)             # <<<<<<<<<<<<<<
  * 
  *     cdef void _get_error(self, long data_index):
  */
-    ((struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self->__pyx_vtab)->_get_error(__pyx_v_self, __pyx_v_data_index);
+    ((struct __pyx_vtabstruct_11cy_fm_batch_CyFmBatch *)__pyx_v_self->__pyx_vtab)->_get_error(__pyx_v_self, __pyx_v_data_index);
   }
 
-  /* "fm_sgd_opt.pyx":124
+  /* "cy_fm_batch.pyx":124
  * 
  * 
  *     def get_all_error(self):             # <<<<<<<<<<<<<<
@@ -3011,7 +3011,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_4get_all_error(struct __pyx_
   goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.get_all_error", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.get_all_error", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3019,7 +3019,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_4get_all_error(struct __pyx_
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":135
+/* "cy_fm_batch.pyx":135
  *             self._get_error(data_index)
  * 
  *     cdef void _get_error(self, long data_index):             # <<<<<<<<<<<<<<
@@ -3027,7 +3027,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_4get_all_error(struct __pyx_
  * 
  */
 
-static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__get_error(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, long __pyx_v_data_index) {
+static void __pyx_f_11cy_fm_batch_9CyFmBatch__get_error(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, long __pyx_v_data_index) {
   double __pyx_v_features;
   double __pyx_v_iterations;
   int __pyx_v_f;
@@ -3049,7 +3049,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__get_error(struct __pyx_obj_10fm_s
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_get_error", 0);
 
-  /* "fm_sgd_opt.pyx":140
+  /* "cy_fm_batch.pyx":140
  *         """
  *         cdef:
  *             double features = 0.0             # <<<<<<<<<<<<<<
@@ -3058,7 +3058,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__get_error(struct __pyx_obj_10fm_s
  */
   __pyx_v_features = 0.0;
 
-  /* "fm_sgd_opt.pyx":141
+  /* "cy_fm_batch.pyx":141
  *         cdef:
  *             double features = 0.0
  *             double iterations = 0.0             # <<<<<<<<<<<<<<
@@ -3067,7 +3067,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__get_error(struct __pyx_obj_10fm_s
  */
   __pyx_v_iterations = 0.0;
 
-  /* "fm_sgd_opt.pyx":144
+  /* "cy_fm_batch.pyx":144
  *             int f
  * 
  *         features = np.dot(self.W, self.R[data_index])             # <<<<<<<<<<<<<<
@@ -3112,7 +3112,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__get_error(struct __pyx_obj_10fm_s
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_features = __pyx_t_7;
 
-  /* "fm_sgd_opt.pyx":145
+  /* "cy_fm_batch.pyx":145
  * 
  *         features = np.dot(self.W, self.R[data_index])
  *         for f in xrange(self.K):             # <<<<<<<<<<<<<<
@@ -3123,7 +3123,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__get_error(struct __pyx_obj_10fm_s
   for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
     __pyx_v_f = __pyx_t_9;
 
-    /* "fm_sgd_opt.pyx":146
+    /* "cy_fm_batch.pyx":146
  *         features = np.dot(self.W, self.R[data_index])
  *         for f in xrange(self.K):
  *             iterations += pow(np.dot(self.V[:,f], self.R[data_index]), 2) - np.dot(self.V[:,f]*self.V[:,f], self.R[data_index]*self.R[data_index])             # <<<<<<<<<<<<<<
@@ -3266,7 +3266,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__get_error(struct __pyx_obj_10fm_s
     __pyx_v_iterations = __pyx_t_7;
   }
 
-  /* "fm_sgd_opt.pyx":148
+  /* "cy_fm_batch.pyx":148
  *             iterations += pow(np.dot(self.V[:,f], self.R[data_index]), 2) - np.dot(self.V[:,f]*self.V[:,f], self.R[data_index]*self.R[data_index])
  * 
  *         self.E[data_index] = (self.w_0 + features + iterations/2) - self.targets[data_index]             # <<<<<<<<<<<<<<
@@ -3284,7 +3284,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__get_error(struct __pyx_obj_10fm_s
   if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->E), __pyx_v_data_index, __pyx_t_1, long, 1, __Pyx_PyInt_From_long, 0, 1, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "fm_sgd_opt.pyx":135
+  /* "cy_fm_batch.pyx":135
  *             self._get_error(data_index)
  * 
  *     cdef void _get_error(self, long data_index):             # <<<<<<<<<<<<<<
@@ -3303,12 +3303,12 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__get_error(struct __pyx_obj_10fm_s
   __Pyx_XDECREF(__pyx_t_10);
   __Pyx_XDECREF(__pyx_t_11);
   __Pyx_XDECREF(__pyx_t_12);
-  __Pyx_WriteUnraisable("fm_sgd_opt.CyFmSgdOpt._get_error", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_WriteUnraisable("cy_fm_batch.CyFmBatch._get_error", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
 }
 
-/* "fm_sgd_opt.pyx":150
+/* "cy_fm_batch.pyx":150
  *         self.E[data_index] = (self.w_0 + features + iterations/2) - self.targets[data_index]
  * 
  *     cdef void _update_w_0(self, long data_index):             # <<<<<<<<<<<<<<
@@ -3316,7 +3316,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__get_error(struct __pyx_obj_10fm_s
  *         w_0
  */
 
-static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_w_0(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, CYTHON_UNUSED long __pyx_v_data_index) {
+static void __pyx_f_11cy_fm_batch_9CyFmBatch__update_w_0(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, CYTHON_UNUSED long __pyx_v_data_index) {
   double __pyx_v_grad_value;
   double __pyx_v_update_value;
   __Pyx_RefNannyDeclarations
@@ -3332,7 +3332,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_w_0(struct __pyx_obj_10fm_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_update_w_0", 0);
 
-  /* "fm_sgd_opt.pyx":155
+  /* "cy_fm_batch.pyx":155
  *         """
  *         cdef:
  *             double grad_value = 0.0             # <<<<<<<<<<<<<<
@@ -3341,7 +3341,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_w_0(struct __pyx_obj_10fm_
  */
   __pyx_v_grad_value = 0.0;
 
-  /* "fm_sgd_opt.pyx":156
+  /* "cy_fm_batch.pyx":156
  *         cdef:
  *             double grad_value = 0.0
  *             double update_value = 0.0             # <<<<<<<<<<<<<<
@@ -3350,7 +3350,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_w_0(struct __pyx_obj_10fm_
  */
   __pyx_v_update_value = 0.0;
 
-  /* "fm_sgd_opt.pyx":158
+  /* "cy_fm_batch.pyx":158
  *             double update_value = 0.0
  * 
  *         grad_value = 2 * self.l_rate*(self.now_error + self.regs[0]*self.w_0)             # <<<<<<<<<<<<<<
@@ -3381,7 +3381,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_w_0(struct __pyx_obj_10fm_
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_v_grad_value = __pyx_t_6;
 
-  /* "fm_sgd_opt.pyx":160
+  /* "cy_fm_batch.pyx":160
  *         grad_value = 2 * self.l_rate*(self.now_error + self.regs[0]*self.w_0)
  * 
  *         self.adagrad_w_0 += grad_value * grad_value             # <<<<<<<<<<<<<<
@@ -3390,7 +3390,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_w_0(struct __pyx_obj_10fm_
  */
   __pyx_v_self->adagrad_w_0 = (__pyx_v_self->adagrad_w_0 + (__pyx_v_grad_value * __pyx_v_grad_value));
 
-  /* "fm_sgd_opt.pyx":161
+  /* "cy_fm_batch.pyx":161
  * 
  *         self.adagrad_w_0 += grad_value * grad_value
  *         update_value = self.l_rate * grad_value / sqrt(self.adagrad_w_0)             # <<<<<<<<<<<<<<
@@ -3405,7 +3405,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_w_0(struct __pyx_obj_10fm_
   }
   __pyx_v_update_value = (__pyx_t_6 / __pyx_t_7);
 
-  /* "fm_sgd_opt.pyx":162
+  /* "cy_fm_batch.pyx":162
  *         self.adagrad_w_0 += grad_value * grad_value
  *         update_value = self.l_rate * grad_value / sqrt(self.adagrad_w_0)
  *         self.w_0 -= update_value             # <<<<<<<<<<<<<<
@@ -3414,7 +3414,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_w_0(struct __pyx_obj_10fm_
  */
   __pyx_v_self->w_0 = (__pyx_v_self->w_0 - __pyx_v_update_value);
 
-  /* "fm_sgd_opt.pyx":150
+  /* "cy_fm_batch.pyx":150
  *         self.E[data_index] = (self.w_0 + features + iterations/2) - self.targets[data_index]
  * 
  *     cdef void _update_w_0(self, long data_index):             # <<<<<<<<<<<<<<
@@ -3430,12 +3430,12 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_w_0(struct __pyx_obj_10fm_
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_WriteUnraisable("fm_sgd_opt.CyFmSgdOpt._update_w_0", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_WriteUnraisable("cy_fm_batch.CyFmBatch._update_w_0", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
 }
 
-/* "fm_sgd_opt.pyx":164
+/* "cy_fm_batch.pyx":164
  *         self.w_0 -= update_value
  * 
  *     cdef void _update_W(self, long data_index, long i):             # <<<<<<<<<<<<<<
@@ -3443,7 +3443,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_w_0(struct __pyx_obj_10fm_
  *         W[i]
  */
 
-static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_W(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, long __pyx_v_data_index, long __pyx_v_i) {
+static void __pyx_f_11cy_fm_batch_9CyFmBatch__update_W(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, long __pyx_v_data_index, long __pyx_v_i) {
   double __pyx_v_grad_value;
   double __pyx_v_update_value;
   __Pyx_RefNannyDeclarations
@@ -3461,7 +3461,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_W(struct __pyx_obj_10fm_sg
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_update_W", 0);
 
-  /* "fm_sgd_opt.pyx":169
+  /* "cy_fm_batch.pyx":169
  *         """
  *         cdef:
  *             double grad_value = 0.0             # <<<<<<<<<<<<<<
@@ -3470,7 +3470,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_W(struct __pyx_obj_10fm_sg
  */
   __pyx_v_grad_value = 0.0;
 
-  /* "fm_sgd_opt.pyx":170
+  /* "cy_fm_batch.pyx":170
  *         cdef:
  *             double grad_value = 0.0
  *             double update_value = 0.0             # <<<<<<<<<<<<<<
@@ -3479,7 +3479,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_W(struct __pyx_obj_10fm_sg
  */
   __pyx_v_update_value = 0.0;
 
-  /* "fm_sgd_opt.pyx":172
+  /* "cy_fm_batch.pyx":172
  *             double update_value = 0.0
  * 
  *         grad_value = 2 * (self.now_error*self.R[data_index][i] + self.regs[1]*self.W[i])             # <<<<<<<<<<<<<<
@@ -3516,7 +3516,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_W(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_grad_value = __pyx_t_5;
 
-  /* "fm_sgd_opt.pyx":173
+  /* "cy_fm_batch.pyx":173
  * 
  *         grad_value = 2 * (self.now_error*self.R[data_index][i] + self.regs[1]*self.W[i])
  *         self.adagrad_W[i] += grad_value * grad_value             # <<<<<<<<<<<<<<
@@ -3538,7 +3538,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_W(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(((PyObject *)__pyx_t_6)); __pyx_t_6 = 0;
 
-  /* "fm_sgd_opt.pyx":174
+  /* "cy_fm_batch.pyx":174
  *         grad_value = 2 * (self.now_error*self.R[data_index][i] + self.regs[1]*self.W[i])
  *         self.adagrad_W[i] += grad_value * grad_value
  *         update_value = self.l_rate * grad_value / sqrt(self.adagrad_W[i])             # <<<<<<<<<<<<<<
@@ -3557,7 +3557,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_W(struct __pyx_obj_10fm_sg
   }
   __pyx_v_update_value = (__pyx_t_5 / __pyx_t_9);
 
-  /* "fm_sgd_opt.pyx":175
+  /* "cy_fm_batch.pyx":175
  *         self.adagrad_W[i] += grad_value * grad_value
  *         update_value = self.l_rate * grad_value / sqrt(self.adagrad_W[i])
  *         self.W[i] -= update_value             # <<<<<<<<<<<<<<
@@ -3579,7 +3579,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_W(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(((PyObject *)__pyx_t_6)); __pyx_t_6 = 0;
 
-  /* "fm_sgd_opt.pyx":164
+  /* "cy_fm_batch.pyx":164
  *         self.w_0 -= update_value
  * 
  *     cdef void _update_W(self, long data_index, long i):             # <<<<<<<<<<<<<<
@@ -3595,12 +3595,12 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_W(struct __pyx_obj_10fm_sg
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(((PyObject *)__pyx_t_6));
-  __Pyx_WriteUnraisable("fm_sgd_opt.CyFmSgdOpt._update_W", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_WriteUnraisable("cy_fm_batch.CyFmBatch._update_W", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
 }
 
-/* "fm_sgd_opt.pyx":177
+/* "cy_fm_batch.pyx":177
  *         self.W[i] -= update_value
  * 
  *     cdef void _update_V(self, long data_index, long i, int f):             # <<<<<<<<<<<<<<
@@ -3608,7 +3608,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_W(struct __pyx_obj_10fm_sg
  *         V[i][f]
  */
 
-static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, long __pyx_v_data_index, long __pyx_v_i, int __pyx_v_f) {
+static void __pyx_f_11cy_fm_batch_9CyFmBatch__update_V(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, long __pyx_v_data_index, long __pyx_v_i, int __pyx_v_f) {
   double __pyx_v_grad_value;
   double __pyx_v_update_value;
   double __pyx_v_h;
@@ -3632,7 +3632,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_update_V", 0);
 
-  /* "fm_sgd_opt.pyx":182
+  /* "cy_fm_batch.pyx":182
  *         """
  *         cdef:
  *             double grad_value = 0.0             # <<<<<<<<<<<<<<
@@ -3641,7 +3641,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
  */
   __pyx_v_grad_value = 0.0;
 
-  /* "fm_sgd_opt.pyx":183
+  /* "cy_fm_batch.pyx":183
  *         cdef:
  *             double grad_value = 0.0
  *             double update_value = 0.0             # <<<<<<<<<<<<<<
@@ -3650,7 +3650,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
  */
   __pyx_v_update_value = 0.0;
 
-  /* "fm_sgd_opt.pyx":184
+  /* "cy_fm_batch.pyx":184
  *             double grad_value = 0.0
  *             double update_value = 0.0
  *             double h = 0.0             # <<<<<<<<<<<<<<
@@ -3659,7 +3659,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
  */
   __pyx_v_h = 0.0;
 
-  /* "fm_sgd_opt.pyx":185
+  /* "cy_fm_batch.pyx":185
  *             double update_value = 0.0
  *             double h = 0.0
  *             double h_pre = 0.0             # <<<<<<<<<<<<<<
@@ -3668,7 +3668,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
  */
   __pyx_v_h_pre = 0.0;
 
-  /* "fm_sgd_opt.pyx":188
+  /* "cy_fm_batch.pyx":188
  *             long ix
  * 
  *         for ix in self.ixs:             # <<<<<<<<<<<<<<
@@ -3722,7 +3722,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_ix = __pyx_t_5;
 
-    /* "fm_sgd_opt.pyx":189
+    /* "cy_fm_batch.pyx":189
  * 
  *         for ix in self.ixs:
  *             h_pre += self.V[ix][f] * self.R[data_index][ix]             # <<<<<<<<<<<<<<
@@ -3753,7 +3753,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     __pyx_v_h_pre = __pyx_t_9;
 
-    /* "fm_sgd_opt.pyx":188
+    /* "cy_fm_batch.pyx":188
  *             long ix
  * 
  *         for ix in self.ixs:             # <<<<<<<<<<<<<<
@@ -3763,7 +3763,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fm_sgd_opt.pyx":190
+  /* "cy_fm_batch.pyx":190
  *         for ix in self.ixs:
  *             h_pre += self.V[ix][f] * self.R[data_index][ix]
  *         h = h_pre - self.V[i][f]*self.R[data_index][i]             # <<<<<<<<<<<<<<
@@ -3794,7 +3794,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_h = __pyx_t_9;
 
-  /* "fm_sgd_opt.pyx":191
+  /* "cy_fm_batch.pyx":191
  *             h_pre += self.V[ix][f] * self.R[data_index][ix]
  *         h = h_pre - self.V[i][f]*self.R[data_index][i]
  *         h *= self.R[data_index][i]             # <<<<<<<<<<<<<<
@@ -3816,7 +3816,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   __pyx_v_h = __pyx_t_9;
 
-  /* "fm_sgd_opt.pyx":192
+  /* "cy_fm_batch.pyx":192
  *         h = h_pre - self.V[i][f]*self.R[data_index][i]
  *         h *= self.R[data_index][i]
  *         grad_value = 2 * (self.now_error*h + self.regs[f+2]*self.V[i][f])             # <<<<<<<<<<<<<<
@@ -3848,7 +3848,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_grad_value = __pyx_t_9;
 
-  /* "fm_sgd_opt.pyx":193
+  /* "cy_fm_batch.pyx":193
  *         h *= self.R[data_index][i]
  *         grad_value = 2 * (self.now_error*h + self.regs[f+2]*self.V[i][f])
  *         self.adagrad_V[i][f] += grad_value * grad_value             # <<<<<<<<<<<<<<
@@ -3870,7 +3870,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "fm_sgd_opt.pyx":194
+  /* "cy_fm_batch.pyx":194
  *         grad_value = 2 * (self.now_error*h + self.regs[f+2]*self.V[i][f])
  *         self.adagrad_V[i][f] += grad_value * grad_value
  *         update_value = self.l_rate * grad_value / sqrt(self.adagrad_V[i][f])             # <<<<<<<<<<<<<<
@@ -3892,7 +3892,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
   }
   __pyx_v_update_value = (__pyx_t_9 / __pyx_t_12);
 
-  /* "fm_sgd_opt.pyx":195
+  /* "cy_fm_batch.pyx":195
  *         self.adagrad_V[i][f] += grad_value * grad_value
  *         update_value = self.l_rate * grad_value / sqrt(self.adagrad_V[i][f])
  *         self.V[i][f] -= update_value             # <<<<<<<<<<<<<<
@@ -3914,7 +3914,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fm_sgd_opt.pyx":177
+  /* "cy_fm_batch.pyx":177
  *         self.W[i] -= update_value
  * 
  *     cdef void _update_V(self, long data_index, long i, int f):             # <<<<<<<<<<<<<<
@@ -3930,12 +3930,12 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_WriteUnraisable("fm_sgd_opt.CyFmSgdOpt._update_V", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_WriteUnraisable("cy_fm_batch.CyFmBatch._update_V", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
 }
 
-/* "fm_sgd_opt.pyx":197
+/* "cy_fm_batch.pyx":197
  *         self.V[i][f] -= update_value
  * 
  *     def repeat_optimization(self):             # <<<<<<<<<<<<<<
@@ -3944,19 +3944,19 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V(struct __pyx_obj_10fm_sg
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_7repeat_optimization(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_7repeat_optimization(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_7repeat_optimization(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_7repeat_optimization(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("repeat_optimization (wrapper)", 0);
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_6repeat_optimization(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_6repeat_optimization(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self) {
   long __pyx_v_ix;
   int __pyx_v_f;
   long __pyx_v_data_index;
@@ -3999,7 +3999,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
   __pyx_pybuffernd_pre_V.data = NULL;
   __pyx_pybuffernd_pre_V.rcbuffer = &__pyx_pybuffer_pre_V;
 
-  /* "fm_sgd_opt.pyx":208
+  /* "cy_fm_batch.pyx":208
  *             np.ndarray[DOUBLE, ndim=2, mode="c"] pre_V
  * 
  *         for data_index in xrange(self.N):             # <<<<<<<<<<<<<<
@@ -4010,7 +4010,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
   for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_data_index = __pyx_t_2;
 
-    /* "fm_sgd_opt.pyx":213
+    /* "cy_fm_batch.pyx":213
  *             """
  *             #
  *             pre_w_0 = self.w_0             # <<<<<<<<<<<<<<
@@ -4020,7 +4020,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
     __pyx_t_3 = __pyx_v_self->w_0;
     __pyx_v_pre_w_0 = __pyx_t_3;
 
-    /* "fm_sgd_opt.pyx":214
+    /* "cy_fm_batch.pyx":214
  *             #
  *             pre_w_0 = self.w_0
  *             pre_W = self.W             # <<<<<<<<<<<<<<
@@ -4032,10 +4032,10 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
     {
       __Pyx_BufFmt_StackElem __pyx_stack[1];
       __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pre_W.rcbuffer->pybuffer);
-      __pyx_t_5 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pre_W.rcbuffer->pybuffer, (PyObject*)((PyArrayObject *)__pyx_t_4), &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack);
+      __pyx_t_5 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pre_W.rcbuffer->pybuffer, (PyObject*)((PyArrayObject *)__pyx_t_4), &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack);
       if (unlikely(__pyx_t_5 < 0)) {
         PyErr_Fetch(&__pyx_t_6, &__pyx_t_7, &__pyx_t_8);
-        if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pre_W.rcbuffer->pybuffer, (PyObject*)__pyx_v_pre_W, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {
+        if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pre_W.rcbuffer->pybuffer, (PyObject*)__pyx_v_pre_W, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {
           Py_XDECREF(__pyx_t_6); Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_8);
           __Pyx_RaiseBufferFallbackError();
         } else {
@@ -4048,7 +4048,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
     __Pyx_XDECREF_SET(__pyx_v_pre_W, ((PyArrayObject *)__pyx_t_4));
     __pyx_t_4 = 0;
 
-    /* "fm_sgd_opt.pyx":215
+    /* "cy_fm_batch.pyx":215
  *             pre_w_0 = self.w_0
  *             pre_W = self.W
  *             pre_V = self.V             # <<<<<<<<<<<<<<
@@ -4060,10 +4060,10 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
     {
       __Pyx_BufFmt_StackElem __pyx_stack[1];
       __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pre_V.rcbuffer->pybuffer);
-      __pyx_t_5 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pre_V.rcbuffer->pybuffer, (PyObject*)((PyArrayObject *)__pyx_t_4), &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack);
+      __pyx_t_5 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pre_V.rcbuffer->pybuffer, (PyObject*)((PyArrayObject *)__pyx_t_4), &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack);
       if (unlikely(__pyx_t_5 < 0)) {
         PyErr_Fetch(&__pyx_t_8, &__pyx_t_7, &__pyx_t_6);
-        if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pre_V.rcbuffer->pybuffer, (PyObject*)__pyx_v_pre_V, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {
+        if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pre_V.rcbuffer->pybuffer, (PyObject*)__pyx_v_pre_V, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {
           Py_XDECREF(__pyx_t_8); Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_6);
           __Pyx_RaiseBufferFallbackError();
         } else {
@@ -4076,7 +4076,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
     __Pyx_XDECREF_SET(__pyx_v_pre_V, ((PyArrayObject *)__pyx_t_4));
     __pyx_t_4 = 0;
 
-    /* "fm_sgd_opt.pyx":216
+    /* "cy_fm_batch.pyx":216
  *             pre_W = self.W
  *             pre_V = self.V
  *             print "data_index %d" % data_index             # <<<<<<<<<<<<<<
@@ -4091,7 +4091,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
     if (__Pyx_PrintOne(0, __pyx_t_9) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 216; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-    /* "fm_sgd_opt.pyx":217
+    /* "cy_fm_batch.pyx":217
  *             pre_V = self.V
  *             print "data_index %d" % data_index
  *             self.ixs = np.nonzero(self.R[data_index])[0]             # <<<<<<<<<<<<<<
@@ -4142,25 +4142,25 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
     __pyx_t_13.memview = NULL;
     __pyx_t_13.data = NULL;
 
-    /* "fm_sgd_opt.pyx":218
+    /* "cy_fm_batch.pyx":218
  *             print "data_index %d" % data_index
  *             self.ixs = np.nonzero(self.R[data_index])[0]
  *             self.now_error = self._calc_error(data_index)             # <<<<<<<<<<<<<<
  *             self._update_w_0(data_index)
  *             for ix in self.ixs:
  */
-    __pyx_v_self->now_error = ((struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self->__pyx_vtab)->_calc_error(__pyx_v_self, __pyx_v_data_index);
+    __pyx_v_self->now_error = ((struct __pyx_vtabstruct_11cy_fm_batch_CyFmBatch *)__pyx_v_self->__pyx_vtab)->_calc_error(__pyx_v_self, __pyx_v_data_index);
 
-    /* "fm_sgd_opt.pyx":219
+    /* "cy_fm_batch.pyx":219
  *             self.ixs = np.nonzero(self.R[data_index])[0]
  *             self.now_error = self._calc_error(data_index)
  *             self._update_w_0(data_index)             # <<<<<<<<<<<<<<
  *             for ix in self.ixs:
  *                 self._update_W(data_index, ix)
  */
-    ((struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self->__pyx_vtab)->_update_w_0(__pyx_v_self, __pyx_v_data_index);
+    ((struct __pyx_vtabstruct_11cy_fm_batch_CyFmBatch *)__pyx_v_self->__pyx_vtab)->_update_w_0(__pyx_v_self, __pyx_v_data_index);
 
-    /* "fm_sgd_opt.pyx":220
+    /* "cy_fm_batch.pyx":220
  *             self.now_error = self._calc_error(data_index)
  *             self._update_w_0(data_index)
  *             for ix in self.ixs:             # <<<<<<<<<<<<<<
@@ -4214,16 +4214,16 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
       __pyx_v_ix = __pyx_t_16;
 
-      /* "fm_sgd_opt.pyx":221
+      /* "cy_fm_batch.pyx":221
  *             self._update_w_0(data_index)
  *             for ix in self.ixs:
  *                 self._update_W(data_index, ix)             # <<<<<<<<<<<<<<
  *                 for f in xrange(self.K):
  *                     self._update_V(data_index, ix, f)
  */
-      ((struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self->__pyx_vtab)->_update_W(__pyx_v_self, __pyx_v_data_index, __pyx_v_ix);
+      ((struct __pyx_vtabstruct_11cy_fm_batch_CyFmBatch *)__pyx_v_self->__pyx_vtab)->_update_W(__pyx_v_self, __pyx_v_data_index, __pyx_v_ix);
 
-      /* "fm_sgd_opt.pyx":222
+      /* "cy_fm_batch.pyx":222
  *             for ix in self.ixs:
  *                 self._update_W(data_index, ix)
  *                 for f in xrange(self.K):             # <<<<<<<<<<<<<<
@@ -4234,17 +4234,17 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
       for (__pyx_t_17 = 0; __pyx_t_17 < __pyx_t_5; __pyx_t_17+=1) {
         __pyx_v_f = __pyx_t_17;
 
-        /* "fm_sgd_opt.pyx":223
+        /* "cy_fm_batch.pyx":223
  *                 self._update_W(data_index, ix)
  *                 for f in xrange(self.K):
  *                     self._update_V(data_index, ix, f)             # <<<<<<<<<<<<<<
  *             self._calc_regs(pre_w_0, pre_W, pre_V)
  * 
  */
-        ((struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self->__pyx_vtab)->_update_V(__pyx_v_self, __pyx_v_data_index, __pyx_v_ix, __pyx_v_f);
+        ((struct __pyx_vtabstruct_11cy_fm_batch_CyFmBatch *)__pyx_v_self->__pyx_vtab)->_update_V(__pyx_v_self, __pyx_v_data_index, __pyx_v_ix, __pyx_v_f);
       }
 
-      /* "fm_sgd_opt.pyx":220
+      /* "cy_fm_batch.pyx":220
  *             self.now_error = self._calc_error(data_index)
  *             self._update_w_0(data_index)
  *             for ix in self.ixs:             # <<<<<<<<<<<<<<
@@ -4254,17 +4254,17 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
     }
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-    /* "fm_sgd_opt.pyx":224
+    /* "cy_fm_batch.pyx":224
  *                 for f in xrange(self.K):
  *                     self._update_V(data_index, ix, f)
  *             self._calc_regs(pre_w_0, pre_W, pre_V)             # <<<<<<<<<<<<<<
  * 
  *     cdef void _calc_regs(self, double pre_w_0, np.ndarray[DOUBLE, ndim=1, mode="c"] pre_W, np.ndarray[DOUBLE, ndim=2, mode="c"] pre_V):
  */
-    ((struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self->__pyx_vtab)->_calc_regs(__pyx_v_self, __pyx_v_pre_w_0, ((PyArrayObject *)__pyx_v_pre_W), ((PyArrayObject *)__pyx_v_pre_V));
+    ((struct __pyx_vtabstruct_11cy_fm_batch_CyFmBatch *)__pyx_v_self->__pyx_vtab)->_calc_regs(__pyx_v_self, __pyx_v_pre_w_0, ((PyArrayObject *)__pyx_v_pre_W), ((PyArrayObject *)__pyx_v_pre_V));
   }
 
-  /* "fm_sgd_opt.pyx":197
+  /* "cy_fm_batch.pyx":197
  *         self.V[i][f] -= update_value
  * 
  *     def repeat_optimization(self):             # <<<<<<<<<<<<<<
@@ -4287,7 +4287,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pre_V.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pre_W.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.repeat_optimization", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.repeat_optimization", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -4301,7 +4301,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":226
+/* "cy_fm_batch.pyx":226
  *             self._calc_regs(pre_w_0, pre_W, pre_V)
  * 
  *     cdef void _calc_regs(self, double pre_w_0, np.ndarray[DOUBLE, ndim=1, mode="c"] pre_W, np.ndarray[DOUBLE, ndim=2, mode="c"] pre_V):             # <<<<<<<<<<<<<<
@@ -4309,7 +4309,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_6repeat_optimization(struct 
  *         regs
  */
 
-static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, double __pyx_v_pre_w_0, PyArrayObject *__pyx_v_pre_W, PyArrayObject *__pyx_v_pre_V) {
+static void __pyx_f_11cy_fm_batch_9CyFmBatch__calc_regs(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, double __pyx_v_pre_w_0, PyArrayObject *__pyx_v_pre_W, PyArrayObject *__pyx_v_pre_V) {
   double __pyx_v_new_r;
   double __pyx_v_err;
   long __pyx_v_ix;
@@ -4352,16 +4352,16 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
   __pyx_pybuffernd_pre_V.rcbuffer = &__pyx_pybuffer_pre_V;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pre_W.rcbuffer->pybuffer, (PyObject*)__pyx_v_pre_W, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 226; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pre_W.rcbuffer->pybuffer, (PyObject*)__pyx_v_pre_W, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 226; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_pre_W.diminfo[0].strides = __pyx_pybuffernd_pre_W.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_pre_W.diminfo[0].shape = __pyx_pybuffernd_pre_W.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pre_V.rcbuffer->pybuffer, (PyObject*)__pyx_v_pre_V, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 226; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_pre_V.rcbuffer->pybuffer, (PyObject*)__pyx_v_pre_V, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 226; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_pre_V.diminfo[0].strides = __pyx_pybuffernd_pre_V.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_pre_V.diminfo[0].shape = __pyx_pybuffernd_pre_V.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_pre_V.diminfo[1].strides = __pyx_pybuffernd_pre_V.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_pre_V.diminfo[1].shape = __pyx_pybuffernd_pre_V.rcbuffer->pybuffer.shape[1];
 
-  /* "fm_sgd_opt.pyx":236
+  /* "cy_fm_batch.pyx":236
  *             int f
  *             long random_index
  *             double dot_r_v = 0.0             # <<<<<<<<<<<<<<
@@ -4370,7 +4370,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
  */
   __pyx_v_dot_r_v = 0.0;
 
-  /* "fm_sgd_opt.pyx":237
+  /* "cy_fm_batch.pyx":237
  *             long random_index
  *             double dot_r_v = 0.0
  *             double dot_r_v_pre = 0.0             # <<<<<<<<<<<<<<
@@ -4379,7 +4379,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
  */
   __pyx_v_dot_r_v_pre = 0.0;
 
-  /* "fm_sgd_opt.pyx":238
+  /* "cy_fm_batch.pyx":238
  *             double dot_r_v = 0.0
  *             double dot_r_v_pre = 0.0
  *             double dot_sum = 0.0             # <<<<<<<<<<<<<<
@@ -4388,7 +4388,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
  */
   __pyx_v_dot_sum = 0.0;
 
-  /* "fm_sgd_opt.pyx":240
+  /* "cy_fm_batch.pyx":240
  *             double dot_sum = 0.0
  * 
  *         random_index = random.randint(0, self.N_v-1)             # <<<<<<<<<<<<<<
@@ -4433,7 +4433,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_random_index = __pyx_t_7;
 
-  /* "fm_sgd_opt.pyx":241
+  /* "cy_fm_batch.pyx":241
  * 
  *         random_index = random.randint(0, self.N_v-1)
  *         self.reg_ixs = np.nonzero(self.R_v[random_index])[0]             # <<<<<<<<<<<<<<
@@ -4484,16 +4484,16 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
   __pyx_t_8.memview = NULL;
   __pyx_t_8.data = NULL;
 
-  /* "fm_sgd_opt.pyx":242
+  /* "cy_fm_batch.pyx":242
  *         random_index = random.randint(0, self.N_v-1)
  *         self.reg_ixs = np.nonzero(self.R_v[random_index])[0]
  *         err = 2 * self._calc_error(random_index)             # <<<<<<<<<<<<<<
  *         # lambda_0
  *         new_r = self.regs[0] - self.l_rate * (err * -2 * self.l_rate * pre_w_0)
  */
-  __pyx_v_err = (2.0 * ((struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self->__pyx_vtab)->_calc_error(__pyx_v_self, __pyx_v_random_index));
+  __pyx_v_err = (2.0 * ((struct __pyx_vtabstruct_11cy_fm_batch_CyFmBatch *)__pyx_v_self->__pyx_vtab)->_calc_error(__pyx_v_self, __pyx_v_random_index));
 
-  /* "fm_sgd_opt.pyx":244
+  /* "cy_fm_batch.pyx":244
  *         err = 2 * self._calc_error(random_index)
  *         # lambda_0
  *         new_r = self.regs[0] - self.l_rate * (err * -2 * self.l_rate * pre_w_0)             # <<<<<<<<<<<<<<
@@ -4512,7 +4512,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_new_r = __pyx_t_9;
 
-  /* "fm_sgd_opt.pyx":245
+  /* "cy_fm_batch.pyx":245
  *         # lambda_0
  *         new_r = self.regs[0] - self.l_rate * (err * -2 * self.l_rate * pre_w_0)
  *         self.regs[0] = new_r if new_r >= 0 else 0             # <<<<<<<<<<<<<<
@@ -4531,7 +4531,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
   if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->regs), 0, __pyx_t_4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 245; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "fm_sgd_opt.pyx":247
+  /* "cy_fm_batch.pyx":247
  *         self.regs[0] = new_r if new_r >= 0 else 0
  *         # lambda_w
  *         new_r = self.regs[1] - self.l_rate * (err * -2 * self.l_rate * np.dot(pre_W, self.R_v[random_index]))             # <<<<<<<<<<<<<<
@@ -4594,7 +4594,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
   __pyx_v_new_r = __pyx_t_9;
 
-  /* "fm_sgd_opt.pyx":248
+  /* "cy_fm_batch.pyx":248
  *         # lambda_w
  *         new_r = self.regs[1] - self.l_rate * (err * -2 * self.l_rate * np.dot(pre_W, self.R_v[random_index]))
  *         self.regs[1] = new_r if new_r >= 0 else 0             # <<<<<<<<<<<<<<
@@ -4613,7 +4613,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
   if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->regs), 1, __pyx_t_10, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 248; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-  /* "fm_sgd_opt.pyx":249
+  /* "cy_fm_batch.pyx":249
  *         new_r = self.regs[1] - self.l_rate * (err * -2 * self.l_rate * np.dot(pre_W, self.R_v[random_index]))
  *         self.regs[1] = new_r if new_r >= 0 else 0
  *         for f in xrange(self.K):             # <<<<<<<<<<<<<<
@@ -4624,7 +4624,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
   for (__pyx_t_14 = 0; __pyx_t_14 < __pyx_t_13; __pyx_t_14+=1) {
     __pyx_v_f = __pyx_t_14;
 
-    /* "fm_sgd_opt.pyx":251
+    /* "cy_fm_batch.pyx":251
  *         for f in xrange(self.K):
  *             # lambda_v_f
  *             dot_r_v = 0.0             # <<<<<<<<<<<<<<
@@ -4633,7 +4633,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
  */
     __pyx_v_dot_r_v = 0.0;
 
-    /* "fm_sgd_opt.pyx":252
+    /* "cy_fm_batch.pyx":252
  *             # lambda_v_f
  *             dot_r_v = 0.0
  *             dot_r_v_pre = 0.0             # <<<<<<<<<<<<<<
@@ -4642,7 +4642,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
  */
     __pyx_v_dot_r_v_pre = 0.0;
 
-    /* "fm_sgd_opt.pyx":253
+    /* "cy_fm_batch.pyx":253
  *             dot_r_v = 0.0
  *             dot_r_v_pre = 0.0
  *             dot_sum = 0.0             # <<<<<<<<<<<<<<
@@ -4651,7 +4651,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
  */
     __pyx_v_dot_sum = 0.0;
 
-    /* "fm_sgd_opt.pyx":254
+    /* "cy_fm_batch.pyx":254
  *             dot_r_v_pre = 0.0
  *             dot_sum = 0.0
  *             for ix in self.reg_ixs:             # <<<<<<<<<<<<<<
@@ -4705,7 +4705,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
       __pyx_v_ix = __pyx_t_7;
 
-      /* "fm_sgd_opt.pyx":255
+      /* "cy_fm_batch.pyx":255
  *             dot_sum = 0.0
  *             for ix in self.reg_ixs:
  *                 dot_r_v += self.R_v[random_index][ix] * self.V[ix][f]             # <<<<<<<<<<<<<<
@@ -4736,7 +4736,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_v_dot_r_v = __pyx_t_9;
 
-      /* "fm_sgd_opt.pyx":256
+      /* "cy_fm_batch.pyx":256
  *             for ix in self.reg_ixs:
  *                 dot_r_v += self.R_v[random_index][ix] * self.V[ix][f]
  *                 dot_r_v_pre += self.R_v[random_index][ix] * pre_V[ix][f]             # <<<<<<<<<<<<<<
@@ -4767,7 +4767,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_v_dot_r_v_pre = __pyx_t_9;
 
-      /* "fm_sgd_opt.pyx":257
+      /* "cy_fm_batch.pyx":257
  *                 dot_r_v += self.R_v[random_index][ix] * self.V[ix][f]
  *                 dot_r_v_pre += self.R_v[random_index][ix] * pre_V[ix][f]
  *                 dot_sum += self.R_v[random_index][ix] * self.R_v[random_index][ix] * self.V[ix][f] * pre_V[ix][f]             # <<<<<<<<<<<<<<
@@ -4816,7 +4816,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_v_dot_sum = __pyx_t_9;
 
-      /* "fm_sgd_opt.pyx":254
+      /* "cy_fm_batch.pyx":254
  *             dot_r_v_pre = 0.0
  *             dot_sum = 0.0
  *             for ix in self.reg_ixs:             # <<<<<<<<<<<<<<
@@ -4826,7 +4826,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "fm_sgd_opt.pyx":258
+    /* "cy_fm_batch.pyx":258
  *                 dot_r_v_pre += self.R_v[random_index][ix] * pre_V[ix][f]
  *                 dot_sum += self.R_v[random_index][ix] * self.R_v[random_index][ix] * self.V[ix][f] * pre_V[ix][f]
  *             new_r = self.regs[f+2] - self.l_rate * (err * -2 * self.l_rate * dot_r_v * dot_r_v_pre - dot_sum)             # <<<<<<<<<<<<<<
@@ -4846,7 +4846,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __pyx_v_new_r = __pyx_t_9;
 
-    /* "fm_sgd_opt.pyx":259
+    /* "cy_fm_batch.pyx":259
  *                 dot_sum += self.R_v[random_index][ix] * self.R_v[random_index][ix] * self.V[ix][f] * pre_V[ix][f]
  *             new_r = self.regs[f+2] - self.l_rate * (err * -2 * self.l_rate * dot_r_v * dot_r_v_pre - dot_sum)
  *             self.regs[f+2] = new_r if new_r >= 0 else 0             # <<<<<<<<<<<<<<
@@ -4867,7 +4867,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   }
 
-  /* "fm_sgd_opt.pyx":226
+  /* "cy_fm_batch.pyx":226
  *             self._calc_regs(pre_w_0, pre_W, pre_V)
  * 
  *     cdef void _calc_regs(self, double pre_w_0, np.ndarray[DOUBLE, ndim=1, mode="c"] pre_W, np.ndarray[DOUBLE, ndim=2, mode="c"] pre_V):             # <<<<<<<<<<<<<<
@@ -4892,7 +4892,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pre_V.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pre_W.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_WriteUnraisable("fm_sgd_opt.CyFmSgdOpt._calc_regs", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_WriteUnraisable("cy_fm_batch.CyFmBatch._calc_regs", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
   goto __pyx_L2;
   __pyx_L0:;
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pre_V.rcbuffer->pybuffer);
@@ -4901,7 +4901,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
   __Pyx_RefNannyFinishContext();
 }
 
-/* "fm_sgd_opt.pyx":261
+/* "cy_fm_batch.pyx":261
  *             self.regs[f+2] = new_r if new_r >= 0 else 0
  * 
  *     cdef double _calc_error(self, long data_index):             # <<<<<<<<<<<<<<
@@ -4909,7 +4909,7 @@ static void __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs(struct __pyx_obj_10fm_s
  * 
  */
 
-static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, long __pyx_v_data_index) {
+static double __pyx_f_11cy_fm_batch_9CyFmBatch__calc_error(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, long __pyx_v_data_index) {
   double __pyx_v_features;
   double __pyx_v_iterations;
   int __pyx_v_f;
@@ -4934,7 +4934,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_calc_error", 0);
 
-  /* "fm_sgd_opt.pyx":266
+  /* "cy_fm_batch.pyx":266
  *         """
  *         cdef:
  *             double features = 0.0             # <<<<<<<<<<<<<<
@@ -4943,7 +4943,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
  */
   __pyx_v_features = 0.0;
 
-  /* "fm_sgd_opt.pyx":267
+  /* "cy_fm_batch.pyx":267
  *         cdef:
  *             double features = 0.0
  *             double iterations = 0.0             # <<<<<<<<<<<<<<
@@ -4952,7 +4952,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
  */
   __pyx_v_iterations = 0.0;
 
-  /* "fm_sgd_opt.pyx":269
+  /* "cy_fm_batch.pyx":269
  *             double iterations = 0.0
  *             int f
  *             double dot_sum = 0.0             # <<<<<<<<<<<<<<
@@ -4961,7 +4961,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
  */
   __pyx_v_dot_sum = 0.0;
 
-  /* "fm_sgd_opt.pyx":270
+  /* "cy_fm_batch.pyx":270
  *             int f
  *             double dot_sum = 0.0
  *             double dot_square_sum = 0.0             # <<<<<<<<<<<<<<
@@ -4970,7 +4970,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
  */
   __pyx_v_dot_square_sum = 0.0;
 
-  /* "fm_sgd_opt.pyx":274
+  /* "cy_fm_batch.pyx":274
  *             double start_time
  * 
  *         for ix in self.ixs:             # <<<<<<<<<<<<<<
@@ -5024,7 +5024,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_ix = __pyx_t_5;
 
-    /* "fm_sgd_opt.pyx":275
+    /* "cy_fm_batch.pyx":275
  * 
  *         for ix in self.ixs:
  *             features += self.W[ix] * self.R[data_index][ix]             # <<<<<<<<<<<<<<
@@ -5052,7 +5052,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     __pyx_v_features = __pyx_t_9;
 
-    /* "fm_sgd_opt.pyx":274
+    /* "cy_fm_batch.pyx":274
  *             double start_time
  * 
  *         for ix in self.ixs:             # <<<<<<<<<<<<<<
@@ -5062,7 +5062,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fm_sgd_opt.pyx":277
+  /* "cy_fm_batch.pyx":277
  *             features += self.W[ix] * self.R[data_index][ix]
  *             #
  *         for f in xrange(self.K):             # <<<<<<<<<<<<<<
@@ -5073,7 +5073,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
   for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
     __pyx_v_f = __pyx_t_11;
 
-    /* "fm_sgd_opt.pyx":278
+    /* "cy_fm_batch.pyx":278
  *             #
  *         for f in xrange(self.K):
  *             dot_sum = 0.0             # <<<<<<<<<<<<<<
@@ -5082,7 +5082,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
  */
     __pyx_v_dot_sum = 0.0;
 
-    /* "fm_sgd_opt.pyx":279
+    /* "cy_fm_batch.pyx":279
  *         for f in xrange(self.K):
  *             dot_sum = 0.0
  *             dot_square_sum = 0.0             # <<<<<<<<<<<<<<
@@ -5091,7 +5091,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
  */
     __pyx_v_dot_square_sum = 0.0;
 
-    /* "fm_sgd_opt.pyx":280
+    /* "cy_fm_batch.pyx":280
  *             dot_sum = 0.0
  *             dot_square_sum = 0.0
  *             for ix in self.ixs:             # <<<<<<<<<<<<<<
@@ -5145,7 +5145,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_v_ix = __pyx_t_5;
 
-      /* "fm_sgd_opt.pyx":281
+      /* "cy_fm_batch.pyx":281
  *             dot_square_sum = 0.0
  *             for ix in self.ixs:
  *                 dot_sum += self.V[ix][f] * self.R[data_index][ix]             # <<<<<<<<<<<<<<
@@ -5176,7 +5176,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_v_dot_sum = __pyx_t_9;
 
-      /* "fm_sgd_opt.pyx":282
+      /* "cy_fm_batch.pyx":282
  *             for ix in self.ixs:
  *                 dot_sum += self.V[ix][f] * self.R[data_index][ix]
  *                 dot_square_sum += self.V[ix][f] * self.V[ix][f] * self.R[data_index][ix] * self.R[data_index][ix]             # <<<<<<<<<<<<<<
@@ -5225,7 +5225,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __pyx_v_dot_square_sum = __pyx_t_9;
 
-      /* "fm_sgd_opt.pyx":280
+      /* "cy_fm_batch.pyx":280
  *             dot_sum = 0.0
  *             dot_square_sum = 0.0
  *             for ix in self.ixs:             # <<<<<<<<<<<<<<
@@ -5235,7 +5235,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
     }
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-    /* "fm_sgd_opt.pyx":283
+    /* "cy_fm_batch.pyx":283
  *                 dot_sum += self.V[ix][f] * self.R[data_index][ix]
  *                 dot_square_sum += self.V[ix][f] * self.V[ix][f] * self.R[data_index][ix] * self.R[data_index][ix]
  *             iterations += dot_sum * dot_sum - dot_square_sum             # <<<<<<<<<<<<<<
@@ -5245,7 +5245,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
     __pyx_v_iterations = (__pyx_v_iterations + ((__pyx_v_dot_sum * __pyx_v_dot_sum) - __pyx_v_dot_square_sum));
   }
 
-  /* "fm_sgd_opt.pyx":285
+  /* "cy_fm_batch.pyx":285
  *             iterations += dot_sum * dot_sum - dot_square_sum
  * 
  *         return (self.w_0 + features + iterations/2) - 1.0             # <<<<<<<<<<<<<<
@@ -5255,7 +5255,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
   __pyx_r = (((__pyx_v_self->w_0 + __pyx_v_features) + (__pyx_v_iterations / 2.0)) - 1.0);
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":261
+  /* "cy_fm_batch.pyx":261
  *             self.regs[f+2] = new_r if new_r >= 0 else 0
  * 
  *     cdef double _calc_error(self, long data_index):             # <<<<<<<<<<<<<<
@@ -5270,14 +5270,14 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_WriteUnraisable("fm_sgd_opt.CyFmSgdOpt._calc_error", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_WriteUnraisable("cy_fm_batch.CyFmBatch._calc_error", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":287
+/* "cy_fm_batch.pyx":287
  *         return (self.w_0 + features + iterations/2) - 1.0
  * 
  *     cdef double _calc_error_regs(self, long data_index):             # <<<<<<<<<<<<<<
@@ -5285,7 +5285,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error(struct __pyx_obj_10f
  *         ()
  */
 
-static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, long __pyx_v_data_index) {
+static double __pyx_f_11cy_fm_batch_9CyFmBatch__calc_error_regs(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, long __pyx_v_data_index) {
   double __pyx_v_features;
   double __pyx_v_iterations;
   int __pyx_v_f;
@@ -5310,7 +5310,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("_calc_error_regs", 0);
 
-  /* "fm_sgd_opt.pyx":292
+  /* "cy_fm_batch.pyx":292
  *         """
  *         cdef:
  *             double features = 0.0             # <<<<<<<<<<<<<<
@@ -5319,7 +5319,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
  */
   __pyx_v_features = 0.0;
 
-  /* "fm_sgd_opt.pyx":293
+  /* "cy_fm_batch.pyx":293
  *         cdef:
  *             double features = 0.0
  *             double iterations = 0.0             # <<<<<<<<<<<<<<
@@ -5328,7 +5328,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
  */
   __pyx_v_iterations = 0.0;
 
-  /* "fm_sgd_opt.pyx":295
+  /* "cy_fm_batch.pyx":295
  *             double iterations = 0.0
  *             int f
  *             double dot_sum = 0.0             # <<<<<<<<<<<<<<
@@ -5337,7 +5337,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
  */
   __pyx_v_dot_sum = 0.0;
 
-  /* "fm_sgd_opt.pyx":296
+  /* "cy_fm_batch.pyx":296
  *             int f
  *             double dot_sum = 0.0
  *             double dot_square_sum = 0.0             # <<<<<<<<<<<<<<
@@ -5346,7 +5346,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
  */
   __pyx_v_dot_square_sum = 0.0;
 
-  /* "fm_sgd_opt.pyx":300
+  /* "cy_fm_batch.pyx":300
  *             double start_time
  * 
  *         for ix in self.reg_ixs:             # <<<<<<<<<<<<<<
@@ -5400,7 +5400,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_ix = __pyx_t_5;
 
-    /* "fm_sgd_opt.pyx":301
+    /* "cy_fm_batch.pyx":301
  * 
  *         for ix in self.reg_ixs:
  *             features += self.W[ix] * self.R_v[data_index][ix]             # <<<<<<<<<<<<<<
@@ -5428,7 +5428,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     __pyx_v_features = __pyx_t_9;
 
-    /* "fm_sgd_opt.pyx":300
+    /* "cy_fm_batch.pyx":300
  *             double start_time
  * 
  *         for ix in self.reg_ixs:             # <<<<<<<<<<<<<<
@@ -5438,7 +5438,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fm_sgd_opt.pyx":303
+  /* "cy_fm_batch.pyx":303
  *             features += self.W[ix] * self.R_v[data_index][ix]
  *             #
  *         for f in xrange(self.K):             # <<<<<<<<<<<<<<
@@ -5449,7 +5449,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
   for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
     __pyx_v_f = __pyx_t_11;
 
-    /* "fm_sgd_opt.pyx":304
+    /* "cy_fm_batch.pyx":304
  *             #
  *         for f in xrange(self.K):
  *             dot_sum = 0.0             # <<<<<<<<<<<<<<
@@ -5458,7 +5458,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
  */
     __pyx_v_dot_sum = 0.0;
 
-    /* "fm_sgd_opt.pyx":305
+    /* "cy_fm_batch.pyx":305
  *         for f in xrange(self.K):
  *             dot_sum = 0.0
  *             dot_square_sum = 0.0             # <<<<<<<<<<<<<<
@@ -5467,7 +5467,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
  */
     __pyx_v_dot_square_sum = 0.0;
 
-    /* "fm_sgd_opt.pyx":306
+    /* "cy_fm_batch.pyx":306
  *             dot_sum = 0.0
  *             dot_square_sum = 0.0
  *             for ix in self.reg_ixs:             # <<<<<<<<<<<<<<
@@ -5521,7 +5521,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_v_ix = __pyx_t_5;
 
-      /* "fm_sgd_opt.pyx":307
+      /* "cy_fm_batch.pyx":307
  *             dot_square_sum = 0.0
  *             for ix in self.reg_ixs:
  *                 dot_sum += self.V[ix][f] * self.R_v[data_index][ix]             # <<<<<<<<<<<<<<
@@ -5552,7 +5552,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __pyx_v_dot_sum = __pyx_t_9;
 
-      /* "fm_sgd_opt.pyx":308
+      /* "cy_fm_batch.pyx":308
  *             for ix in self.reg_ixs:
  *                 dot_sum += self.V[ix][f] * self.R_v[data_index][ix]
  *                 dot_square_sum += self.V[ix][f] * self.V[ix][f] * self.R_v[data_index][ix] * self.R_v[data_index][ix]             # <<<<<<<<<<<<<<
@@ -5601,7 +5601,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __pyx_v_dot_square_sum = __pyx_t_9;
 
-      /* "fm_sgd_opt.pyx":306
+      /* "cy_fm_batch.pyx":306
  *             dot_sum = 0.0
  *             dot_square_sum = 0.0
  *             for ix in self.reg_ixs:             # <<<<<<<<<<<<<<
@@ -5611,7 +5611,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
     }
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-    /* "fm_sgd_opt.pyx":309
+    /* "cy_fm_batch.pyx":309
  *                 dot_sum += self.V[ix][f] * self.R_v[data_index][ix]
  *                 dot_square_sum += self.V[ix][f] * self.V[ix][f] * self.R_v[data_index][ix] * self.R_v[data_index][ix]
  *             iterations += dot_sum * dot_sum - dot_square_sum             # <<<<<<<<<<<<<<
@@ -5621,7 +5621,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
     __pyx_v_iterations = (__pyx_v_iterations + ((__pyx_v_dot_sum * __pyx_v_dot_sum) - __pyx_v_dot_square_sum));
   }
 
-  /* "fm_sgd_opt.pyx":311
+  /* "cy_fm_batch.pyx":311
  *             iterations += dot_sum * dot_sum - dot_square_sum
  * 
  *         return (self.w_0 + features + iterations/2) - 1.0             # <<<<<<<<<<<<<<
@@ -5631,7 +5631,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
   __pyx_r = (((__pyx_v_self->w_0 + __pyx_v_features) + (__pyx_v_iterations / 2.0)) - 1.0);
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":287
+  /* "cy_fm_batch.pyx":287
  *         return (self.w_0 + features + iterations/2) - 1.0
  * 
  *     cdef double _calc_error_regs(self, long data_index):             # <<<<<<<<<<<<<<
@@ -5646,14 +5646,14 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_WriteUnraisable("fm_sgd_opt.CyFmSgdOpt._calc_error_regs", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_WriteUnraisable("cy_fm_batch.CyFmBatch._calc_error_regs", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":313
+/* "cy_fm_batch.pyx":313
  *         return (self.w_0 + features + iterations/2) - 1.0
  * 
  *     def learning(self):             # <<<<<<<<<<<<<<
@@ -5662,20 +5662,20 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs(struct __pyx_ob
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_9learning(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_8learning[] = "\n        \345\210\235\346\234\237\343\201\256\345\255\246\347\277\222\n        ";
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_9learning(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_9learning(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_11cy_fm_batch_9CyFmBatch_8learning[] = "\n        \345\210\235\346\234\237\343\201\256\345\255\246\347\277\222\n        ";
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_9learning(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("learning (wrapper)", 0);
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_8learning(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_8learning(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self) {
   int __pyx_v_s;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -5692,7 +5692,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("learning", 0);
 
-  /* "fm_sgd_opt.pyx":320
+  /* "cy_fm_batch.pyx":320
  *             int s
  * 
  *         self.adagrad_w_0 = 0.0             # <<<<<<<<<<<<<<
@@ -5701,7 +5701,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
  */
   __pyx_v_self->adagrad_w_0 = 0.0;
 
-  /* "fm_sgd_opt.pyx":321
+  /* "cy_fm_batch.pyx":321
  * 
  *         self.adagrad_w_0 = 0.0
  *         self.adagrad_W = np.zeros(self.n)             # <<<<<<<<<<<<<<
@@ -5748,7 +5748,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
   __pyx_v_self->adagrad_W = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "fm_sgd_opt.pyx":322
+  /* "cy_fm_batch.pyx":322
  *         self.adagrad_w_0 = 0.0
  *         self.adagrad_W = np.zeros(self.n)
  *         self.adagrad_V = np.zeros((self.n, self.K))             # <<<<<<<<<<<<<<
@@ -5805,7 +5805,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
   __pyx_v_self->adagrad_V = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "fm_sgd_opt.pyx":323
+  /* "cy_fm_batch.pyx":323
  *         self.adagrad_W = np.zeros(self.n)
  *         self.adagrad_V = np.zeros((self.n, self.K))
  *         for s in xrange(self.step):             # <<<<<<<<<<<<<<
@@ -5816,7 +5816,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
   for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
     __pyx_v_s = __pyx_t_7;
 
-    /* "fm_sgd_opt.pyx":324
+    /* "cy_fm_batch.pyx":324
  *         self.adagrad_V = np.zeros((self.n, self.K))
  *         for s in xrange(self.step):
  *             print "Step %d" % s             # <<<<<<<<<<<<<<
@@ -5831,7 +5831,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
     if (__Pyx_PrintOne(0, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 324; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "fm_sgd_opt.pyx":325
+    /* "cy_fm_batch.pyx":325
  *         for s in xrange(self.step):
  *             print "Step %d" % s
  *             self.repeat_optimization()             # <<<<<<<<<<<<<<
@@ -5860,7 +5860,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "fm_sgd_opt.pyx":326
+    /* "cy_fm_batch.pyx":326
  *             print "Step %d" % s
  *             self.repeat_optimization()
  *             self.get_sum_error()             # <<<<<<<<<<<<<<
@@ -5889,7 +5889,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "fm_sgd_opt.pyx":327
+    /* "cy_fm_batch.pyx":327
  *             self.repeat_optimization()
  *             self.get_sum_error()
  *             print self.error             # <<<<<<<<<<<<<<
@@ -5901,7 +5901,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
     if (__Pyx_PrintOne(0, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 327; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "fm_sgd_opt.pyx":328
+    /* "cy_fm_batch.pyx":328
  *             self.get_sum_error()
  *             print self.error
  *             if self.error <= 100:             # <<<<<<<<<<<<<<
@@ -5911,7 +5911,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
     __pyx_t_8 = ((__pyx_v_self->error <= 100.0) != 0);
     if (__pyx_t_8) {
 
-      /* "fm_sgd_opt.pyx":329
+      /* "cy_fm_batch.pyx":329
  *             print self.error
  *             if self.error <= 100:
  *                 break             # <<<<<<<<<<<<<<
@@ -5920,7 +5920,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
  */
       goto __pyx_L4_break;
 
-      /* "fm_sgd_opt.pyx":328
+      /* "cy_fm_batch.pyx":328
  *             self.get_sum_error()
  *             print self.error
  *             if self.error <= 100:             # <<<<<<<<<<<<<<
@@ -5931,7 +5931,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
   }
   __pyx_L4_break:;
 
-  /* "fm_sgd_opt.pyx":313
+  /* "cy_fm_batch.pyx":313
  *         return (self.w_0 + features + iterations/2) - 1.0
  * 
  *     def learning(self):             # <<<<<<<<<<<<<<
@@ -5948,7 +5948,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.learning", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.learning", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -5956,7 +5956,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":331
+/* "cy_fm_batch.pyx":331
  *                 break
  * 
  *     cdef double _calc_rating(self,             # <<<<<<<<<<<<<<
@@ -5964,7 +5964,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_8learning(struct __pyx_obj_1
  *         """
  */
 
-static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_matrix, char *__pyx_v_song, PyArrayObject *__pyx_v_ixs) {
+static double __pyx_f_11cy_fm_batch_9CyFmBatch__calc_rating(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_matrix, char *__pyx_v_song, PyArrayObject *__pyx_v_ixs) {
   double __pyx_v_features;
   double __pyx_v_iterations;
   int __pyx_v_f;
@@ -5979,7 +5979,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
-  __pyx_t_10fm_sgd_opt_INTEGER __pyx_t_3;
+  __pyx_t_11cy_fm_batch_INTEGER __pyx_t_3;
   Py_ssize_t __pyx_t_4;
   int __pyx_t_5;
   Py_ssize_t __pyx_t_6;
@@ -6009,16 +6009,16 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
   __pyx_pybuffernd_ixs.rcbuffer = &__pyx_pybuffer_ixs;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_matrix.rcbuffer->pybuffer, (PyObject*)__pyx_v_matrix, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 331; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_matrix.rcbuffer->pybuffer, (PyObject*)__pyx_v_matrix, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 331; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_matrix.diminfo[0].strides = __pyx_pybuffernd_matrix.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_matrix.diminfo[0].shape = __pyx_pybuffernd_matrix.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_ixs.rcbuffer->pybuffer, (PyObject*)__pyx_v_ixs, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_INTEGER, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 331; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_ixs.rcbuffer->pybuffer, (PyObject*)__pyx_v_ixs, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_INTEGER, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 331; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_ixs.diminfo[0].strides = __pyx_pybuffernd_ixs.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_ixs.diminfo[0].shape = __pyx_pybuffernd_ixs.rcbuffer->pybuffer.shape[0];
 
-  /* "fm_sgd_opt.pyx":338
+  /* "cy_fm_batch.pyx":338
  *         cdef:
  *             #
  *             double features = 0.0             # <<<<<<<<<<<<<<
@@ -6027,7 +6027,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
  */
   __pyx_v_features = 0.0;
 
-  /* "fm_sgd_opt.pyx":340
+  /* "cy_fm_batch.pyx":340
  *             double features = 0.0
  *             #
  *             double iterations = 0.0             # <<<<<<<<<<<<<<
@@ -6036,7 +6036,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
  */
   __pyx_v_iterations = 0.0;
 
-  /* "fm_sgd_opt.pyx":342
+  /* "cy_fm_batch.pyx":342
  *             double iterations = 0.0
  *             int f
  *             double dot_sum = 0.0             # <<<<<<<<<<<<<<
@@ -6045,7 +6045,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
  */
   __pyx_v_dot_sum = 0.0;
 
-  /* "fm_sgd_opt.pyx":343
+  /* "cy_fm_batch.pyx":343
  *             int f
  *             double dot_sum = 0.0
  *             double dot_sum_square = 0.0             # <<<<<<<<<<<<<<
@@ -6054,7 +6054,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
  */
   __pyx_v_dot_sum_square = 0.0;
 
-  /* "fm_sgd_opt.pyx":346
+  /* "cy_fm_batch.pyx":346
  *             long ix
  * 
  *         ixs[-1] = self.labels["song="+song]             # <<<<<<<<<<<<<<
@@ -6085,9 +6085,9 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
     __Pyx_RaiseBufferIndexError(__pyx_t_5);
     {__pyx_filename = __pyx_f[0]; __pyx_lineno = 346; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  *__Pyx_BufPtrCContig1d(__pyx_t_10fm_sgd_opt_INTEGER *, __pyx_pybuffernd_ixs.rcbuffer->pybuffer.buf, __pyx_t_4, __pyx_pybuffernd_ixs.diminfo[0].strides) = __pyx_t_3;
+  *__Pyx_BufPtrCContig1d(__pyx_t_11cy_fm_batch_INTEGER *, __pyx_pybuffernd_ixs.rcbuffer->pybuffer.buf, __pyx_t_4, __pyx_pybuffernd_ixs.diminfo[0].strides) = __pyx_t_3;
 
-  /* "fm_sgd_opt.pyx":347
+  /* "cy_fm_batch.pyx":347
  * 
  *         ixs[-1] = self.labels["song="+song]
  *         for ix in ixs:             # <<<<<<<<<<<<<<
@@ -6137,7 +6137,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_v_ix = __pyx_t_8;
 
-    /* "fm_sgd_opt.pyx":348
+    /* "cy_fm_batch.pyx":348
  *         ixs[-1] = self.labels["song="+song]
  *         for ix in ixs:
  *             features += self.W[ix] * matrix[ix]             # <<<<<<<<<<<<<<
@@ -6158,7 +6158,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
       __Pyx_RaiseBufferIndexError(__pyx_t_5);
       {__pyx_filename = __pyx_f[0]; __pyx_lineno = 348; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
-    __pyx_t_11 = PyFloat_FromDouble((*__Pyx_BufPtrCContig1d(__pyx_t_10fm_sgd_opt_DOUBLE *, __pyx_pybuffernd_matrix.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_matrix.diminfo[0].strides))); if (unlikely(!__pyx_t_11)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 348; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_11 = PyFloat_FromDouble((*__Pyx_BufPtrCContig1d(__pyx_t_11cy_fm_batch_DOUBLE *, __pyx_pybuffernd_matrix.rcbuffer->pybuffer.buf, __pyx_t_10, __pyx_pybuffernd_matrix.diminfo[0].strides))); if (unlikely(!__pyx_t_11)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 348; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_11);
     __pyx_t_12 = PyNumber_Multiply(__pyx_t_9, __pyx_t_11); if (unlikely(!__pyx_t_12)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 348; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_12);
@@ -6172,7 +6172,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     __pyx_v_features = __pyx_t_13;
 
-    /* "fm_sgd_opt.pyx":347
+    /* "cy_fm_batch.pyx":347
  * 
  *         ixs[-1] = self.labels["song="+song]
  *         for ix in ixs:             # <<<<<<<<<<<<<<
@@ -6182,7 +6182,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "fm_sgd_opt.pyx":349
+  /* "cy_fm_batch.pyx":349
  *         for ix in ixs:
  *             features += self.W[ix] * matrix[ix]
  *         for f in xrange(self.K):             # <<<<<<<<<<<<<<
@@ -6193,7 +6193,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
   for (__pyx_t_14 = 0; __pyx_t_14 < __pyx_t_5; __pyx_t_14+=1) {
     __pyx_v_f = __pyx_t_14;
 
-    /* "fm_sgd_opt.pyx":350
+    /* "cy_fm_batch.pyx":350
  *             features += self.W[ix] * matrix[ix]
  *         for f in xrange(self.K):
  *             dot_sum = 0.0             # <<<<<<<<<<<<<<
@@ -6202,7 +6202,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
  */
     __pyx_v_dot_sum = 0.0;
 
-    /* "fm_sgd_opt.pyx":351
+    /* "cy_fm_batch.pyx":351
  *         for f in xrange(self.K):
  *             dot_sum = 0.0
  *             dot_sum_square = 0.0             # <<<<<<<<<<<<<<
@@ -6211,7 +6211,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
  */
     __pyx_v_dot_sum_square = 0.0;
 
-    /* "fm_sgd_opt.pyx":352
+    /* "cy_fm_batch.pyx":352
  *             dot_sum = 0.0
  *             dot_sum_square = 0.0
  *             for ix in ixs:             # <<<<<<<<<<<<<<
@@ -6261,7 +6261,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __pyx_v_ix = __pyx_t_8;
 
-      /* "fm_sgd_opt.pyx":353
+      /* "cy_fm_batch.pyx":353
  *             dot_sum_square = 0.0
  *             for ix in ixs:
  *                 dot_sum += self.V[ix][f] * matrix[ix]             # <<<<<<<<<<<<<<
@@ -6285,7 +6285,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
         __Pyx_RaiseBufferIndexError(__pyx_t_16);
         {__pyx_filename = __pyx_f[0]; __pyx_lineno = 353; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       }
-      __pyx_t_12 = PyFloat_FromDouble((*__Pyx_BufPtrCContig1d(__pyx_t_10fm_sgd_opt_DOUBLE *, __pyx_pybuffernd_matrix.rcbuffer->pybuffer.buf, __pyx_t_15, __pyx_pybuffernd_matrix.diminfo[0].strides))); if (unlikely(!__pyx_t_12)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 353; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_12 = PyFloat_FromDouble((*__Pyx_BufPtrCContig1d(__pyx_t_11cy_fm_batch_DOUBLE *, __pyx_pybuffernd_matrix.rcbuffer->pybuffer.buf, __pyx_t_15, __pyx_pybuffernd_matrix.diminfo[0].strides))); if (unlikely(!__pyx_t_12)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 353; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_12);
       __pyx_t_9 = PyNumber_Multiply(__pyx_t_2, __pyx_t_12); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 353; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_9);
@@ -6299,7 +6299,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       __pyx_v_dot_sum = __pyx_t_13;
 
-      /* "fm_sgd_opt.pyx":354
+      /* "cy_fm_batch.pyx":354
  *             for ix in ixs:
  *                 dot_sum += self.V[ix][f] * matrix[ix]
  *                 dot_sum_square += self.V[ix][f] * self.V[ix][f] * matrix[ix] * matrix[ix]             # <<<<<<<<<<<<<<
@@ -6332,7 +6332,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
         __Pyx_RaiseBufferIndexError(__pyx_t_16);
         {__pyx_filename = __pyx_f[0]; __pyx_lineno = 354; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       }
-      __pyx_t_2 = PyFloat_FromDouble((*__Pyx_BufPtrCContig1d(__pyx_t_10fm_sgd_opt_DOUBLE *, __pyx_pybuffernd_matrix.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_matrix.diminfo[0].strides))); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 354; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = PyFloat_FromDouble((*__Pyx_BufPtrCContig1d(__pyx_t_11cy_fm_batch_DOUBLE *, __pyx_pybuffernd_matrix.rcbuffer->pybuffer.buf, __pyx_t_17, __pyx_pybuffernd_matrix.diminfo[0].strides))); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 354; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_11 = PyNumber_Multiply(__pyx_t_9, __pyx_t_2); if (unlikely(!__pyx_t_11)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 354; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_11);
@@ -6348,7 +6348,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
         __Pyx_RaiseBufferIndexError(__pyx_t_16);
         {__pyx_filename = __pyx_f[0]; __pyx_lineno = 354; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       }
-      __pyx_t_2 = PyFloat_FromDouble((*__Pyx_BufPtrCContig1d(__pyx_t_10fm_sgd_opt_DOUBLE *, __pyx_pybuffernd_matrix.rcbuffer->pybuffer.buf, __pyx_t_18, __pyx_pybuffernd_matrix.diminfo[0].strides))); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 354; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = PyFloat_FromDouble((*__Pyx_BufPtrCContig1d(__pyx_t_11cy_fm_batch_DOUBLE *, __pyx_pybuffernd_matrix.rcbuffer->pybuffer.buf, __pyx_t_18, __pyx_pybuffernd_matrix.diminfo[0].strides))); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 354; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_9 = PyNumber_Multiply(__pyx_t_11, __pyx_t_2); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 354; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_9);
@@ -6362,7 +6362,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_v_dot_sum_square = __pyx_t_13;
 
-      /* "fm_sgd_opt.pyx":352
+      /* "cy_fm_batch.pyx":352
  *             dot_sum = 0.0
  *             dot_sum_square = 0.0
  *             for ix in ixs:             # <<<<<<<<<<<<<<
@@ -6372,7 +6372,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "fm_sgd_opt.pyx":355
+    /* "cy_fm_batch.pyx":355
  *                 dot_sum += self.V[ix][f] * matrix[ix]
  *                 dot_sum_square += self.V[ix][f] * self.V[ix][f] * matrix[ix] * matrix[ix]
  *             iterations += dot_sum * dot_sum - dot_sum_square             # <<<<<<<<<<<<<<
@@ -6382,7 +6382,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
     __pyx_v_iterations = (__pyx_v_iterations + ((__pyx_v_dot_sum * __pyx_v_dot_sum) - __pyx_v_dot_sum_square));
   }
 
-  /* "fm_sgd_opt.pyx":356
+  /* "cy_fm_batch.pyx":356
  *                 dot_sum_square += self.V[ix][f] * self.V[ix][f] * matrix[ix] * matrix[ix]
  *             iterations += dot_sum * dot_sum - dot_sum_square
  *         return self.w_0 + features + iterations/2             # <<<<<<<<<<<<<<
@@ -6392,7 +6392,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
   __pyx_r = ((__pyx_v_self->w_0 + __pyx_v_features) + (__pyx_v_iterations / 2.0));
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":331
+  /* "cy_fm_batch.pyx":331
  *                 break
  * 
  *     cdef double _calc_rating(self,             # <<<<<<<<<<<<<<
@@ -6412,7 +6412,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_ixs.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_matrix.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_WriteUnraisable("fm_sgd_opt.CyFmSgdOpt._calc_rating", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_WriteUnraisable("cy_fm_batch.CyFmBatch._calc_rating", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
   __pyx_r = 0;
   goto __pyx_L2;
   __pyx_L0:;
@@ -6423,7 +6423,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":358
+/* "cy_fm_batch.pyx":358
  *         return self.w_0 + features + iterations/2
  * 
  *     def get_rankings(self, np.ndarray[DOUBLE, ndim=2, mode="c"] matrixes, np.ndarray[INTEGER, ndim=1, mode="c"] songs, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):             # <<<<<<<<<<<<<<
@@ -6432,9 +6432,9 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating(struct __pyx_obj_10
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_11get_rankings(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_10get_rankings[] = "\n        \343\203\251\343\203\263\343\202\255\343\203\263\343\202\260\343\202\222\345\217\226\345\276\227\n        ";
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_11get_rankings(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_11get_rankings(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_11cy_fm_batch_9CyFmBatch_10get_rankings[] = "\n        \343\203\251\343\203\263\343\202\255\343\203\263\343\202\260\343\202\222\345\217\226\345\276\227\n        ";
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_11get_rankings(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_matrixes = 0;
   PyArrayObject *__pyx_v_songs = 0;
   PyArrayObject *__pyx_v_ixs = 0;
@@ -6491,14 +6491,14 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_11get_rankings(PyObject *__p
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("get_rankings", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 358; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.get_rankings", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.get_rankings", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_matrixes), __pyx_ptype_5numpy_ndarray, 1, "matrixes", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 358; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_songs), __pyx_ptype_5numpy_ndarray, 1, "songs", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 358; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_ixs), __pyx_ptype_5numpy_ndarray, 1, "ixs", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 358; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_10get_rankings(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self), __pyx_v_matrixes, __pyx_v_songs, __pyx_v_ixs);
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_10get_rankings(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self), __pyx_v_matrixes, __pyx_v_songs, __pyx_v_ixs);
 
   /* function exit code */
   goto __pyx_L0;
@@ -6509,7 +6509,7 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_11get_rankings(PyObject *__p
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_10get_rankings(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_matrixes, PyArrayObject *__pyx_v_songs, PyArrayObject *__pyx_v_ixs) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_10get_rankings(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_matrixes, PyArrayObject *__pyx_v_songs, PyArrayObject *__pyx_v_ixs) {
   PyObject *__pyx_v_rankings = NULL;
   PyObject *__pyx_v_matrix = NULL;
   PyObject *__pyx_v_song = NULL;
@@ -6550,21 +6550,21 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_10get_rankings(struct __pyx_
   __pyx_pybuffernd_ixs.rcbuffer = &__pyx_pybuffer_ixs;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_matrixes.rcbuffer->pybuffer, (PyObject*)__pyx_v_matrixes, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 358; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_matrixes.rcbuffer->pybuffer, (PyObject*)__pyx_v_matrixes, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 358; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_matrixes.diminfo[0].strides = __pyx_pybuffernd_matrixes.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_matrixes.diminfo[0].shape = __pyx_pybuffernd_matrixes.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_matrixes.diminfo[1].strides = __pyx_pybuffernd_matrixes.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_matrixes.diminfo[1].shape = __pyx_pybuffernd_matrixes.rcbuffer->pybuffer.shape[1];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_songs.rcbuffer->pybuffer, (PyObject*)__pyx_v_songs, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_INTEGER, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 358; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_songs.rcbuffer->pybuffer, (PyObject*)__pyx_v_songs, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_INTEGER, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 358; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_songs.diminfo[0].strides = __pyx_pybuffernd_songs.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_songs.diminfo[0].shape = __pyx_pybuffernd_songs.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_ixs.rcbuffer->pybuffer, (PyObject*)__pyx_v_ixs, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_INTEGER, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 358; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_ixs.rcbuffer->pybuffer, (PyObject*)__pyx_v_ixs, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_INTEGER, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 358; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_ixs.diminfo[0].strides = __pyx_pybuffernd_ixs.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_ixs.diminfo[0].shape = __pyx_pybuffernd_ixs.rcbuffer->pybuffer.shape[0];
 
-  /* "fm_sgd_opt.pyx":362
+  /* "cy_fm_batch.pyx":362
  * 
  *         """
  *         rankings = [(self.predict(matrix, ixs, str(song)), song) for matrix, song in zip(matrixes, songs)]             # <<<<<<<<<<<<<<
@@ -6733,7 +6733,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_10get_rankings(struct __pyx_
   __pyx_v_rankings = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "fm_sgd_opt.pyx":363
+  /* "cy_fm_batch.pyx":363
  *         """
  *         rankings = [(self.predict(matrix, ixs, str(song)), song) for matrix, song in zip(matrixes, songs)]
  *         return rankings             # <<<<<<<<<<<<<<
@@ -6745,7 +6745,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_10get_rankings(struct __pyx_
   __pyx_r = __pyx_v_rankings;
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":358
+  /* "cy_fm_batch.pyx":358
  *         return self.w_0 + features + iterations/2
  * 
  *     def get_rankings(self, np.ndarray[DOUBLE, ndim=2, mode="c"] matrixes, np.ndarray[INTEGER, ndim=1, mode="c"] songs, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):             # <<<<<<<<<<<<<<
@@ -6768,7 +6768,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_10get_rankings(struct __pyx_
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_matrixes.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_songs.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.get_rankings", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.get_rankings", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -6784,7 +6784,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_10get_rankings(struct __pyx_
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":365
+/* "cy_fm_batch.pyx":365
  *         return rankings
  * 
  *     def predict(self, np.ndarray[DOUBLE, ndim=1, mode="c"] matrix, char* song, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):             # <<<<<<<<<<<<<<
@@ -6793,9 +6793,9 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_10get_rankings(struct __pyx_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_13predict(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_12predict[] = "\n        python\345\201\264\343\201\213\343\202\211\345\221\274\343\201\263\345\207\272\343\201\233\343\202\213\345\233\236\345\270\260\344\272\210\346\270\254\347\265\220\346\236\234\345\217\226\345\276\227\n        ";
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_13predict(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_13predict(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_11cy_fm_batch_9CyFmBatch_12predict[] = "\n        python\345\201\264\343\201\213\343\202\211\345\221\274\343\201\263\345\207\272\343\201\233\343\202\213\345\233\236\345\270\260\344\272\210\346\270\254\347\265\220\346\236\234\345\217\226\345\276\227\n        ";
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_13predict(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_matrix = 0;
   char *__pyx_v_song;
   PyArrayObject *__pyx_v_ixs = 0;
@@ -6852,13 +6852,13 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_13predict(PyObject *__pyx_v_
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("predict", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 365; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.predict", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.predict", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_matrix), __pyx_ptype_5numpy_ndarray, 1, "matrix", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 365; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_ixs), __pyx_ptype_5numpy_ndarray, 1, "ixs", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 365; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_12predict(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self), __pyx_v_matrix, __pyx_v_song, __pyx_v_ixs);
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_12predict(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self), __pyx_v_matrix, __pyx_v_song, __pyx_v_ixs);
 
   /* function exit code */
   goto __pyx_L0;
@@ -6869,7 +6869,7 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_13predict(PyObject *__pyx_v_
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_12predict(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_matrix, char *__pyx_v_song, PyArrayObject *__pyx_v_ixs) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_12predict(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_matrix, char *__pyx_v_song, PyArrayObject *__pyx_v_ixs) {
   __Pyx_LocalBuf_ND __pyx_pybuffernd_ixs;
   __Pyx_Buffer __pyx_pybuffer_ixs;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_matrix;
@@ -6891,16 +6891,16 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_12predict(struct __pyx_obj_1
   __pyx_pybuffernd_ixs.rcbuffer = &__pyx_pybuffer_ixs;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_matrix.rcbuffer->pybuffer, (PyObject*)__pyx_v_matrix, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 365; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_matrix.rcbuffer->pybuffer, (PyObject*)__pyx_v_matrix, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 365; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_matrix.diminfo[0].strides = __pyx_pybuffernd_matrix.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_matrix.diminfo[0].shape = __pyx_pybuffernd_matrix.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_ixs.rcbuffer->pybuffer, (PyObject*)__pyx_v_ixs, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_INTEGER, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 365; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_ixs.rcbuffer->pybuffer, (PyObject*)__pyx_v_ixs, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_INTEGER, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 365; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_ixs.diminfo[0].strides = __pyx_pybuffernd_ixs.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_ixs.diminfo[0].shape = __pyx_pybuffernd_ixs.rcbuffer->pybuffer.shape[0];
 
-  /* "fm_sgd_opt.pyx":369
+  /* "cy_fm_batch.pyx":369
  *         python
  *         """
  *         return self._calc_rating(matrix, song, ixs)             # <<<<<<<<<<<<<<
@@ -6908,13 +6908,13 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_12predict(struct __pyx_obj_1
  *     def save_redis(self, int db = 0):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(((struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self->__pyx_vtab)->_calc_rating(__pyx_v_self, ((PyArrayObject *)__pyx_v_matrix), __pyx_v_song, ((PyArrayObject *)__pyx_v_ixs))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 369; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(((struct __pyx_vtabstruct_11cy_fm_batch_CyFmBatch *)__pyx_v_self->__pyx_vtab)->_calc_rating(__pyx_v_self, ((PyArrayObject *)__pyx_v_matrix), __pyx_v_song, ((PyArrayObject *)__pyx_v_ixs))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 369; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":365
+  /* "cy_fm_batch.pyx":365
  *         return rankings
  * 
  *     def predict(self, np.ndarray[DOUBLE, ndim=1, mode="c"] matrix, char* song, np.ndarray[INTEGER, ndim=1, mode="c"] ixs):             # <<<<<<<<<<<<<<
@@ -6930,7 +6930,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_12predict(struct __pyx_obj_1
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_ixs.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_matrix.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.predict", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.predict", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -6942,7 +6942,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_12predict(struct __pyx_obj_1
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":371
+/* "cy_fm_batch.pyx":371
  *         return self._calc_rating(matrix, song, ixs)
  * 
  *     def save_redis(self, int db = 0):             # <<<<<<<<<<<<<<
@@ -6951,9 +6951,9 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_12predict(struct __pyx_obj_1
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_15save_redis(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_14save_redis[] = "\n        \343\203\221\343\203\251\343\203\241\343\203\274\343\202\277\343\201\256redis\343\201\270\343\201\256\344\277\235\345\255\230\n        ";
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_15save_redis(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_15save_redis(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_11cy_fm_batch_9CyFmBatch_14save_redis[] = "\n        \343\203\221\343\203\251\343\203\241\343\203\274\343\202\277\343\201\256redis\343\201\270\343\201\256\344\277\235\345\255\230\n        ";
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_15save_redis(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   int __pyx_v_db;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -7000,18 +7000,18 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_15save_redis(PyObject *__pyx
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("save_redis", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 371; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.save_redis", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.save_redis", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self), __pyx_v_db);
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_14save_redis(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self), __pyx_v_db);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, int __pyx_v_db) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_14save_redis(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, int __pyx_v_db) {
   PyObject *__pyx_v_r = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -7026,7 +7026,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("save_redis", 0);
 
-  /* "fm_sgd_opt.pyx":375
+  /* "cy_fm_batch.pyx":375
  *         redis
  *         """
  *         r = redis.Redis(host='localhost', port=6379, db=db)             # <<<<<<<<<<<<<<
@@ -7053,7 +7053,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
   __pyx_v_r = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "fm_sgd_opt.pyx":385
+  /* "cy_fm_batch.pyx":385
  *         """
  *         # w_0
  *         print "w_0"             # <<<<<<<<<<<<<<
@@ -7062,7 +7062,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
  */
   if (__Pyx_PrintOne(0, __pyx_kp_s_w_0_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 385; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "fm_sgd_opt.pyx":386
+  /* "cy_fm_batch.pyx":386
  *         # w_0
  *         print "w_0"
  *         self.save_scalar(r, "bias", "w_0", self.w_0)             # <<<<<<<<<<<<<<
@@ -7108,7 +7108,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "fm_sgd_opt.pyx":388
+  /* "cy_fm_batch.pyx":388
  *         self.save_scalar(r, "bias", "w_0", self.w_0)
  *         # W
  *         print "W"             # <<<<<<<<<<<<<<
@@ -7117,7 +7117,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
  */
   if (__Pyx_PrintOne(0, __pyx_kp_s_W_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 388; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "fm_sgd_opt.pyx":389
+  /* "cy_fm_batch.pyx":389
  *         # W
  *         print "W"
  *         self.save_one_dim_array(r, "W", self.W)             # <<<<<<<<<<<<<<
@@ -7158,7 +7158,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "fm_sgd_opt.pyx":391
+  /* "cy_fm_batch.pyx":391
  *         self.save_one_dim_array(r, "W", self.W)
  *         # V
  *         print "V"             # <<<<<<<<<<<<<<
@@ -7167,7 +7167,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
  */
   if (__Pyx_PrintOne(0, __pyx_kp_s_V_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 391; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "fm_sgd_opt.pyx":392
+  /* "cy_fm_batch.pyx":392
  *         # V
  *         print "V"
  *         self.save_two_dim_array(r, "V_", self.V)             # <<<<<<<<<<<<<<
@@ -7208,7 +7208,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "fm_sgd_opt.pyx":396
+  /* "cy_fm_batch.pyx":396
  *         regs
  *         """
  *         print "regs"             # <<<<<<<<<<<<<<
@@ -7217,7 +7217,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
  */
   if (__Pyx_PrintOne(0, __pyx_kp_s_regs_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 396; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "fm_sgd_opt.pyx":397
+  /* "cy_fm_batch.pyx":397
  *         """
  *         print "regs"
  *         self.save_one_dim_array(r, "regs", self.regs)             # <<<<<<<<<<<<<<
@@ -7258,7 +7258,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "fm_sgd_opt.pyx":402
+  /* "cy_fm_batch.pyx":402
  *         """
  *         # adagrad_w_0
  *         print "adagrad_w_0"             # <<<<<<<<<<<<<<
@@ -7267,7 +7267,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
  */
   if (__Pyx_PrintOne(0, __pyx_kp_s_adagrad_w_0) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 402; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "fm_sgd_opt.pyx":403
+  /* "cy_fm_batch.pyx":403
  *         # adagrad_w_0
  *         print "adagrad_w_0"
  *         self.save_scalar(r, "bias", "adagrad", self.adagrad_w_0)             # <<<<<<<<<<<<<<
@@ -7313,7 +7313,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "fm_sgd_opt.pyx":405
+  /* "cy_fm_batch.pyx":405
  *         self.save_scalar(r, "bias", "adagrad", self.adagrad_w_0)
  *         # adagrad_W
  *         print "adagrad_W"             # <<<<<<<<<<<<<<
@@ -7322,7 +7322,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
  */
   if (__Pyx_PrintOne(0, __pyx_kp_s_adagrad_W) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 405; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "fm_sgd_opt.pyx":406
+  /* "cy_fm_batch.pyx":406
  *         # adagrad_W
  *         print "adagrad_W"
  *         self.save_one_dim_array(r, "adagrad_W", self.adagrad_W)             # <<<<<<<<<<<<<<
@@ -7363,7 +7363,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "fm_sgd_opt.pyx":408
+  /* "cy_fm_batch.pyx":408
  *         self.save_one_dim_array(r, "adagrad_W", self.adagrad_W)
  *         # adagrad_V
  *         print "adagrad_V"             # <<<<<<<<<<<<<<
@@ -7372,7 +7372,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
  */
   if (__Pyx_PrintOne(0, __pyx_kp_s_adagrad_V) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 408; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "fm_sgd_opt.pyx":409
+  /* "cy_fm_batch.pyx":409
  *         # adagrad_V
  *         print "adagrad_V"
  *         self.save_two_dim_array(r, "adagrad_V_", self.adagrad_V)             # <<<<<<<<<<<<<<
@@ -7413,7 +7413,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "fm_sgd_opt.pyx":371
+  /* "cy_fm_batch.pyx":371
  *         return self._calc_rating(matrix, song, ixs)
  * 
  *     def save_redis(self, int db = 0):             # <<<<<<<<<<<<<<
@@ -7430,7 +7430,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.save_redis", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.save_redis", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_r);
@@ -7439,7 +7439,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":411
+/* "cy_fm_batch.pyx":411
  *         self.save_two_dim_array(r, "adagrad_V_", self.adagrad_V)
  * 
  *     def save_scalar(self, redis_obj, char* key, char* field, double value):             # <<<<<<<<<<<<<<
@@ -7448,8 +7448,8 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_14save_redis(struct __pyx_ob
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_17save_scalar(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_17save_scalar(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_17save_scalar(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_17save_scalar(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_redis_obj = 0;
   char *__pyx_v_key;
   char *__pyx_v_field;
@@ -7515,18 +7515,18 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_17save_scalar(PyObject *__py
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("save_scalar", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 411; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.save_scalar", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.save_scalar", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_16save_scalar(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self), __pyx_v_redis_obj, __pyx_v_key, __pyx_v_field, __pyx_v_value);
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_16save_scalar(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self), __pyx_v_redis_obj, __pyx_v_key, __pyx_v_field, __pyx_v_value);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_16save_scalar(CYTHON_UNUSED struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_key, char *__pyx_v_field, double __pyx_v_value) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_16save_scalar(CYTHON_UNUSED struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_key, char *__pyx_v_field, double __pyx_v_value) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -7542,7 +7542,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_16save_scalar(CYTHON_UNUSED 
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("save_scalar", 0);
 
-  /* "fm_sgd_opt.pyx":412
+  /* "cy_fm_batch.pyx":412
  * 
  *     def save_scalar(self, redis_obj, char* key, char* field, double value):
  *         redis_obj.hset(key, field, value)             # <<<<<<<<<<<<<<
@@ -7589,7 +7589,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_16save_scalar(CYTHON_UNUSED 
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "fm_sgd_opt.pyx":411
+  /* "cy_fm_batch.pyx":411
  *         self.save_two_dim_array(r, "adagrad_V_", self.adagrad_V)
  * 
  *     def save_scalar(self, redis_obj, char* key, char* field, double value):             # <<<<<<<<<<<<<<
@@ -7608,7 +7608,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_16save_scalar(CYTHON_UNUSED 
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.save_scalar", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.save_scalar", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -7616,7 +7616,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_16save_scalar(CYTHON_UNUSED 
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":414
+/* "cy_fm_batch.pyx":414
  *         redis_obj.hset(key, field, value)
  * 
  *     def save_one_dim_array(self, redis_obj, char* key, np.ndarray[DOUBLE, ndim=1, mode="c"] params):             # <<<<<<<<<<<<<<
@@ -7625,8 +7625,8 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_16save_scalar(CYTHON_UNUSED 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_19save_one_dim_array(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_19save_one_dim_array(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_19save_one_dim_array(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_19save_one_dim_array(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_redis_obj = 0;
   char *__pyx_v_key;
   PyArrayObject *__pyx_v_params = 0;
@@ -7683,12 +7683,12 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_19save_one_dim_array(PyObjec
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("save_one_dim_array", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 414; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.save_one_dim_array", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.save_one_dim_array", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_params), __pyx_ptype_5numpy_ndarray, 1, "params", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 414; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_18save_one_dim_array(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self), __pyx_v_redis_obj, __pyx_v_key, __pyx_v_params);
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_18save_one_dim_array(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self), __pyx_v_redis_obj, __pyx_v_key, __pyx_v_params);
 
   /* function exit code */
   goto __pyx_L0;
@@ -7699,7 +7699,7 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_19save_one_dim_array(PyObjec
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_18save_one_dim_array(CYTHON_UNUSED struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_key, PyArrayObject *__pyx_v_params) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_18save_one_dim_array(CYTHON_UNUSED struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_key, PyArrayObject *__pyx_v_params) {
   double __pyx_v_param;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_params;
   __Pyx_Buffer __pyx_pybuffer_params;
@@ -7726,11 +7726,11 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_18save_one_dim_array(CYTHON_
   __pyx_pybuffernd_params.rcbuffer = &__pyx_pybuffer_params;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_params.rcbuffer->pybuffer, (PyObject*)__pyx_v_params, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 414; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_params.rcbuffer->pybuffer, (PyObject*)__pyx_v_params, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 414; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_params.diminfo[0].strides = __pyx_pybuffernd_params.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_params.diminfo[0].shape = __pyx_pybuffernd_params.rcbuffer->pybuffer.shape[0];
 
-  /* "fm_sgd_opt.pyx":419
+  /* "cy_fm_batch.pyx":419
  *             double param
  * 
  *         for param in params:             # <<<<<<<<<<<<<<
@@ -7780,7 +7780,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_18save_one_dim_array(CYTHON_
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_param = __pyx_t_5;
 
-    /* "fm_sgd_opt.pyx":420
+    /* "cy_fm_batch.pyx":420
  * 
  *         for param in params:
  *             redis_obj.rpush(key, param)             # <<<<<<<<<<<<<<
@@ -7822,7 +7822,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_18save_one_dim_array(CYTHON_
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "fm_sgd_opt.pyx":419
+    /* "cy_fm_batch.pyx":419
  *             double param
  * 
  *         for param in params:             # <<<<<<<<<<<<<<
@@ -7832,7 +7832,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_18save_one_dim_array(CYTHON_
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "fm_sgd_opt.pyx":414
+  /* "cy_fm_batch.pyx":414
  *         redis_obj.hset(key, field, value)
  * 
  *     def save_one_dim_array(self, redis_obj, char* key, np.ndarray[DOUBLE, ndim=1, mode="c"] params):             # <<<<<<<<<<<<<<
@@ -7855,7 +7855,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_18save_one_dim_array(CYTHON_
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_params.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.save_one_dim_array", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.save_one_dim_array", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -7866,7 +7866,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_18save_one_dim_array(CYTHON_
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":422
+/* "cy_fm_batch.pyx":422
  *             redis_obj.rpush(key, param)
  * 
  *     def save_two_dim_array(self, redis_obj, char* pre_key, np.ndarray[DOUBLE, ndim=2, mode="c"] params):             # <<<<<<<<<<<<<<
@@ -7875,8 +7875,8 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_18save_one_dim_array(CYTHON_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_21save_two_dim_array(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_21save_two_dim_array(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_21save_two_dim_array(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_21save_two_dim_array(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_redis_obj = 0;
   char *__pyx_v_pre_key;
   PyArrayObject *__pyx_v_params = 0;
@@ -7933,12 +7933,12 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_21save_two_dim_array(PyObjec
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("save_two_dim_array", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 422; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.save_two_dim_array", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.save_two_dim_array", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_params), __pyx_ptype_5numpy_ndarray, 1, "params", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 422; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_20save_two_dim_array(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self), __pyx_v_redis_obj, __pyx_v_pre_key, __pyx_v_params);
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_20save_two_dim_array(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self), __pyx_v_redis_obj, __pyx_v_pre_key, __pyx_v_params);
 
   /* function exit code */
   goto __pyx_L0;
@@ -7949,7 +7949,7 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_21save_two_dim_array(PyObjec
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_20save_two_dim_array(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_pre_key, PyArrayObject *__pyx_v_params) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_20save_two_dim_array(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyObject *__pyx_v_redis_obj, char *__pyx_v_pre_key, PyArrayObject *__pyx_v_params) {
   long __pyx_v_i;
   double __pyx_v_param;
   PyObject *__pyx_v_key = NULL;
@@ -7979,11 +7979,11 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_20save_two_dim_array(struct 
   __pyx_pybuffernd_params.rcbuffer = &__pyx_pybuffer_params;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_params.rcbuffer->pybuffer, (PyObject*)__pyx_v_params, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 422; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_params.rcbuffer->pybuffer, (PyObject*)__pyx_v_params, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 422; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_params.diminfo[0].strides = __pyx_pybuffernd_params.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_params.diminfo[0].shape = __pyx_pybuffernd_params.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_params.diminfo[1].strides = __pyx_pybuffernd_params.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_params.diminfo[1].shape = __pyx_pybuffernd_params.rcbuffer->pybuffer.shape[1];
 
-  /* "fm_sgd_opt.pyx":428
+  /* "cy_fm_batch.pyx":428
  *             double param
  * 
  *         for i in xrange(self.K):             # <<<<<<<<<<<<<<
@@ -7994,7 +7994,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_20save_two_dim_array(struct 
   for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
     __pyx_v_i = __pyx_t_2;
 
-    /* "fm_sgd_opt.pyx":429
+    /* "cy_fm_batch.pyx":429
  * 
  *         for i in xrange(self.K):
  *             key = pre_key + str(i)             # <<<<<<<<<<<<<<
@@ -8020,7 +8020,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_20save_two_dim_array(struct 
     __Pyx_XDECREF_SET(__pyx_v_key, __pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "fm_sgd_opt.pyx":430
+    /* "cy_fm_batch.pyx":430
  *         for i in xrange(self.K):
  *             key = pre_key + str(i)
  *             for param in np.transpose(params)[i]:             # <<<<<<<<<<<<<<
@@ -8104,7 +8104,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_20save_two_dim_array(struct 
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_v_param = __pyx_t_9;
 
-      /* "fm_sgd_opt.pyx":431
+      /* "cy_fm_batch.pyx":431
  *             key = pre_key + str(i)
  *             for param in np.transpose(params)[i]:
  *                 redis_obj.rpush(key, param)             # <<<<<<<<<<<<<<
@@ -8144,7 +8144,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_20save_two_dim_array(struct 
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-      /* "fm_sgd_opt.pyx":430
+      /* "cy_fm_batch.pyx":430
  *         for i in xrange(self.K):
  *             key = pre_key + str(i)
  *             for param in np.transpose(params)[i]:             # <<<<<<<<<<<<<<
@@ -8155,7 +8155,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_20save_two_dim_array(struct 
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
 
-  /* "fm_sgd_opt.pyx":422
+  /* "cy_fm_batch.pyx":422
  *             redis_obj.rpush(key, param)
  * 
  *     def save_two_dim_array(self, redis_obj, char* pre_key, np.ndarray[DOUBLE, ndim=2, mode="c"] params):             # <<<<<<<<<<<<<<
@@ -8177,7 +8177,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_20save_two_dim_array(struct 
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_params.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.save_two_dim_array", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.save_two_dim_array", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -8189,7 +8189,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_20save_two_dim_array(struct 
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":436
+/* "cy_fm_batch.pyx":436
  * 
  *     """
  *     def smoothing(self, dict not_learned_song_tag_map, dict learned_song_tag_map, dict learn_song_norm, int rank):             # <<<<<<<<<<<<<<
@@ -8198,8 +8198,8 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_20save_two_dim_array(struct 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_23smoothing(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_23smoothing(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_23smoothing(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_23smoothing(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_not_learned_song_tag_map = 0;
   PyObject *__pyx_v_learned_song_tag_map = 0;
   PyObject *__pyx_v_learn_song_norm = 0;
@@ -8265,14 +8265,14 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_23smoothing(PyObject *__pyx_
   __pyx_L5_argtuple_error:;
   __Pyx_RaiseArgtupleInvalid("smoothing", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 436; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.smoothing", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.smoothing", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_not_learned_song_tag_map), (&PyDict_Type), 1, "not_learned_song_tag_map", 1))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 436; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_learned_song_tag_map), (&PyDict_Type), 1, "learned_song_tag_map", 1))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 436; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_learn_song_norm), (&PyDict_Type), 1, "learn_song_norm", 1))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 436; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self), __pyx_v_not_learned_song_tag_map, __pyx_v_learned_song_tag_map, __pyx_v_learn_song_norm, __pyx_v_rank);
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_22smoothing(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self), __pyx_v_not_learned_song_tag_map, __pyx_v_learned_song_tag_map, __pyx_v_learn_song_norm, __pyx_v_rank);
 
   /* function exit code */
   goto __pyx_L0;
@@ -8283,7 +8283,7 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_23smoothing(PyObject *__pyx_
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyObject *__pyx_v_not_learned_song_tag_map, PyObject *__pyx_v_learned_song_tag_map, PyObject *__pyx_v_learn_song_norm, int __pyx_v_rank) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_22smoothing(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyObject *__pyx_v_not_learned_song_tag_map, PyObject *__pyx_v_learned_song_tag_map, PyObject *__pyx_v_learn_song_norm, int __pyx_v_rank) {
   long __pyx_v_target_song;
   long __pyx_v_learn_song;
   PyArrayObject *__pyx_v_target_tags = 0;
@@ -8319,7 +8319,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("smoothing", 0);
 
-  /* "fm_sgd_opt.pyx":446
+  /* "cy_fm_batch.pyx":446
  *             long learn_song_index
  *             double distance
  *             double sum_distance = 0.0             # <<<<<<<<<<<<<<
@@ -8328,7 +8328,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
  */
   __pyx_v_sum_distance = 0.0;
 
-  /* "fm_sgd_opt.pyx":447
+  /* "cy_fm_batch.pyx":447
  *             double distance
  *             double sum_distance = 0.0
  *             long index = 0             # <<<<<<<<<<<<<<
@@ -8337,7 +8337,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
  */
   __pyx_v_index = 0;
 
-  /* "fm_sgd_opt.pyx":448
+  /* "cy_fm_batch.pyx":448
  *             double sum_distance = 0.0
  *             long index = 0
  *             double target_norm = 0.0             # <<<<<<<<<<<<<<
@@ -8346,7 +8346,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
  */
   __pyx_v_target_norm = 0.0;
 
-  /* "fm_sgd_opt.pyx":449
+  /* "cy_fm_batch.pyx":449
  *             long index = 0
  *             double target_norm = 0.0
  *             double learn_norm = 0.0             # <<<<<<<<<<<<<<
@@ -8355,7 +8355,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
  */
   __pyx_v_learn_norm = 0.0;
 
-  /* "fm_sgd_opt.pyx":453
+  /* "cy_fm_batch.pyx":453
  *             tuple top
  * 
  *         for target_song, target_tags in not_learned_song_tag_map.items():             # <<<<<<<<<<<<<<
@@ -8465,7 +8465,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_target_tags, ((PyArrayObject *)__pyx_t_6));
     __pyx_t_6 = 0;
 
-    /* "fm_sgd_opt.pyx":454
+    /* "cy_fm_batch.pyx":454
  * 
  *         for target_song, target_tags in not_learned_song_tag_map.items():
  *             index += 1             # <<<<<<<<<<<<<<
@@ -8474,7 +8474,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
  */
     __pyx_v_index = (__pyx_v_index + 1);
 
-    /* "fm_sgd_opt.pyx":455
+    /* "cy_fm_batch.pyx":455
  *         for target_song, target_tags in not_learned_song_tag_map.items():
  *             index += 1
  *             print index             # <<<<<<<<<<<<<<
@@ -8486,7 +8486,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
     if (__Pyx_PrintOne(0, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 455; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "fm_sgd_opt.pyx":456
+    /* "cy_fm_batch.pyx":456
  *             index += 1
  *             print index
  *             target_song_index = self.labels["song="+str(target_song)]             # <<<<<<<<<<<<<<
@@ -8517,7 +8517,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_target_song_index = __pyx_t_9;
 
-    /* "fm_sgd_opt.pyx":457
+    /* "cy_fm_batch.pyx":457
  *             print index
  *             target_song_index = self.labels["song="+str(target_song)]
  *             sum_distance = 0.0             # <<<<<<<<<<<<<<
@@ -8526,7 +8526,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
  */
     __pyx_v_sum_distance = 0.0;
 
-    /* "fm_sgd_opt.pyx":458
+    /* "cy_fm_batch.pyx":458
  *             target_song_index = self.labels["song="+str(target_song)]
  *             sum_distance = 0.0
  *             self.W[target_song_index] = 0.0 #             # <<<<<<<<<<<<<<
@@ -8535,7 +8535,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
  */
     if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->W), __pyx_v_target_song_index, __pyx_float_0_0, long, 1, __Pyx_PyInt_From_long, 0, 1, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 458; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "fm_sgd_opt.pyx":459
+    /* "cy_fm_batch.pyx":459
  *             sum_distance = 0.0
  *             self.W[target_song_index] = 0.0 #
  *             self.V[target_song_index] = 0.0 #             # <<<<<<<<<<<<<<
@@ -8544,7 +8544,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
  */
     if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->V), __pyx_v_target_song_index, __pyx_float_0_0, long, 1, __Pyx_PyInt_From_long, 0, 1, 1) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 459; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "fm_sgd_opt.pyx":460
+    /* "cy_fm_batch.pyx":460
  *             self.W[target_song_index] = 0.0 #
  *             self.V[target_song_index] = 0.0 #
  *             target_norm = np.linalg.norm(target_tags)             # <<<<<<<<<<<<<<
@@ -8588,7 +8588,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_target_norm = __pyx_t_10;
 
-    /* "fm_sgd_opt.pyx":461
+    /* "cy_fm_batch.pyx":461
  *             self.V[target_song_index] = 0.0 #
  *             target_norm = np.linalg.norm(target_tags)
  *             top_10 = []             # <<<<<<<<<<<<<<
@@ -8600,7 +8600,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
     __Pyx_XDECREF_SET(__pyx_v_top_10, ((PyObject*)__pyx_t_1));
     __pyx_t_1 = 0;
 
-    /* "fm_sgd_opt.pyx":462
+    /* "cy_fm_batch.pyx":462
  *             target_norm = np.linalg.norm(target_tags)
  *             top_10 = []
  *             for learn_song, learn_tags in learned_song_tag_map.items():             # <<<<<<<<<<<<<<
@@ -8710,7 +8710,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
       __Pyx_XDECREF_SET(__pyx_v_learn_tags, ((PyArrayObject *)__pyx_t_5));
       __pyx_t_5 = 0;
 
-      /* "fm_sgd_opt.pyx":464
+      /* "cy_fm_batch.pyx":464
  *             for learn_song, learn_tags in learned_song_tag_map.items():
  *                 #distance = self.calc_feature_distances(target_tags, learn_tags)
  *                 learn_norm = learn_song_norm[learn_song]             # <<<<<<<<<<<<<<
@@ -8730,16 +8730,16 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_v_learn_norm = __pyx_t_10;
 
-      /* "fm_sgd_opt.pyx":465
+      /* "cy_fm_batch.pyx":465
  *                 #distance = self.calc_feature_distances(target_tags, learn_tags)
  *                 learn_norm = learn_song_norm[learn_song]
  *                 distance = self.calc_cosine_similarity(target_tags, learn_tags, target_norm, learn_norm)             # <<<<<<<<<<<<<<
  *                 learn_song_index = self.labels["song="+str(learn_song)]
  *                 top_10.append((distance, learn_song_index))
  */
-      __pyx_v_distance = ((struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self->__pyx_vtab)->calc_cosine_similarity(__pyx_v_self, ((PyArrayObject *)__pyx_v_target_tags), ((PyArrayObject *)__pyx_v_learn_tags), __pyx_v_target_norm, __pyx_v_learn_norm);
+      __pyx_v_distance = ((struct __pyx_vtabstruct_11cy_fm_batch_CyFmBatch *)__pyx_v_self->__pyx_vtab)->calc_cosine_similarity(__pyx_v_self, ((PyArrayObject *)__pyx_v_target_tags), ((PyArrayObject *)__pyx_v_learn_tags), __pyx_v_target_norm, __pyx_v_learn_norm);
 
-      /* "fm_sgd_opt.pyx":466
+      /* "cy_fm_batch.pyx":466
  *                 learn_norm = learn_song_norm[learn_song]
  *                 distance = self.calc_cosine_similarity(target_tags, learn_tags, target_norm, learn_norm)
  *                 learn_song_index = self.labels["song="+str(learn_song)]             # <<<<<<<<<<<<<<
@@ -8770,7 +8770,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_v_learn_song_index = __pyx_t_9;
 
-      /* "fm_sgd_opt.pyx":467
+      /* "cy_fm_batch.pyx":467
  *                 distance = self.calc_cosine_similarity(target_tags, learn_tags, target_norm, learn_norm)
  *                 learn_song_index = self.labels["song="+str(learn_song)]
  *                 top_10.append((distance, learn_song_index))             # <<<<<<<<<<<<<<
@@ -8792,7 +8792,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
       __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_top_10, __pyx_t_7); if (unlikely(__pyx_t_14 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 467; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "fm_sgd_opt.pyx":462
+      /* "cy_fm_batch.pyx":462
  *             target_norm = np.linalg.norm(target_tags)
  *             top_10 = []
  *             for learn_song, learn_tags in learned_song_tag_map.items():             # <<<<<<<<<<<<<<
@@ -8802,7 +8802,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
     }
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-    /* "fm_sgd_opt.pyx":471
+    /* "cy_fm_batch.pyx":471
  *                 # self.V[target_song_index] += self.V[learn_song_index] * distance
  *                 # sum_distance += distance
  *             top_10.sort()             # <<<<<<<<<<<<<<
@@ -8811,7 +8811,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
  */
     __pyx_t_14 = PyList_Sort(__pyx_v_top_10); if (unlikely(__pyx_t_14 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 471; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "fm_sgd_opt.pyx":472
+    /* "cy_fm_batch.pyx":472
  *                 # sum_distance += distance
  *             top_10.sort()
  *             top_10.reverse()             # <<<<<<<<<<<<<<
@@ -8820,7 +8820,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
  */
     __pyx_t_14 = PyList_Reverse(__pyx_v_top_10); if (unlikely(__pyx_t_14 == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 472; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "fm_sgd_opt.pyx":473
+    /* "cy_fm_batch.pyx":473
  *             top_10.sort()
  *             top_10.reverse()
  *             for top in top_10[:rank]:             # <<<<<<<<<<<<<<
@@ -8843,7 +8843,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
       __Pyx_XDECREF_SET(__pyx_v_top, ((PyObject*)__pyx_t_6));
       __pyx_t_6 = 0;
 
-      /* "fm_sgd_opt.pyx":474
+      /* "cy_fm_batch.pyx":474
  *             top_10.reverse()
  *             for top in top_10[:rank]:
  *                 self.W[target_song_index] += self.W[top[1]] * top[0]             # <<<<<<<<<<<<<<
@@ -8882,7 +8882,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(((PyObject *)__pyx_t_15)); __pyx_t_15 = 0;
 
-      /* "fm_sgd_opt.pyx":475
+      /* "cy_fm_batch.pyx":475
  *             for top in top_10[:rank]:
  *                 self.W[target_song_index] += self.W[top[1]] * top[0]
  *                 self.V[target_song_index] += self.V[top[1]] * top[0]             # <<<<<<<<<<<<<<
@@ -8921,7 +8921,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       __Pyx_DECREF(((PyObject *)__pyx_t_15)); __pyx_t_15 = 0;
 
-      /* "fm_sgd_opt.pyx":476
+      /* "cy_fm_batch.pyx":476
  *                 self.W[target_song_index] += self.W[top[1]] * top[0]
  *                 self.V[target_song_index] += self.V[top[1]] * top[0]
  *                 sum_distance += top[0]             # <<<<<<<<<<<<<<
@@ -8944,7 +8944,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_v_sum_distance = __pyx_t_10;
 
-      /* "fm_sgd_opt.pyx":473
+      /* "cy_fm_batch.pyx":473
  *             top_10.sort()
  *             top_10.reverse()
  *             for top in top_10[:rank]:             # <<<<<<<<<<<<<<
@@ -8954,7 +8954,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
     }
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "fm_sgd_opt.pyx":478
+    /* "cy_fm_batch.pyx":478
  *                 sum_distance += top[0]
  * 
  *             self.V[target_song_index] /= sum_distance             # <<<<<<<<<<<<<<
@@ -8976,7 +8976,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(((PyObject *)__pyx_t_15)); __pyx_t_15 = 0;
 
-    /* "fm_sgd_opt.pyx":479
+    /* "cy_fm_batch.pyx":479
  * 
  *             self.V[target_song_index] /= sum_distance
  *             self.W[target_song_index] /= sum_distance             # <<<<<<<<<<<<<<
@@ -8998,7 +8998,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(((PyObject *)__pyx_t_15)); __pyx_t_15 = 0;
 
-    /* "fm_sgd_opt.pyx":453
+    /* "cy_fm_batch.pyx":453
  *             tuple top
  * 
  *         for target_song, target_tags in not_learned_song_tag_map.items():             # <<<<<<<<<<<<<<
@@ -9008,7 +9008,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "fm_sgd_opt.pyx":436
+  /* "cy_fm_batch.pyx":436
  * 
  *     """
  *     def smoothing(self, dict not_learned_song_tag_map, dict learned_song_tag_map, dict learn_song_norm, int rank):             # <<<<<<<<<<<<<<
@@ -9027,7 +9027,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
   __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_13);
   __Pyx_XDECREF(((PyObject *)__pyx_t_15));
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.smoothing", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.smoothing", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF((PyObject *)__pyx_v_target_tags);
@@ -9039,7 +9039,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":481
+/* "cy_fm_batch.pyx":481
  *             self.W[target_song_index] /= sum_distance
  * 
  *     cdef double calc_feature_distances(self, np.ndarray[DOUBLE, ndim=1, mode="c"] vector1, np.ndarray[DOUBLE, ndim=1, mode="c"] vector2):             # <<<<<<<<<<<<<<
@@ -9047,7 +9047,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_22smoothing(struct __pyx_obj
  *         cdef:
  */
 
-static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_feature_distances(CYTHON_UNUSED struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_vector1, PyArrayObject *__pyx_v_vector2) {
+static double __pyx_f_11cy_fm_batch_9CyFmBatch_calc_feature_distances(CYTHON_UNUSED struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_vector1, PyArrayObject *__pyx_v_vector2) {
   CYTHON_UNUSED double __pyx_v_euclid_distance;
   double __pyx_v_sum_distance;
   double __pyx_v_distance;
@@ -9079,16 +9079,16 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_feature_distances(CYTHON_UN
   __pyx_pybuffernd_vector2.rcbuffer = &__pyx_pybuffer_vector2;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vector1.rcbuffer->pybuffer, (PyObject*)__pyx_v_vector1, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 481; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vector1.rcbuffer->pybuffer, (PyObject*)__pyx_v_vector1, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 481; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_vector1.diminfo[0].strides = __pyx_pybuffernd_vector1.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_vector1.diminfo[0].shape = __pyx_pybuffernd_vector1.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vector2.rcbuffer->pybuffer, (PyObject*)__pyx_v_vector2, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 481; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vector2.rcbuffer->pybuffer, (PyObject*)__pyx_v_vector2, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 481; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_vector2.diminfo[0].strides = __pyx_pybuffernd_vector2.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_vector2.diminfo[0].shape = __pyx_pybuffernd_vector2.rcbuffer->pybuffer.shape[0];
 
-  /* "fm_sgd_opt.pyx":484
+  /* "cy_fm_batch.pyx":484
  * 
  *         cdef:
  *             double euclid_distance = 0.0             # <<<<<<<<<<<<<<
@@ -9097,7 +9097,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_feature_distances(CYTHON_UN
  */
   __pyx_v_euclid_distance = 0.0;
 
-  /* "fm_sgd_opt.pyx":485
+  /* "cy_fm_batch.pyx":485
  *         cdef:
  *             double euclid_distance = 0.0
  *             double sum_distance = 0.0             # <<<<<<<<<<<<<<
@@ -9106,7 +9106,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_feature_distances(CYTHON_UN
  */
   __pyx_v_sum_distance = 0.0;
 
-  /* "fm_sgd_opt.pyx":489
+  /* "cy_fm_batch.pyx":489
  *             int index
  * 
  *         for index in xrange(FEATURE_NUM):             # <<<<<<<<<<<<<<
@@ -9120,7 +9120,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_feature_distances(CYTHON_UN
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_index = __pyx_t_3;
 
-    /* "fm_sgd_opt.pyx":490
+    /* "cy_fm_batch.pyx":490
  * 
  *         for index in xrange(FEATURE_NUM):
  *             sum_distance += pow(vector1[index] - vector2[index], 2)             # <<<<<<<<<<<<<<
@@ -9147,10 +9147,10 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_feature_distances(CYTHON_UN
       __Pyx_RaiseBufferIndexError(__pyx_t_5);
       {__pyx_filename = __pyx_f[0]; __pyx_lineno = 490; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
-    __pyx_v_sum_distance = (__pyx_v_sum_distance + pow(((*__Pyx_BufPtrCContig1d(__pyx_t_10fm_sgd_opt_DOUBLE *, __pyx_pybuffernd_vector1.rcbuffer->pybuffer.buf, __pyx_t_4, __pyx_pybuffernd_vector1.diminfo[0].strides)) - (*__Pyx_BufPtrCContig1d(__pyx_t_10fm_sgd_opt_DOUBLE *, __pyx_pybuffernd_vector2.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_vector2.diminfo[0].strides))), 2.0));
+    __pyx_v_sum_distance = (__pyx_v_sum_distance + pow(((*__Pyx_BufPtrCContig1d(__pyx_t_11cy_fm_batch_DOUBLE *, __pyx_pybuffernd_vector1.rcbuffer->pybuffer.buf, __pyx_t_4, __pyx_pybuffernd_vector1.diminfo[0].strides)) - (*__Pyx_BufPtrCContig1d(__pyx_t_11cy_fm_batch_DOUBLE *, __pyx_pybuffernd_vector2.rcbuffer->pybuffer.buf, __pyx_t_6, __pyx_pybuffernd_vector2.diminfo[0].strides))), 2.0));
   }
 
-  /* "fm_sgd_opt.pyx":492
+  /* "cy_fm_batch.pyx":492
  *             sum_distance += pow(vector1[index] - vector2[index], 2)
  * 
  *         distance = 1/sqrt(sum_distance)             # <<<<<<<<<<<<<<
@@ -9164,7 +9164,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_feature_distances(CYTHON_UN
   }
   __pyx_v_distance = (1.0 / __pyx_t_7);
 
-  /* "fm_sgd_opt.pyx":493
+  /* "cy_fm_batch.pyx":493
  * 
  *         distance = 1/sqrt(sum_distance)
  *         return distance             # <<<<<<<<<<<<<<
@@ -9174,7 +9174,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_feature_distances(CYTHON_UN
   __pyx_r = __pyx_v_distance;
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":481
+  /* "cy_fm_batch.pyx":481
  *             self.W[target_song_index] /= sum_distance
  * 
  *     cdef double calc_feature_distances(self, np.ndarray[DOUBLE, ndim=1, mode="c"] vector1, np.ndarray[DOUBLE, ndim=1, mode="c"] vector2):             # <<<<<<<<<<<<<<
@@ -9190,7 +9190,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_feature_distances(CYTHON_UN
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_vector1.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_vector2.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_WriteUnraisable("fm_sgd_opt.CyFmSgdOpt.calc_feature_distances", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_WriteUnraisable("cy_fm_batch.CyFmBatch.calc_feature_distances", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
   __pyx_r = 0;
   goto __pyx_L2;
   __pyx_L0:;
@@ -9201,7 +9201,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_feature_distances(CYTHON_UN
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":495
+/* "cy_fm_batch.pyx":495
  *         return distance
  * 
  *     cdef double calc_pearson_distance(self, np.ndarray[DOUBLE, ndim=1] vector1, np.ndarray[DOUBLE, ndim=1] vector2):             # <<<<<<<<<<<<<<
@@ -9209,7 +9209,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_feature_distances(CYTHON_UN
  *         cdef:
  */
 
-static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNUSED struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_vector1, PyArrayObject *__pyx_v_vector2) {
+static double __pyx_f_11cy_fm_batch_9CyFmBatch_calc_pearson_distance(CYTHON_UNUSED struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_vector1, PyArrayObject *__pyx_v_vector2) {
   double __pyx_v_sum_vector1;
   double __pyx_v_sum_vector2;
   double __pyx_v_sum_vector1_sq;
@@ -9245,16 +9245,16 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
   __pyx_pybuffernd_vector2.rcbuffer = &__pyx_pybuffer_vector2;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vector1.rcbuffer->pybuffer, (PyObject*)__pyx_v_vector1, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 495; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vector1.rcbuffer->pybuffer, (PyObject*)__pyx_v_vector1, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 495; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_vector1.diminfo[0].strides = __pyx_pybuffernd_vector1.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_vector1.diminfo[0].shape = __pyx_pybuffernd_vector1.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vector2.rcbuffer->pybuffer, (PyObject*)__pyx_v_vector2, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 495; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vector2.rcbuffer->pybuffer, (PyObject*)__pyx_v_vector2, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 495; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_vector2.diminfo[0].strides = __pyx_pybuffernd_vector2.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_vector2.diminfo[0].shape = __pyx_pybuffernd_vector2.rcbuffer->pybuffer.shape[0];
 
-  /* "fm_sgd_opt.pyx":498
+  /* "cy_fm_batch.pyx":498
  * 
  *         cdef:
  *             double sum_vector1 = 0.0             # <<<<<<<<<<<<<<
@@ -9263,7 +9263,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
  */
   __pyx_v_sum_vector1 = 0.0;
 
-  /* "fm_sgd_opt.pyx":499
+  /* "cy_fm_batch.pyx":499
  *         cdef:
  *             double sum_vector1 = 0.0
  *             double sum_vector2 = 0.0             # <<<<<<<<<<<<<<
@@ -9272,7 +9272,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
  */
   __pyx_v_sum_vector2 = 0.0;
 
-  /* "fm_sgd_opt.pyx":500
+  /* "cy_fm_batch.pyx":500
  *             double sum_vector1 = 0.0
  *             double sum_vector2 = 0.0
  *             double sum_vector1_sq = 0.0             # <<<<<<<<<<<<<<
@@ -9281,7 +9281,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
  */
   __pyx_v_sum_vector1_sq = 0.0;
 
-  /* "fm_sgd_opt.pyx":501
+  /* "cy_fm_batch.pyx":501
  *             double sum_vector2 = 0.0
  *             double sum_vector1_sq = 0.0
  *             double sum_vector2_sq = 0.0             # <<<<<<<<<<<<<<
@@ -9290,7 +9290,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
  */
   __pyx_v_sum_vector2_sq = 0.0;
 
-  /* "fm_sgd_opt.pyx":502
+  /* "cy_fm_batch.pyx":502
  *             double sum_vector1_sq = 0.0
  *             double sum_vector2_sq = 0.0
  *             double p_sum = 0.0             # <<<<<<<<<<<<<<
@@ -9299,7 +9299,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
  */
   __pyx_v_p_sum = 0.0;
 
-  /* "fm_sgd_opt.pyx":503
+  /* "cy_fm_batch.pyx":503
  *             double sum_vector2_sq = 0.0
  *             double p_sum = 0.0
  *             double num = 0.0             # <<<<<<<<<<<<<<
@@ -9308,7 +9308,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
  */
   __pyx_v_num = 0.0;
 
-  /* "fm_sgd_opt.pyx":504
+  /* "cy_fm_batch.pyx":504
  *             double p_sum = 0.0
  *             double num = 0.0
  *             double den = 0.0             # <<<<<<<<<<<<<<
@@ -9317,7 +9317,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
  */
   __pyx_v_den = 0.0;
 
-  /* "fm_sgd_opt.pyx":507
+  /* "cy_fm_batch.pyx":507
  *             long index
  * 
  *         sum_vector1 = np.sum(vector1)             # <<<<<<<<<<<<<<
@@ -9358,7 +9358,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_sum_vector1 = __pyx_t_5;
 
-  /* "fm_sgd_opt.pyx":508
+  /* "cy_fm_batch.pyx":508
  * 
  *         sum_vector1 = np.sum(vector1)
  *         sum_vector2 = np.sum(vector2)             # <<<<<<<<<<<<<<
@@ -9399,7 +9399,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_sum_vector2 = __pyx_t_5;
 
-  /* "fm_sgd_opt.pyx":509
+  /* "cy_fm_batch.pyx":509
  *         sum_vector1 = np.sum(vector1)
  *         sum_vector2 = np.sum(vector2)
  *         sum_vector1_sq = np.sum(vector1**2)             # <<<<<<<<<<<<<<
@@ -9443,7 +9443,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_sum_vector1_sq = __pyx_t_5;
 
-  /* "fm_sgd_opt.pyx":510
+  /* "cy_fm_batch.pyx":510
  *         sum_vector2 = np.sum(vector2)
  *         sum_vector1_sq = np.sum(vector1**2)
  *         sum_vector2_sq = np.sum(vector2**2)             # <<<<<<<<<<<<<<
@@ -9487,7 +9487,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_sum_vector2_sq = __pyx_t_5;
 
-  /* "fm_sgd_opt.pyx":511
+  /* "cy_fm_batch.pyx":511
  *         sum_vector1_sq = np.sum(vector1**2)
  *         sum_vector2_sq = np.sum(vector2**2)
  *         p_sum = np.dot(vector1, vector2)             # <<<<<<<<<<<<<<
@@ -9530,7 +9530,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_p_sum = __pyx_t_5;
 
-  /* "fm_sgd_opt.pyx":513
+  /* "cy_fm_batch.pyx":513
  *         p_sum = np.dot(vector1, vector2)
  * 
  *         num = p_sum - (sum_vector1 * sum_vector2 / FEATURE_NUM)             # <<<<<<<<<<<<<<
@@ -9555,7 +9555,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_num = __pyx_t_5;
 
-  /* "fm_sgd_opt.pyx":514
+  /* "cy_fm_batch.pyx":514
  * 
  *         num = p_sum - (sum_vector1 * sum_vector2 / FEATURE_NUM)
  *         den = sqrt((sum_vector1_sq - pow(sum_vector1, 2)/FEATURE_NUM) * (sum_vector2_sq - pow(sum_vector2, 2)/FEATURE_NUM))             # <<<<<<<<<<<<<<
@@ -9598,7 +9598,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_den = sqrt(__pyx_t_5);
 
-  /* "fm_sgd_opt.pyx":515
+  /* "cy_fm_batch.pyx":515
  *         num = p_sum - (sum_vector1 * sum_vector2 / FEATURE_NUM)
  *         den = sqrt((sum_vector1_sq - pow(sum_vector1, 2)/FEATURE_NUM) * (sum_vector2_sq - pow(sum_vector2, 2)/FEATURE_NUM))
  *         if den == 0: return 0             # <<<<<<<<<<<<<<
@@ -9611,7 +9611,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
     goto __pyx_L0;
   }
 
-  /* "fm_sgd_opt.pyx":517
+  /* "cy_fm_batch.pyx":517
  *         if den == 0: return 0
  * 
  *         return num/den             # <<<<<<<<<<<<<<
@@ -9625,7 +9625,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
   __pyx_r = (__pyx_v_num / __pyx_v_den);
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":495
+  /* "cy_fm_batch.pyx":495
  *         return distance
  * 
  *     cdef double calc_pearson_distance(self, np.ndarray[DOUBLE, ndim=1] vector1, np.ndarray[DOUBLE, ndim=1] vector2):             # <<<<<<<<<<<<<<
@@ -9645,7 +9645,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_vector1.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_vector2.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_WriteUnraisable("fm_sgd_opt.CyFmSgdOpt.calc_pearson_distance", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_WriteUnraisable("cy_fm_batch.CyFmBatch.calc_pearson_distance", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
   __pyx_r = 0;
   goto __pyx_L2;
   __pyx_L0:;
@@ -9656,7 +9656,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":519
+/* "cy_fm_batch.pyx":519
  *         return num/den
  * 
  *     cdef double calc_cosine_similarity(self, np.ndarray[DOUBLE, ndim=1] vector1, np.ndarray[DOUBLE, ndim=1] vector2, double vector1_norm, double vector2_norm):             # <<<<<<<<<<<<<<
@@ -9664,7 +9664,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance(CYTHON_UNU
  *         return np.dot(vector1, vector2) / (vector1_norm * vector2_norm)
  */
 
-static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_cosine_similarity(CYTHON_UNUSED struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_vector1, PyArrayObject *__pyx_v_vector2, double __pyx_v_vector1_norm, double __pyx_v_vector2_norm) {
+static double __pyx_f_11cy_fm_batch_9CyFmBatch_calc_cosine_similarity(CYTHON_UNUSED struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_vector1, PyArrayObject *__pyx_v_vector2, double __pyx_v_vector1_norm, double __pyx_v_vector2_norm) {
   __Pyx_LocalBuf_ND __pyx_pybuffernd_vector1;
   __Pyx_Buffer __pyx_pybuffer_vector1;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_vector2;
@@ -9691,16 +9691,16 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_cosine_similarity(CYTHON_UN
   __pyx_pybuffernd_vector2.rcbuffer = &__pyx_pybuffer_vector2;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vector1.rcbuffer->pybuffer, (PyObject*)__pyx_v_vector1, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 519; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vector1.rcbuffer->pybuffer, (PyObject*)__pyx_v_vector1, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 519; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_vector1.diminfo[0].strides = __pyx_pybuffernd_vector1.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_vector1.diminfo[0].shape = __pyx_pybuffernd_vector1.rcbuffer->pybuffer.shape[0];
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vector2.rcbuffer->pybuffer, (PyObject*)__pyx_v_vector2, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 519; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_vector2.rcbuffer->pybuffer, (PyObject*)__pyx_v_vector2, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 519; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_vector2.diminfo[0].strides = __pyx_pybuffernd_vector2.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_vector2.diminfo[0].shape = __pyx_pybuffernd_vector2.rcbuffer->pybuffer.shape[0];
 
-  /* "fm_sgd_opt.pyx":521
+  /* "cy_fm_batch.pyx":521
  *     cdef double calc_cosine_similarity(self, np.ndarray[DOUBLE, ndim=1] vector1, np.ndarray[DOUBLE, ndim=1] vector2, double vector1_norm, double vector2_norm):
  * 
  *         return np.dot(vector1, vector2) / (vector1_norm * vector2_norm)             # <<<<<<<<<<<<<<
@@ -9750,7 +9750,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_cosine_similarity(CYTHON_UN
   __pyx_r = __pyx_t_6;
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":519
+  /* "cy_fm_batch.pyx":519
  *         return num/den
  * 
  *     cdef double calc_cosine_similarity(self, np.ndarray[DOUBLE, ndim=1] vector1, np.ndarray[DOUBLE, ndim=1] vector2, double vector1_norm, double vector2_norm):             # <<<<<<<<<<<<<<
@@ -9769,7 +9769,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_cosine_similarity(CYTHON_UN
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_vector1.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_vector2.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_WriteUnraisable("fm_sgd_opt.CyFmSgdOpt.calc_cosine_similarity", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
+  __Pyx_WriteUnraisable("cy_fm_batch.CyFmBatch.calc_cosine_similarity", __pyx_clineno, __pyx_lineno, __pyx_filename, 0, 0);
   __pyx_r = 0;
   goto __pyx_L2;
   __pyx_L0:;
@@ -9780,7 +9780,7 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_cosine_similarity(CYTHON_UN
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":523
+/* "cy_fm_batch.pyx":523
  *         return np.dot(vector1, vector2) / (vector1_norm * vector2_norm)
  * 
  *     def get_w_0(self):             # <<<<<<<<<<<<<<
@@ -9789,19 +9789,19 @@ static double __pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_cosine_similarity(CYTHON_UN
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_25get_w_0(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_25get_w_0(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_25get_w_0(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_25get_w_0(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_w_0 (wrapper)", 0);
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_24get_w_0(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_24get_w_0(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_24get_w_0(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_24get_w_0(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -9810,7 +9810,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_24get_w_0(struct __pyx_obj_1
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_w_0", 0);
 
-  /* "fm_sgd_opt.pyx":524
+  /* "cy_fm_batch.pyx":524
  * 
  *     def get_w_0(self):
  *         return self.w_0             # <<<<<<<<<<<<<<
@@ -9824,7 +9824,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_24get_w_0(struct __pyx_obj_1
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":523
+  /* "cy_fm_batch.pyx":523
  *         return np.dot(vector1, vector2) / (vector1_norm * vector2_norm)
  * 
  *     def get_w_0(self):             # <<<<<<<<<<<<<<
@@ -9835,7 +9835,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_24get_w_0(struct __pyx_obj_1
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.get_w_0", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.get_w_0", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -9843,7 +9843,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_24get_w_0(struct __pyx_obj_1
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":526
+/* "cy_fm_batch.pyx":526
  *         return self.w_0
  * 
  *     def get_W(self):             # <<<<<<<<<<<<<<
@@ -9852,24 +9852,24 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_24get_w_0(struct __pyx_obj_1
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_27get_W(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_27get_W(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_27get_W(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_27get_W(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_W (wrapper)", 0);
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_26get_W(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_26get_W(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_26get_W(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_26get_W(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_W", 0);
 
-  /* "fm_sgd_opt.pyx":527
+  /* "cy_fm_batch.pyx":527
  * 
  *     def get_W(self):
  *         return self.W             # <<<<<<<<<<<<<<
@@ -9881,7 +9881,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_26get_W(struct __pyx_obj_10f
   __pyx_r = ((PyObject *)__pyx_v_self->W);
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":526
+  /* "cy_fm_batch.pyx":526
  *         return self.w_0
  * 
  *     def get_W(self):             # <<<<<<<<<<<<<<
@@ -9896,7 +9896,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_26get_W(struct __pyx_obj_10f
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":529
+/* "cy_fm_batch.pyx":529
  *         return self.W
  * 
  *     def get_V(self):             # <<<<<<<<<<<<<<
@@ -9905,24 +9905,24 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_26get_W(struct __pyx_obj_10f
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_29get_V(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_29get_V(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_29get_V(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_29get_V(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_V (wrapper)", 0);
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_28get_V(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_28get_V(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_28get_V(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_28get_V(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_V", 0);
 
-  /* "fm_sgd_opt.pyx":530
+  /* "cy_fm_batch.pyx":530
  * 
  *     def get_V(self):
  *         return self.V             # <<<<<<<<<<<<<<
@@ -9934,7 +9934,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_28get_V(struct __pyx_obj_10f
   __pyx_r = ((PyObject *)__pyx_v_self->V);
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":529
+  /* "cy_fm_batch.pyx":529
  *         return self.W
  * 
  *     def get_V(self):             # <<<<<<<<<<<<<<
@@ -9949,7 +9949,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_28get_V(struct __pyx_obj_10f
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":532
+/* "cy_fm_batch.pyx":532
  *         return self.V
  * 
  *     def get_E(self):             # <<<<<<<<<<<<<<
@@ -9958,24 +9958,24 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_28get_V(struct __pyx_obj_10f
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_31get_E(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_31get_E(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_31get_E(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_31get_E(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_E (wrapper)", 0);
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_30get_E(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_30get_E(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_30get_E(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_30get_E(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_E", 0);
 
-  /* "fm_sgd_opt.pyx":533
+  /* "cy_fm_batch.pyx":533
  * 
  *     def get_E(self):
  *         return self.E             # <<<<<<<<<<<<<<
@@ -9987,7 +9987,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_30get_E(struct __pyx_obj_10f
   __pyx_r = ((PyObject *)__pyx_v_self->E);
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":532
+  /* "cy_fm_batch.pyx":532
  *         return self.V
  * 
  *     def get_E(self):             # <<<<<<<<<<<<<<
@@ -10002,7 +10002,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_30get_E(struct __pyx_obj_10f
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":535
+/* "cy_fm_batch.pyx":535
  *         return self.E
  * 
  *     def get_self_error(self):             # <<<<<<<<<<<<<<
@@ -10011,19 +10011,19 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_30get_E(struct __pyx_obj_10f
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_33get_self_error(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_33get_self_error(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_33get_self_error(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_33get_self_error(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_self_error (wrapper)", 0);
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_32get_self_error(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_32get_self_error(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_32get_self_error(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_32get_self_error(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -10032,7 +10032,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_32get_self_error(struct __py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_self_error", 0);
 
-  /* "fm_sgd_opt.pyx":536
+  /* "cy_fm_batch.pyx":536
  * 
  *     def get_self_error(self):
  *         return self.error             # <<<<<<<<<<<<<<
@@ -10046,7 +10046,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_32get_self_error(struct __py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":535
+  /* "cy_fm_batch.pyx":535
  *         return self.E
  * 
  *     def get_self_error(self):             # <<<<<<<<<<<<<<
@@ -10057,7 +10057,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_32get_self_error(struct __py
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.get_self_error", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.get_self_error", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -10065,7 +10065,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_32get_self_error(struct __py
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":538
+/* "cy_fm_batch.pyx":538
  *         return self.error
  * 
  *     def get_adagrad_w_0(self):             # <<<<<<<<<<<<<<
@@ -10074,19 +10074,19 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_32get_self_error(struct __py
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_35get_adagrad_w_0(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_35get_adagrad_w_0(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_35get_adagrad_w_0(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_35get_adagrad_w_0(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_adagrad_w_0 (wrapper)", 0);
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_34get_adagrad_w_0(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_34get_adagrad_w_0(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_34get_adagrad_w_0(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_34get_adagrad_w_0(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -10095,7 +10095,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_34get_adagrad_w_0(struct __p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_adagrad_w_0", 0);
 
-  /* "fm_sgd_opt.pyx":539
+  /* "cy_fm_batch.pyx":539
  * 
  *     def get_adagrad_w_0(self):
  *         return self.adagrad_w_0             # <<<<<<<<<<<<<<
@@ -10109,7 +10109,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_34get_adagrad_w_0(struct __p
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":538
+  /* "cy_fm_batch.pyx":538
  *         return self.error
  * 
  *     def get_adagrad_w_0(self):             # <<<<<<<<<<<<<<
@@ -10120,7 +10120,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_34get_adagrad_w_0(struct __p
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.get_adagrad_w_0", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.get_adagrad_w_0", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -10128,7 +10128,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_34get_adagrad_w_0(struct __p
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":541
+/* "cy_fm_batch.pyx":541
  *         return self.adagrad_w_0
  * 
  *     def get_adagrad_W(self):             # <<<<<<<<<<<<<<
@@ -10137,24 +10137,24 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_34get_adagrad_w_0(struct __p
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_37get_adagrad_W(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_37get_adagrad_W(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_37get_adagrad_W(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_37get_adagrad_W(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_adagrad_W (wrapper)", 0);
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_36get_adagrad_W(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_36get_adagrad_W(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_36get_adagrad_W(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_36get_adagrad_W(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_adagrad_W", 0);
 
-  /* "fm_sgd_opt.pyx":542
+  /* "cy_fm_batch.pyx":542
  * 
  *     def get_adagrad_W(self):
  *         return self.adagrad_W             # <<<<<<<<<<<<<<
@@ -10166,7 +10166,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_36get_adagrad_W(struct __pyx
   __pyx_r = ((PyObject *)__pyx_v_self->adagrad_W);
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":541
+  /* "cy_fm_batch.pyx":541
  *         return self.adagrad_w_0
  * 
  *     def get_adagrad_W(self):             # <<<<<<<<<<<<<<
@@ -10181,7 +10181,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_36get_adagrad_W(struct __pyx
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":544
+/* "cy_fm_batch.pyx":544
  *         return self.adagrad_W
  * 
  *     def get_adagrad_V(self):             # <<<<<<<<<<<<<<
@@ -10190,24 +10190,24 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_36get_adagrad_W(struct __pyx
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_39get_adagrad_V(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_39get_adagrad_V(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_39get_adagrad_V(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_39get_adagrad_V(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_adagrad_V (wrapper)", 0);
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_38get_adagrad_V(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_38get_adagrad_V(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_38get_adagrad_V(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_38get_adagrad_V(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_adagrad_V", 0);
 
-  /* "fm_sgd_opt.pyx":545
+  /* "cy_fm_batch.pyx":545
  * 
  *     def get_adagrad_V(self):
  *         return self.adagrad_V             # <<<<<<<<<<<<<<
@@ -10219,7 +10219,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_38get_adagrad_V(struct __pyx
   __pyx_r = ((PyObject *)__pyx_v_self->adagrad_V);
   goto __pyx_L0;
 
-  /* "fm_sgd_opt.pyx":544
+  /* "cy_fm_batch.pyx":544
  *         return self.adagrad_W
  * 
  *     def get_adagrad_V(self):             # <<<<<<<<<<<<<<
@@ -10234,7 +10234,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_38get_adagrad_V(struct __pyx
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":547
+/* "cy_fm_batch.pyx":547
  *         return self.adagrad_V
  * 
  *     def set_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] W):             # <<<<<<<<<<<<<<
@@ -10243,8 +10243,8 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_38get_adagrad_V(struct __pyx
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_41set_W(PyObject *__pyx_v_self, PyObject *__pyx_v_W); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_41set_W(PyObject *__pyx_v_self, PyObject *__pyx_v_W) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_41set_W(PyObject *__pyx_v_self, PyObject *__pyx_v_W); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_41set_W(PyObject *__pyx_v_self, PyObject *__pyx_v_W) {
   CYTHON_UNUSED int __pyx_lineno = 0;
   CYTHON_UNUSED const char *__pyx_filename = NULL;
   CYTHON_UNUSED int __pyx_clineno = 0;
@@ -10252,7 +10252,7 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_41set_W(PyObject *__pyx_v_se
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_W (wrapper)", 0);
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_W), __pyx_ptype_5numpy_ndarray, 1, "W", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 547; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_40set_W(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self), ((PyArrayObject *)__pyx_v_W));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_40set_W(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self), ((PyArrayObject *)__pyx_v_W));
 
   /* function exit code */
   goto __pyx_L0;
@@ -10263,7 +10263,7 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_41set_W(PyObject *__pyx_v_se
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_40set_W(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_W) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_40set_W(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_W) {
   __Pyx_LocalBuf_ND __pyx_pybuffernd_W;
   __Pyx_Buffer __pyx_pybuffer_W;
   PyObject *__pyx_r = NULL;
@@ -10278,11 +10278,11 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_40set_W(struct __pyx_obj_10f
   __pyx_pybuffernd_W.rcbuffer = &__pyx_pybuffer_W;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_W.rcbuffer->pybuffer, (PyObject*)__pyx_v_W, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 547; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_W.rcbuffer->pybuffer, (PyObject*)__pyx_v_W, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 547; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_W.diminfo[0].strides = __pyx_pybuffernd_W.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_W.diminfo[0].shape = __pyx_pybuffernd_W.rcbuffer->pybuffer.shape[0];
 
-  /* "fm_sgd_opt.pyx":549
+  /* "cy_fm_batch.pyx":549
  *     def set_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] W):
  * 
  *         self.W = W             # <<<<<<<<<<<<<<
@@ -10295,7 +10295,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_40set_W(struct __pyx_obj_10f
   __Pyx_DECREF(((PyObject *)__pyx_v_self->W));
   __pyx_v_self->W = ((PyArrayObject *)__pyx_v_W);
 
-  /* "fm_sgd_opt.pyx":547
+  /* "cy_fm_batch.pyx":547
  *         return self.adagrad_V
  * 
  *     def set_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] W):             # <<<<<<<<<<<<<<
@@ -10311,7 +10311,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_40set_W(struct __pyx_obj_10f
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_W.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.set_W", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.set_W", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -10322,7 +10322,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_40set_W(struct __pyx_obj_10f
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":551
+/* "cy_fm_batch.pyx":551
  *         self.W = W
  * 
  *     def set_V(self, np.ndarray[DOUBLE, ndim=2, mode="c"] V):             # <<<<<<<<<<<<<<
@@ -10331,8 +10331,8 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_40set_W(struct __pyx_obj_10f
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_43set_V(PyObject *__pyx_v_self, PyObject *__pyx_v_V); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_43set_V(PyObject *__pyx_v_self, PyObject *__pyx_v_V) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_43set_V(PyObject *__pyx_v_self, PyObject *__pyx_v_V); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_43set_V(PyObject *__pyx_v_self, PyObject *__pyx_v_V) {
   CYTHON_UNUSED int __pyx_lineno = 0;
   CYTHON_UNUSED const char *__pyx_filename = NULL;
   CYTHON_UNUSED int __pyx_clineno = 0;
@@ -10340,7 +10340,7 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_43set_V(PyObject *__pyx_v_se
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_V (wrapper)", 0);
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_V), __pyx_ptype_5numpy_ndarray, 1, "V", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 551; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_42set_V(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self), ((PyArrayObject *)__pyx_v_V));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_42set_V(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self), ((PyArrayObject *)__pyx_v_V));
 
   /* function exit code */
   goto __pyx_L0;
@@ -10351,7 +10351,7 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_43set_V(PyObject *__pyx_v_se
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_42set_V(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_V) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_42set_V(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_V) {
   __Pyx_LocalBuf_ND __pyx_pybuffernd_V;
   __Pyx_Buffer __pyx_pybuffer_V;
   PyObject *__pyx_r = NULL;
@@ -10366,11 +10366,11 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_42set_V(struct __pyx_obj_10f
   __pyx_pybuffernd_V.rcbuffer = &__pyx_pybuffer_V;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_V.rcbuffer->pybuffer, (PyObject*)__pyx_v_V, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 551; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_V.rcbuffer->pybuffer, (PyObject*)__pyx_v_V, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 551; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_V.diminfo[0].strides = __pyx_pybuffernd_V.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_V.diminfo[0].shape = __pyx_pybuffernd_V.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_V.diminfo[1].strides = __pyx_pybuffernd_V.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_V.diminfo[1].shape = __pyx_pybuffernd_V.rcbuffer->pybuffer.shape[1];
 
-  /* "fm_sgd_opt.pyx":553
+  /* "cy_fm_batch.pyx":553
  *     def set_V(self, np.ndarray[DOUBLE, ndim=2, mode="c"] V):
  * 
  *         self.V = V             # <<<<<<<<<<<<<<
@@ -10383,7 +10383,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_42set_V(struct __pyx_obj_10f
   __Pyx_DECREF(((PyObject *)__pyx_v_self->V));
   __pyx_v_self->V = ((PyArrayObject *)__pyx_v_V);
 
-  /* "fm_sgd_opt.pyx":551
+  /* "cy_fm_batch.pyx":551
  *         self.W = W
  * 
  *     def set_V(self, np.ndarray[DOUBLE, ndim=2, mode="c"] V):             # <<<<<<<<<<<<<<
@@ -10399,7 +10399,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_42set_V(struct __pyx_obj_10f
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_V.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.set_V", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.set_V", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -10410,7 +10410,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_42set_V(struct __pyx_obj_10f
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":555
+/* "cy_fm_batch.pyx":555
  *         self.V = V
  * 
  *     def set_adagrad_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] adagrad_W):             # <<<<<<<<<<<<<<
@@ -10419,8 +10419,8 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_42set_V(struct __pyx_obj_10f
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_45set_adagrad_W(PyObject *__pyx_v_self, PyObject *__pyx_v_adagrad_W); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_45set_adagrad_W(PyObject *__pyx_v_self, PyObject *__pyx_v_adagrad_W) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_45set_adagrad_W(PyObject *__pyx_v_self, PyObject *__pyx_v_adagrad_W); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_45set_adagrad_W(PyObject *__pyx_v_self, PyObject *__pyx_v_adagrad_W) {
   CYTHON_UNUSED int __pyx_lineno = 0;
   CYTHON_UNUSED const char *__pyx_filename = NULL;
   CYTHON_UNUSED int __pyx_clineno = 0;
@@ -10428,7 +10428,7 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_45set_adagrad_W(PyObject *__
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_adagrad_W (wrapper)", 0);
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_adagrad_W), __pyx_ptype_5numpy_ndarray, 1, "adagrad_W", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 555; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_44set_adagrad_W(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self), ((PyArrayObject *)__pyx_v_adagrad_W));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_44set_adagrad_W(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self), ((PyArrayObject *)__pyx_v_adagrad_W));
 
   /* function exit code */
   goto __pyx_L0;
@@ -10439,7 +10439,7 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_45set_adagrad_W(PyObject *__
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_44set_adagrad_W(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_adagrad_W) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_44set_adagrad_W(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_adagrad_W) {
   __Pyx_LocalBuf_ND __pyx_pybuffernd_adagrad_W;
   __Pyx_Buffer __pyx_pybuffer_adagrad_W;
   PyObject *__pyx_r = NULL;
@@ -10454,11 +10454,11 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_44set_adagrad_W(struct __pyx
   __pyx_pybuffernd_adagrad_W.rcbuffer = &__pyx_pybuffer_adagrad_W;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_adagrad_W.rcbuffer->pybuffer, (PyObject*)__pyx_v_adagrad_W, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 555; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_adagrad_W.rcbuffer->pybuffer, (PyObject*)__pyx_v_adagrad_W, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 555; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_adagrad_W.diminfo[0].strides = __pyx_pybuffernd_adagrad_W.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_adagrad_W.diminfo[0].shape = __pyx_pybuffernd_adagrad_W.rcbuffer->pybuffer.shape[0];
 
-  /* "fm_sgd_opt.pyx":557
+  /* "cy_fm_batch.pyx":557
  *     def set_adagrad_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] adagrad_W):
  * 
  *         self.adagrad_W = adagrad_W             # <<<<<<<<<<<<<<
@@ -10471,7 +10471,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_44set_adagrad_W(struct __pyx
   __Pyx_DECREF(((PyObject *)__pyx_v_self->adagrad_W));
   __pyx_v_self->adagrad_W = ((PyArrayObject *)__pyx_v_adagrad_W);
 
-  /* "fm_sgd_opt.pyx":555
+  /* "cy_fm_batch.pyx":555
  *         self.V = V
  * 
  *     def set_adagrad_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] adagrad_W):             # <<<<<<<<<<<<<<
@@ -10487,7 +10487,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_44set_adagrad_W(struct __pyx
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_adagrad_W.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.set_adagrad_W", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.set_adagrad_W", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -10498,7 +10498,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_44set_adagrad_W(struct __pyx
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":559
+/* "cy_fm_batch.pyx":559
  *         self.adagrad_W = adagrad_W
  * 
  *     def set_adagrad_V(self, np.ndarray[DOUBLE, ndim=2, mode="c"] adagrad_V):             # <<<<<<<<<<<<<<
@@ -10507,8 +10507,8 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_44set_adagrad_W(struct __pyx
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_47set_adagrad_V(PyObject *__pyx_v_self, PyObject *__pyx_v_adagrad_V); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_47set_adagrad_V(PyObject *__pyx_v_self, PyObject *__pyx_v_adagrad_V) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_47set_adagrad_V(PyObject *__pyx_v_self, PyObject *__pyx_v_adagrad_V); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_47set_adagrad_V(PyObject *__pyx_v_self, PyObject *__pyx_v_adagrad_V) {
   CYTHON_UNUSED int __pyx_lineno = 0;
   CYTHON_UNUSED const char *__pyx_filename = NULL;
   CYTHON_UNUSED int __pyx_clineno = 0;
@@ -10516,7 +10516,7 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_47set_adagrad_V(PyObject *__
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_adagrad_V (wrapper)", 0);
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_adagrad_V), __pyx_ptype_5numpy_ndarray, 1, "adagrad_V", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 559; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_46set_adagrad_V(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self), ((PyArrayObject *)__pyx_v_adagrad_V));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_46set_adagrad_V(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self), ((PyArrayObject *)__pyx_v_adagrad_V));
 
   /* function exit code */
   goto __pyx_L0;
@@ -10527,7 +10527,7 @@ static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_47set_adagrad_V(PyObject *__
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_46set_adagrad_V(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyArrayObject *__pyx_v_adagrad_V) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_46set_adagrad_V(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyArrayObject *__pyx_v_adagrad_V) {
   __Pyx_LocalBuf_ND __pyx_pybuffernd_adagrad_V;
   __Pyx_Buffer __pyx_pybuffer_adagrad_V;
   PyObject *__pyx_r = NULL;
@@ -10542,11 +10542,11 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_46set_adagrad_V(struct __pyx
   __pyx_pybuffernd_adagrad_V.rcbuffer = &__pyx_pybuffer_adagrad_V;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_adagrad_V.rcbuffer->pybuffer, (PyObject*)__pyx_v_adagrad_V, &__Pyx_TypeInfo_nn___pyx_t_10fm_sgd_opt_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 559; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_adagrad_V.rcbuffer->pybuffer, (PyObject*)__pyx_v_adagrad_V, &__Pyx_TypeInfo_nn___pyx_t_11cy_fm_batch_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 2, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 559; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_adagrad_V.diminfo[0].strides = __pyx_pybuffernd_adagrad_V.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_adagrad_V.diminfo[0].shape = __pyx_pybuffernd_adagrad_V.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_adagrad_V.diminfo[1].strides = __pyx_pybuffernd_adagrad_V.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_adagrad_V.diminfo[1].shape = __pyx_pybuffernd_adagrad_V.rcbuffer->pybuffer.shape[1];
 
-  /* "fm_sgd_opt.pyx":561
+  /* "cy_fm_batch.pyx":561
  *     def set_adagrad_V(self, np.ndarray[DOUBLE, ndim=2, mode="c"] adagrad_V):
  * 
  *         self.adagrad_V = adagrad_V             # <<<<<<<<<<<<<<
@@ -10559,7 +10559,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_46set_adagrad_V(struct __pyx
   __Pyx_DECREF(((PyObject *)__pyx_v_self->adagrad_V));
   __pyx_v_self->adagrad_V = ((PyArrayObject *)__pyx_v_adagrad_V);
 
-  /* "fm_sgd_opt.pyx":559
+  /* "cy_fm_batch.pyx":559
  *         self.adagrad_W = adagrad_W
  * 
  *     def set_adagrad_V(self, np.ndarray[DOUBLE, ndim=2, mode="c"] adagrad_V):             # <<<<<<<<<<<<<<
@@ -10575,7 +10575,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_46set_adagrad_V(struct __pyx
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_adagrad_V.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.set_adagrad_V", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.set_adagrad_V", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -10586,7 +10586,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_46set_adagrad_V(struct __pyx
   return __pyx_r;
 }
 
-/* "fm_sgd_opt.pyx":563
+/* "cy_fm_batch.pyx":563
  *         self.adagrad_V = adagrad_V
  * 
  *     def set_n(self, n):             # <<<<<<<<<<<<<<
@@ -10595,19 +10595,19 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_46set_adagrad_V(struct __pyx
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_49set_n(PyObject *__pyx_v_self, PyObject *__pyx_v_n); /*proto*/
-static PyObject *__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_49set_n(PyObject *__pyx_v_self, PyObject *__pyx_v_n) {
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_49set_n(PyObject *__pyx_v_self, PyObject *__pyx_v_n); /*proto*/
+static PyObject *__pyx_pw_11cy_fm_batch_9CyFmBatch_49set_n(PyObject *__pyx_v_self, PyObject *__pyx_v_n) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_n (wrapper)", 0);
-  __pyx_r = __pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_48set_n(((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)__pyx_v_self), ((PyObject *)__pyx_v_n));
+  __pyx_r = __pyx_pf_11cy_fm_batch_9CyFmBatch_48set_n(((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)__pyx_v_self), ((PyObject *)__pyx_v_n));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_48set_n(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *__pyx_v_self, PyObject *__pyx_v_n) {
+static PyObject *__pyx_pf_11cy_fm_batch_9CyFmBatch_48set_n(struct __pyx_obj_11cy_fm_batch_CyFmBatch *__pyx_v_self, PyObject *__pyx_v_n) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   long __pyx_t_1;
@@ -10616,7 +10616,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_48set_n(struct __pyx_obj_10f
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("set_n", 0);
 
-  /* "fm_sgd_opt.pyx":565
+  /* "cy_fm_batch.pyx":565
  *     def set_n(self, n):
  * 
  *         self.n = n             # <<<<<<<<<<<<<<
@@ -10624,7 +10624,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_48set_n(struct __pyx_obj_10f
   __pyx_t_1 = __Pyx_PyInt_As_long(__pyx_v_n); if (unlikely((__pyx_t_1 == (long)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 565; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_self->n = __pyx_t_1;
 
-  /* "fm_sgd_opt.pyx":563
+  /* "cy_fm_batch.pyx":563
  *         self.adagrad_V = adagrad_V
  * 
  *     def set_n(self, n):             # <<<<<<<<<<<<<<
@@ -10636,7 +10636,7 @@ static PyObject *__pyx_pf_10fm_sgd_opt_10CyFmSgdOpt_48set_n(struct __pyx_obj_10f
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("fm_sgd_opt.CyFmSgdOpt.set_n", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_fm_batch.CyFmBatch.set_n", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -24307,10 +24307,10 @@ static void __pyx_memoryview__slice_assign_scalar(char *__pyx_v_data, Py_ssize_t
 
   /* function exit code */
 }
-static struct __pyx_vtabstruct_10fm_sgd_opt_CyFmSgdOpt __pyx_vtable_10fm_sgd_opt_CyFmSgdOpt;
+static struct __pyx_vtabstruct_11cy_fm_batch_CyFmBatch __pyx_vtable_11cy_fm_batch_CyFmBatch;
 
-static PyObject *__pyx_tp_new_10fm_sgd_opt_CyFmSgdOpt(PyTypeObject *t, PyObject *a, PyObject *k) {
-  struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *p;
+static PyObject *__pyx_tp_new_11cy_fm_batch_CyFmBatch(PyTypeObject *t, PyObject *a, PyObject *k) {
+  struct __pyx_obj_11cy_fm_batch_CyFmBatch *p;
   PyObject *o;
   if (likely((t->tp_flags & Py_TPFLAGS_IS_ABSTRACT) == 0)) {
     o = (*t->tp_alloc)(t, 0);
@@ -24318,8 +24318,8 @@ static PyObject *__pyx_tp_new_10fm_sgd_opt_CyFmSgdOpt(PyTypeObject *t, PyObject 
     o = (PyObject *) PyBaseObject_Type.tp_new(t, __pyx_empty_tuple, 0);
   }
   if (unlikely(!o)) return 0;
-  p = ((struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)o);
-  p->__pyx_vtab = __pyx_vtabptr_10fm_sgd_opt_CyFmSgdOpt;
+  p = ((struct __pyx_obj_11cy_fm_batch_CyFmBatch *)o);
+  p->__pyx_vtab = __pyx_vtabptr_11cy_fm_batch_CyFmBatch;
   p->R = ((PyArrayObject *)Py_None); Py_INCREF(Py_None);
   p->R_v = ((PyArrayObject *)Py_None); Py_INCREF(Py_None);
   p->targets = ((PyArrayObject *)Py_None); Py_INCREF(Py_None);
@@ -24335,14 +24335,14 @@ static PyObject *__pyx_tp_new_10fm_sgd_opt_CyFmSgdOpt(PyTypeObject *t, PyObject 
   p->ixs.memview = NULL;
   p->reg_ixs.data = NULL;
   p->reg_ixs.memview = NULL;
-  if (unlikely(__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_1__cinit__(o, a, k) < 0)) {
+  if (unlikely(__pyx_pw_11cy_fm_batch_9CyFmBatch_1__cinit__(o, a, k) < 0)) {
     Py_DECREF(o); o = 0;
   }
   return o;
 }
 
-static void __pyx_tp_dealloc_10fm_sgd_opt_CyFmSgdOpt(PyObject *o) {
-  struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *p = (struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)o;
+static void __pyx_tp_dealloc_11cy_fm_batch_CyFmBatch(PyObject *o) {
+  struct __pyx_obj_11cy_fm_batch_CyFmBatch *p = (struct __pyx_obj_11cy_fm_batch_CyFmBatch *)o;
   #if PY_VERSION_HEX >= 0x030400a1
   if (unlikely(Py_TYPE(o)->tp_finalize) && !_PyGC_FINALIZED(o)) {
     if (PyObject_CallFinalizerFromDealloc(o)) return;
@@ -24365,9 +24365,9 @@ static void __pyx_tp_dealloc_10fm_sgd_opt_CyFmSgdOpt(PyObject *o) {
   (*Py_TYPE(o)->tp_free)(o);
 }
 
-static int __pyx_tp_traverse_10fm_sgd_opt_CyFmSgdOpt(PyObject *o, visitproc v, void *a) {
+static int __pyx_tp_traverse_11cy_fm_batch_CyFmBatch(PyObject *o, visitproc v, void *a) {
   int e;
-  struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *p = (struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)o;
+  struct __pyx_obj_11cy_fm_batch_CyFmBatch *p = (struct __pyx_obj_11cy_fm_batch_CyFmBatch *)o;
   if (p->R) {
     e = (*v)(((PyObject*)p->R), a); if (e) return e;
   }
@@ -24404,9 +24404,9 @@ static int __pyx_tp_traverse_10fm_sgd_opt_CyFmSgdOpt(PyObject *o, visitproc v, v
   return 0;
 }
 
-static int __pyx_tp_clear_10fm_sgd_opt_CyFmSgdOpt(PyObject *o) {
+static int __pyx_tp_clear_11cy_fm_batch_CyFmBatch(PyObject *o) {
   PyObject* tmp;
-  struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *p = (struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *)o;
+  struct __pyx_obj_11cy_fm_batch_CyFmBatch *p = (struct __pyx_obj_11cy_fm_batch_CyFmBatch *)o;
   tmp = ((PyObject*)p->R);
   p->R = ((PyArrayObject *)Py_None); Py_INCREF(Py_None);
   Py_XDECREF(tmp);
@@ -24443,40 +24443,40 @@ static int __pyx_tp_clear_10fm_sgd_opt_CyFmSgdOpt(PyObject *o) {
   return 0;
 }
 
-static PyMethodDef __pyx_methods_10fm_sgd_opt_CyFmSgdOpt[] = {
-  {"get_sum_error", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_3get_sum_error, METH_NOARGS, 0},
-  {"get_all_error", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_5get_all_error, METH_NOARGS, __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_4get_all_error},
-  {"repeat_optimization", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_7repeat_optimization, METH_NOARGS, 0},
-  {"learning", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_9learning, METH_NOARGS, __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_8learning},
-  {"get_rankings", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_11get_rankings, METH_VARARGS|METH_KEYWORDS, __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_10get_rankings},
-  {"predict", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_13predict, METH_VARARGS|METH_KEYWORDS, __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_12predict},
-  {"save_redis", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_15save_redis, METH_VARARGS|METH_KEYWORDS, __pyx_doc_10fm_sgd_opt_10CyFmSgdOpt_14save_redis},
-  {"save_scalar", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_17save_scalar, METH_VARARGS|METH_KEYWORDS, 0},
-  {"save_one_dim_array", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_19save_one_dim_array, METH_VARARGS|METH_KEYWORDS, 0},
-  {"save_two_dim_array", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_21save_two_dim_array, METH_VARARGS|METH_KEYWORDS, 0},
-  {"smoothing", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_23smoothing, METH_VARARGS|METH_KEYWORDS, 0},
-  {"get_w_0", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_25get_w_0, METH_NOARGS, 0},
-  {"get_W", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_27get_W, METH_NOARGS, 0},
-  {"get_V", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_29get_V, METH_NOARGS, 0},
-  {"get_E", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_31get_E, METH_NOARGS, 0},
-  {"get_self_error", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_33get_self_error, METH_NOARGS, 0},
-  {"get_adagrad_w_0", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_35get_adagrad_w_0, METH_NOARGS, 0},
-  {"get_adagrad_W", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_37get_adagrad_W, METH_NOARGS, 0},
-  {"get_adagrad_V", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_39get_adagrad_V, METH_NOARGS, 0},
-  {"set_W", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_41set_W, METH_O, 0},
-  {"set_V", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_43set_V, METH_O, 0},
-  {"set_adagrad_W", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_45set_adagrad_W, METH_O, 0},
-  {"set_adagrad_V", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_47set_adagrad_V, METH_O, 0},
-  {"set_n", (PyCFunction)__pyx_pw_10fm_sgd_opt_10CyFmSgdOpt_49set_n, METH_O, 0},
+static PyMethodDef __pyx_methods_11cy_fm_batch_CyFmBatch[] = {
+  {"get_sum_error", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_3get_sum_error, METH_NOARGS, 0},
+  {"get_all_error", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_5get_all_error, METH_NOARGS, __pyx_doc_11cy_fm_batch_9CyFmBatch_4get_all_error},
+  {"repeat_optimization", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_7repeat_optimization, METH_NOARGS, 0},
+  {"learning", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_9learning, METH_NOARGS, __pyx_doc_11cy_fm_batch_9CyFmBatch_8learning},
+  {"get_rankings", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_11get_rankings, METH_VARARGS|METH_KEYWORDS, __pyx_doc_11cy_fm_batch_9CyFmBatch_10get_rankings},
+  {"predict", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_13predict, METH_VARARGS|METH_KEYWORDS, __pyx_doc_11cy_fm_batch_9CyFmBatch_12predict},
+  {"save_redis", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_15save_redis, METH_VARARGS|METH_KEYWORDS, __pyx_doc_11cy_fm_batch_9CyFmBatch_14save_redis},
+  {"save_scalar", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_17save_scalar, METH_VARARGS|METH_KEYWORDS, 0},
+  {"save_one_dim_array", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_19save_one_dim_array, METH_VARARGS|METH_KEYWORDS, 0},
+  {"save_two_dim_array", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_21save_two_dim_array, METH_VARARGS|METH_KEYWORDS, 0},
+  {"smoothing", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_23smoothing, METH_VARARGS|METH_KEYWORDS, 0},
+  {"get_w_0", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_25get_w_0, METH_NOARGS, 0},
+  {"get_W", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_27get_W, METH_NOARGS, 0},
+  {"get_V", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_29get_V, METH_NOARGS, 0},
+  {"get_E", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_31get_E, METH_NOARGS, 0},
+  {"get_self_error", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_33get_self_error, METH_NOARGS, 0},
+  {"get_adagrad_w_0", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_35get_adagrad_w_0, METH_NOARGS, 0},
+  {"get_adagrad_W", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_37get_adagrad_W, METH_NOARGS, 0},
+  {"get_adagrad_V", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_39get_adagrad_V, METH_NOARGS, 0},
+  {"set_W", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_41set_W, METH_O, 0},
+  {"set_V", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_43set_V, METH_O, 0},
+  {"set_adagrad_W", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_45set_adagrad_W, METH_O, 0},
+  {"set_adagrad_V", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_47set_adagrad_V, METH_O, 0},
+  {"set_n", (PyCFunction)__pyx_pw_11cy_fm_batch_9CyFmBatch_49set_n, METH_O, 0},
   {0, 0, 0, 0}
 };
 
-static PyTypeObject __pyx_type_10fm_sgd_opt_CyFmSgdOpt = {
+static PyTypeObject __pyx_type_11cy_fm_batch_CyFmBatch = {
   PyVarObject_HEAD_INIT(0, 0)
-  "fm_sgd_opt.CyFmSgdOpt", /*tp_name*/
-  sizeof(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt), /*tp_basicsize*/
+  "cy_fm_batch.CyFmBatch", /*tp_name*/
+  sizeof(struct __pyx_obj_11cy_fm_batch_CyFmBatch), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_10fm_sgd_opt_CyFmSgdOpt, /*tp_dealloc*/
+  __pyx_tp_dealloc_11cy_fm_batch_CyFmBatch, /*tp_dealloc*/
   0, /*tp_print*/
   0, /*tp_getattr*/
   0, /*tp_setattr*/
@@ -24498,13 +24498,13 @@ static PyTypeObject __pyx_type_10fm_sgd_opt_CyFmSgdOpt = {
   0, /*tp_as_buffer*/
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC, /*tp_flags*/
   "\n    parameters\n    R : \345\255\246\347\277\222\343\203\207\343\203\274\343\202\277\351\205\215\345\210\227(FM\343\203\225\343\202\251\343\203\274\343\203\236\343\203\203\343\203\210\345\275\242\345\274\217) N * n\n    R_v : \343\203\206\343\202\271\343\203\210\347\224\250\343\203\207\343\203\274\343\202\277\351\205\215\345\210\227(FM\343\203\225\343\202\251\343\203\274\343\203\236\343\203\203\343\203\210\345\275\242\345\274\217) regs\343\201\250grads\343\201\256\346\234\200\351\201\251\345\214\226\347\224\250\n    targets : \345\255\246\347\277\222\343\203\207\343\203\274\343\202\277\343\201\256\346\225\231\345\270\253\343\203\251\343\203\231\343\203\253 N\n    w_0 : \343\203\220\343\202\244\343\202\242\343\202\271 1\n    W : \345\220\204\347\211\271\345\276\264\351\207\217\343\201\256\351\207\215\343\201\277 n\n    V : \345\220\204\347\211\271\345\276\264\351\207\217\343\201\256\347\233\270\344\272\222\344\275\234\347\224\250\343\201\256\351\207\215\343\201\277 n * K\n    E : \345\220\204\343\203\207\343\203\274\343\202\277\343\201\256\344\272\210\346\270\254\350\252\244\345\267\256 N\n    adagrad_w_0 : adagrad\343\201\253\343\201\212\343\201\221\343\202\213w_0\343\201\256\344\277\235\345\255\230\351\205\215\345\210\227 1\n    adagrad_V : adagrad\343\201\253\343\201\212\343\201\221\343\202\213V\343\201\256\344\277\235\345\255\230\351\205\215\345\210\227 n * K\n    adagrad_W : adagrad\343\201\253\343\201\212\343\201\221\343\202\213W\343\201\256\344\277\235\345\255\230\351\205\215\345\210\227 n\n    N : \345\255\246\347\277\222\343\203\207\343\203\274\343\202\277\346\225\260\n    n : \347\211\271\345\276\264\351\207\217\343\201\256\347\267\217\346\225\260\n    l_rate : \345\255\246\347\277\222\347\216\207\n    r_param : \345\213\276\351\205\215\347\216\207\n    K : V\343\201\256\346\254\241\345\205\203\n    step : \345\255\246\347\277\222\343\202\271\343\203\206\343\203\203\343\203\227\346\225\260\n    regs : regulations \351\205\215\345\210\227 K+2 (0: w_0, 1: W, 2~K+2: V)\n    error: \347\233\256\347\232\204\351\226\242\346\225\260\n    now_error: \343\201\235\343\201\256\350\246\226\350\201\264\345\261\245\346\255\264\343\201\256\345\255\246\347\277\222\350\252\244\345\267\256\n    ixs: nonzero\343\202\244\343\203\263\343\203\207\343\203\203\343\202\257\343\202\271\351\205\215\345\210\227\n    reg_ixs: \346\255\243\350\246\217\345\214\226\351\240\205\347\233\256\343\201\256\343\202\244\343\203\263\343\203\207\343\203\203\343\202\257\343\202\271\351\205\215\345\210\227\n    ", /*tp_doc*/
-  __pyx_tp_traverse_10fm_sgd_opt_CyFmSgdOpt, /*tp_traverse*/
-  __pyx_tp_clear_10fm_sgd_opt_CyFmSgdOpt, /*tp_clear*/
+  __pyx_tp_traverse_11cy_fm_batch_CyFmBatch, /*tp_traverse*/
+  __pyx_tp_clear_11cy_fm_batch_CyFmBatch, /*tp_clear*/
   0, /*tp_richcompare*/
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
   0, /*tp_iternext*/
-  __pyx_methods_10fm_sgd_opt_CyFmSgdOpt, /*tp_methods*/
+  __pyx_methods_11cy_fm_batch_CyFmBatch, /*tp_methods*/
   0, /*tp_members*/
   0, /*tp_getset*/
   0, /*tp_base*/
@@ -24514,7 +24514,7 @@ static PyTypeObject __pyx_type_10fm_sgd_opt_CyFmSgdOpt = {
   0, /*tp_dictoffset*/
   0, /*tp_init*/
   0, /*tp_alloc*/
-  __pyx_tp_new_10fm_sgd_opt_CyFmSgdOpt, /*tp_new*/
+  __pyx_tp_new_11cy_fm_batch_CyFmBatch, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -24646,7 +24646,7 @@ static PyBufferProcs __pyx_tp_as_buffer_array = {
 
 static PyTypeObject __pyx_type___pyx_array = {
   PyVarObject_HEAD_INIT(0, 0)
-  "fm_sgd_opt.array", /*tp_name*/
+  "cy_fm_batch.array", /*tp_name*/
   sizeof(struct __pyx_array_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_array, /*tp_dealloc*/
@@ -24752,7 +24752,7 @@ static PyMethodDef __pyx_methods_Enum[] = {
 
 static PyTypeObject __pyx_type___pyx_MemviewEnum = {
   PyVarObject_HEAD_INIT(0, 0)
-  "fm_sgd_opt.Enum", /*tp_name*/
+  "cy_fm_batch.Enum", /*tp_name*/
   sizeof(struct __pyx_MemviewEnum_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_Enum, /*tp_dealloc*/
@@ -24999,7 +24999,7 @@ static PyBufferProcs __pyx_tp_as_buffer_memoryview = {
 
 static PyTypeObject __pyx_type___pyx_memoryview = {
   PyVarObject_HEAD_INIT(0, 0)
-  "fm_sgd_opt.memoryview", /*tp_name*/
+  "cy_fm_batch.memoryview", /*tp_name*/
   sizeof(struct __pyx_memoryview_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_memoryview, /*tp_dealloc*/
@@ -25124,7 +25124,7 @@ static struct PyGetSetDef __pyx_getsets__memoryviewslice[] = {
 
 static PyTypeObject __pyx_type___pyx_memoryviewslice = {
   PyVarObject_HEAD_INIT(0, 0)
-  "fm_sgd_opt._memoryviewslice", /*tp_name*/
+  "cy_fm_batch._memoryviewslice", /*tp_name*/
   sizeof(struct __pyx_memoryviewslice_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc__memoryviewslice, /*tp_dealloc*/
@@ -25199,7 +25199,7 @@ static struct PyModuleDef __pyx_moduledef = {
   #else
     PyModuleDef_HEAD_INIT,
   #endif
-    "fm_sgd_opt",
+    "cy_fm_batch",
     __pyx_k_Factorization_Machinecython_SGD, /* m_doc */
     -1, /* m_size */
     __pyx_methods /* m_methods */,
@@ -25385,7 +25385,7 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "fm_sgd_opt.pyx":146
+  /* "cy_fm_batch.pyx":146
  *         features = np.dot(self.W, self.R[data_index])
  *         for f in xrange(self.K):
  *             iterations += pow(np.dot(self.V[:,f], self.R[data_index]), 2) - np.dot(self.V[:,f]*self.V[:,f], self.R[data_index]*self.R[data_index])             # <<<<<<<<<<<<<<
@@ -25691,11 +25691,11 @@ static int __Pyx_InitGlobals(void) {
 }
 
 #if PY_MAJOR_VERSION < 3
-PyMODINIT_FUNC initfm_sgd_opt(void); /*proto*/
-PyMODINIT_FUNC initfm_sgd_opt(void)
+PyMODINIT_FUNC initcy_fm_batch(void); /*proto*/
+PyMODINIT_FUNC initcy_fm_batch(void)
 #else
-PyMODINIT_FUNC PyInit_fm_sgd_opt(void); /*proto*/
-PyMODINIT_FUNC PyInit_fm_sgd_opt(void)
+PyMODINIT_FUNC PyInit_cy_fm_batch(void); /*proto*/
+PyMODINIT_FUNC PyInit_cy_fm_batch(void)
 #endif
 {
   PyObject *__pyx_t_1 = NULL;
@@ -25712,7 +25712,7 @@ PyMODINIT_FUNC PyInit_fm_sgd_opt(void)
           Py_FatalError("failed to import 'refnanny' module");
   }
   #endif
-  __Pyx_RefNannySetupContext("PyMODINIT_FUNC PyInit_fm_sgd_opt(void)", 0);
+  __Pyx_RefNannySetupContext("PyMODINIT_FUNC PyInit_cy_fm_batch(void)", 0);
   if (__Pyx_check_binary_version() < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_empty_tuple = PyTuple_New(0); if (unlikely(!__pyx_empty_tuple)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_empty_bytes = PyBytes_FromStringAndSize("", 0); if (unlikely(!__pyx_empty_bytes)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -25740,7 +25740,7 @@ PyMODINIT_FUNC PyInit_fm_sgd_opt(void)
   #endif
   /*--- Module creation code ---*/
   #if PY_MAJOR_VERSION < 3
-  __pyx_m = Py_InitModule4("fm_sgd_opt", __pyx_methods, __pyx_k_Factorization_Machinecython_SGD, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
+  __pyx_m = Py_InitModule4("cy_fm_batch", __pyx_methods, __pyx_k_Factorization_Machinecython_SGD, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
   #else
   __pyx_m = PyModule_Create(&__pyx_moduledef);
   #endif
@@ -25757,14 +25757,14 @@ PyMODINIT_FUNC PyInit_fm_sgd_opt(void)
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   #endif
-  if (__pyx_module_is_main_fm_sgd_opt) {
+  if (__pyx_module_is_main_cy_fm_batch) {
     if (PyObject_SetAttrString(__pyx_m, "__name__", __pyx_n_s_main) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (!PyDict_GetItemString(modules, "fm_sgd_opt")) {
-      if (unlikely(PyDict_SetItemString(modules, "fm_sgd_opt", __pyx_m) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (!PyDict_GetItemString(modules, "cy_fm_batch")) {
+      if (unlikely(PyDict_SetItemString(modules, "cy_fm_batch", __pyx_m) < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
   }
   #endif
@@ -25781,23 +25781,23 @@ PyMODINIT_FUNC PyInit_fm_sgd_opt(void)
   /*--- Variable export code ---*/
   /*--- Function export code ---*/
   /*--- Type init code ---*/
-  __pyx_vtabptr_10fm_sgd_opt_CyFmSgdOpt = &__pyx_vtable_10fm_sgd_opt_CyFmSgdOpt;
-  __pyx_vtable_10fm_sgd_opt_CyFmSgdOpt._get_error = (void (*)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, long))__pyx_f_10fm_sgd_opt_10CyFmSgdOpt__get_error;
-  __pyx_vtable_10fm_sgd_opt_CyFmSgdOpt._update_w_0 = (void (*)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, long))__pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_w_0;
-  __pyx_vtable_10fm_sgd_opt_CyFmSgdOpt._update_W = (void (*)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, long, long))__pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_W;
-  __pyx_vtable_10fm_sgd_opt_CyFmSgdOpt._update_V = (void (*)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, long, long, int))__pyx_f_10fm_sgd_opt_10CyFmSgdOpt__update_V;
-  __pyx_vtable_10fm_sgd_opt_CyFmSgdOpt._calc_regs = (void (*)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, double, PyArrayObject *, PyArrayObject *))__pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_regs;
-  __pyx_vtable_10fm_sgd_opt_CyFmSgdOpt._calc_error = (double (*)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, long))__pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error;
-  __pyx_vtable_10fm_sgd_opt_CyFmSgdOpt._calc_error_regs = (double (*)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, long))__pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_error_regs;
-  __pyx_vtable_10fm_sgd_opt_CyFmSgdOpt._calc_rating = (double (*)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, PyArrayObject *, char *, PyArrayObject *))__pyx_f_10fm_sgd_opt_10CyFmSgdOpt__calc_rating;
-  __pyx_vtable_10fm_sgd_opt_CyFmSgdOpt.calc_feature_distances = (double (*)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, PyArrayObject *, PyArrayObject *))__pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_feature_distances;
-  __pyx_vtable_10fm_sgd_opt_CyFmSgdOpt.calc_pearson_distance = (double (*)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, PyArrayObject *, PyArrayObject *))__pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_pearson_distance;
-  __pyx_vtable_10fm_sgd_opt_CyFmSgdOpt.calc_cosine_similarity = (double (*)(struct __pyx_obj_10fm_sgd_opt_CyFmSgdOpt *, PyArrayObject *, PyArrayObject *, double, double))__pyx_f_10fm_sgd_opt_10CyFmSgdOpt_calc_cosine_similarity;
-  if (PyType_Ready(&__pyx_type_10fm_sgd_opt_CyFmSgdOpt) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_type_10fm_sgd_opt_CyFmSgdOpt.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_10fm_sgd_opt_CyFmSgdOpt.tp_dict, __pyx_vtabptr_10fm_sgd_opt_CyFmSgdOpt) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (PyObject_SetAttrString(__pyx_m, "CyFmSgdOpt", (PyObject *)&__pyx_type_10fm_sgd_opt_CyFmSgdOpt) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_ptype_10fm_sgd_opt_CyFmSgdOpt = &__pyx_type_10fm_sgd_opt_CyFmSgdOpt;
+  __pyx_vtabptr_11cy_fm_batch_CyFmBatch = &__pyx_vtable_11cy_fm_batch_CyFmBatch;
+  __pyx_vtable_11cy_fm_batch_CyFmBatch._get_error = (void (*)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, long))__pyx_f_11cy_fm_batch_9CyFmBatch__get_error;
+  __pyx_vtable_11cy_fm_batch_CyFmBatch._update_w_0 = (void (*)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, long))__pyx_f_11cy_fm_batch_9CyFmBatch__update_w_0;
+  __pyx_vtable_11cy_fm_batch_CyFmBatch._update_W = (void (*)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, long, long))__pyx_f_11cy_fm_batch_9CyFmBatch__update_W;
+  __pyx_vtable_11cy_fm_batch_CyFmBatch._update_V = (void (*)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, long, long, int))__pyx_f_11cy_fm_batch_9CyFmBatch__update_V;
+  __pyx_vtable_11cy_fm_batch_CyFmBatch._calc_regs = (void (*)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, double, PyArrayObject *, PyArrayObject *))__pyx_f_11cy_fm_batch_9CyFmBatch__calc_regs;
+  __pyx_vtable_11cy_fm_batch_CyFmBatch._calc_error = (double (*)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, long))__pyx_f_11cy_fm_batch_9CyFmBatch__calc_error;
+  __pyx_vtable_11cy_fm_batch_CyFmBatch._calc_error_regs = (double (*)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, long))__pyx_f_11cy_fm_batch_9CyFmBatch__calc_error_regs;
+  __pyx_vtable_11cy_fm_batch_CyFmBatch._calc_rating = (double (*)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, PyArrayObject *, char *, PyArrayObject *))__pyx_f_11cy_fm_batch_9CyFmBatch__calc_rating;
+  __pyx_vtable_11cy_fm_batch_CyFmBatch.calc_feature_distances = (double (*)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, PyArrayObject *, PyArrayObject *))__pyx_f_11cy_fm_batch_9CyFmBatch_calc_feature_distances;
+  __pyx_vtable_11cy_fm_batch_CyFmBatch.calc_pearson_distance = (double (*)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, PyArrayObject *, PyArrayObject *))__pyx_f_11cy_fm_batch_9CyFmBatch_calc_pearson_distance;
+  __pyx_vtable_11cy_fm_batch_CyFmBatch.calc_cosine_similarity = (double (*)(struct __pyx_obj_11cy_fm_batch_CyFmBatch *, PyArrayObject *, PyArrayObject *, double, double))__pyx_f_11cy_fm_batch_9CyFmBatch_calc_cosine_similarity;
+  if (PyType_Ready(&__pyx_type_11cy_fm_batch_CyFmBatch) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_type_11cy_fm_batch_CyFmBatch.tp_print = 0;
+  if (__Pyx_SetVtable(__pyx_type_11cy_fm_batch_CyFmBatch.tp_dict, __pyx_vtabptr_11cy_fm_batch_CyFmBatch) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "CyFmBatch", (PyObject *)&__pyx_type_11cy_fm_batch_CyFmBatch) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_ptype_11cy_fm_batch_CyFmBatch = &__pyx_type_11cy_fm_batch_CyFmBatch;
   if (PyType_Ready(&__pyx_type___pyx_array) < 0) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 101; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type___pyx_array.tp_print = 0;
   __pyx_array_type = &__pyx_type___pyx_array;
@@ -25845,7 +25845,7 @@ PyMODINIT_FUNC PyInit_fm_sgd_opt(void)
   if (__Pyx_patch_abc() < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   #endif
 
-  /* "fm_sgd_opt.pyx":10
+  /* "cy_fm_batch.pyx":10
  * 
  * from libc.math cimport pow, sqrt
  * import math             # <<<<<<<<<<<<<<
@@ -25857,7 +25857,7 @@ PyMODINIT_FUNC PyInit_fm_sgd_opt(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_math, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "fm_sgd_opt.pyx":11
+  /* "cy_fm_batch.pyx":11
  * from libc.math cimport pow, sqrt
  * import math
  * import random             # <<<<<<<<<<<<<<
@@ -25869,7 +25869,7 @@ PyMODINIT_FUNC PyInit_fm_sgd_opt(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_random, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "fm_sgd_opt.pyx":12
+  /* "cy_fm_batch.pyx":12
  * import math
  * import random
  * import time             # <<<<<<<<<<<<<<
@@ -25881,7 +25881,7 @@ PyMODINIT_FUNC PyInit_fm_sgd_opt(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_time, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "fm_sgd_opt.pyx":13
+  /* "cy_fm_batch.pyx":13
  * import random
  * import time
  * import numpy as np             # <<<<<<<<<<<<<<
@@ -25893,7 +25893,7 @@ PyMODINIT_FUNC PyInit_fm_sgd_opt(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 13; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "fm_sgd_opt.pyx":16
+  /* "cy_fm_batch.pyx":16
  * cimport numpy as np
  * cimport cython
  * import redis             # <<<<<<<<<<<<<<
@@ -25905,7 +25905,7 @@ PyMODINIT_FUNC PyInit_fm_sgd_opt(void)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_redis, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 16; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "fm_sgd_opt.pyx":18
+  /* "cy_fm_batch.pyx":18
  * import redis
  * 
  * np.import_array()             # <<<<<<<<<<<<<<
@@ -25914,16 +25914,16 @@ PyMODINIT_FUNC PyInit_fm_sgd_opt(void)
  */
   import_array();
 
-  /* "fm_sgd_opt.pyx":23
+  /* "cy_fm_batch.pyx":23
  * ctypedef np.int64_t INTEGER
  * 
  * FEATURE_NUM = 43             # <<<<<<<<<<<<<<
- * cdef class CyFmSgdOpt:
+ * cdef class CyFmBatch:
  *     """
  */
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_FEATURE_NUM, __pyx_int_43) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 23; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "fm_sgd_opt.pyx":1
+  /* "cy_fm_batch.pyx":1
  * # -*- coding:utf-8 -*-             # <<<<<<<<<<<<<<
  * """
  * Factorization Machinecython
@@ -26057,11 +26057,11 @@ PyMODINIT_FUNC PyInit_fm_sgd_opt(void)
   __Pyx_XDECREF(__pyx_t_1);
   if (__pyx_m) {
     if (__pyx_d) {
-      __Pyx_AddTraceback("init fm_sgd_opt", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init cy_fm_batch", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     Py_DECREF(__pyx_m); __pyx_m = 0;
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init fm_sgd_opt");
+    PyErr_SetString(PyExc_ImportError, "init cy_fm_batch");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
