@@ -268,6 +268,18 @@ class FmOnline:
         for param in top_matrix:
             redis_obj.rpush(key, param)
     
+    def get_one_song_matrix(self, song_id):
+
+        top_matrix = np.zeros(self.n)
+        song_index = self.labels["song="+str(song_id)]
+        user_index = self.labels["user="+str(self.user)]
+        top_matrix[user_index] = 1.0
+        top_matrix[song_index] = 1.0
+        for index, tag_value in enumerate(self.song_tag_map[song_id]):
+            top_matrix[self.tag_map[index]] = tag_value
+
+        return top_matrix
+
     def set_W_and_V(self):
         """
         スムージング後、WとVを再セット
