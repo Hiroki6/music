@@ -61,6 +61,9 @@ def smoothing_validation():
     smoothing(smoothing_evaluate=True)
     print time.time() - start_time
 
+"""
+スムージングメソッド
+"""
 def smoothing(smoothing_evaluate=False):
 
     s_obj = smoothing_lib.SmoothingFm(8, smoothing_evaluate)
@@ -91,11 +94,19 @@ def redis_flush(db=0):
 FMのオンライン学習
 逐次的にデータを読み込む(メモリ削減のため)
 """
-def online_train():
+def online_train(step=1):
 
+    start_time = time.time()
     data_labels, tag_map = create_matrix.get_data_labels_and_tag_map()
-
     fm_obj = fm_online.FmOnline(data_labels, tag_map)
     fm_obj.prepare_train(0.005, K=8, step=1)
-    fm_obj.fit(5)
+    fm_obj.fit(step)
     fm_obj.calc_error()
+    fm_obj.arrange_user()
+    redis_flush()
+    fm_obj.cy_fm.save_redis()
+    labels = FM_obj.labels
+    save_params_into_radis(labels, tag_map) # labelsをredisに保存
+    smoothing()
+    fm_obj.save_top_k_ranking_all_user(smoothing_flag = True)
+    print time.time() - start_time
