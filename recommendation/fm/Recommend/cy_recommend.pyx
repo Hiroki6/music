@@ -92,8 +92,6 @@ cdef class CyRecommendFm:
         if self.labels.has_key("song="+song):
             ixs[-1] = self.labels["song="+song]
         for ix in ixs:
-            if ix == 63166:
-                print ix
             features += self.W[ix] * matrix[ix]
         for f in xrange(self.K):
             dot_sum = 0.0
