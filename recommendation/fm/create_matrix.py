@@ -74,7 +74,7 @@ def create_fm_matrix():
 def get_uniq_users():
    
     uniq_users = []
-    with open(os.path.join(BASE, "../data_10/uniq_user.csv")) as f:
+    with open(os.path.join(BASE, "../data/user.csv")) as f:
         for line in f:
             user = line.replace("\n","")
             uniq_users.append(user)
@@ -122,7 +122,7 @@ def transform_matrix(test_data, data_labels, tag_map, test_nums):
 
 def get_ratelist():
 
-    rate_dic, rate_nums = get_dic_and_nums_by_file("../data_10/train.csv")
+    rate_dic, rate_nums = get_dic_and_nums_by_file("../data/train.csv")
 
     app_preferences = models.Preference.objects.all()
     for app_preference in app_preferences:
@@ -133,7 +133,7 @@ def get_ratelist():
         rate_dic[user].append(song_id)
         rate_nums += 1
 
-    regs_dic, regs_nums = get_dic_and_nums_by_file("../data_10/regulation.csv")
+    regs_dic, regs_nums = get_dic_and_nums_by_file("../data/regulation.csv")
 
     return rate_dic, rate_nums, regs_dic, regs_nums
 
