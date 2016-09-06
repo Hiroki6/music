@@ -5,7 +5,7 @@ from django.template import Context, loader
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Song, Artist, Preference
-from forms import MusicSearchForm
+from forms import MusicSearchForm, EmotionSearchForm
 from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from django.core.context_processors import csrf
@@ -33,6 +33,9 @@ def index(request):
     contents = get_pagination_contents(paginator, page)
     return render(request, 'recommendation/index.html', {'user': user, 'results': contents})
 
+"""
+音楽推薦
+"""
 # フィードバック
 @login_required
 def feedback(request):
@@ -216,3 +219,9 @@ def questionnaire(request):
 @login_required
 def end(request):
     return render(request, 'recommendation/end.html')
+
+"""
+印象語検索
+"""
+def emotion_search(request):
+    return render(request, 'recommendation/emotion_search.html')
