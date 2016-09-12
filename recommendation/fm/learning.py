@@ -5,7 +5,7 @@ import redis
 import time
 import sys
 sys.dont_write_bytecode = True 
-import smoothing_lib
+import smoothing
 sys.path.append('./FmSgd')
 import fm_batch
 import fm_online
@@ -66,7 +66,7 @@ def smoothing_validation():
 """
 def smoothing(smoothing_evaluate=False):
 
-    s_obj = smoothing_lib.SmoothingFm(8, smoothing_evaluate)
+    s_obj = smoothing.SmoothingFm(8, smoothing_evaluate)
     s_obj.learning()
     s_obj.smoothing()
 
