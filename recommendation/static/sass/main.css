@@ -59,6 +59,10 @@ body {
       color: #77eeff; }
       body header .recommend-songs:hover {
         color: #00bfff; }
+    body header .emotion-search {
+      color: #e8d1ff; }
+      body header .emotion-search:hover {
+        color: #6a5acd; }
     body header .logout {
       float: right;
       color: #ffffe0;
@@ -94,6 +98,26 @@ body {
       body .search-form .search-submit:hover {
         color: #0000cd;
         background-color: #fff; }
+  body select {
+    border: none;
+    background-color: #fff;
+    height: 30px;
+    font-weight: bold;
+    font-size: 100%; }
+    body select option {
+      background-color: #fff;
+      color: #00bfff;
+      padding: 5px;
+      border-radius: 5px;
+      text-align: center;
+      float: left;
+      margin: 2px; }
+      body select option:hover {
+        color: #fff;
+        background-color: #00bfff; }
+      body select option::selection {
+        color: #fff !important;
+        background-color: #00bfff !important; }
   body .main {
     width: 85%;
     margin-left: auto;
@@ -103,26 +127,6 @@ body {
       color: #ff0000; }
     body .main .error-msg {
       color: #ff0000; }
-    body .main select {
-      border: none;
-      background-color: #fff;
-      height: 30px;
-      font-weight: bold;
-      font-size: 100%; }
-      body .main select option {
-        background-color: #fff;
-        color: #00bfff;
-        padding: 5px;
-        border-radius: 5px;
-        text-align: center;
-        float: left;
-        margin: 2px; }
-        body .main select option:hover {
-          color: #fff;
-          background-color: #00bfff; }
-        body .main select option::selection {
-          color: #fff !important;
-          background-color: #00bfff !important; }
     body .main .recommend-song-list {
       font-size: 20px;
       color: #00ff7f; }

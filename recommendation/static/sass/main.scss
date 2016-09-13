@@ -79,6 +79,12 @@ body{
         color: #00bfff;
       }
     }
+    .emotion-search{
+      color: #e8d1ff;
+      &:hover{
+        color: #6a5acd;
+      }
+    }
     .logout{
       float: right;
       color: #ffffe0;
@@ -126,6 +132,33 @@ body{
       }
     }
   }
+  select{
+    border: none;
+    background-color: #fff;
+    height: 30px;
+    font-weight: bold;
+    font-size: 100%;
+    // position: absolute;
+    // bottom: 0;
+    // right: 30px;
+    option{
+      background-color: #fff;
+      color: #00bfff;
+      padding: 5px;
+      border-radius: 5px;
+      text-align: center;
+      float: left;
+      margin: 2px;
+      &:hover{
+        color: #fff;
+        background-color: #00bfff;
+      }
+      &::selection{
+        color: #fff !important;
+        background-color: #00bfff !important;
+      }
+    }
+  }
   .main{
     width: 85%;
     margin-left: auto;
@@ -136,33 +169,6 @@ body{
     }
     .error-msg {
       color: #ff0000;
-    }
-    select{
-      border: none;
-      background-color: #fff;
-      height: 30px;
-      font-weight: bold;
-      font-size: 100%;
-      // position: absolute;
-      // bottom: 0;
-      // right: 30px;
-      option{
-        background-color: #fff;
-        color: #00bfff;
-        padding: 5px;
-        border-radius: 5px;
-        text-align: center;
-        float: left;
-        margin: 2px;
-        &:hover{
-          color: #fff;
-          background-color: #00bfff;
-        }
-        &::selection{
-          color: #fff !important;
-          background-color: #00bfff !important;
-        }
-      }
     }
     .recommend-song-list{
       font-size: 20px;
