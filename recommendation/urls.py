@@ -18,5 +18,7 @@ urlpatterns = [
     url(r'^select_song/$', views.select_song, name = 'select_song'),
     url(r'^questionnaire/$', views.questionnaire, name = 'questionnaire'),
     url(r'^end/$', views.end, name = 'end'),
-    url(r'^emotion_search/$', views.emotion_search, name = 'emotion_search')
+    url(r'^emotion_search/$', views.emotion_search, name = 'emotion_search'),
+    url(r'^relevant_feedback/$', views.relevant_feedback, name = 'relevant_feedback'),
+    url(r'^emotion_feedback/$', views.emotion_feedback, name = 'emotion_feedback')
     ]

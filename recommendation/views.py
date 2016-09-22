@@ -12,7 +12,7 @@ from django.core.context_processors import csrf
 from django.contrib.auth.models import User
 from fm import recommend_lib
 from django.contrib.sites.models import Site
-from helpers import *
+import helpers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_protect
 import time
@@ -30,7 +30,7 @@ def index(request):
     results = Preference.objects.filter(user=user_id)
     paginator = Paginator(results, 10)
     page = request.GET.get("page")
-    contents = get_pagination_contents(paginator, page)
+    contents = helpers.get_pagination_contents(paginator, page)
     return render(request, 'recommendation/index.html', {'user': user, 'results': contents})
 
 """
@@ -65,21 +65,21 @@ def search(request):
     if request.method == 'POST':
         like_type = request.POST['like_type']
         song_id = request.POST['song_id']
-        add_perference_song(request.user.id, song_id, like_type)
+        helpers.add_perference_song(request.user.id, song_id, like_type)
         return redirect('/recommendation/search/')
     if request.method == 'GET':
         form = MusicSearchForm(request.GET)
         if form.data.has_key('artist') and form.data.has_key('song'):
             artist = form.data['artist']
             song = form.data['song']
-            results = search_song(artist, song)
+            results = helpers.search_song(artist, song)
             is_result = 1 if len(results) == 0 else 2
     else:
         form = MusicSearchForm()
     paginator = Paginator(results, 10)
     page = request.GET.get("page")
-    contents = get_pagination_contents(paginator, page)
-    songs = get_user_preference(request.user.id)
+    contents = helpers.get_pagination_contents(paginator, page)
+    songs = helpers.get_user_preference(request.user.id)
     params = "&artist=" + artist + "&song=" + song
     return render(request, 'recommendation/search.html', {'form': form, 'artist': artist, 'song': song, 'results': contents, 'is_result': is_result, 'user': request.user, 'songs': songs, 'page': page, 'params': params})
 
@@ -97,17 +97,17 @@ def artist(request, artist_id):
     if request.method == 'POST':
         like_type = request.POST['like_type']
         song_id = request.POST['song_id']
-        add_perference_song(request.user.id, song_id, like_type)
+        helpers.add_perference_song(request.user.id, song_id, like_type)
         return redirect('/recommendation/artist/'+artist_id)
     if request.GET.has_key("page"):
         page = int(request.GET["page"])
     index = page * 10
-    songs = get_user_preference(request.user.id)
+    songs = helpers.get_user_preference(request.user.id)
     results = Song.objects.filter(artist=artist_id)
     artist_name = results[0].artist.name
     paginator = Paginator(results, 10)
     page = request.GET.get("page")
-    contents = get_pagination_contents(paginator, page)
+    contents = helpers.get_pagination_contents(paginator, page)
     return render(request, 'recommendation/artist.html', {'results': contents, 'user': request.user, 'songs': songs, 'artist': artist_id, 'page': page, 'artist_name': artist_name})
 
 # 指定した頭文字から始まるアーティスト名
@@ -149,17 +149,17 @@ def user(request):
 @login_required
 def recommend_song(request, error_msg = ""):
     user = request.user
-    song = get_top_song(user)
+    song = helpers.get_top_song(user)
     song_obj = Song.objects.filter(id=song)
-    add_user_recommend_song(user.id, song)
-    feedback_dict = get_feedback_dict()
-    finish_flag = 1 if count_recommend_songs(user.id) >= 10 else 0
+    helpers.add_user_recommend_song(user.id, song)
+    feedback_dict = helpers.get_feedback_dict()
+    finish_flag = 1 if helpers.count_recommend_songs(user.id) >= 10 else 0
     return render(request, 'recommendation/recommend_song.html', {'user': user, 'songs': song_obj, 'feedback_dict': feedback_dict, 'finish_flag': finish_flag, 'error_msg': error_msg})
 
 @login_required
 def recommend_songs(request):
     user = request.user
-    songs = get_top_k_songs(user)
+    songs = helpers.get_top_k_songs(user)
     results = Song.objects.filter(id__in=songs)
     return render(request, 'recommendation/recommend_songs.html', {'user': user, 'results': results})
 
@@ -167,7 +167,7 @@ def recommend_songs(request):
 def interaction_songs(request):
     if request.method == 'POST':
         user_id = request.POST['user_id']
-        refrash_recommend_songs(user_id)
+        helpers.refrash_recommend_songs(user_id)
         return redirect('/recommendation/recommend_song/')
     user = request.user
     results = RecommendSong.objects.filter(user=user.id)
@@ -181,7 +181,7 @@ def select_song(request):
         recommend_type = request.POST['recommend_type']
         if request.POST.has_key("like_by_recommend"):
             song_id = request.POST['like_by_recommend']
-            next_page = create_like_song(user.id, song_id, recommend_type)
+            next_page = helpers.create_like_song(user.id, song_id, recommend_type)
             print recommend_type
     if next_page == 1:
         return redirect('/recommendation/recommend_song/')
@@ -192,12 +192,12 @@ def select_song(request):
 
 @login_required
 def questionnaire(request):
-    results = get_select_songs(request.user.id)
-    recommend_all_songs = get_recommend_all_songs(request.user)
+    results = helpers.get_select_songs(request.user.id)
+    recommend_all_songs = helpers.get_recommend_all_songs(request.user)
     recommend_all_song_map = dict(zip(range(0, len(recommend_all_songs)), recommend_all_songs))
     error_msg = ""
     # すでに回答しているかどうか
-    is_answer = judge_answer(request.user.id)
+    is_answer = helpers.judge_answer(request.user.id)
     if request.method == 'POST':
         if request.POST.has_key('q1') and request.POST.has_key('q2') and request.POST.has_key('q3') and request.POST.has_key('q4') and request.POST.has_key('free_content'):
             comparison = request.POST['q1']
@@ -209,7 +209,7 @@ def questionnaire(request):
                 if request.POST[str(i)] == "1":
                     song_nums += 1
             free_content = request.POST['free_content']
-            save_questionnaire(request.user.id, comparison, interaction_rate, recommend_rate, song_nums, compare_method, free_content)
+            helpers.save_questionnaire(request.user.id, comparison, interaction_rate, recommend_rate, song_nums, compare_method, free_content)
             return redirect('/recommendation/end/')
         else:
             error_msg = "全て選択してください"
@@ -223,7 +223,21 @@ def end(request):
 """
 印象語検索
 """
+@login_required
 def emotion_search(request):
+    return render(request, 'recommendation/emotion_search.html')
+
+@login_required
+def relevant_feedback(request):
+    k_songs, error_msg = _emotion_search(request)
+    return render(request, 'recommendation/relevant_feedback.html', {'songs': k_songs, 'url': "relevant_feedback", 'error_msg': error_msg})
+
+@login_required
+def emotion_feedback(request):
+    k_songs, error_msg = _emotion_search(request)
+    return render(request, 'recommendation/emotion_feedback.html', {'songs': k_songs, 'url': "emotion_feedback", 'error_msg': error_msg})
+
+def _emotion_search(request):
     error_msg = ""
     k_songs = []
     if request.method == 'GET' and request.GET.has_key("emotion-search"):
@@ -231,6 +245,7 @@ def emotion_search(request):
         if emotion == "0":
             error_msg = "印象語を選択してください"
         else:
-            songs = search_by_emotion(int(emotion))
-            k_songs = get_random_k_songs(10, songs)
-    return render(request, 'recommendation/emotion_search.html', {'songs': k_songs, 'error_msg': error_msg})
+            songs = helpers.search_by_emotion(int(emotion))
+            k_songs = helpers.get_random_k_songs(10, songs)
+    
+    return k_songs, error_msg
