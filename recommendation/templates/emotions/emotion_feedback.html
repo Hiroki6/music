@@ -1,0 +1,17 @@
+{% extends 'bases/emotion_base.html' %}
+
+{% block title %}印象語フィードバック{% endblock title %}
+
+{% block main %}
+<h2>印象語フィードバックによる楽曲検索システムへようこそ</h2>
+<div class = "main">
+  {% include "parts/emotion_search_form.html" %}
+  <div class = "clearfix">
+    {% for song in songs %}
+      <div class = "content">
+       {% include "parts/song_iframe_ref.html" %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock main %}

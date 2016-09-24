@@ -15,9 +15,6 @@
   <script type = "text/javascript" src = "{% static 'js/indicator.js' %}" ></script>
   <script src="http://www.htmlhifive.com/ja/res/lib/jquery/jquery-2.js"></script>
 
-  <!--<link href="http://code.htmlhifive.com/h5.css" rel="stylesheet" >
-  <script src="http://code.htmlhifive.com/ejs-h5mod.js"></script>
-  <script src="http://code.htmlhifive.com/h5.dev.js"></script>-->
   <link rel = "stylesheet" type = "text/css" href = "{% static 'css/h5.css' %}" />
   <script type = "text/javascript" src = "{% static 'js/ejs-h5mod.js' %}" ></script>
   <script type = "text/javascript" src = "{% static 'js/h5.dev.js' %}" ></script>
@@ -25,12 +22,8 @@
 </head>
 <body>
   <header>
-    <a href = "/recommendation/"><h1>音楽探索システム</h1></a>
-    <a class = "emerald" href = "/recommendation/search/">楽曲検索へ</a>
-    <a class = "orange" href = "/recommendation/artists/">アーティスト一覧へ</a>
-    <a class = "red" href = "/recommendation/recommend_song/">インタラクティブな楽曲探索へ</a>
-    <a class = "light-blue" href = "/recommendation/recommend_songs/">楽曲推薦へ</a>
-    <a class = "purple" href = "/recommendation/emotion_search/">印象後検索システムへ</a>
+    <a href = "/recommendation/emotion_search/"><h1>印象後検索システム</h1></a>
+    <a class = "purple" href = "/recommendation/">音楽探索システムへ</a>
     <a class = "logout" href = "/accounts/logout/">ログアウト</a>
   </header>
   <div id = "indicator-target" class = "container">

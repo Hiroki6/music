@@ -9,6 +9,39 @@ html, body{
 }
 
 body{
+  .emerald{
+    color: #7fffd4;
+    &:hover{
+      color: #66cc99;
+    }
+  }
+  .orange{
+    color: #ffc0cb;
+    &:hover{
+      color: #cc99cc;
+    }
+  }
+  .orange, .emerald, .red, .light-blue, .purple{
+    margin: 0 5px;
+  }
+  .red{
+    color: #ff7f50;
+    &:hover{
+      color: #dc143c;
+    }
+  }
+  .light-blue{
+    color: #77eeff;
+    &:hover{
+      color: #00bfff;
+    }
+  }
+  .purple{
+    color: #e8d1ff;
+    &:hover{
+      color: #6a5acd;
+    }
+  }
   .login-main {
     background-image: url("../img/music_back5.png");
     background-size: cover;
@@ -51,39 +84,6 @@ body{
     padding: 10px;
     h1{
       color: #fff;
-    }
-    .search{
-      color: #7fffd4;
-      &:hover{
-        color: #66cc99;
-      }
-    }
-    .artist-list{
-      color: #ffc0cb;
-      &:hover{
-        color: #cc99cc;
-      }
-    }
-    .artist-list, .search, .interaction, .recommend-songs{
-      margin: 0 5px;
-    }
-    .interaction{
-      color: #ff7f50;
-      &:hover{
-        color: #dc143c;
-      }
-    }
-    .recommend-songs{
-      color: #77eeff;
-      &:hover{
-        color: #00bfff;
-      }
-    }
-    .emotion-search{
-      color: #e8d1ff;
-      &:hover{
-        color: #6a5acd;
-      }
     }
     .logout{
       float: right;
@@ -306,6 +306,16 @@ body{
         &:hover{
           color: #afeeee;
         }
+      }
+    }
+    .search-type {
+      margin: 20px;
+      a {
+        background-color: #fff;
+        padding: 10px;
+        font-size: 20px;
+        border-radius: 10px;
+        margin: 0 20px;
       }
     }
   }
