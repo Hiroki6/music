@@ -10,7 +10,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.context_processors import csrf
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from .. import helpers
+from recommendation.helpers import emotion_helper
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_protect
 import time
@@ -64,7 +64,7 @@ def _emotion_search(request, k):
         if emotion == "0":
             error_msg = "印象語を選択してください"
         else:
-            songs = helpers.search_by_emotion(int(emotion))
-            k_songs = helpers.get_random_k_songs(k, songs)
+            songs = emotion_helper.search_by_emotion(int(emotion))
+            k_songs = emotion_helper.get_random_k_songs(k, songs)
     
     return k_songs, error_msg

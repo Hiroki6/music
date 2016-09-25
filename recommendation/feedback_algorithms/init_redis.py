@@ -49,7 +49,7 @@ class InitRedis(object):
         適合性フィードバック用のモデルのredisへの保存
         """
         common.save_one_dim_array(self.r, "W_" + user, W)
-        common.save_scala(self.r, "bias", user, bias)
+        common.save_scalar(self.r, "bias", user, bias)
 
     def save_emotion_into_redis(self):
         """

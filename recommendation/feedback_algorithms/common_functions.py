@@ -4,6 +4,12 @@ import redis
 import numpy as np
 
 """
+redisからのスカラー値の取得
+"""
+def get_scalar(redis_obj, key, field):
+    return float(redis_obj.hget(key, field))
+
+"""
 redisから一次元配列の取得
 """
 def get_one_dim_params(redis_obj, key):
@@ -28,7 +34,7 @@ def get_two_dim_by_redis(redis_obj, pre_key, n, m):
 """
 スカラー値の保存
 """
-def save_scala(redis_obj, key, field, value):
+def save_scalar(redis_obj, key, field, value):
 
     redis_obj.hset(key, field, value)
 

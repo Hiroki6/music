@@ -17,14 +17,14 @@ class RelevantFeedback:
     適合性フィードバックによるオンライン学習クラス
     """
     def __init__(self, user):
-        self._get_params_by_redis()
         self.user = user
+        self._get_params_by_redis()
 
     def _get_params_by_redis(self):
         self.r = common.get_redis_obj(HOST, PORT, DB)
         key =  "W_" + self.user
-        self.W = common.get_one_dim_params(redis_obj, key)
-        self.bias = get_scalar(redis_obj, "bias", self.user)
+        self.W = common.get_one_dim_params(self.r, key)
+        self.bias = common.get_scalar(self.r, "bias", self.user)
 
     def learning(self):
         return
