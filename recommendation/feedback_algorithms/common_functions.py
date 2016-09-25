@@ -50,5 +50,5 @@ def save_two_dim_array(redis_obj, pre_key, params):
         for param in params[i]:
             redis_obj.rpush(key, param)
 
-
-
+def get_redis_obj(host, port, db):
+    return redis.Redis(host=host, port=port, db=db)
