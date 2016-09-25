@@ -31,6 +31,6 @@ def save_user_relevant_song(user_id, song_id, relevant_type):
     obj, created = EmotionRelevantSong.objects.get_or_create(user_id=user_id, song_id=song_id, relevant_type=relevant_type)
 
 def get_top_song_relevant(user, emotion):
-    song_id = exec_functions.get_song_by_relevant(user, emotion)
-    song_obj = Song.objects.filter(id=song_id)
+    song_ids = exec_functions.get_song_by_relevant(user, emotion)
+    song_obj = Song.objects.filter(id__in=song_ids)
     return song_obj

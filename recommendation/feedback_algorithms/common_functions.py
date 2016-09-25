@@ -85,3 +85,7 @@ def get_not_listening_songs(user, emotion):
             song_tag_map[song_id].append(result[tag])
 
     return songs, song_tag_map
+
+def listtuple_sort_reverse(t):
+    t.sort()
+    t.reverse()

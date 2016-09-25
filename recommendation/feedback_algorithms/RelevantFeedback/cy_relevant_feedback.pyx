@@ -37,4 +37,6 @@ cdef class CyRelevantFeedback:
         """
         return target - self.predict(X)
 
+    def fit(self):
+        return
 

@@ -7,5 +7,6 @@ import relevant_feedback as r_f
 
 def get_song_by_relevant(user, emotion):
     r_obj = r_f.RelevantFeedback(user, emotion)
-    song = r_obj.get_recommend_songs()
-    return song
+    top_k_songs = r_obj.get_recommend_songs()
+    song_ids = [song[1] for song in top_k_songs]
+    return song_ids

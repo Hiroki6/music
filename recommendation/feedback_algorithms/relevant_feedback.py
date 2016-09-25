@@ -30,7 +30,7 @@ class RelevantFeedback:
         self.W = common.get_one_dim_params(self.r, key)
         self.bias = common.get_scalar(self.r, "bias", self.user)
 
-    def learning(self):
+    def fit(self):
         return
 
     def get_recommend_songs(self, k=1):
@@ -40,14 +40,9 @@ class RelevantFeedback:
         songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotion)
         top_song = 0
         top_song_value = -sys.maxint
-        for song, tags in song_tag_map.items():
-            tags = np.array(tags)
-            value = self.cy_obj.predict(tags)
-            if value > top_song_value:
-                top_song = song
-                top_song_value = value
-
-        return top_song
+        rankings = [(self.cy_obj.predict(np.array(tags)), song_id) for song_id, tags in song_tag_map.items()]
+        common.listtuple_sort_reverse(rankings)
+        return rankings[:k]
 
     def save_song_and_tags(self, song, tags):
         return
