@@ -2,12 +2,14 @@
 """
 印象語検索システムに関するhelper関数
 """
-from recommendation.models import Song, Artist, Preference, RecommendSong, LikeSong, Questionnaire, MusicCluster
+from recommendation.models import *
 import redis
 import numpy as np
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from itertools import chain
 import random
+from recommendation.feedback_algorithms import exec_functions
+
 
 """
 印象語による検索
@@ -23,3 +25,12 @@ def get_random_k_songs(k, song_obj):
         index = random.randint(0, len(song_obj)-1)
         k_song_objs.append(song_obj[index])
     return k_song_objs
+
+def save_user_relevant_song(user_id, song_id, relevant_type):
+
+    obj, created = EmotionRelevantSong.objects.get_or_create(user_id=user_id, song_id=song_id, relevant_type=relevant_type)
+
+def get_top_song_relevant(user, emotion):
+    song_id = exec_functions.get_song_by_relevant(user, emotion)
+    song_obj = Song.objects.filter(id=song_id)
+    return song_obj

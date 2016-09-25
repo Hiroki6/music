@@ -15,8 +15,6 @@ ctypedef np.float64_t DOUBLE
 ctypedef np.int64_t INTEGER
 
 cdef class CyRelevantFeedback:
-    """
-    """
     cdef:
         np.ndarray W
         double bias

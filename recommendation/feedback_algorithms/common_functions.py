@@ -2,6 +2,7 @@
 
 import redis
 import numpy as np
+from recommendation import models
 
 """
 redisからのスカラー値の取得
@@ -58,3 +59,29 @@ def save_two_dim_array(redis_obj, pre_key, params):
 
 def get_redis_obj(host, port, db):
     return redis.Redis(host=host, port=port, db=db)
+
+"""
+フィードバックの種類によって視聴済みの楽曲を取得するモデルを変える必要がある
+"""
+def get_not_listening_songs(user, emotion):
+    print "未視聴の楽曲取得"
+    listening_songs = models.EmotionRelevantSong.objects.filter(user=user).values('song')
+    emotion_map = {1: "-calm", 2: "-tense", 3: "-aggressive", 4: "-lively", 5: "-peaceful"}
+    cluster_songs = models.MusicCluster.objects.exclude(song_id__in=listening_songs).order_by(emotion_map[emotion]).values('song')[:300]
+    top_k_songs = []
+    for song in cluster_songs:
+        top_k_songs.append(song["song"])
+    results = models.Song.objects.filter(id__in=top_k_songs).values()
+    tag_obj = models.Tag.objects.all()
+    tags = [tag.name for tag in tag_obj]
+
+    song_tag_map = {} # {song_id: List[tag_value]}
+    songs = [] # List[song_id]
+    for result in results:
+        song_id = result['id']
+        songs.append(song_id)
+        song_tag_map.setdefault(song_id, [])
+        for tag in tags:
+            song_tag_map[song_id].append(result[tag])
+
+    return songs, song_tag_map

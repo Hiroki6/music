@@ -9,13 +9,13 @@
   <div class = "clearfix">
     {% for song in songs %}
       <div class = "content">
-        {% include "parts/song_iframe_ref.html" %}
+        {% include "parts/song_iframe.html" %}
         {% if multi_flag %}
         <p>multi</p> 
         {% else %}
           <form class = "like-form" name = "like" method = "POST" action = "/recommendation/relevant_feedback_single/">
             {% csrf_token %}
-            <input type = "hidden" name = "like_type" value = 1>
+            <input type = "hidden" name = "relevant_type" value = 1>
             <button class = "preference-button like-button" type = "submit" name = "song_id" value = {{song.song.id}}>
               like <i class="fa fa-thumbs-o-up" hidden="true"></i>
             </button>
