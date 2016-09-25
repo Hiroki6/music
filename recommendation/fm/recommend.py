@@ -68,9 +68,7 @@ class RecommendFm(object):
         for i in xrange(self.K):
             key = pre_key + str(i)
             v = redis_obj.lrange(key, 0, -1)
-            #v = np.array(v, dtype=np.float64)
             V[i] = v
-        # copy(order='C')によってC-連続アレイに変換する
         V = np.array(V, dtype=np.float64)
         return V.T.copy(order='C')
 
@@ -109,7 +107,6 @@ class RecommendFm(object):
             rankings.append((self.cy_fm.predict(matrix, str(song_id), self.ixs), song_id))
 
 
-        #rankings = [(self.cy_fm.predict(matrix, str(song), self.ixs), song) for matrix, song in zip(self.matrixes, self.songs)]
         rankings.sort()
         rankings.reverse()
         return rankings[:rank]
