@@ -126,7 +126,7 @@ class SmoothingFm():
             self.save_smoothing_labels(not_learned_songs)
             not_learned_songs_obj = models.Song.objects.filter(id__in=not_learned_songs).values()
         else:
-            with open(os.path.join(BASE, "../data_10/uniq_songs.csv")) as f:
+            with open(os.path.join(BASE, "data_10/uniq_songs.csv")) as f:
                 for line in f:
                     song = line.replace("\n","").split(",")[0]
                     learned_songs.append(int(song))
