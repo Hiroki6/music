@@ -33,7 +33,7 @@ class RelevantFeedback:
     def fit(self):
         return
 
-    def get_recommend_songs(self, k=1):
+    def get_top_k_songs(self, k=1):
         """
         検索対象の印象語に含まれている楽曲から回帰値の高いk個の楽曲を取得する
         """
