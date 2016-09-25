@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from django.core.context_processors import csrf
 from django.contrib.auth.models import User
-from recommendation.fm import recommend_lib
+from recommendation.factorization_machines import recommend_lib
 from django.contrib.sites.models import Site
 from .. import helpers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
