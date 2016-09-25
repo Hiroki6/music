@@ -24,17 +24,39 @@ sys.dont_write_bytecode = True
 def index(request):
     return render(request, 'emotions/emotion_search.html')
 
+"""
+適合性フィードバック(10曲)
+"""
 @login_required
-def relevant_feedback(request):
-    k_songs, error_msg = _emotion_search(request)
-    return render(request, 'emotions/relevant_feedback.html', {'songs': k_songs, 'url': "relevant_feedback", 'error_msg': error_msg})
+def relevant_feedback_multi(request):
+    k_songs, error_msg = _emotion_search(request, 10)
+    return render(request, 'emotions/relevant_feedback.html', {'songs': k_songs, 'url': "relevant_feedback_multi", 'error_msg': error_msg, "multi_flag": True})
 
+"""
+印象語フィードバック(10曲)
+"""
 @login_required
-def emotion_feedback(request):
-    k_songs, error_msg = _emotion_search(request)
-    return render(request, 'emotions/emotion_feedback.html', {'songs': k_songs, 'url': "emotion_feedback", 'error_msg': error_msg})
+def emotion_feedback_multi(request):
+    k_songs, error_msg = _emotion_search(request, 10)
+    return render(request, 'emotions/emotion_feedback.html', {'songs': k_songs, 'url': "emotion_feedback_multi", 'error_msg': error_msg, "multi_flag": True})
 
-def _emotion_search(request):
+"""
+適合性フィードバック(1曲)
+"""
+@login_required
+def relevant_feedback_single(request):
+    k_songs, error_msg = _emotion_search(request, 1)
+    return render(request, 'emotions/relevant_feedback.html', {'songs': k_songs, 'url': "relevant_feedback_single", 'error_msg': error_msg, "multi_flag": False})
+
+"""
+印象語フィードバック(1曲)
+"""
+@login_required
+def emotion_feedback_single(request):
+    k_songs, error_msg = _emotion_search(request, 1)
+    return render(request, 'emotions/emotion_feedback.html', {'songs': k_songs, 'url': "emotion_feedback_single", 'error_msg': error_msg, "multi_flag": False})
+
+def _emotion_search(request, k):
     error_msg = ""
     k_songs = []
     if request.method == 'GET' and request.GET.has_key("emotion-search"):
@@ -43,6 +65,6 @@ def _emotion_search(request):
             error_msg = "印象語を選択してください"
         else:
             songs = helpers.search_by_emotion(int(emotion))
-            k_songs = helpers.get_random_k_songs(10, songs)
+            k_songs = helpers.get_random_k_songs(k, songs)
     
     return k_songs, error_msg

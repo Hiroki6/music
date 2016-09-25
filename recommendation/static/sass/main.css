@@ -234,13 +234,13 @@ body {
         body .main .paginator a:hover, body .main .paginator strong:hover {
           color: #afeeee; }
     body .main .search-type {
-      margin: 20px; }
+      margin: 25px 20px; }
       body .main .search-type a {
         background-color: #fff;
-        padding: 10px;
+        padding: 10px 5px;
         font-size: 20px;
         border-radius: 10px;
-        margin: 0 20px; }
+        margin: 0px 10px; }
   body .pagination {
     float: right; }
   body footer {

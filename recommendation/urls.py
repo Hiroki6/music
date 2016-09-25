@@ -20,6 +20,8 @@ urlpatterns = [
     url(r'^questionnaire/$', recommendation_controller.questionnaire, name = 'questionnaire'),
     url(r'^end/$', recommendation_controller.end, name = 'end'),
     url(r'^emotion_search/$', emotion_controller.index, name = 'emotion_search'),
-    url(r'^relevant_feedback/$', emotion_controller.relevant_feedback, name = 'relevant_feedback'),
-    url(r'^emotion_feedback/$', emotion_controller.emotion_feedback, name = 'emotion_feedback')
+    url(r'^relevant_feedback_multi/$', emotion_controller.relevant_feedback_multi, name = 'relevant_feedback_multi'),
+    url(r'^relevant_feedback_single/$', emotion_controller.relevant_feedback_single, name = 'relevant_feedback_single'),
+    url(r'^emotion_feedback_multi/$', emotion_controller.emotion_feedback_multi, name = 'emotion_feedback_multi'),
+    url(r'^emotion_feedback_single/$', emotion_controller.emotion_feedback_single, name = 'emotion_feedback_single')
     ]
