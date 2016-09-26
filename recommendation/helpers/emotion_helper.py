@@ -32,5 +32,12 @@ def save_user_relevant_song(user_id, song_id, relevant_type):
 
 def get_top_song_relevant(user, emotion):
     song_ids = exec_functions.get_song_by_relevant(user, emotion)
-    song_obj = Song.objects.filter(id__in=song_ids)
-    return song_obj
+    return get_song_objs(song_ids)
+
+def learning_and_get_song(user, emotion):
+    song_ids = exec_functions.learning_and_get_song_by_relevant(user, emotion)
+    return get_song_objs(song_ids)
+    
+def get_song_objs(song_ids):
+    song_objs = Song.objects.filter(id__in=song_ids)
+    return song_objs

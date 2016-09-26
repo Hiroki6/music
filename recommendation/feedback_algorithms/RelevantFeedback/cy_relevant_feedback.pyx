@@ -72,3 +72,6 @@ cdef class CyRelevantFeedback:
 
         for index in xrange(self.feature_num):
             self.W[index] += 2 * self.l_rate * (self.error * X[index] - self.beta * self.W[index])
+
+    def get_bias(self):
+        return self.bias

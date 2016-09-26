@@ -45,6 +45,7 @@ class RelevantFeedback:
         """
         学習パラメータの設定
         """
+        self.beta = beta
         self.cy_obj.set_learning_params(l_rate, beta)
         self.set_listening_songs()
 
@@ -56,19 +57,23 @@ class RelevantFeedback:
         """
         CyRelevantFeedbackクラスを用いたモデルの学習
         """
-        for i in xrange(100):
+        for i in xrange(1000):
             for song_id, relevant_type in self.song_relevant.items():
                 self.cy_obj.fit(self.song_tag_map[song_id], relevant_type)
             error = self._calc_all_error()
             print error
-            if error < 0.01:
+            if error < 0.00001:
+                self.bias = self.cy_obj.get_bias()
                 break
+
+        self.update_params_into_redis()
 
     def _calc_all_error(self):
 
         error = 0.0
         for song_id, relevant_type in self.song_relevant.items():
-            error += self.cy_obj.calc_error(self.song_tag_map[song_id], relevant_type)
+            error += pow(self.cy_obj.calc_error(self.song_tag_map[song_id], relevant_type), 2)
+        error += self.beta * np.linalg.norm(self.W)
 
         return error
 
@@ -82,3 +87,8 @@ class RelevantFeedback:
         rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
         common.listtuple_sort_reverse(rankings)
         return rankings[:k]
+
+    def update_params_into_redis(self):
+        common.delete_redis_key(self.r, "W_"+self.user)
+        common.save_one_dim_array(self.r, "W_" + self.user, self.W)
+        common.save_scalar(self.r, "bias", self.user, self.bias)

@@ -60,6 +60,14 @@ def save_two_dim_array(redis_obj, pre_key, params):
 def get_redis_obj(host, port, db):
     return redis.Redis(host=host, port=port, db=db)
 
+def delete_redis_keys(redis_obj, keys):
+
+    for key in keys:
+        delete_redis_key(redis_obj, key)
+
+def delete_redis_key(redis_obj, key):
+    redis_obj.delete(key)
+
 """
 フィードバックの種類によって視聴済みの楽曲を取得するモデルを変える必要がある
 """

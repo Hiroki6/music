@@ -1284,6 +1284,7 @@ static PyObject *__pyx_pf_20cy_relevant_feedback_18CyRelevantFeedback_2predict(s
 static PyObject *__pyx_pf_20cy_relevant_feedback_18CyRelevantFeedback_4calc_error(struct __pyx_obj_20cy_relevant_feedback_CyRelevantFeedback *__pyx_v_self, PyArrayObject *__pyx_v_X, double __pyx_v_target); /* proto */
 static PyObject *__pyx_pf_20cy_relevant_feedback_18CyRelevantFeedback_6set_learning_params(struct __pyx_obj_20cy_relevant_feedback_CyRelevantFeedback *__pyx_v_self, double __pyx_v_l_rate, double __pyx_v_beta); /* proto */
 static PyObject *__pyx_pf_20cy_relevant_feedback_18CyRelevantFeedback_8fit(struct __pyx_obj_20cy_relevant_feedback_CyRelevantFeedback *__pyx_v_self, PyArrayObject *__pyx_v_X, int __pyx_v_relevant_type); /* proto */
+static PyObject *__pyx_pf_20cy_relevant_feedback_18CyRelevantFeedback_10get_bias(struct __pyx_obj_20cy_relevant_feedback_CyRelevantFeedback *__pyx_v_self); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static PyObject *__pyx_tp_new_20cy_relevant_feedback_CyRelevantFeedback(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -2136,6 +2137,7 @@ static void __pyx_f_20cy_relevant_feedback_18CyRelevantFeedback__update_W(struct
  * 
  *         for index in xrange(self.feature_num):             # <<<<<<<<<<<<<<
  *             self.W[index] += 2 * self.l_rate * (self.error * X[index] - self.beta * self.W[index])
+ * 
  */
   __pyx_t_1 = __pyx_v_self->feature_num;
   for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
@@ -2145,6 +2147,8 @@ static void __pyx_f_20cy_relevant_feedback_18CyRelevantFeedback__update_W(struct
  * 
  *         for index in xrange(self.feature_num):
  *             self.W[index] += 2 * self.l_rate * (self.error * X[index] - self.beta * self.W[index])             # <<<<<<<<<<<<<<
+ * 
+ *     def get_bias(self):
  */
     __Pyx_INCREF(((PyObject *)__pyx_v_self->W));
     __pyx_t_3 = __pyx_v_self->W;
@@ -2218,6 +2222,65 @@ static void __pyx_f_20cy_relevant_feedback_18CyRelevantFeedback__update_W(struct
   __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_X.rcbuffer->pybuffer);
   __pyx_L2:;
   __Pyx_RefNannyFinishContext();
+}
+
+/* "cy_relevant_feedback.pyx":76
+ *             self.W[index] += 2 * self.l_rate * (self.error * X[index] - self.beta * self.W[index])
+ * 
+ *     def get_bias(self):             # <<<<<<<<<<<<<<
+ *         return self.bias
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_20cy_relevant_feedback_18CyRelevantFeedback_11get_bias(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_20cy_relevant_feedback_18CyRelevantFeedback_11get_bias(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_bias (wrapper)", 0);
+  __pyx_r = __pyx_pf_20cy_relevant_feedback_18CyRelevantFeedback_10get_bias(((struct __pyx_obj_20cy_relevant_feedback_CyRelevantFeedback *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_20cy_relevant_feedback_18CyRelevantFeedback_10get_bias(struct __pyx_obj_20cy_relevant_feedback_CyRelevantFeedback *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("get_bias", 0);
+
+  /* "cy_relevant_feedback.pyx":77
+ * 
+ *     def get_bias(self):
+ *         return self.bias             # <<<<<<<<<<<<<<
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->bias); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "cy_relevant_feedback.pyx":76
+ *             self.W[index] += 2 * self.l_rate * (self.error * X[index] - self.beta * self.W[index])
+ * 
+ *     def get_bias(self):             # <<<<<<<<<<<<<<
+ *         return self.bias
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("cy_relevant_feedback.CyRelevantFeedback.get_bias", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
 }
 
 /* "../../../../../../../../usr/local/lib/python2.7/site-packages/Cython/Includes/numpy/__init__.pxd":197
@@ -4417,6 +4480,7 @@ static PyMethodDef __pyx_methods_20cy_relevant_feedback_CyRelevantFeedback[] = {
   {"calc_error", (PyCFunction)__pyx_pw_20cy_relevant_feedback_18CyRelevantFeedback_5calc_error, METH_VARARGS|METH_KEYWORDS, __pyx_doc_20cy_relevant_feedback_18CyRelevantFeedback_4calc_error},
   {"set_learning_params", (PyCFunction)__pyx_pw_20cy_relevant_feedback_18CyRelevantFeedback_7set_learning_params, METH_VARARGS|METH_KEYWORDS, 0},
   {"fit", (PyCFunction)__pyx_pw_20cy_relevant_feedback_18CyRelevantFeedback_9fit, METH_VARARGS|METH_KEYWORDS, 0},
+  {"get_bias", (PyCFunction)__pyx_pw_20cy_relevant_feedback_18CyRelevantFeedback_11get_bias, METH_NOARGS, 0},
   {0, 0, 0, 0}
 };
 
