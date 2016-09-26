@@ -10,7 +10,7 @@
   {% endif %}
   <div class = "recommend-song">
     {% for song in songs %}
-    {% include "parts/song_iframe.html" %}
+    {% include "parts/_song_iframe.html" %}
       {% if not finish_flag %}
         <form class = "feedback-form" name = "feedback" method = "POST" action = "/recommendation/feedback/">
           {% csrf_token %}
@@ -31,14 +31,6 @@
       {% endif %}
     {% endfor %}
   </div>
-  <div class = "feedback-explanation">
-    <ul>
-      <li>calm: 静かな</li>
-      <li>tense: 緊張した</li>
-      <li>aggressive: 激しい</li>
-      <li>lively: 活発な</li>
-      <li>peaceful: 平和な</li>
-    </ul>
-  </div>
+  {% include "parts/_feedback_explanation.html" %}
 </div>
 {% endblock main %}

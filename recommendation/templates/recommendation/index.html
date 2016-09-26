@@ -8,7 +8,7 @@
   <div class = "clearfix">
   {% for song in results %}
     <div class = "content">
-      {% include "parts/song_iframe_ref.html" %}
+      {% include "parts/_song_iframe_ref.html" %}
       <form class = "like-form" name = "like" method = "POST" action = "/recommendation/">
         {% csrf_token %}
         <button class = "preference-button erase-button" type = "submit" name = "song_id" value = {{song.song_id}}>
@@ -18,7 +18,7 @@
       </div>
   {% endfor %}
   </div>
-  {% include "parts/paginator.html" %}
+  {% include "parts/_paginator.html" %}
 </div>
 {% endblock main %}
 

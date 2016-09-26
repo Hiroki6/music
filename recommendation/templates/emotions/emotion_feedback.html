@@ -5,11 +5,11 @@
 {% block main %}
 <h2>印象語フィードバックによる楽曲検索システムへようこそ</h2>
 <div class = "main">
-  {% include "parts/emotion_search_form.html" %}
+  {% include "parts/_emotion_search_form.html" %}
   <div class = "clearfix">
     {% for song in songs %}
       <div class = "content">
-       {% include "parts/song_iframe_ref.html" %}
+       {% include "parts/_song_iframe_ref.html" %}
       </div>
     {% endfor %}
   </div>

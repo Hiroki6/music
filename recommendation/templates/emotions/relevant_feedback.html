@@ -6,12 +6,14 @@
 <h2>適合性フィードバックによる楽曲検索システムへようこそ</h2>
 <div class = "main">
   {% ifequal emotion 0 %}
-    {% include "parts/emotion_search_form.html" %}
+    {% include "parts/_emotion_search_form.html" %}
+    {% include "parts/_feedback_explanation.html" %}
   {% else %}
+    <h2>{{ search_emotion }}の検索結果</h2>
     <div class = "clearfix">
       {% for song in songs %}
         <div class = "content">
-            {% include "parts/song_iframe.html" %}
+            {% include "parts/_song_iframe.html" %}
           {% if multi_flag %}
           <p>multi</p> 
           {% else %}
@@ -30,8 +32,9 @@
           {% endif %}
         </div>
       {% endfor %}
+    {% include "parts/_feedback_explanation.html" %}
     </div>
-  <a href = "/recommendation/{{ url }}/">他の印象語で検索をする</a>
+    {% include "parts/_refresh_search_button.html" %}
   {% endifequal %}
 </div>
 {% endblock main %}

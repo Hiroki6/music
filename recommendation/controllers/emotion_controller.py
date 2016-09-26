@@ -17,6 +17,7 @@ import time
 import sys
 sys.dont_write_bytecode = True 
 
+emotion_map = {0: "", 1: "calm", 2: "tense", 3: "aggressive", 4: "lively", 5: "peaceful"}
 """
 印象語検索
 """
@@ -60,7 +61,8 @@ def relevant_feedback_single(request):
         user_id = request.user.id
         emotion_helper.save_user_relevant_song(int(user_id), int(song_id), int(relevant_type))
         song = _relevant_search(request, emotion)
-    return render(request, 'emotions/relevant_feedback.html', {'songs': song, 'url': "relevant_feedback_single", 'error_msg': error_msg, "multi_flag": False, "emotion": emotion})
+    search_emotion = emotion_map[emotion]
+    return render(request, 'emotions/relevant_feedback.html', {'songs': song, 'url': "relevant_feedback_single", 'error_msg': error_msg, "multi_flag": False, "emotion": emotion, "search_emotion": search_emotion})
 
 """
 印象語フィードバック(1曲)
