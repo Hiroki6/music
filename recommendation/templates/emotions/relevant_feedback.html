@@ -5,28 +5,33 @@
 {% block main %}
 <h2>適合性フィードバックによる楽曲検索システムへようこそ</h2>
 <div class = "main">
-  {% include "parts/emotion_search_form.html" %}
-  <div class = "clearfix">
-    {% for song in songs %}
-      <div class = "content">
-        {% include "parts/song_iframe.html" %}
-        {% if multi_flag %}
-        <p>multi</p> 
-        {% else %}
-          <form class = "like-form" name = "like" method = "POST" action = "/recommendation/relevant_feedback_single/">
-            {% csrf_token %}
-            <input type = "hidden" name = "relevant_type" value = 1>
-            <button class = "preference-button like-button" type = "submit" name = "song_id" value = {{song.song.id}}>
-              like <i class="fa fa-thumbs-o-up" hidden="true"></i>
-            </button>
-            <input type = "hidden" name = "like_type" value = 0>
-            <button class = "preference-button erase-button" type = "submit" name = "song_id" value = {{song.song.id}}>
-              dislike <i class="fa fa-thumbs-o-down" hidden="true"></i>
-            </button>
-          </form>
-        {% endif %}
-      </div>
-    {% endfor %}
-  </div>
+  {% ifequal emotion 0 %}
+    {% include "parts/emotion_search_form.html" %}
+  {% else %}
+    <div class = "clearfix">
+      {% for song in songs %}
+        <div class = "content">
+            {% include "parts/song_iframe.html" %}
+          {% if multi_flag %}
+          <p>multi</p> 
+          {% else %}
+            <form class = "like-form" name = "like" method = "POST" action = "/recommendation/relevant_feedback_single/">
+              {% csrf_token %}
+              <input type = "hidden" name = "relevant_type" value = 1>
+              <button class = "preference-button like-button" type = "submit" name = "song_id" value = {{song.id}}>
+                like <i class="fa fa-thumbs-o-up" hidden="true"></i>
+              </button>
+              <input type = "hidden" name = "like_type" value = 0>
+              <input type = "hidden" name = "emotion" value = {{emotion}}>
+              <button class = "preference-button erase-button" type = "submit" name = "song_id" value = {{song.id}}>
+                dislike <i class="fa fa-thumbs-o-down" hidden="true"></i>
+              </button>
+            </form>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  <a href = "/recommendation/{{ url }}/">他の印象語で検索をする</a>
+  {% endifequal %}
 </div>
 {% endblock main %}

@@ -45,13 +45,22 @@ def emotion_feedback_multi(request):
 """
 @login_required
 def relevant_feedback_single(request):
-    song, error_msg = _relevant_search(request)
+    emotion = 0
+    song = []
+    error_msg = ""
+    if request.method == 'GET' and request.GET.has_key("emotion-search"):
+        emotion = int(request.GET['emotion-search'])
+        if emotion == 0:
+            error_msg = "印象語を選択してください"
+        song = _relevant_search(request, emotion, False)
     if request.method == 'POST':
         song_id = request.POST["song_id"]
         relevant_type = request.POST["relevant_type"]
+        emotion = int(request.POST['emotion'])
         user_id = request.user.id
-        emotion_helper.save_user_relevant_song(user_id, song_id, relevant_type)
-    return render(request, 'emotions/relevant_feedback.html', {'songs': song, 'url': "relevant_feedback_single", 'error_msg': error_msg, "multi_flag": False})
+        emotion_helper.save_user_relevant_song(int(user_id), int(song_id), int(relevant_type))
+        song = _relevant_search(request, emotion)
+    return render(request, 'emotions/relevant_feedback.html', {'songs': song, 'url': "relevant_feedback_single", 'error_msg': error_msg, "multi_flag": False, "emotion": emotion})
 
 """
 印象語フィードバック(1曲)
@@ -74,12 +83,13 @@ def _emotion_search(request, k):
 適合性用フィードバック用の検索関数
 最終的にはkを引数として渡す
 """
-def _relevant_search(request):
-    error_msg, emotion = _check_search_request(request)
+def _relevant_search(request, emotion, learning=True):
     song_obj = []
-    if error_msg == "":
+    if learning:
+        song_obj = emotion_helper.learning_and_get_song(str(request.user.id), emotion)
+    else:
         song_obj = emotion_helper.get_top_song_relevant(str(request.user.id), emotion)
-    return song_obj, error_msg
+    return song_obj
 
 def _check_search_request(request):
     error_msg = ""
