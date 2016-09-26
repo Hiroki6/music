@@ -71,20 +71,40 @@ def get_not_listening_songs(user, emotion):
     top_k_songs = []
     for song in cluster_songs:
         top_k_songs.append(song["song"])
+
     results = models.Song.objects.filter(id__in=top_k_songs).values()
+    return get_song_and_tag_map(results)
+
+def get_listening_songs(user):
+
+    listening_songs = models.EmotionRelevantSong.objects.filter(user=user).values('song')
+    results = models.Song.objects.filter(id__in=listening_songs).values()
+    return get_song_and_tag_map(results)
+
+def get_song_and_tag_map(song_objs):
+
     tag_obj = models.Tag.objects.all()
     tags = [tag.name for tag in tag_obj]
 
     song_tag_map = {} # {song_id: List[tag_value]}
     songs = [] # List[song_id]
-    for result in results:
-        song_id = result['id']
+    for song_obj in song_objs:
+        song_id = song_obj['id']
         songs.append(song_id)
         song_tag_map.setdefault(song_id, [])
         for tag in tags:
-            song_tag_map[song_id].append(result[tag])
-
+            song_tag_map[song_id].append(song_obj[tag])
+    
+    change_list_into_numpy(song_tag_map)
     return songs, song_tag_map
+
+"""
+listを持つdictをnumpy.arrayに変換
+"""
+def change_list_into_numpy(target_map):
+
+    for key, values in target_map.items():
+        target_map[key] = np.array(values)
 
 def listtuple_sort_reverse(t):
     t.sort()
