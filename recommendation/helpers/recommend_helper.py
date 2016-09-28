@@ -25,17 +25,6 @@ def get_user_not_listening_songs(user_id):
     songs = Song.objects.exclude(id__in=listening_songs)
     return songs
 
-def get_feedback_dict():
-
-    feedbacks = ["calm", "tense", "aggressive", "lively", "peaceful"]
-    feedback_dict = {}
-    for i in xrange(2):
-        for index, feedback in enumerate(feedbacks):
-            key = i * 5 + index
-            feedback_dict[key] = feedback
-
-    return feedback_dict
-
 def search_song(artist, song):
     results = []
     if artist != None and song != None:
