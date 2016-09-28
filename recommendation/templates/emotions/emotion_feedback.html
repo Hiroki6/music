@@ -5,13 +5,21 @@
 {% block main %}
 <h2>印象語フィードバックによる楽曲検索システムへようこそ</h2>
 <div class = "main">
-  {% include "parts/_emotion_search_form.html" %}
-  <div class = "clearfix">
-    {% for song in songs %}
-      <div class = "content">
-       {% include "parts/_song_iframe_ref.html" %}
-      </div>
-    {% endfor %}
-  </div>
+  {% ifequal emotion 0 %}
+    {% include "parts/_emotion_search_form.html" %}
+    {% include "parts/_feedback_explanation.html" %}
+  {% else %}
+    <h2>{{ search_emotion }}の検索結果</h2>
+    <div class = "clearfix">
+      {% for song in songs %}
+        <div class = "content">
+          {% include "parts/_song_iframe.html" %}
+          {% include "parts/_emotion_feedback.html" %}
+        </div>
+      {% endfor %}
+    {% include "parts/_feedback_explanation.html" %}
+    </div>
+    {% include "parts/_refresh_search_button.html" %}
+  {% endifequal %}
 </div>
 {% endblock main %}

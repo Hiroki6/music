@@ -12,7 +12,7 @@ from django.core.context_processors import csrf
 from django.contrib.auth.models import User
 from recommendation.factorization_machines import recommend_lib
 from django.contrib.sites.models import Site
-from recommendation.helpers import recommend_helper
+from recommendation.helpers import recommend_helper, common_helper
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_protect
 import time
@@ -152,9 +152,9 @@ def recommend_song(request, error_msg = ""):
     song = recommend_helper.get_top_song(user)
     song_obj = Song.objects.filter(id=song)
     recommend_helper.add_user_recommend_song(user.id, song)
-    feedback_dict = recommend_helper.get_feedback_dict()
+    feedback_dict = common.helper.get_feedback_dict()
     finish_flag = 1 if recommend_helper.count_recommend_songs(user.id) >= 10 else 0
-    return render(request, 'recommendation/recommend_song.html', {'user': user, 'songs': song_obj, 'feedback_dict': feedback_dict, 'finish_flag': finish_flag, 'error_msg': error_msg})
+    return render(request, 'recommendation/recommend_song.html', {'user': user, 'songs': song_obj, 'feedback_dict': feedback_dict, 'finish_flag': finish_flag, 'error_msg': error_msg, 'url': "feedback"})
 
 @login_required
 def recommend_songs(request):
@@ -199,17 +199,7 @@ def questionnaire(request):
     # すでに回答しているかどうか
     is_answer = recommend_helper.judge_answer(request.user.id)
     if request.method == 'POST':
-        if request.POST.has_key('q1') and request.POST.has_key('q2') and request.POST.has_key('q3') and request.POST.has_key('q4') and request.POST.has_key('free_content'):
-            comparison = request.POST['q1']
-            interaction_rate = request.POST['q2']
-            recommend_rate = request.POST['q3']
-            compare_method = request.POST['q4']
-            song_nums = 0
-            for i in xrange(len(recommend_all_song_map)):
-                if request.POST[str(i)] == "1":
-                    song_nums += 1
-            free_content = request.POST['free_content']
-            helpers.save_questionnaire(request.user.id, comparison, interaction_rate, recommend_rate, song_nums, compare_method, free_content)
+        if _process_questionnaire(request, recommend_all_song_map):
             return redirect('/recommendation/end/')
         else:
             error_msg = "全て選択してください"
@@ -219,3 +209,22 @@ def questionnaire(request):
 @login_required
 def end(request):
     return render(request, 'recommendation/end.html')
+
+"""
+アンケートに対する処理
+"""
+def _process_questionnaire(request, recommend_all_song_map):
+    if request.POST.has_key('q1') and request.POST.has_key('q2') and request.POST.has_key('q3') and request.POST.has_key('q4') and request.POST.has_key('free_content'):
+        comparison = request.POST['q1']
+        interaction_rate = request.POST['q2']
+        recommend_rate = request.POST['q3']
+        compare_method = request.POST['q4']
+        song_nums = 0
+        for i in xrange(len(recommend_all_song_map)):
+            if request.POST[str(i)] == "1":
+                song_nums += 1
+        free_content = request.POST['free_content']
+        helpers.save_questionnaire(request.user.id, comparison, interaction_rate, recommend_rate, song_nums, compare_method, free_content)
+        return True
+    else:
+        return False
