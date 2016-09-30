@@ -9,6 +9,9 @@ feedback_map = {"relevant": 2, "emotion": 3}
 モデルの初期化(各ユーザーごとのモデル配列の作成・保存)
 relevantなら2
 emotionなら3
+
+relevantのパラメータ: Wとbias
+emotionのパラメータ: Wのみ
 """
 class InitRedis(object):
 
@@ -23,35 +26,26 @@ class InitRedis(object):
         """
         feedback_typeによって初期化するモデルを分ける
         """
-        if self.feedback_type == "relevant":
-            self.init_all_user_relevant_model()
-        else:
-            return
-
-    def init_all_user_relevant_model(self):
-        """
-        relevantモデル全て初期化
-        """
         uniq_users = models.Preference.objects.all().values_list("user", flat=True).order_by("user").distinct()
         self.flush_db()
         for user in uniq_users:
-            self.create_and_save_user_relevant_model(str(user))
+            self.init_user_model(user)
+    
+    def update_user_model(self, user):
+        """
+        ユーザーの更新
+        """
+        common.delete_redis_key(self.r, "W_" + user)
+        self.init_user_model(user)
 
     def init_user_model(self, user):
         """
-        特定のユーザーのモデル
+        特定のユーザーのモデル更新
         """
         if self.feedback_type == "relevant":
-            self.init_user_relevant_model(user)
+            self.create_and_save_user_relevant_model(user)
         else:
-            return
-
-    def init_user_relevant_model(self, user):
-        """
-        特定のユーザーのrelevantモデル更新
-        """
-        common.delete_redis_key(self.r, "W_" + user)
-        self.create_and_save_user_relevant_model(user)
+            self.create_and_save_user_emotion_model(user)
 
     def create_and_save_user_relevant_model(self, user):
         """
@@ -59,6 +53,13 @@ class InitRedis(object):
         """
         W, bias = self.create_relevant_model()
         self.save_user_relevant_into_redis(user, W, bias)
+    
+    def create_and_save_user_emotion_model(self, user):
+        """
+        emotionモデルの初期化と保存
+        """
+        W = self.create_emotion_model()
+        seld.save_user_emotion_into_redis(user, W)
 
     def create_relevant_model(self):
         """
@@ -73,7 +74,9 @@ class InitRedis(object):
         """
         印象語フィードバック用のモデルの作成
         """
-        return
+        np.random.seed(seed=self.seed)
+        W = np.random.normal(scale=self.init_stdev,size=(self.N))
+        return W
 
     def save_user_relevant_into_redis(self, user, W, bias):
         """
@@ -82,11 +85,11 @@ class InitRedis(object):
         common.save_one_dim_array(self.r, "W_" + user, W)
         common.save_scalar(self.r, "bias", user, bias)
 
-    def save_emotion_into_redis(self):
+    def save_user_emotion_into_redis(self, user, W):
         """
         印象語フィードバック用のモデルのredisへの保存
         """
-        return
+        common.save_one_dim_array(self.r, "W_" + user, W)
 
     def flush_db(self):
         """

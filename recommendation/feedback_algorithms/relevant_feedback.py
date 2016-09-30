@@ -9,7 +9,7 @@ import redis
 import common_functions as common
 from RelevantFeedback import cy_relevant_feedback as cy_rf
 import sys
-from recommendation.models import EmotionRelevantSong
+from recommendation import models
 
 HOST = 'localhost'
 PORT = 6379
@@ -23,7 +23,6 @@ class RelevantFeedback:
         self.user = user
         self._get_params_by_redis()
         self.emotion = emotion
-        self._get_learning_data()
         self.cy_obj = cy_rf.CyRelevantFeedback(self.W, self.bias, 43)
 
     def _get_params_by_redis(self):
@@ -32,24 +31,29 @@ class RelevantFeedback:
         self.W = common.get_one_dim_params(self.r, key)
         self.bias = common.get_scalar(self.r, "bias", self.user)
 
-    def _get_learning_data(self):
+    def _get_learning_data(self, learning_method):
         """
         学習データの取得
         """
-        relevant_datas = EmotionRelevantSong.objects.filter(user_id=int(self.user)).values()
+        relevant_datas = models.EmotionRelevantSong.objects.order_by("id").filter(user_id=int(self.user)).values()
         self.song_relevant = {} # {song_id: relevant_type}
-        for relevant_data in relevant_datas:
-            self.song_relevant[relevant_data["song_id"]] = relevant_data["relevant_type"]
+        if learning_method == "online":
+            relevant_datas = relevant_datas.reverse()
+            self.song_relevant[relevant_datas[0]["song_id"]] = relevant_datas[0]["relevant_type"]
+        else:
+            for relevant_data in relevant_datas:
+                self.song_relevant[relevant_data["song_id"]] = relevant_data["relevant_type"]
 
-    def set_learning_params(self, l_rate, beta):
+    def set_learning_params(self, l_rate, beta, learning_method = "online"):
         """
         学習パラメータの設定
         """
         self.beta = beta
         self.cy_obj.set_learning_params(l_rate, beta)
-        self.set_listening_songs()
+        self._get_learning_data(learning_method)
+        self._set_listening_songs()
 
-    def set_listening_songs(self):
+    def _set_listening_songs(self):
 
         self.songs, self.song_tag_map = common.get_listening_songs(self.user)
 
@@ -57,12 +61,15 @@ class RelevantFeedback:
         """
         CyRelevantFeedbackクラスを用いたモデルの学習
         """
-        for i in xrange(1000):
+        error = 0
+        for i in xrange(100):
+            before_error = error
             for song_id, relevant_type in self.song_relevant.items():
+                print "song_id: %d" % (song_id)
                 self.cy_obj.fit(self.song_tag_map[song_id], relevant_type)
             error = self._calc_all_error()
             print error
-            if error < 0.00001:
+            if error < 0.0001 or abs(error - before_error) < 0.000001:
                 self.bias = self.cy_obj.get_bias()
                 break
 
@@ -72,6 +79,7 @@ class RelevantFeedback:
 
         error = 0.0
         for song_id, relevant_type in self.song_relevant.items():
+            print "song_id: %d" % (song_id)
             error += pow(self.cy_obj.calc_error(self.song_tag_map[song_id], relevant_type), 2)
         error += self.beta * np.linalg.norm(self.W)
 

@@ -58,4 +58,9 @@ def get_song_objs(song_ids):
 ユーザーのモデル初期化
 """
 def init_user_model(user_id, relevant_type):
+    delete_user_listening_history(user_id, relevant_type)
     exec_functions.init_redis_user_model(str(user_id), relevant_type)
+
+def delete_user_listening_history(user_id, relevant_type):
+    if relevant_type == "relevant":
+        EmotionRelevantSong.objects.filter(user_id=user_id).delete()
