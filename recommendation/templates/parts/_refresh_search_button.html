@@ -1,6 +1,6 @@
-<form class = "refresh-form" name = "refresh" method = "POST" action = "/recommendation/{{ url }}/">
+<form class = "refresh-form" method = "POST" action = "/recommendation/{{ url }}/">
   {% csrf_token %}
-  <button class = "refresh-button" type = "submit" name = "user_id" value = {{user.id}}>
+  <button class = "refresh-button" type = "submit" name = "refresh" value = {{user.id}}>
     他の印象語で検索をする
   </button>
 </form>

@@ -44,7 +44,6 @@ def feedback(request):
         feedback_value = request.POST['select-feedback']
         if feedback_value == "-1":
             error_msg = "フィードバックを選択してください"
-            #return redirect('/recommendation/recommend_song/')
             return recommend_song(request, error_msg)
         song_id = request.POST['song']
     except KeyError:
