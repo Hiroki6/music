@@ -56,7 +56,9 @@ cdef class CyRelevantFeedback:
         self.beta = beta
 
     def fit(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X, int relevant_type):
-        
+        """
+        @param(relevant_type): 適合か不適合{+1, -1}
+        """
         self.error = self.calc_error(X, relevant_type)
         self._update_bias()
         self._update_W(X)
@@ -69,9 +71,11 @@ cdef class CyRelevantFeedback:
         
         cdef:
             int index
+            double update_value
 
         for index in xrange(self.feature_num):
-            self.W[index] += 2 * self.l_rate * (self.error * X[index] - self.beta * self.W[index])
+            update_value = 2 * self.l_rate * (self.error * X[index] - self.beta * self.W[index])
+            self.W[index] += update_value
 
     def get_bias(self):
         return self.bias

@@ -20,7 +20,7 @@ def init_redis_all_model(feedback_type):
 def init_redis_user_model(user_id, feedback_type):
 
     init_obj = init_redis.InitRedis(feedback_type = feedback_type)
-    init_obj.init_user_model(user_id)
+    init_obj.update_user_model(user_id)
 
 """
 relevant

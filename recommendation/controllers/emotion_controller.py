@@ -55,9 +55,11 @@ def relevant_feedback_single(request):
             error_msg = "印象語を選択してください"
         songs = _relevant_search(request, emotion, False)
     if request.method == 'POST':
+        # redis初期化
         if request.POST.has_key("refresh"):
             user_id = request.user.id
             emotion_helper.init_user_model(user_id, "relevant")
+        # フィードバック
         else:
             song_id = request.POST["song_id"]
             relevant_type = request.POST["relevant_type"]
