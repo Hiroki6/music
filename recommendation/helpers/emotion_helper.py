@@ -26,18 +26,36 @@ def get_random_k_songs(k, song_obj):
         k_song_objs.append(song_obj[index])
     return k_song_objs
 
+"""
+適合性フィードバックの内容永続化
+"""
 def save_user_relevant_song(user_id, song_id, relevant_type):
 
     obj, created = EmotionRelevantSong.objects.get_or_create(user_id=user_id, song_id=song_id, relevant_type=relevant_type)
 
+"""
+モデルから楽曲取得
+"""
 def get_top_song_relevant(user, emotion):
     song_ids = exec_functions.get_song_by_relevant(user, emotion)
     return get_song_objs(song_ids)
 
+"""
+学習と楽曲の取得
+"""
 def learning_and_get_song(user, emotion):
     song_ids = exec_functions.learning_and_get_song_by_relevant(user, emotion)
     return get_song_objs(song_ids)
-    
+   
+"""
+楽曲ID集合からSong Object取得
+"""
 def get_song_objs(song_ids):
     song_objs = Song.objects.filter(id__in=song_ids)
     return song_objs
+
+"""
+ユーザーのモデル初期化
+"""
+def init_user_model(user_id, relevant_type):
+    exec_functions.init_redis_user_model(str(user_id), relevant_type)

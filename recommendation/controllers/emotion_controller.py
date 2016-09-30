@@ -55,12 +55,16 @@ def relevant_feedback_single(request):
             error_msg = "印象語を選択してください"
         songs = _relevant_search(request, emotion, False)
     if request.method == 'POST':
-        song_id = request.POST["song_id"]
-        relevant_type = request.POST["relevant_type"]
-        emotion = int(request.POST['emotion'])
-        user_id = request.user.id
-        emotion_helper.save_user_relevant_song(int(user_id), int(song_id), int(relevant_type))
-        songs = _relevant_search(request, emotion)
+        if request.POST.has_key("refresh"):
+            user_id = request.user.id
+            emotion_helper.init_user_model(user_id, "relevant")
+        else:
+            song_id = request.POST["song_id"]
+            relevant_type = request.POST["relevant_type"]
+            emotion = int(request.POST['emotion'])
+            user_id = request.user.id
+            emotion_helper.save_user_relevant_song(int(user_id), int(song_id), int(relevant_type))
+            songs = _relevant_search(request, emotion)
     search_emotion = emotion_map[emotion]
     return render(request, 'emotions/relevant_feedback.html', {'songs': songs, 'url': "relevant_feedback_single", 'error_msg': error_msg, "multi_flag": False, "emotion": emotion, "search_emotion": search_emotion})
 
@@ -73,6 +77,12 @@ def emotion_feedback_single(request):
     songs = []
     error_msg = ""
     feedback_dict = common_helper.get_feedback_dict()
+    if request.method == "POST" and request.POST.has_key('select-feedback'):
+        feedback_value = request.POST['select-feedback']
+        if feedback_value == "-1":
+            error_msg = "フィードバックを選択してください"
+        emotion = int(request.POST['emotion'])
+        song_id = request.POST['song']
     if request.method == 'GET' and request.GET.has_key("emotion-search"):
         emotion = int(request.GET['emotion-search'])
         if emotion == 0:
