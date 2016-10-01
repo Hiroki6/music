@@ -22,6 +22,7 @@ cdef class CyEmotionFeedback:
     cdef:
         np.ndarray W
         double margin
+        double error
 
     def __cinit__(self,
             np.ndarray[DOUBLE, ndim=1, mode="c"] W):
@@ -38,3 +39,33 @@ cdef class CyEmotionFeedback:
         回帰誤差計算
         """
         return self.margin - self.predict(X)
+
+    def set_margin(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
+        """
+        X: フィードバック要素を含んだものとフィードバックされた楽曲の特徴ベクトルの差ベクトル(X_f - X_t)
+        """
+        self.margin = 2 * self.predict(X)
+        
+    def fit(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
+
+        self.set_margin(X)
+        self._repeat_optimization(X)
+
+    def _repeat_optimization(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
+        
+        cdef:
+            int i
+        self.error = self.calc_error(X)
+        for i in xrange(1000):
+            if self.error < 0:
+                break
+            else:
+                self._update_W(X)
+
+    def _update_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
+        
+        cdef:
+            double tau
+
+        tau = self.error / np.linalg.norm(X)
+        self.W += tau * X

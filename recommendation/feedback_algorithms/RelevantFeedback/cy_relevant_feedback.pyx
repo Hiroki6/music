@@ -49,7 +49,10 @@ cdef class CyRelevantFeedback:
         """
         回帰誤差計算
         """
-        return target - self.predict(X)
+        cdef:
+            predict_value
+        predict_value = self.predict(X)
+        return target - predict_value
 
     def set_learning_params(self, double l_rate, double beta):
         self.l_rate = l_rate

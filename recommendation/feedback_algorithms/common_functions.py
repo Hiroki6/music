@@ -68,9 +68,11 @@ def delete_redis_keys(redis_obj, keys):
 def delete_redis_key(redis_obj, key):
     redis_obj.delete(key)
 
-"""
-フィードバックの種類によって視聴済みの楽曲を取得するモデルを変える必要がある
-"""
+def update_redis_key(redis_obj, key, params):
+
+    delete_redis_key(redis_obj, key)
+    save_one_dim_array(redis_obj, key, params)
+
 def get_not_listening_songs(user, emotion):
     print "未視聴の楽曲取得"
     listening_songs = models.EmotionRelevantSong.objects.filter(user=user).values('song')

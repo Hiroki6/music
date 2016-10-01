@@ -83,8 +83,9 @@ def emotion_feedback_single(request):
         feedback_value = request.POST['select-feedback']
         if feedback_value == "-1":
             error_msg = "フィードバックを選択してください"
-        emotion = int(request.POST['emotion'])
-        song_id = request.POST['song']
+        else:
+            emotion = int(request.POST['emotion'])
+            song_id = request.POST['song']
     if request.method == 'GET' and request.GET.has_key("emotion-search"):
         emotion = int(request.GET['emotion-search'])
         if emotion == 0:
@@ -109,7 +110,7 @@ def _emotion_search(request, k):
 def _relevant_search(request, emotion, learning=True):
     song_obj = []
     if learning:
-        song_obj = emotion_helper.learning_and_get_song(str(request.user.id), emotion)
+        song_obj = emotion_helper.learning_and_get_song_by_relevant(str(request.user.id), emotion)
     else:
         song_obj = emotion_helper.get_top_song_relevant(str(request.user.id), emotion)
     return song_obj

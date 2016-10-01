@@ -4,6 +4,7 @@
 helperから呼ばれる各オブジェクト実行用の関数
 """
 import relevant_feedback as r_f
+import emotion_feedback as e_f
 import init_redis
 
 """
@@ -41,8 +42,31 @@ def learning_and_get_song_by_relevant(user, emotion, l_rate = 0.005, beta = 0.02
 def get_r_obj(user, emotion):
     return r_f.RelevantFeedback(user, emotion)
 
-def get_top_song(r_obj):
-    top_k_songs = r_obj.get_top_k_songs()
+"""
+emotion
+"""
+def get_song_by_emotion(user, emotion):
+    e_obj = get_e_obj(user, emotion)
+    return get_top_song(e_obj)
+
+def learning_by_emotion(e_obj, feedback):
+    e_obj.set_params(feedback)
+    e_obj.fit()
+
+def learning_and_get_song_by_emotion(user, emotion, feedback):
+    e_obj = get_e_obj(user, emotion)
+    learning_by_emotion(e_obj, feedback)
+    return get_top_song(e_obJ)
+
+def get_e_obj(user, emotion):
+    return e_f.EmotionFeedback(user, emotion)
+
+
+"""
+共通
+"""
+def get_top_song(obj):
+    top_k_songs = obj.get_top_k_songs()
     song_ids = [song[1] for song in top_k_songs]
     return song_ids
-  
+

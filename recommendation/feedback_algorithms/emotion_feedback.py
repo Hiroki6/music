@@ -30,10 +30,31 @@ class EmotionFeedback:
         self.top_song = common.get_scalar(self.r, "top_song", self.user)
         self.top_matrix = common.get_one_dim_params(self.r, "top_matrix_"+self.user)
         self.W = common.get_one_dim_params(self.r, key)
+ 
+    def set_params(self, feedback):
+        self.create_feedback_matrix(feedback)
+
+    def fit(self):
+
+        X = self.feedback_matrix - self.top_matrix
+        self.cy_obj = cy_ef.CyEmotionFeedback(self.W)
+        self.cy_obj.fit(X)   
+ 
+    def get_top_k_songs(self, k=1):
+        """
+        検索対象の印象語に含まれている楽曲から回帰値の高いk個の楽曲を取得する
+        """
+        songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotion)
+        rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
+        common.listtuple_sort_reverse(rankings)
+        self.top_song = rankings[0][1]
+        self.top_matrix = song_tag_map[self.top_song]
+        self.save_top_song()
+        return rankings[:k]
 
     def save_top_song(self):
-        common.save_scale(self.r, "top_song", self.user, "")
-        common.save_one_dim_array(self.r, "top_matrix_"+self.user, "")
+        common.save_scale(self.r, "top_song", self.user, self.top_song)
+        common.save_one_dim_array(self.r, "top_matrix_"+self.user, self.top_matrix)
 
     def create_feedback_matrix(self, feedback):
         """
@@ -60,4 +81,5 @@ class EmotionFeedback:
         feedback += 1
         tags = models.Tag.objects.filter(cluster__id=feedback)
         self.tags = [(tag.id-1, tag.name) for tag in tags]
+    
 
