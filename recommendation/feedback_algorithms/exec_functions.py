@@ -31,7 +31,7 @@ def get_song_by_relevant(user, emotion):
     return get_top_song(r_obj)
 
 def learning_by_relevant(r_obj, l_rate, beta):
-    r_obj.set_learning_params(l_rate, beta)
+    r_obj.set_learning_params(l_rate, beta, "batch")
     r_obj.fit()
 
 def learning_and_get_song_by_relevant(user, emotion, l_rate = 0.005, beta = 0.02):

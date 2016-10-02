@@ -11,6 +11,7 @@ from RelevantFeedback import cy_relevant_feedback as cy_rf
 import sys
 from recommendation import models
 import codecs
+import random
 
 HOST = 'localhost'
 PORT = 6379
@@ -63,16 +64,21 @@ class RelevantFeedback:
         CyRelevantFeedbackクラスを用いたモデルの学習
         """
         error = 0
-        for i in xrange(100):
+        for i in xrange(10000):
             before_error = error
-            for song_id, relevant_type in self.song_relevant.items():
-                self.cy_obj.fit(self.song_tag_map[song_id], relevant_type)
+            #for song_id, relevant_type in self.song_relevant.items():
+            #    self.cy_obj.fit(self.song_tag_map[song_id], relevant_type)
+            song_id = random.choice(self.song_relevant.keys())
+            self.cy_obj.fit(self.song_tag_map[song_id], self.song_relevant[song_id])
             error = self._calc_all_error()
-            print error
             if error < 0.0001 or abs(error - before_error) < 0.000001:
+                print "iterations %d" % (i)
+                print "final error %.8f" % (error)
                 self.bias = self.cy_obj.get_bias()
                 break
-
+        for song_id, relevant_type in self.song_relevant.items():
+            print "target: %.1f" % (relevant_type)
+            print "predict: %.8f" % (self.cy_obj.predict(self.song_tag_map[song_id]))
         self._update_params_into_redis()
 
     def _calc_all_error(self):
@@ -91,7 +97,7 @@ class RelevantFeedback:
         songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotion)
         rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
         common.listtuple_sort_reverse(rankings)
-        #common.write_top_k_songs(rankings[:10])
+        common.write_top_k_songs(rankings[:10])
         return rankings[:k]
 
     def _update_params_into_redis(self):
