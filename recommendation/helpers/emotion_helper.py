@@ -33,20 +33,39 @@ def save_user_relevant_song(user_id, song_id, relevant_type):
 
     obj, created = EmotionRelevantSong.objects.get_or_create(user_id=user_id, song_id=song_id, relevant_type=relevant_type)
 
+def save_user_emotion_song(user_id, song_id, emotion, feedback_type):
+
+    obj, created = EmotionEmotionbasedSong.objects.get_or_create(user_id=user_id, song_id=song_id, emotion_id=emotion, feedback_type=feedback_type)
+
+    
 """
-モデルから楽曲取得
+モデルから楽曲取得(relevant)
 """
 def get_top_song_relevant(user, emotion):
     song_ids = exec_functions.get_song_by_relevant(user, emotion)
     return get_song_objs(song_ids)
 
 """
-学習と楽曲の取得
+モデルから楽曲取得(emotion)
 """
-def learning_and_get_song(user, emotion):
+def get_top_song_emotion(user, emotion):
+    song_ids = exec_functions.get_song_by_emotion(user, emotion)
+    return get_song_objs(song_ids)
+
+"""
+学習と楽曲の取得(relevant)
+"""
+def learning_and_get_song_by_emotion(user, emotion):
+    song_ids = exec_functions.learning_and_get_song_by_emotion(user, emotion)
+    return get_song_objs(song_ids)
+
+"""
+学習と楽曲の取得(relevant)
+"""
+def learning_and_get_song_by_relevant(user, emotion):
     song_ids = exec_functions.learning_and_get_song_by_relevant(user, emotion)
     return get_song_objs(song_ids)
-   
+
 """
 楽曲ID集合からSong Object取得
 """
@@ -64,3 +83,5 @@ def init_user_model(user_id, relevant_type):
 def delete_user_listening_history(user_id, relevant_type):
     if relevant_type == "relevant":
         EmotionRelevantSong.objects.filter(user_id=user_id).delete()
+    else:
+        EmotionEmotionbasedSong.objects.filter(user_id=user_id).delete()

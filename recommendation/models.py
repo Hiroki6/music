@@ -118,4 +118,4 @@ class EmotionEmotionbasedSong(models.Model):
     user = models.ForeignKey(User)
     song = models.ForeignKey(Song)
     emotion = models.ForeignKey(Cluster)
-
+    feedback_type = models.IntegerField(null=False, blank=False)

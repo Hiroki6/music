@@ -29,7 +29,7 @@ class InitRedis(object):
         uniq_users = models.Preference.objects.all().values_list("user", flat=True).order_by("user").distinct()
         self.flush_db()
         for user in uniq_users:
-            self.init_user_model(user)
+            self.init_user_model(str(user))
     
     def update_user_model(self, user):
         """
@@ -59,7 +59,7 @@ class InitRedis(object):
         emotionモデルの初期化と保存
         """
         W = self.create_emotion_model()
-        seld.save_user_emotion_into_redis(user, W)
+        self.save_user_emotion_into_redis(user, W)
 
     def create_relevant_model(self):
         """

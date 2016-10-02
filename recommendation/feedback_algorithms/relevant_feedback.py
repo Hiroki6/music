@@ -10,6 +10,7 @@ import common_functions as common
 from RelevantFeedback import cy_relevant_feedback as cy_rf
 import sys
 from recommendation import models
+import codecs
 
 HOST = 'localhost'
 PORT = 6379
@@ -65,7 +66,6 @@ class RelevantFeedback:
         for i in xrange(100):
             before_error = error
             for song_id, relevant_type in self.song_relevant.items():
-                print "song_id: %d" % (song_id)
                 self.cy_obj.fit(self.song_tag_map[song_id], relevant_type)
             error = self._calc_all_error()
             print error
@@ -73,13 +73,12 @@ class RelevantFeedback:
                 self.bias = self.cy_obj.get_bias()
                 break
 
-        self.update_params_into_redis()
+        self._update_params_into_redis()
 
     def _calc_all_error(self):
 
         error = 0.0
         for song_id, relevant_type in self.song_relevant.items():
-            print "song_id: %d" % (song_id)
             error += pow(self.cy_obj.calc_error(self.song_tag_map[song_id], relevant_type), 2)
         error += self.beta * np.linalg.norm(self.W)
 
@@ -90,13 +89,11 @@ class RelevantFeedback:
         検索対象の印象語に含まれている楽曲から回帰値の高いk個の楽曲を取得する
         """
         songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotion)
-        top_song = 0
-        top_song_value = -sys.maxint
         rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
         common.listtuple_sort_reverse(rankings)
+        #common.write_top_k_songs(rankings[:10])
         return rankings[:k]
 
-    def update_params_into_redis(self):
-        common.delete_redis_key(self.r, "W_"+self.user)
-        common.save_one_dim_array(self.r, "W_" + self.user, self.W)
+    def _update_params_into_redis(self):
+        common.update_redis_key(self.r, "W_" + self.user, self.W)
         common.save_scalar(self.r, "bias", self.user, self.bias)
