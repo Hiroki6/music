@@ -59,7 +59,7 @@ class InitRedis(object):
         emotionモデルの初期化と保存
         """
         W = self.create_emotion_model()
-        seld.save_user_emotion_into_redis(user, W)
+        self.save_user_emotion_into_redis(user, W)
 
     def create_relevant_model(self):
         """

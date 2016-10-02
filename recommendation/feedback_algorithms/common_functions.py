@@ -3,6 +3,7 @@
 import redis
 import numpy as np
 from recommendation import models
+import codecs
 
 """
 redisからのスカラー値の取得
@@ -73,9 +74,12 @@ def update_redis_key(redis_obj, key, params):
     delete_redis_key(redis_obj, key)
     save_one_dim_array(redis_obj, key, params)
 
-def get_not_listening_songs(user, emotion):
+def get_not_listening_songs(user, emotion, feedback_type = "relevant"):
     print "未視聴の楽曲取得"
-    listening_songs = models.EmotionRelevantSong.objects.filter(user=user).values('song')
+    if feedback_type == "relevant":
+        listening_songs = models.EmotionRelevantSong.objects.filter(user=user).values('song')
+    else:
+        listening_songs = models.EmotionEmotionbasedSong.objects.filter(user=user).values('song')
     emotion_map = {1: "-calm", 2: "-tense", 3: "-aggressive", 4: "-lively", 5: "-peaceful"}
     cluster_songs = models.MusicCluster.objects.exclude(song_id__in=listening_songs).order_by(emotion_map[emotion]).values('song')[:300]
     top_k_songs = []
@@ -119,3 +123,16 @@ def change_list_into_numpy(target_map):
 def listtuple_sort_reverse(t):
     t.sort()
     t.reverse()
+
+def write_top_k_songs(top_k_songs):
+    """
+    上位k個の楽曲のファイルへの書き込み
+    """
+
+    print "write file"
+    f = codecs.open("top_k_song.txt", "a")
+    for song in top_k_songs:
+        content = str(song) + "\n"
+        f.write(content)
+    f.write("\n")
+    f.close()

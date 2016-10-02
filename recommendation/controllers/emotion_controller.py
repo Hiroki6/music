@@ -79,33 +79,43 @@ def emotion_feedback_single(request):
     songs = []
     error_msg = ""
     feedback_dict = common_helper.get_feedback_dict()
-    if request.method == "POST" and request.POST.has_key('select-feedback'):
-        feedback_value = request.POST['select-feedback']
-        if feedback_value == "-1":
-            error_msg = "フィードバックを選択してください"
+    if request.method == "POST":
+        # redis初期化
+        if request.POST.has_key("refresh"):
+            user_id = request.user.id
+            emotion_helper.init_user_model(user_id, "emotion")
         else:
+            feedback_type = request.POST['select-feedback']
             emotion = int(request.POST['emotion'])
-            song_id = request.POST['song']
+            song_id = int(request.POST['song'])
+            if feedback_type == "-1":
+                error_msg = "フィードバックを選択してください"
+                songs = _emotion_search(request, emotion, False)
+            else:
+                # 永続化
+                emotion_helper.save_user_emotion_song(request.user.id, song_id, emotion, feedback_type)
+                songs = _emotion_search(request, emotion)
     if request.method == 'GET' and request.GET.has_key("emotion-search"):
         emotion = int(request.GET['emotion-search'])
         if emotion == 0:
             error_msg = "印象語を選択してください"
-        songs = _relevant_search(request, emotion, False)
+        songs = _emotion_search(request, emotion, False)
     search_emotion = emotion_map[emotion]
     return render(request, 'emotions/emotion_feedback.html', {'songs': songs, 'url': "emotion_feedback_single", 'error_msg': error_msg, "multi_flag": False, "emotion": emotion, "search_emotion": search_emotion, "url": "emotion_feedback_single", 'feedback_dict': feedback_dict})
 
-def _emotion_search(request, k):
-    error_msg, emotion = _check_search_request(request)
-    k_songs = []
-    if error_msg != "":
-        songs = emotion_helper.search_by_emotion(int(emotion))
-        k_songs = emotion_helper.get_random_k_songs(k, songs)
-    
-    return k_songs, error_msg
+"""
+印象語フィードバック用の検索関数
+"""
+def _emotion_search(request, emotion, learning=True):
+    song_obj = []
+    if learning:
+        song_obj = emotion_helper.learning_and_get_song_by_emotion(str(request.user.id), emotion)
+    else:
+        song_obj = emotion_helper.get_top_song_emotion(str(request.user.id), emotion)
+    return song_obj
 
 """
-適合性用フィードバック用の検索関数
-最終的にはkを引数として渡す
+適合性フィードバック用の検索関数
 """
 def _relevant_search(request, emotion, learning=True):
     song_obj = []

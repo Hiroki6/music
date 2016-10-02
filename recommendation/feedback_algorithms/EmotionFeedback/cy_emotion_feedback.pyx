@@ -43,8 +43,17 @@ cdef class CyEmotionFeedback:
     def set_margin(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
         """
         X: フィードバック要素を含んだものとフィードバックされた楽曲の特徴ベクトルの差ベクトル(X_f - X_t)
+        初期予測値が>0の時は2*predict_valueをマージンにして、<0のときは0まで学習する
         """
-        self.margin = 2 * self.predict(X)
+        cdef:
+            double predict_value
+
+        predict_value = self.predict(X)
+        if predict_value > 0:
+            self.margin = 2 * self.predict(X)
+        else:
+            self.margin = -1 * self.predict(X)
+        print self.margin
         
     def fit(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
 
@@ -57,10 +66,12 @@ cdef class CyEmotionFeedback:
             int i
         self.error = self.calc_error(X)
         for i in xrange(1000):
-            if self.error < 0:
+            print self.error
+            if self.error <= 0:
                 break
             else:
                 self._update_W(X)
+            self.error = self.calc_error(X)
 
     def _update_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
         

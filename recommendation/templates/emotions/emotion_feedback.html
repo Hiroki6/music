@@ -5,6 +5,9 @@
 {% block main %}
 <h2>印象語フィードバックによる楽曲検索システムへようこそ</h2>
 <div class = "main">
+  {% if error_msg %}
+    <h3 class = "error-msg">{{ error_msg }}</h3>
+  {% endif %}
   {% ifequal emotion 0 %}
     {% include "parts/_emotion_search_form.html" %}
     {% include "parts/_feedback_explanation.html" %}

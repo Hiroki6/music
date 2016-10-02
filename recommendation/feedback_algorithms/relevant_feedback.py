@@ -73,7 +73,7 @@ class RelevantFeedback:
                 self.bias = self.cy_obj.get_bias()
                 break
 
-        self.update_params_into_redis()
+        self._update_params_into_redis()
 
     def _calc_all_error(self):
 
@@ -91,22 +91,9 @@ class RelevantFeedback:
         songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotion)
         rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
         common.listtuple_sort_reverse(rankings)
-        #self.write_top_k_songs(rankings[:10])
+        #common.write_top_k_songs(rankings[:10])
         return rankings[:k]
 
-    def update_params_into_redis(self):
+    def _update_params_into_redis(self):
         common.update_redis_key(self.r, "W_" + self.user, self.W)
         common.save_scalar(self.r, "bias", self.user, self.bias)
-
-    def write_top_k_songs(self, top_k_songs):
-        """
-        上位k個の楽曲のファイルへの書き込み
-        """
-
-        print "write file"
-        f = codecs.open("top_k_song.txt", "a")
-        for song in top_k_songs:
-            content = str(song) + "\n"
-            f.write(content)
-        f.write("\n")
-        f.close()

@@ -49,14 +49,14 @@ def get_song_by_emotion(user, emotion):
     e_obj = get_e_obj(user, emotion)
     return get_top_song(e_obj)
 
-def learning_by_emotion(e_obj, feedback):
-    e_obj.set_params(feedback)
+def learning_by_emotion(e_obj):
+    e_obj.set_params()
     e_obj.fit()
 
-def learning_and_get_song_by_emotion(user, emotion, feedback):
+def learning_and_get_song_by_emotion(user, emotion):
     e_obj = get_e_obj(user, emotion)
-    learning_by_emotion(e_obj, feedback)
-    return get_top_song(e_obJ)
+    learning_by_emotion(e_obj)
+    return get_top_song(e_obj)
 
 def get_e_obj(user, emotion):
     return e_f.EmotionFeedback(user, emotion)
