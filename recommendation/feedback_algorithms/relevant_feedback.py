@@ -69,7 +69,10 @@ class RelevantFeedback:
             #for song_id, relevant_type in self.song_relevant.items():
             #    self.cy_obj.fit(self.song_tag_map[song_id], relevant_type)
             song_id = random.choice(self.song_relevant.keys())
-            self.cy_obj.fit(self.song_tag_map[song_id], self.song_relevant[song_id])
+            relevant_type = self.song_relevant[song_id]
+            if relevant_type == 0:
+                continue
+            self.cy_obj.fit(self.song_tag_map[song_id], relevant_type)
             error = self._calc_all_error()
             if error < 0.0001 or abs(error - before_error) < 0.000001:
                 print "iterations %d" % (i)
