@@ -3,6 +3,7 @@
 import numpy as np
 import common_functions as common
 from .. import models
+import random
 
 feedback_map = {"relevant": 2, "emotion": 3}
 """
@@ -65,7 +66,8 @@ class InitRedis(object):
         """
         適合性フィードバック用のモデルの作成
         """
-        np.random.seed(seed=self.seed)
+        seed = random.randint(20, 40)
+        np.random.seed(seed=seed)
         W = np.random.normal(scale=self.init_stdev,size=(self.N))
         bias = 0.0
         return W, bias
