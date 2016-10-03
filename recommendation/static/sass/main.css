@@ -165,6 +165,10 @@ body {
           color: #52a2c5; }
           body .main .content .like-form .erase-button:hover {
             color: #2860a3; }
+        body .main .content .like-form .next-button {
+          color: #ffa500; }
+          body .main .content .like-form .next-button:hover {
+            color: #ff8c00; }
       body .main .content .song-info {
         float: left;
         margin: 5px 0 0; }

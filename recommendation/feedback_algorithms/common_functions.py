@@ -124,13 +124,14 @@ def listtuple_sort_reverse(t):
     t.sort()
     t.reverse()
 
-def write_top_k_songs(top_k_songs):
+def write_top_k_songs(user_id, filepass, top_k_songs):
     """
     上位k個の楽曲のファイルへの書き込み
     """
 
     print "write file"
-    f = codecs.open("top_k_song.txt", "a")
+    f = codecs.open(filepass, "a")
+    f.write("user: " + str(user_id) + "\n")
     for song in top_k_songs:
         content = str(song) + "\n"
         f.write(content)
