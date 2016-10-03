@@ -10,7 +10,7 @@
     {% csrf_token %}
     {% for song in results %}
       <div class = "content">
-        {% include "parts/song_iframe.html" %}
+        {% include "parts/_song_iframe.html" %}
         <label><input class = "best-song-button" type="radio" name="like_by_recommend" value={{song.id}} > この曲が一番好き</label>
       </div>
     {% endfor %}

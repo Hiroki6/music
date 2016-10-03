@@ -19,7 +19,7 @@
       {% else %}
         <h3>A</h3>
       {% endif %}
-      {% include "parts/song_iframe_ref.html" %}
+      {% include "parts/_song_iframe_ref.html" %}
     </div>
   {% endfor %}
   </div>
@@ -49,7 +49,7 @@
       <div class = "clearfix">
         {% for index, song in recommend_all_song_map.items %}
           <div class = "min-content">
-            {% include "parts/min_song_iframe.html" %}
+            {% include "parts/_min_song_iframe.html" %}
           </div>
         {% endfor %}
       </div>

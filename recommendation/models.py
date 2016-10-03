@@ -104,3 +104,18 @@ class Questionnaire(models.Model):
     song_nums = models.IntegerField(null=False, blank=False)
     compare_method = models.IntegerField(null=False, blank=False)
     free_content = models.CharField(max_length=255, null=True, blank=True)
+
+"""
+印象語検索における適合フィードバックの結果格納
+relevant_type: {1: "好き", -1: "嫌い"}
+"""
+class EmotionRelevantSong(models.Model):
+    user = models.ForeignKey(User)
+    song = models.ForeignKey(Song)
+    relevant_type = models.IntegerField(null=False, blank=False)
+
+class EmotionEmotionbasedSong(models.Model):
+    user = models.ForeignKey(User)
+    song = models.ForeignKey(Song)
+    emotion = models.ForeignKey(Cluster)
+    feedback_type = models.IntegerField(null=False, blank=False)
