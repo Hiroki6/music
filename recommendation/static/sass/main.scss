@@ -219,6 +219,12 @@ body{
             color: #2860a3;
           }
         }
+        .next-button {
+          color: #ffa500;
+          &:hover {
+            color: #ff8c00;
+          }
+        }
       }
       .song-info{
         float: left;

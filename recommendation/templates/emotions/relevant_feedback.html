@@ -33,6 +33,14 @@
                 dislike <i class="fa fa-thumbs-o-down" hidden="true"></i>
               </button>
             </form>
+            <form class = "like-form" name = "like" method = "POST" action = "/recommendation/relevant_feedback_single/">
+              {% csrf_token %}
+              <input type = "hidden" name = "relevant_type" value = 0>
+              <input type = "hidden" name = "emotion" value = {{emotion}}>
+              <button class = "preference-button next-button" type = "submit" name = "song_id" value = {{song.id}}>
+                next<i class="fa fa-arrow-right" aria-hidden="true"></i>
+              </button>
+            </form>
           {% endif %}
         </div>
       {% endfor %}

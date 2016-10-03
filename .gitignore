@@ -1,2 +1,4 @@
 *.pyc
 top_k_song.txt
+relevant_k_song.txt
+emotion_k_song.txt
