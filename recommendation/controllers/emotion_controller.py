@@ -94,7 +94,12 @@ def emotion_feedback_single(request):
             else:
                 # 永続化
                 emotion_helper.save_user_emotion_song(request.user.id, song_id, emotion, feedback_type)
-                songs = _emotion_search(request, emotion)
+                # 再推薦
+                if feedback_type == "11":
+                    songs = _emotion_search(request, emotion, False)
+                # 学習
+                else:
+                    songs = _emotion_search(request, emotion)
     if request.method == 'GET' and request.GET.has_key("emotion-search"):
         emotion = int(request.GET['emotion-search'])
         if emotion == 0:
