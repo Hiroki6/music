@@ -55,7 +55,7 @@ class EmotionFeedback:
         self.top_song = rankings[0][1]
         self.top_matrix = song_tag_map[self.top_song]
         self.save_top_song()
-        common.write_top_k_songs(rankings[:10])
+        common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10])
         return rankings[:k]
 
     def save_top_song(self):

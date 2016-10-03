@@ -97,7 +97,7 @@ class RelevantFeedback:
         songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotion)
         rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
         common.listtuple_sort_reverse(rankings)
-        common.write_top_k_songs(rankings[:10])
+        common.write_top_k_songs(self.user, "relevant_k_song.txt", rankings[:10])
         return rankings[:k]
 
     def _update_params_into_redis(self):

@@ -66,7 +66,10 @@ def relevant_feedback_single(request):
             emotion = int(request.POST['emotion'])
             user_id = request.user.id
             emotion_helper.save_user_relevant_song(int(user_id), int(song_id), int(relevant_type))
-            songs = _relevant_search(request, emotion)
+            if relevant_type == "0":
+                songs = _relevant_search(request, emotion, False)
+            else:
+                songs = _relevant_search(request, emotion)
     search_emotion = emotion_map[emotion]
     return render(request, 'emotions/relevant_feedback.html', {'songs': songs, 'url': "relevant_feedback_single", 'error_msg': error_msg, "multi_flag": False, "emotion": emotion, "search_emotion": search_emotion})
 
