@@ -81,7 +81,14 @@ def get_not_listening_songs(user, emotion, feedback_type = "relevant"):
     else:
         listening_songs = models.EmotionEmotionbasedSong.objects.filter(user=user).values('song')
     emotion_map = {1: "-calm", 2: "-tense", 3: "-aggressive", 4: "-lively", 5: "-peaceful"}
-    cluster_songs = models.MusicCluster.objects.exclude(song_id__in=listening_songs).order_by(emotion_map[emotion]).values('song')[:300]
+    """
+    上位1000曲
+    """
+    cluster_songs = models.MusicCluster.objects.exclude(song_id__in=listening_songs).order_by(emotion_map[emotion]).values('song')[:1000]
+    """
+    その印象クラスタが最も高い楽曲
+    """
+    #cluster_songs = models.MusicCluster.objects.exclude(song_id__in=listening_songs).filter(cluster_id=emotion).values('song')
     top_k_songs = []
     for song in cluster_songs:
         top_k_songs.append(song["song"])
