@@ -55,9 +55,12 @@ cdef class CyEmotionFeedback:
             self.margin = -1 * self.predict(X)
         print self.margin
         
-    def fit(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
-
-        self.set_margin(X)
+    def fit(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X, bint normal = False):
+    
+        if normal:
+            self.margin = 0.0
+        else:
+            self.set_margin(X)
         self._repeat_optimization(X)
 
     def _repeat_optimization(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
@@ -66,8 +69,8 @@ cdef class CyEmotionFeedback:
             int i
         self.error = self.calc_error(X)
         for i in xrange(1000):
-            print self.error
             if self.error <= 0:
+                print i
                 break
             else:
                 self._update_W(X)

@@ -15,6 +15,8 @@ HOST = 'localhost'
 PORT = 6379
 DB = 3
 
+emotion_map = {0: "calm", 1: "tense", 2: "aggressive", 3: "lively", 4: "peaceful"}
+
 class EmotionFeedback:
     """
     印象語フィードバックによるオンライン学習クラス
@@ -35,7 +37,14 @@ class EmotionFeedback:
         学習用データ作成
         """
         self._create_feedback_matrix()
-
+    
+    def set_params_k_rankings(self, k = 10):
+        """
+        フィードバックの印象ベクトルの上位k個の楽曲を学習するバージョン
+        """
+        self.k = k
+        self._create_k_upper_songs()
+    
     def fit(self):
         """
         学習
@@ -45,6 +54,15 @@ class EmotionFeedback:
         self.cy_obj.fit(X)
         self._update_params_into_redis()
  
+    def k_fit(self):
+        """
+        上位k個のランキング学習
+        """
+        for song, tags in self.upper_song_tag_map.items():
+            X = tags - self.top_matrix
+            self.cy_obj.fit(X, True)
+        self._update_params_into_redis()
+
     def get_top_k_songs(self, k=1):
         """
         検索対象の印象語に含まれている楽曲から回帰値の高いk個の楽曲を取得する
@@ -77,6 +95,15 @@ class EmotionFeedback:
         for tag in enumerate(self.tags):
             self.feedback_matrix[tag[0]] += alpha/self.feedback_matrix[tag[0]]
 
+    def _create_k_upper_songs(self):
+        """
+        フィードバックの印象ベクトルの上位k個の学習データ作成
+        """
+        self._get_last_song()
+        self._get_last_feedback()
+        self._transform_feedback()
+        self._get_upper_songs()
+
     def _get_last_feedback(self):
         """
         最後のフィードバック情報取得
@@ -86,8 +113,13 @@ class EmotionFeedback:
         self.feedback = emotion_datas[0]["feedback_type"]
 
     def _get_tags_by_feedback(self):
+        self._transform_feedback()
+        tags = models.Tag.objects.filter(cluster__id=self.feedback)
+        self.tags = [(tag.id-1, tag.name) for tag in tags]
+    
+    def _transform_feedback(self):
         """
-        feedback: 1~10
+        feedback(1~10)を印象のベクトルに変換
         """
         if(self.feedback <= 4):
             self.plus_or_minus = 1
@@ -95,9 +127,7 @@ class EmotionFeedback:
             self.plus_or_minus = -1
             self.feedback -= 5
         self.feedback += 1
-        tags = models.Tag.objects.filter(cluster__id=self.feedback)
-        self.tags = [(tag.id-1, tag.name) for tag in tags]
-    
+       
     def _get_last_song(self):
         self.top_song = common.get_scalar(self.r, "top_song", self.user)
         self.top_matrix = common.get_one_dim_params(self.r, "top_matrix_"+self.user)
@@ -106,3 +136,11 @@ class EmotionFeedback:
         print "パラメータの更新"
         common.update_redis_key(self.r, "W_" + self.user, self.W)
 
+    def _get_upper_songs(self):
+        """
+        フィードバックを受けた楽曲よりもemotionの値が高い楽曲s曲に対してranking学習を行う
+        とりあえずその楽曲よりも直近で大きいs曲取得
+        """
+        top_song_obj = models.MusicCluster.objects.filter(song_id=int(self.top_song)).values()
+        emotion_value = top_song_obj[0][emotion_map[self.feedback-1]]
+        self.upper_songs, self.upper_song_tag_map = common.get_upper_song_tag_map(self.feedback-1, emotion_value, self.k)

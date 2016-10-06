@@ -56,7 +56,7 @@ def get_top_song_emotion(user, emotion):
 学習と楽曲の取得(relevant)
 """
 def learning_and_get_song_by_emotion(user, emotion):
-    song_ids = exec_functions.learning_and_get_song_by_emotion(user, emotion)
+    song_ids = exec_functions.learning_and_get_song_by_emotion(user, emotion, True)
     return get_song_objs(song_ids)
 
 """
