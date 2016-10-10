@@ -135,7 +135,6 @@ class EmotionFeedback(EmotionBaseline):
                 X = tags - self.top_matrix
             else:
                 X = self.top_matrix - tags
-            print X
             self.cy_obj.fit(X, True)
         self._update_params_into_redis()
 

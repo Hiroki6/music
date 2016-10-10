@@ -129,7 +129,7 @@ def _check_search_request(request, feedback_type):
             songs = _emotion_search(request, emotion, False)
         else:
             songs = _relevant_search(request, emotion, False)
-    return songs, emotion, error_msg
+    return songs, int(emotion), error_msg
 
 def _refresh(request, feedback_type):
     user_id = request.user.id

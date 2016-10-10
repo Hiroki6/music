@@ -82,10 +82,10 @@ def get_not_listening_songs(user, emotion, feedback_type = "relevant"):
     print "未視聴の楽曲取得"
     listening_songs = []
     if feedback_type == "relevant":
-        listening_songs = get_listening_songs_by_relevant(user, emotion)
+        listening_songs = get_listening_songs_by_relevant(user)
     else:
-        listening_songs = get_listening_songs_by_emotion(user, emotion)
-    cluster_songs = get_exclude_cluster_songs(listening_songs, emotion)
+        listening_songs = get_listening_songs_by_emotion(user)
+    cluster_songs = get_exclude_cluster_songs(listening_songs, int(emotion))
     """
     その印象クラスタが最も高い楽曲
     """
@@ -97,12 +97,12 @@ def get_not_listening_songs(user, emotion, feedback_type = "relevant"):
     results = models.Song.objects.filter(id__in=top_k_songs).values()
     return get_song_and_tag_map(results)
 
-def get_listening_songs_by_emotion(user, emotion):
+def get_listening_songs_by_emotion(user):
 
     listening_songs = models.EmotionEmotionbasedSong.objects.filter(user=user).values('song')
     return listening_songs
 
-def get_listening_songs_by_relevant(user, emotion):
+def get_listening_songs_by_relevant(user):
 
     listening_songs = models.EmotionRelevantSong.objects.filter(user=user).values('song')
     return listening_songs
@@ -176,7 +176,7 @@ def get_bound_song_tag_map(emotion, value, k, plus_or_minus):
 
     if plus_or_minus == 1:
         songs = get_upper_songs(emotion, value)
-        songs = upper_songs.reverse()
+        songs = songs.reverse()
     else:
         songs = get_lower_songs(emotin, value)
     song_ids = []
