@@ -74,17 +74,18 @@ def update_redis_key(redis_obj, key, params):
     delete_redis_key(redis_obj, key)
     save_one_dim_array(redis_obj, key, params)
 
+
+"""
+未視聴の楽曲取得
+"""
 def get_not_listening_songs(user, emotion, feedback_type = "relevant"):
     print "未視聴の楽曲取得"
+    listening_songs = []
     if feedback_type == "relevant":
-        listening_songs = models.EmotionRelevantSong.objects.filter(user=user).values('song')
+        listening_songs = get_listening_songs_by_relevant(user)
     else:
-        listening_songs = models.EmotionEmotionbasedSong.objects.filter(user=user).values('song')
-    emotion_map = {1: "-calm", 2: "-tense", 3: "-aggressive", 4: "-lively", 5: "-peaceful"}
-    """
-    上位1000曲
-    """
-    cluster_songs = models.MusicCluster.objects.exclude(song_id__in=listening_songs).order_by(emotion_map[emotion]).values('song')[:1000]
+        listening_songs = get_listening_songs_by_emotion(user)
+    cluster_songs = get_exclude_cluster_songs(listening_songs, int(emotion))
     """
     その印象クラスタが最も高い楽曲
     """
@@ -96,6 +97,29 @@ def get_not_listening_songs(user, emotion, feedback_type = "relevant"):
     results = models.Song.objects.filter(id__in=top_k_songs).values()
     return get_song_and_tag_map(results)
 
+def get_listening_songs_by_emotion(user):
+
+    listening_songs = models.EmotionEmotionbasedSong.objects.filter(user=user).values('song')
+    return listening_songs
+
+def get_listening_songs_by_relevant(user):
+
+    listening_songs = models.EmotionRelevantSong.objects.filter(user=user).values('song')
+    return listening_songs
+
+def get_exclude_cluster_songs(listening_songs, emotion):
+    """
+    上位1000曲
+    """
+    emotion_map = {1: "-calm", 2: "-tense", 3: "-aggressive", 4: "-lively", 5: "-peaceful"}
+    cluster_songs = models.MusicCluster.objects.exclude(song_id__in=listening_songs).order_by(emotion_map[emotion]).values('song')[:1000]
+
+    return cluster_songs
+
+
+"""
+視聴済みの楽曲取得
+"""
 def get_listening_songs(user):
 
     listening_songs = models.EmotionRelevantSong.objects.filter(user=user).values('song')
@@ -118,6 +142,49 @@ def get_song_and_tag_map(song_objs):
     
     change_list_into_numpy(song_tag_map)
     return songs, song_tag_map
+
+"""
+特定の印象ベクトルが特定の値より大きいものを取得
+"""
+def get_upper_songs(emotion, value):
+
+    if emotion == 0:
+        return models.MusicCluster.objects.order_by("calm").filter(calm__gte=value).values()
+    elif emotion == 1:
+        return models.MusicCluster.objects.order_by("tense").filter(tense__gte=value).values()
+    elif emotion == 2:
+        return models.MusicCluster.objects.order_by("aggressive").filter(aggressive__gte=value).values()
+    elif emotion == 3:
+        return models.MusicCluster.objects.order_by("lively").filter(lively__gte=value).values()
+    else:
+        return models.MusicCluster.objects.order_by("peaceful").filter(peaceful__gte=value).values()
+
+def get_lower_songs(emotion, value):
+
+    if emotion == 0:
+        return models.MusicCluster.objects.order_by("calm").filter(calm__lte=value).values()
+    elif emotion == 1:
+        return models.MusicCluster.objects.order_by("tense").filter(tense__lte=value).values()
+    elif emotion == 2:
+        return models.MusicCluster.objects.order_by("aggressive").filter(aggressive__lte=value).values()
+    elif emotion == 3:
+        return models.MusicCluster.objects.order_by("lively").filter(lively__lte=value).values()
+    else:
+        return models.MusicCluster.objects.order_by("peaceful").filter(peaceful__lte=value).values()
+
+def get_bound_song_tag_map(emotion, value, k, plus_or_minus):
+
+    if plus_or_minus == 1:
+        songs = get_upper_songs(emotion, value)
+        songs = songs.reverse()
+    else:
+        songs = get_lower_songs(emotin, value)
+    song_ids = []
+    for song in songs[:k]:
+        song_ids.append(song["song_id"])
+
+    song_objs = models.Song.objects.filter(id__in=song_ids).values()
+    return get_song_and_tag_map(song_objs)
 
 """
 listを持つdictをnumpy.arrayに変換

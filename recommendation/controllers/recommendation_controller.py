@@ -41,11 +41,11 @@ def index(request):
 def feedback(request):
     error_msg = ""
     try:
-        feedback_value = request.POST['select-feedback']
+        feedback_value = request.POST['select_feedback']
         if feedback_value == "-1":
             error_msg = "フィードバックを選択してください"
             return recommend_song(request, error_msg)
-        song_id = request.POST['song']
+        song_id = request.POST['song_id']
     except KeyError:
         pass
     start_time = time.time()
