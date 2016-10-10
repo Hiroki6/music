@@ -76,3 +76,11 @@ def get_top_song(obj):
     song_ids = [song[1] for song in top_k_songs]
     return song_ids
 
+"""
+baselineの実装
+"""
+def get_top_song_by_baseline(user, emotion):
+    e_obj = e_f.EmotionBaseline(user, emotion)
+    e_obj.set_params()
+    top_song = e_obj.get_top_song()
+    return [top_song]

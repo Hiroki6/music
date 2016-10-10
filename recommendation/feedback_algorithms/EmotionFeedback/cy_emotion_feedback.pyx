@@ -38,7 +38,10 @@ cdef class CyEmotionFeedback:
         """
         回帰誤差計算
         """
-        return self.margin - self.predict(X)
+        cdef:
+            double predict_value
+        predict_value = self.predict(X)
+        return self.margin - predict_value
 
     def set_margin(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
         """

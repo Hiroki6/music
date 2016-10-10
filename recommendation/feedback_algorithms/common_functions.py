@@ -159,17 +159,32 @@ def get_upper_songs(emotion, value):
     else:
         return models.MusicCluster.objects.order_by("peaceful").filter(peaceful__gte=value).values()
 
-def get_upper_song_tag_map(emotion, value, k):
+def get_lower_songs(emotion, value):
 
-    upper_songs = get_upper_songs(emotion, value)
-    upper_songs = upper_songs.reverse()
-    upper_song_ids = []
-    for song in upper_songs[:k]:
-        upper_song_ids.append(song["song_id"])
+    if emotion == 0:
+        return models.MusicCluster.objects.order_by("calm").filter(calm__lte=value).values()
+    elif emotion == 1:
+        return models.MusicCluster.objects.order_by("tense").filter(tense__lte=value).values()
+    elif emotion == 2:
+        return models.MusicCluster.objects.order_by("aggressive").filter(aggressive__lte=value).values()
+    elif emotion == 3:
+        return models.MusicCluster.objects.order_by("lively").filter(lively__lte=value).values()
+    else:
+        return models.MusicCluster.objects.order_by("peaceful").filter(peaceful__lte=value).values()
 
-    upper_song_objs = models.Song.objects.filter(id__in=upper_song_ids).values()
-    return get_song_and_tag_map(upper_song_objs)
+def get_bound_song_tag_map(emotion, value, k, plus_or_minus):
 
+    if plus_or_minus == 1:
+        songs = get_upper_songs(emotion, value)
+        songs = upper_songs.reverse()
+    else:
+        songs = get_lower_songs(emotin, value)
+    song_ids = []
+    for song in songs[:k]:
+        song_ids.append(song["song_id"])
+
+    song_objs = models.Song.objects.filter(id__in=song_ids).values()
+    return get_song_and_tag_map(song_objs)
 
 """
 listを持つdictをnumpy.arrayに変換
