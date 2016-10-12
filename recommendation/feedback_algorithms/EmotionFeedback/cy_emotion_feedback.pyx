@@ -73,7 +73,8 @@ cdef class CyEmotionFeedback:
         self.error = self.calc_error(X)
         for i in xrange(1000):
             if self.error <= 0:
-                print i
+                if i > 0:
+                    print i
                 break
             else:
                 self._update_W(X)

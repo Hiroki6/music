@@ -38,11 +38,11 @@
               <input type = "hidden" name = "select_feedback" value = 0>
               <input type = "hidden" name = "emotion" value = {{emotion}}>
               <button class = "preference-button next-button" type = "submit" id = "indicator" name = "song_id" value = {{song.id}}>
-                next<i class="fa fa-arrow-right" aria-hidden="true"></i>
+                no opinion<i class="fa fa-arrow-right" aria-hidden="true"></i>
               </button>
             </form>
           {% endif %}
-        </div>
+          </div>
       {% endfor %}
     {% include "parts/_feedback_explanation.html" %}
     </div>
