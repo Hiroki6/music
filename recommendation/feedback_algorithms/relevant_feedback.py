@@ -80,6 +80,8 @@ class RelevantFeedback:
                 self.bias = self.cy_obj.get_bias()
                 break
         for song_id, relevant_type in self.song_relevant.items():
+            if relevant_type == 0:
+                continue
             print "target: %.1f" % (relevant_type)
             print "predict: %.8f" % (self.cy_obj.predict(self.song_tag_map[song_id]))
         self._update_params_into_redis()

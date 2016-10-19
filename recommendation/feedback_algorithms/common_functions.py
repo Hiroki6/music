@@ -4,6 +4,11 @@ import redis
 import numpy as np
 from recommendation import models
 import codecs
+import math
+
+emotion_map = {0: "calm", 1: "tense", 2: "aggressive", 3: "lively", 4: "peaceful"}
+
+bound_ave = 0.0167352
 
 """
 redisからのスカラー値の取得
@@ -111,8 +116,8 @@ def get_exclude_cluster_songs(listening_songs, emotion):
     """
     上位1000曲
     """
-    emotion_map = {1: "-calm", 2: "-tense", 3: "-aggressive", 4: "-lively", 5: "-peaceful"}
-    cluster_songs = models.MusicCluster.objects.exclude(song_id__in=listening_songs).order_by(emotion_map[emotion]).values('song')[:1000]
+    emotion_order_map = {1: "-calm", 2: "-tense", 3: "-aggressive", 4: "-lively", 5: "-peaceful"}
+    cluster_songs = models.MusicCluster.objects.exclude(song_id__in=listening_songs).order_by(emotion_order_map[emotion]).values('song')[:1000]
 
     return cluster_songs
 
@@ -174,17 +179,56 @@ def get_lower_songs(emotion, value):
 
 def get_bound_song_tag_map(emotion, value, k, plus_or_minus):
 
-    if plus_or_minus == 1:
-        songs = get_upper_songs(emotion, value)
-        songs = songs.reverse()
-    else:
-        songs = get_lower_songs(emotin, value)
+    songs = get_bound_songs(emotion, value, plus_or_minus)
     song_ids = []
     for song in songs[:k]:
         song_ids.append(song["song_id"])
 
     song_objs = models.Song.objects.filter(id__in=song_ids).values()
     return get_song_and_tag_map(song_objs)
+
+"""
+@params(emotion): 印象タグ
+@params(top_song_obj): 対象楽曲のmusic cluster object
+@params(value): 対象楽曲の印象ベクトルの値
+@params(plus_or_minus): 上界か下界か
+@params(bound): 境界の値
+対象楽曲のクラスタの値も必要
+"""
+def get_bound_with_attenuation_song_tag_map(emotion, top_song_obj, value, plus_or_minus, bound):
+
+    songs = get_bound_songs(emotion, value, plus_or_minus)
+    song_ids = []
+    count = 0
+    for song in songs:
+        if abs(song[emotion_map[emotion]] - value) > bound:
+            break
+        # 距離を計測する(ユークリッド距離)
+        distances = 0.0
+        for index, emotion_word in emotion_map.items():
+            if index == emotion:
+                continue
+            distances += pow(top_song_obj[emotion_word] - song[emotion_word], 2)
+        distance = math.sqrt(distances) / 4
+        if distance > bound_ave:
+            continue
+        song_ids.append(song["song_id"])
+        count += 1
+    print count
+
+    song_objs = models.Song.objects.filter(id__in=song_ids).values()
+    return get_song_and_tag_map(song_objs)
+
+def get_bound_songs(emotion, value, plus_or_minus):
+
+    if plus_or_minus == 1:
+        songs = get_upper_songs(emotion, value)
+        #songs = songs.reverse()
+    else:
+        songs = get_lower_songs(emotion, value)
+        songs = songs.reverse()
+
+    return songs
 
 """
 listを持つdictをnumpy.arrayに変換
@@ -198,14 +242,14 @@ def listtuple_sort_reverse(t):
     t.sort()
     t.reverse()
 
-def write_top_k_songs(user_id, filepass, top_k_songs):
+def write_top_k_songs(user_id, filepass, top_k_songs, feedback_type = ""):
     """
     上位k個の楽曲のファイルへの書き込み
     """
 
     print "write file"
     f = codecs.open(filepass, "a")
-    f.write("user: " + str(user_id) + "\n")
+    f.write("user: " + str(user_id) + " feedback_type: " + feedback_type + "\n")
     for song in top_k_songs:
         content = str(song) + "\n"
         f.write(content)

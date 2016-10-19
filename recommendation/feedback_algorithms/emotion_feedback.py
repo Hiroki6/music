@@ -17,6 +17,9 @@ DB = 3
 
 emotion_map = {0: "calm", 1: "tense", 2: "aggressive", 3: "lively", 4: "peaceful"}
 
+# 境界条件のmap
+bound_map = {0: 0.008811, 1: 0.007634, 2: 0.016090, 3: 0.037371, 4: 0.013770}
+
 class EmotionBaseline(object):
     """
     印象語フィードバックのベースライン
@@ -79,16 +82,15 @@ class EmotionBaseline(object):
         else:
             self.plus_or_minus = -1
             self.feedback -= 5
-        self.feedback += 1
 
     def _get_bound_songs(self):
         """
         フィードバックを受けた楽曲よりもemotionの値が高い楽曲s曲に対してranking学習を行う
         とりあえずその楽曲よりも直近で大きいs曲取得
         """
-        top_song_obj = models.MusicCluster.objects.filter(song_id=int(self.top_song)).values()
-        emotion_value = top_song_obj[0][emotion_map[self.feedback-1]]
-        self.bound_songs, self.bound_song_tag_map = common.get_bound_song_tag_map(self.feedback-1, emotion_value, self.k, self.plus_or_minus)
+        top_song_objs = models.MusicCluster.objects.filter(song_id=int(self.top_song)).values()
+        emotion_value = top_song_objs[0][emotion_map[self.feedback]]
+        self.bound_songs, self.bound_song_tag_map = common.get_bound_song_tag_map(emotion_value, self.k, self.plus_or_minus)
 
 class EmotionFeedback(EmotionBaseline):
     """
@@ -129,12 +131,13 @@ class EmotionFeedback(EmotionBaseline):
     def k_fit(self):
         """
         上位k個のランキング学習
+        上位K個の決定手法として、範囲アルファ*減衰定数の範囲で取得する
         """
         for song, tags in self.bound_song_tag_map.items():
-            if self.plus_or_minus == 1:
-                X = tags - self.top_matrix
-            else:
-                X = self.top_matrix - tags
+            #if self.plus_or_minus == 1:
+            X = tags - self.top_matrix
+            #else:
+            #    X = self.top_matrix - tags
             self.cy_obj.fit(X, True)
         self._update_params_into_redis()
 
@@ -148,7 +151,11 @@ class EmotionFeedback(EmotionBaseline):
         self.top_song = rankings[0][1]
         self.top_matrix = song_tag_map[self.top_song]
         self._save_top_song()
-        common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10])
+        if hasattr(self, "feedback"):
+            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10], emotion_map[self.feedback])
+        else:
+            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10])
+
         return rankings[:k]
 
     def _create_feedback_matrix(self):
@@ -167,9 +174,40 @@ class EmotionFeedback(EmotionBaseline):
 
     def _get_tags_by_feedback(self):
         self._transform_feedback()
-        tags = models.Tag.objects.filter(cluster__id=self.feedback)
+        tags = models.Tag.objects.filter(cluster__id=self.feedback+1)
         self.tags = [(tag.id-1, tag.name) for tag in tags]
     
     def _update_params_into_redis(self):
         print "パラメータの更新"
         common.update_redis_key(self.r, "W_" + self.user, self.W)
+
+    def _get_bound_songs(self):
+        """
+        _get_bound_songsをオーバーライド
+        その印象に関するフィードバックの回数を取得して減衰定数を決定する
+        減衰定数と境界パラメータを用いてkを動的に決定する
+        他の値についても近いものを選ぶ
+        """
+        top_song_objs = models.MusicCluster.objects.filter(song_id=int(self.top_song)).values()
+        top_song_obj = top_song_objs[0]
+        emotion_value = top_song_objs[0][emotion_map[self.feedback]]
+        self._decision_bound()
+        self.bound_songs, self.bound_song_tag_map = common.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, emotion_value, self.plus_or_minus, self.bound)
+        print self.bound
+        print len(self.bound_songs)
+
+    def _decision_bound(self):
+        """
+        boundの決定
+        """
+        user_feedbacks = models.EmotionEmotionbasedSong.objects.filter(user_id=int(self.user)).values()
+        count = len(user_feedbacks)
+        """count = 0
+        for feedback in user_feedbacks:
+            feedback_type = feedback["feedback_type"]
+            if feedback_type >= 5 and feedback_type < 10:
+                feedback_type -= 5
+            if feedback_type == self.feedback:
+                count += 1
+        """
+        self.bound = bound_map[self.feedback] / count
