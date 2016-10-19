@@ -88,9 +88,9 @@ class EmotionBaseline(object):
         フィードバックを受けた楽曲よりもemotionの値が高い楽曲s曲に対してranking学習を行う
         とりあえずその楽曲よりも直近で大きいs曲取得
         """
-        top_song_obj = models.MusicCluster.objects.filter(song_id=int(self.top_song)).values()
-        emotion_value = top_song_obj[0][emotion_map[self.feedback]]
-        self.bound_songs, self.bound_song_tag_map = common.get_bound_song_tag_map(self.feedback, emotion_value, self.k, self.plus_or_minus)
+        top_song_objs = models.MusicCluster.objects.filter(song_id=int(self.top_song)).values()
+        emotion_value = top_song_objs[0][emotion_map[self.feedback]]
+        self.bound_songs, self.bound_song_tag_map = common.get_bound_song_tag_map(emotion_value, self.k, self.plus_or_minus)
 
 class EmotionFeedback(EmotionBaseline):
     """
@@ -151,7 +151,11 @@ class EmotionFeedback(EmotionBaseline):
         self.top_song = rankings[0][1]
         self.top_matrix = song_tag_map[self.top_song]
         self._save_top_song()
-        common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10])
+        if hasattr(self, "feedback"):
+            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10], emotion_map[self.feedback])
+        else:
+            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10])
+
         return rankings[:k]
 
     def _create_feedback_matrix(self):
@@ -182,11 +186,13 @@ class EmotionFeedback(EmotionBaseline):
         _get_bound_songsをオーバーライド
         その印象に関するフィードバックの回数を取得して減衰定数を決定する
         減衰定数と境界パラメータを用いてkを動的に決定する
+        他の値についても近いものを選ぶ
         """
-        top_song_obj = models.MusicCluster.objects.filter(song_id=int(self.top_song)).values()
-        emotion_value = top_song_obj[0][emotion_map[self.feedback]]
+        top_song_objs = models.MusicCluster.objects.filter(song_id=int(self.top_song)).values()
+        top_song_obj = top_song_objs[0]
+        emotion_value = top_song_objs[0][emotion_map[self.feedback]]
         self._decision_bound()
-        self.bound_songs, self.bound_song_tag_map = common.get_bound_with_attenuation_song_tag_map(self.feedback, emotion_value, self.plus_or_minus, self.bound)
+        self.bound_songs, self.bound_song_tag_map = common.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, emotion_value, self.plus_or_minus, self.bound)
         print self.bound
         print len(self.bound_songs)
 

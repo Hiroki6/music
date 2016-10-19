@@ -71,6 +71,7 @@ cdef class CyEmotionFeedback:
         cdef:
             int i
         self.error = self.calc_error(X)
+        print self.error
         for i in xrange(1000):
             if self.error <= 0:
                 if i > 0:
