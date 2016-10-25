@@ -8,6 +8,6 @@
     <option value=11>rerecommend</option>
   </select>
   <input type = "hidden" name = "song_id" value = {{ song.id }}>
-  <input type = "hidden" name = "emotion" value = {{emotion}}>
+  {% include "parts/_hidden_search_condition.html" %}
   <input type = "submit" id = "indicator" value = "feedback">
 </form>

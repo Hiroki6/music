@@ -45,24 +45,24 @@ def get_r_obj(user, emotion):
 """
 emotion
 """
-def get_song_by_emotion(user, emotion):
-    e_obj = get_e_obj(user, emotion)
+def get_song_by_emotion(user, emotions):
+    e_obj = get_e_obj(user, emotions)
     return get_top_song(e_obj)
 
 def learning_by_emotion(e_obj):
     e_obj.set_params()
     e_obj.fit()
 
-def learning_and_get_song_by_emotion(user, emotion, is_k_ranking = False):
-    e_obj = get_e_obj(user, emotion)
+def learning_and_get_song_by_emotion(user, emotions, is_k_ranking = False):
+    e_obj = get_e_obj(user, emotions)
     if is_k_ranking:
         learning_by_emotion_rankings(e_obj)
     else:
         learning_by_emotion(e_obj)
     return get_top_song(e_obj)
 
-def get_e_obj(user, emotion):
-    return e_f.EmotionFeedback(user, emotion)
+def get_e_obj(user, emotions):
+    return e_f.EmotionFeedback(user, emotions)
 
 def learning_by_emotion_rankings(e_obj):
     e_obj.set_params_k_rankings()

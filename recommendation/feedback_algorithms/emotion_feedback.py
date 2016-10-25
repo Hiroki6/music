@@ -25,10 +25,12 @@ class EmotionBaseline(object):
     印象語フィードバックのベースライン
     フィードバックを受けた楽曲よりも印象値が高い楽曲を推薦する
     モデルは持たずにランダムに楽曲を検索し、そこからフィードバックを受けて新しい楽曲を推薦していく
+    user: ログインユーザーID
+    emotions: 検索語に選択した印象語配列
     """
-    def __init__(self, user, emotion):
+    def __init__(self, user, emotions):
         self.user = user
-        self.emotion = emotion
+        self.emotions = emotions
 
     def _save_top_song(self):
         """
@@ -96,8 +98,8 @@ class EmotionFeedback(EmotionBaseline):
     """
     印象語フィードバックによるオンライン学習クラス
     """
-    def __init__(self, user, emotion):
-        EmotionBaseline.__init__(self, user, emotion)
+    def __init__(self, user, emotions):
+        EmotionBaseline.__init__(self, user, emotions)
         self._get_params_by_redis()
         self.cy_obj = cy_ef.CyEmotionFeedback(self.W)
 
@@ -145,7 +147,8 @@ class EmotionFeedback(EmotionBaseline):
         """
         検索対象の印象語に含まれている楽曲から回帰値の高いk個の楽曲を取得する
         """
-        songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotion, "emotion")
+        #songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotions, "emotion")
+        songs, song_tag_map = common.get_not_listening_songs_by_multi_emotion(self.user, self.emotions, "emotion")
         rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
         common.listtuple_sort_reverse(rankings)
         self.top_song = rankings[0][1]
