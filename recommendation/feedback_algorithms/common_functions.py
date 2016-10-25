@@ -80,27 +80,48 @@ def update_redis_key(redis_obj, key, params):
     save_one_dim_array(redis_obj, key, params)
 
 
+def get_not_listening_songs_by_multi_emotion(user, emotions, feedback_type = "relevant"):
+    print "未視聴の楽曲取得"
+    listening_songs = get_listening_songs_by_feedback_type(user, feedback_type)
+    cluster_songs = extra_cluster_songs(listening_songs, emotions)
+    results = get_song_obj_by_cluster_songs(cluster_songs)
+    return get_song_and_tag_map(results)
+
+def extra_cluster_songs(listening_songs, emotions):
+    # 複数のemotionsを足したextra_column
+    extra_column = ""
+    for emotion in emotions:
+        extra_column += emotion_map[int(emotion)-1] + "+"
+    extra_column = extra_column[:-1]
+    extra_results = models.MusicCluster.objects.extra(select = {'value': extra_column})
+    cluster_songs = extra_results.exclude(song_id__in=listening_songs).extra(order_by=['-value']).values("song")[:1000]
+
+    return cluster_songs
+
 """
 未視聴の楽曲取得
 """
 def get_not_listening_songs(user, emotion, feedback_type = "relevant"):
     print "未視聴の楽曲取得"
-    listening_songs = []
-    if feedback_type == "relevant":
-        listening_songs = get_listening_songs_by_relevant(user)
-    else:
-        listening_songs = get_listening_songs_by_emotion(user)
+    listening_songs = get_listening_songs_by_feedback_type(user, feedback_type)
     cluster_songs = get_exclude_cluster_songs(listening_songs, int(emotion))
-    """
-    その印象クラスタが最も高い楽曲
-    """
-    #cluster_songs = models.MusicCluster.objects.exclude(song_id__in=listening_songs).filter(cluster_id=emotion).values('song')
+    results = get_song_obj_by_cluster_songs(cluster_songs)
+    return get_song_and_tag_map(results)
+
+def get_song_obj_by_cluster_songs(cluster_songs):
     top_k_songs = []
     for song in cluster_songs:
         top_k_songs.append(song["song"])
 
     results = models.Song.objects.filter(id__in=top_k_songs).values()
-    return get_song_and_tag_map(results)
+
+    return results
+
+def get_listening_songs_by_feedback_type(user, feedback_type):
+    if feedback_type == "relevant":
+        return get_listening_songs_by_relevant(user)
+    else:
+        return get_listening_songs_by_emotion(user)
 
 def get_listening_songs_by_emotion(user):
 

@@ -33,9 +33,9 @@ def save_user_relevant_song(user_id, song_id, relevant_type):
 
     obj, created = EmotionRelevantSong.objects.get_or_create(user_id=user_id, song_id=song_id, relevant_type=relevant_type)
 
-def save_user_emotion_song(user_id, song_id, emotion, feedback_type):
+def save_user_emotion_song(user_id, song_id, situation, feedback_type):
 
-    obj, created = EmotionEmotionbasedSong.objects.get_or_create(user_id=user_id, song_id=song_id, emotion_id=emotion, feedback_type=feedback_type)
+    obj, created = EmotionEmotionbasedSong.objects.get_or_create(user_id=user_id, song_id=song_id, situation=situation, feedback_type=feedback_type)
 
     
 """
@@ -48,15 +48,15 @@ def get_top_song_relevant(user, emotion):
 """
 モデルから楽曲取得(emotion)
 """
-def get_top_song_emotion(user, emotion):
-    song_ids = exec_functions.get_song_by_emotion(user, emotion)
+def get_top_song_emotion(user, emotions):
+    song_ids = exec_functions.get_song_by_emotion(user, emotions)
     return get_song_objs(song_ids)
 
 """
 学習と楽曲の取得(emotion)
 """
-def learning_and_get_song_by_emotion(user, emotion):
-    song_ids = exec_functions.learning_and_get_song_by_emotion(user, emotion, True)
+def learning_and_get_song_by_emotion(user, emotions):
+    song_ids = exec_functions.learning_and_get_song_by_emotion(user, emotions, True)
     return get_song_objs(song_ids)
 
 """
