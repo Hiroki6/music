@@ -47,8 +47,11 @@ def relevant_feedback(request):
                 songs = _relevant_search(request, emotions, False)
             else:
                 songs = _relevant_search(request, emotions)
-    if request.method == 'GET' and request.GET.has_key("situation") and request.GET.has_key("emotion"):
-        songs, situation, emotions, error_msg = _check_search_request(request, "relevant")
+    if request.method == 'GET':
+        if request.GET.has_key("situation") and request.GET.has_key("emotion"):
+            songs, situation, emotions, error_msg = _check_search_request(request, "relevant")
+        else:
+            _refresh(request, "relevant")
     search_situation = situation_map[situation]
     return render(request, 'emotions/relevant_feedback.html', {'songs': songs, 'url': "relevant_feedback_single", 'error_msg': error_msg, "multi_flag": False, "emotions": emotions, "search_situation": search_situation, "situation": situation})
 
@@ -80,8 +83,11 @@ def emotion_feedback_model(request):
                 # 学習
                 else:
                     songs = _emotion_search(request, emotions)
-    if request.method == 'GET' and request.GET.has_key("situation") and request.GET.has_key("emotion"):
-        songs, situation, emotions, error_msg = _check_search_request(request, "emotion")
+    if request.method == 'GET':
+        if request.GET.has_key("situation") and request.GET.has_key("emotion"):
+            songs, situation, emotions, error_msg = _check_search_request(request, "emotion")
+        else:
+            _refresh(request, "emotion")
     search_situation = situation_map[situation]
     return render(request, 'emotions/emotion_feedback.html', {'songs': songs, 'url': "emotion_feedback_single", 'error_msg': error_msg, "multi_flag": False, "emotions": emotions, "search_situation": search_situation, "url": "emotion_feedback_single", 'feedback_dict': feedback_dict, "situation": situation})
 
