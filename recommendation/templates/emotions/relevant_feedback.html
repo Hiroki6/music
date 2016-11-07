@@ -5,48 +5,45 @@
 {% block main %}
 <h2>適合性フィードバックによる楽曲検索システムへようこそ</h2>
 <div class = "main">
-  {% ifequal situation 0 %}
-    {% include "parts/_emotion_search_form.html" %}
-    {% include "parts/_feedback_explanation.html" %}
-  {% else %}
-    <h2>{{ search_situation }}に聴く楽曲の検索結果</h2>
-    <div class = "clearfix">
-      {% for song in songs %}
-        <div class = "content">
-            {% include "parts/_song_iframe.html" %}
-          {% if multi_flag %}
-          <p>multi</p> 
-          {% else %}
-            <form class = "like-form" name = "like" method = "POST" action = "/recommendation/relevant_feedback_single/">
-              {% csrf_token %}
-              <input type = "hidden" name = "select_feedback" value = 1>
-              {% include "parts/_hidden_search_condition.html" %}
-              <button class = "preference-button like-button" type = "submit" id = "indicator" name = "song_id" value = {{song.id}}>
-                like <i class="fa fa-thumbs-o-up" hidden="true"></i>
-              </button>
-            </form>
-            <form class = "like-form" name = "like" method = "POST" action = "/recommendation/relevant_feedback_single/">
-              {% csrf_token %}
-              <input type = "hidden" name = "select_feedback" value = -1>
-              {% include "parts/_hidden_search_condition.html" %}
-              <button class = "preference-button erase-button" type = "submit" id = "indicator" name = "song_id" value = {{song.id}}>
-                dislike <i class="fa fa-thumbs-o-down" hidden="true"></i>
-              </button>
-            </form>
-            <form class = "like-form" name = "like" method = "POST" action = "/recommendation/relevant_feedback_single/">
-              {% csrf_token %}
-              <input type = "hidden" name = "select_feedback" value = 0>
-              {% include "parts/_hidden_search_condition.html" %}
-              <button class = "preference-button next-button" type = "submit" id = "indicator" name = "song_id" value = {{song.id}}>
-                no opinion<i class="fa fa-arrow-right" aria-hidden="true"></i>
-              </button>
-            </form>
-          {% endif %}
-          </div>
-      {% endfor %}
-    {% include "parts/_feedback_explanation.html" %}
-    </div>
-    {% include "parts/_refresh_search_button.html" %}
-  {% endifequal %}
+  <h2>{{ search_situation }}に聴く楽曲の検索結果</h2>
+  <div class = "clearfix">
+    {% for song in songs %}
+      <div class = "content">
+          {% include "parts/_song_iframe.html" %}
+        {% if multi_flag %}
+        <p>multi</p> 
+        {% else %}
+          <form class = "like-form" name = "like" method = "POST" action = "/recommendation/relevant_feedback_single/">
+            {% csrf_token %}
+            <input type = "hidden" name = "select_feedback" value = 1>
+            {% include "parts/_hidden_search_condition.html" %}
+            <button class = "preference-button like-button" type = "submit" id = "indicator" name = "song_id" value = {{song.id}}>
+              like <i class="fa fa-thumbs-o-up" hidden="true"></i>
+            </button>
+          </form>
+          <form class = "like-form" name = "like" method = "POST" action = "/recommendation/relevant_feedback_single/">
+            {% csrf_token %}
+            <input type = "hidden" name = "select_feedback" value = -1>
+            {% include "parts/_hidden_search_condition.html" %}
+            <button class = "preference-button erase-button" type = "submit" id = "indicator" name = "song_id" value = {{song.id}}>
+              dislike <i class="fa fa-thumbs-o-down" hidden="true"></i>
+            </button>
+          </form>
+          <form class = "like-form" name = "like" method = "POST" action = "/recommendation/relevant_feedback_single/">
+            {% csrf_token %}
+            <input type = "hidden" name = "select_feedback" value = 0>
+            {% include "parts/_hidden_search_condition.html" %}
+            <button class = "preference-button next-button" type = "submit" id = "indicator" name = "song_id" value = {{song.id}}>
+              no opinion<i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </button>
+          </form>
+        {% endif %}
+        </div>
+    {% endfor %}
+  </div>
+  <div>
+    <a class = "another-search-link" href = "/recommendation/emotion_feedback_single/">印象語フィードバック検索へ</a>
+  </div>
+  {% include "parts/_refresh_search_button.html" %}
 </div>
 {% endblock main %}

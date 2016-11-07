@@ -246,6 +246,13 @@ body {
         font-size: 20px;
         border-radius: 10px;
         margin: 0px 10px; }
+    body .main .another-search {
+      margin-top: 40px; }
+    body .main .another-search-link {
+      background-color: #ff7f50;
+      padding: 5px;
+      color: #fff;
+      border-radius: 5px; }
   body .pagination {
     float: right; }
   body footer {
