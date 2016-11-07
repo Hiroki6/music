@@ -37,7 +37,15 @@ def save_user_emotion_song(user_id, song_id, situation, feedback_type):
 
     obj, created = EmotionEmotionbasedSong.objects.get_or_create(user_id=user_id, song_id=song_id, situation=situation, feedback_type=feedback_type)
 
-    
+
+"""
+状況と選択した印象語の永続化完了
+"""
+def save_situation_and_emotion(user_id, situation, emotions):
+
+    for emotion in emotions:
+        obj, created = SituationEmotion.objects.get_or_create(user_id=user_id, situation=situation, emotion_id=int(emotion))
+
 """
 モデルから楽曲取得(relevant)
 """
@@ -80,8 +88,27 @@ def init_user_model(user_id, relevant_type):
     delete_user_listening_history(user_id, relevant_type)
     exec_functions.init_redis_user_model(str(user_id), relevant_type)
 
+def init_all_user_model(user_id):
+    exec_functions.init_redis_user_model(user_id, "emotion")
+    exec_functions.init_redis_user_model(user_id, "relevant")
+
 def delete_user_listening_history(user_id, relevant_type):
     if relevant_type == "relevant":
         EmotionRelevantSong.objects.filter(user_id=user_id).delete()
     else:
         EmotionEmotionbasedSong.objects.filter(user_id=user_id).delete()
+
+"""
+現在のユーザーの検索状況を取得する
+"""
+def get_now_search_situation(user_id):
+
+    user_situations = SituationEmotion.objects.filter(user_id=user_id).values()
+    situation_count = len(user_situations)
+    now_situation = user_situations[situation_count-1]['situation']
+    emotions = []
+    for i in xrange(situation_count-1, 0, -1):
+        if user_situations[i]["situation"] != now_situation:
+            break
+        emotions.append(user_situations[i]["emotion_id"])
+    return now_situation, emotions

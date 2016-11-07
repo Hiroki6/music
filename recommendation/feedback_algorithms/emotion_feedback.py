@@ -213,4 +213,4 @@ class EmotionFeedback(EmotionBaseline):
             if feedback_type == self.feedback:
                 count += 1
         """
-        self.bound = bound_map[self.feedback] / count
+        self.bound = bound_map[self.feedback] / pow(2, count-1)
