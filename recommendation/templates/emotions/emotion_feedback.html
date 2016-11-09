@@ -8,11 +8,11 @@
   {% if error_msg %}
     <h3 class = "error-msg">{{ error_msg }}</h3>
   {% endif %}
-  {% ifequal emotion 0 %}
+  {% ifequal situation 0 %}
     {% include "parts/_emotion_search_form.html" %}
     {% include "parts/_feedback_explanation.html" %}
   {% else %}
-    <h2>{{ search_emotion }}の検索結果</h2>
+    <h2>{{ search_situation }}に聴く楽曲の検索結果</h2>
     <div class = "clearfix">
       {% for song in songs %}
         <div class = "content">

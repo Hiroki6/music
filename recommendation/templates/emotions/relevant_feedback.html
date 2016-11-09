@@ -5,11 +5,11 @@
 {% block main %}
 <h2>適合性フィードバックによる楽曲検索システムへようこそ</h2>
 <div class = "main">
-  {% ifequal emotion 0 %}
+  {% ifequal situation 0 %}
     {% include "parts/_emotion_search_form.html" %}
     {% include "parts/_feedback_explanation.html" %}
   {% else %}
-    <h2>{{ search_emotion }}の検索結果</h2>
+    <h2>{{ search_situation }}に聴く楽曲の検索結果</h2>
     <div class = "clearfix">
       {% for song in songs %}
         <div class = "content">
@@ -19,30 +19,30 @@
           {% else %}
             <form class = "like-form" name = "like" method = "POST" action = "/recommendation/relevant_feedback_single/">
               {% csrf_token %}
-              <input type = "hidden" name = "relevant_type" value = 1>
-              <input type = "hidden" name = "emotion" value = {{emotion}}>
-              <button class = "preference-button like-button" type = "submit" name = "song_id" value = {{song.id}}>
+              <input type = "hidden" name = "select_feedback" value = 1>
+              {% include "parts/_hidden_search_condition.html" %}
+              <button class = "preference-button like-button" type = "submit" id = "indicator" name = "song_id" value = {{song.id}}>
                 like <i class="fa fa-thumbs-o-up" hidden="true"></i>
               </button>
             </form>
             <form class = "like-form" name = "like" method = "POST" action = "/recommendation/relevant_feedback_single/">
               {% csrf_token %}
-              <input type = "hidden" name = "relevant_type" value = -1>
-              <input type = "hidden" name = "emotion" value = {{emotion}}>
-              <button class = "preference-button erase-button" type = "submit" name = "song_id" value = {{song.id}}>
+              <input type = "hidden" name = "select_feedback" value = -1>
+              {% include "parts/_hidden_search_condition.html" %}
+              <button class = "preference-button erase-button" type = "submit" id = "indicator" name = "song_id" value = {{song.id}}>
                 dislike <i class="fa fa-thumbs-o-down" hidden="true"></i>
               </button>
             </form>
             <form class = "like-form" name = "like" method = "POST" action = "/recommendation/relevant_feedback_single/">
               {% csrf_token %}
-              <input type = "hidden" name = "relevant_type" value = 0>
-              <input type = "hidden" name = "emotion" value = {{emotion}}>
-              <button class = "preference-button next-button" type = "submit" name = "song_id" value = {{song.id}}>
-                next<i class="fa fa-arrow-right" aria-hidden="true"></i>
+              <input type = "hidden" name = "select_feedback" value = 0>
+              {% include "parts/_hidden_search_condition.html" %}
+              <button class = "preference-button next-button" type = "submit" id = "indicator" name = "song_id" value = {{song.id}}>
+                no opinion<i class="fa fa-arrow-right" aria-hidden="true"></i>
               </button>
             </form>
           {% endif %}
-        </div>
+          </div>
       {% endfor %}
     {% include "parts/_feedback_explanation.html" %}
     </div>

@@ -78,6 +78,7 @@ class MusicCluster(models.Model):
     lively = models.FloatField(null=True, blank=True)
     peaceful = models.FloatField(null=True, blank=True)
     tense = models.FloatField(null=True, blank=True)
+    cluster = models.ForeignKey(Cluster, null=True, blank=True)
 
 class RecommendSong(models.Model):
     user = models.ForeignKey(User)
@@ -117,5 +118,6 @@ class EmotionRelevantSong(models.Model):
 class EmotionEmotionbasedSong(models.Model):
     user = models.ForeignKey(User)
     song = models.ForeignKey(Song)
-    emotion = models.ForeignKey(Cluster)
+    situation = models.IntegerField(null=False, blank=False)
+    #emotion = models.ForeignKey(Cluster)
     feedback_type = models.IntegerField(null=False, blank=False)

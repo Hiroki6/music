@@ -1,13 +1,20 @@
-<h2>印象語による楽曲検索</h2>
+<h2>select some emotion words to search music matching the situation</h2>
 <form class = "search-form" action = "/recommendation/{{ url }}/" method = "get">
-  <select name="emotion-search">
-    <option value = "0">印象語を選ぶ</option>
-    <option value = "1">calm</option>
-    <option value = "2">tense</option>
-    <option value = "3">aggressive</option>
-    <option value = "4">lively</option>
-    <option value = "5">peaceful</option>
+  <select name = "situation">
+    <option value = "0">状況を選ぶ</option>
+    <option value = "1">運動中</option>
+    <option value = "2">起床時</option>
+    <option value = "3">作業中</option>
+    <option value = "4">通学中</option>
+    <option value = "5">就寝時</option>
+    <option value = "6">単純に音楽を聴く時</option>
   </select>
-  <input class = "search-submit" type = "submit" value = "検索">
+  <h4>この状況に合うと思う印象語を一つ以上選んでください</h4>
+  <label><input type = "checkbox" name = "emotion" value = 1>calm</label>
+  <label><input type = "checkbox" name = "emotion" value = 2>tense</label>
+  <label><input type = "checkbox" name = "emotion" value = 3>aggressive</label>
+  <label><input type = "checkbox" name = "emotion" value = 4>lively</label>
+  <label><input type = "checkbox" name = "emotion" value = 5>peaceful</label>
+  <input class = "search-submit" type = "submit" value = "search">
 </form>
 

@@ -21,10 +21,10 @@ class RelevantFeedback:
     """
     適合性フィードバックによるオンライン学習クラス
     """
-    def __init__(self, user, emotion):
+    def __init__(self, user, emotions):
         self.user = user
         self._get_params_by_redis()
-        self.emotion = emotion
+        self.emotions = emotions
         self.cy_obj = cy_rf.CyRelevantFeedback(self.W, self.bias, 43)
 
     def _get_params_by_redis(self):
@@ -80,6 +80,8 @@ class RelevantFeedback:
                 self.bias = self.cy_obj.get_bias()
                 break
         for song_id, relevant_type in self.song_relevant.items():
+            if relevant_type == 0:
+                continue
             print "target: %.1f" % (relevant_type)
             print "predict: %.8f" % (self.cy_obj.predict(self.song_tag_map[song_id]))
         self._update_params_into_redis()
@@ -97,7 +99,8 @@ class RelevantFeedback:
         """
         検索対象の印象語に含まれている楽曲から回帰値の高いk個の楽曲を取得する
         """
-        songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotion)
+        #songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotions)
+        songs, song_tag_map = common.get_not_listening_songs_by_multi_emotion(self.user, self.emotions)
         rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
         common.listtuple_sort_reverse(rankings)
         common.write_top_k_songs(self.user, "relevant_k_song.txt", rankings[:10])
