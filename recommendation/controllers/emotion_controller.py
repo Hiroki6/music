@@ -32,7 +32,7 @@ def index(request):
         if error_msg == "":
             return redirect("/recommendation/select_search/")
     emotion_helper.init_all_user_model(str(request.user.id))
-    return render(request, 'emotions/select_situation.html', {"error_msg": error_msg})
+    return render(request, 'emotions/select_situation.html', {"error_msg": error_msg, "search_flag": False})
 
 """
 検索手法の選択
@@ -89,7 +89,7 @@ def emotion_feedback_model(request):
     if request.method == 'GET':
         songs, situation, emotions = search_songs(request, "emotion")
     search_situation = situation_map[situation]
-    return render(request, 'emotions/emotion_feedback.html', {'songs': songs, 'url': "emotion_feedback_single", 'error_msg': error_msg, "multi_flag": False, "emotions": emotions, "search_situation": search_situation, "url": "emotion_feedback_single", 'feedback_dict': feedback_dict, "situation": situation, "search_type": "emotion"})
+    return render(request, 'emotions/emotion_feedback.html', {'songs': songs, 'error_msg': error_msg, "multi_flag": False, "emotions": emotions, "search_situation": search_situation, "url": "emotion_feedback_single", 'feedback_dict': feedback_dict, "situation": situation, "search_type": "emotion", "search_flag": True})
 
 @login_required
 def emotion_feedback_baseline(request):

@@ -209,14 +209,17 @@ body {
       display: inline-block; }
     body .main .feedback-explanation {
       float: right;
-      padding-right: 200px;
+      /*padding-right: 200px;*/
       padding-top: 80px;
-      font-size: 25px; }
+      font-size: 25px;
+      width: 50%; }
       body .main .feedback-explanation ul {
         list-style: none;
         padding: 10px;
-        border-radius: 10px;
-        background-color: #afeeee; }
+        border-radius: 10px; }
+      body .main .feedback-explanation .blue {
+        background-color: #afeeee;
+        width: 50%; }
     body .main input {
       margin-left: 20px;
       background-color: #00bfff;
