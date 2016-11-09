@@ -278,14 +278,18 @@ body{
     }
     .feedback-explanation {
       float: right;
-      padding-right: 200px;
+      /*padding-right: 200px;*/
       padding-top: 80px;
       font-size: 25px;
+      width: 50%;
       ul {
         list-style: none;
         padding: 10px;
         border-radius: 10px;
+      }
+      .blue {
         background-color: #afeeee;
+        width: 50%;
       }
     }
     input{
