@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^select_search/$', emotion_controller.select_search, name = 'select_search'),
     url(r'^relevant_feedback_single/$', emotion_controller.relevant_feedback, name = 'relevant_feedback'),
     url(r'^emotion_feedback_single/$', emotion_controller.emotion_feedback_model, name = 'emotion_feedback_model'),
-    url(r'^emotion_feedback_baseline/$', emotion_controller.emotion_feedback_baseline, name = 'emotion_feedback_baseline')
+    url(r'^emotion_feedback_baseline/$', emotion_controller.emotion_feedback_baseline, name = 'emotion_feedback_baseline'),
+    url(r'^experiment/$', emotion_controller.experiment, name = 'experiment')
     ]

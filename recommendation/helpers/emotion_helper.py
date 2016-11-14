@@ -112,3 +112,7 @@ def get_now_search_situation(user_id):
             break
         emotions.append(user_situations[i]["emotion_id"])
     return now_situation, emotions
+
+def save_experiment(song_id, evaluation):
+
+    obj, created = Experiment.objects.get_or_create(song_id=song_id, evaluation=evaluation)

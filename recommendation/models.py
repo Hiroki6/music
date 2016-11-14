@@ -126,3 +126,8 @@ class SituationEmotion(models.Model):
     user = models.ForeignKey(User)
     situation = models.IntegerField(null=False, blank=False)
     emotion = models.ForeignKey(Cluster)
+
+class Experiment(models.Model):
+    song = models.ForeignKey(Song)
+    evaluation = models.IntegerField(null=False, blank=False)
+

@@ -97,3 +97,15 @@ def emotion_feedback_baseline(request):
     songs = []
     error_msg = ""
     feedback_dict = common_helper.get_feedback_dict()
+
+@login_required
+def experiment(request):
+    if request.method == 'POST':
+        evaluation = int(request.POST["evaluation"])
+        if evaluation == 6:
+            pass
+        else:
+            song_id = int(request.POST["song_id"])
+            emotion_helper.save_experiment(song_id, evaluation)
+    songs = common_helper.get_random_song()
+    return render(request, 'emotions/experiment.html', {"songs": songs})
