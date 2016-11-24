@@ -205,12 +205,4 @@ class EmotionFeedback(EmotionBaseline):
         """
         user_feedbacks = models.EmotionEmotionbasedSong.objects.filter(user_id=int(self.user)).values()
         count = len(user_feedbacks)
-        """count = 0
-        for feedback in user_feedbacks:
-            feedback_type = feedback["feedback_type"]
-            if feedback_type >= 5 and feedback_type < 10:
-                feedback_type -= 5
-            if feedback_type == self.feedback:
-                count += 1
-        """
         self.bound = bound_map[self.feedback] / pow(2, count-1)

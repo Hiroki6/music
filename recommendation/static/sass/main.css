@@ -94,7 +94,9 @@ body {
       color: #fff;
       border-radius: 10px;
       background-color: #0000cd;
-      border: none; }
+      border: none;
+      float: right;
+      margin: 10px 10px 5px; }
       body .search-form .search-submit:hover {
         color: #0000cd;
         background-color: #fff; }
@@ -139,15 +141,31 @@ body {
       margin: 10px;
       width: 450px;
       /*height: 380px;*/
-      float: left;
-      position: relative; }
-      body .main .content .feedback-form {
-        position: absolute;
-        bottom: -35px; }
-        body .main .content .feedback-form .indicator {
-          background-color: #ccff55;
-          padding: 10px;
-          min-height: 200px; }
+      float: left; }
+      body .main .content .emotion-feedback {
+        float: left;
+        text-align: center; }
+        body .main .content .emotion-feedback .feedback-form {
+          display: inline; }
+          body .main .content .emotion-feedback .feedback-form .indicator {
+            background-color: #ccff55;
+            padding: 10px;
+            min-height: 200px; }
+          body .main .content .emotion-feedback .feedback-form button {
+            background-color: #f0ffff;
+            border: none;
+            color: #00bfff; }
+            body .main .content .emotion-feedback .feedback-form button i {
+              font-size: 30px; }
+            body .main .content .emotion-feedback .feedback-form button:hover {
+              color: #000bff; }
+          body .main .content .emotion-feedback .feedback-form .down-button {
+            width: 50px;
+            padding-right: 10px; }
+        body .main .content .emotion-feedback .rerecommend-button {
+          margin-top: 40px;
+          background-color: #f0ffff;
+          border: none; }
       body .main .content .best-song-button {
         margin-top: 8px; }
       body .main .content .like-form {
@@ -170,7 +188,7 @@ body {
           body .main .content .like-form .next-button:hover {
             color: #ff8c00; }
       body .main .content .song-info {
-        float: left;
+        /*float: left;*/
         margin: 5px 0 0; }
     body .main .min-content {
       margin: 10px;
@@ -197,7 +215,8 @@ body {
         background-color: #00ff7f;
         border: none;
         border-radius: 5px;
-        color: #fff; }
+        color: #fff;
+        margin-right: 5px; }
         body .main .refresh-form .refresh-button:hover {
           background-color: #32cd32; }
     body .main .questionnaire {
@@ -209,7 +228,6 @@ body {
       display: inline-block; }
     body .main .feedback-explanation {
       float: right;
-      /*padding-right: 200px;*/
       padding-top: 80px;
       font-size: 25px;
       width: 50%; }
@@ -243,12 +261,15 @@ body {
           color: #afeeee; }
     body .main .search-type {
       margin: 25px 20px; }
+      body .main .search-type p {
+        text-align: center;
+        margin: 20px 0 !important; }
       body .main .search-type a {
         background-color: #fff;
         padding: 10px 5px;
         font-size: 20px;
         border-radius: 10px;
-        margin: 0px 10px; }
+        margin: 10px 10px; }
     body .main .another-search {
       margin-top: 40px; }
     body .main .another-search-link {

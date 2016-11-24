@@ -112,7 +112,7 @@ def get_song_obj_by_cluster_songs(cluster_songs):
     top_k_songs = []
     for song in cluster_songs:
         top_k_songs.append(song["song"])
-
+    
     results = models.Song.objects.filter(id__in=top_k_songs).values()
 
     return results
@@ -141,7 +141,6 @@ def get_exclude_cluster_songs(listening_songs, emotion):
     cluster_songs = models.MusicCluster.objects.exclude(song_id__in=listening_songs).order_by(emotion_order_map[emotion]).values('song')[:1000]
 
     return cluster_songs
-
 
 """
 視聴済みの楽曲取得
