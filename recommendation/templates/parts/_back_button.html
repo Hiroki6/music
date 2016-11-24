@@ -1,0 +1,7 @@
+<form class = "refresh-form" method = "POST" action = "/recommendation/{{ url }}/">
+  {% csrf_token %}
+  {% include "parts/_hidden_search_condition.html" %}
+  <button class = "refresh-button" type = "submit" name = "back" value = {{ songs.0.id }}>
+    戻る
+  </button>
+</form>

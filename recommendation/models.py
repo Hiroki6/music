@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 
 # Create your models here.
 # class User(models.Model):
@@ -114,15 +115,31 @@ class EmotionRelevantSong(models.Model):
     user = models.ForeignKey(User)
     song = models.ForeignKey(Song)
     relevant_type = models.IntegerField(null=False, blank=False)
+    situation = models.IntegerField(null=True, blank=True)
+    created_at = models.DateTimeField(default=datetime.now())
+    updated_at = models.DateTimeField(default=datetime.now())
 
 class EmotionEmotionbasedSong(models.Model):
     user = models.ForeignKey(User)
     song = models.ForeignKey(Song)
     situation = models.IntegerField(null=False, blank=False)
-    #emotion = models.ForeignKey(Cluster)
     feedback_type = models.IntegerField(null=False, blank=False)
+    created_at = models.DateTimeField(default=datetime.now())
+    updated_at = models.DateTimeField(default=datetime.now())
 
 class SituationEmotion(models.Model):
     user = models.ForeignKey(User)
     situation = models.IntegerField(null=False, blank=False)
     emotion = models.ForeignKey(Cluster)
+
+"""
+推薦された楽曲
+feedback_type: {0: 適合性, 1: 印象語}
+"""
+class SearchSong(models.Model):
+    user = models.ForeignKey(User)
+    song = models.ForeignKey(Song)
+    situation = models.IntegerField(null=False, blank=False)
+    feedback_type = models.IntegerField(null=False, blank=False)
+    created_at = models.DateTimeField(default=datetime.now())
+    updated_at = models.DateTimeField(default=datetime.now())

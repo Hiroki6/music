@@ -144,6 +144,9 @@ def get_interaction_songs(user):
     interaction_songs = np.array(interaction_songs)
     return interaction_songs
 
+"""
+すでにアンケートが回答済みかどうか
+"""
 def judge_answer(user_id):
 
     return len(Questionnaire.objects.filter(user_id=user_id)) > 0
