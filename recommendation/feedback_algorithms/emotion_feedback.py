@@ -16,10 +16,10 @@ HOST = 'localhost'
 PORT = 6379
 DB = 3
 
-emotion_map = {0: "calm", 1: "tense", 2: "aggressive", 3: "lively", 4: "peaceful"}
+emotion_map = {0: "pop", 1: "ballad", 2: "aggressive"}
 
 # 境界条件のmap
-bound_map = {0: 0.008811, 1: 0.007634, 2: 0.016090, 3: 0.037371, 4: 0.013770}
+bound_map = {0: 0.000233, 1: 0.000953, 2: 0.000361}
 
 class EmotionBaseline(object):
     """
@@ -78,13 +78,13 @@ class EmotionBaseline(object):
 
     def _transform_feedback(self):
         """
-        feedback(1~10)を印象のベクトルに変換
+        feedback(1~6)を印象のベクトルに変換
         """
-        if(self.feedback <= 4):
+        if(self.feedback <= 2):
             self.plus_or_minus = 1
         else:
             self.plus_or_minus = -1
-            self.feedback -= 5
+            self.feedback -= 3
 
     def _get_bound_songs(self):
         """

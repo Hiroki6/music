@@ -6,7 +6,7 @@ from recommendation import models
 import codecs
 import math
 
-emotion_map = {0: "calm", 1: "tense", 2: "aggressive", 3: "lively", 4: "peaceful"}
+emotion_map = {0: "pop", 1: "ballad", 2: "rock"}
 
 bound_ave = 0.0167352
 
@@ -93,7 +93,7 @@ def extra_cluster_songs(listening_songs, emotions):
     for emotion in emotions:
         extra_column += emotion_map[int(emotion)-1] + "+"
     extra_column = extra_column[:-1]
-    extra_results = models.MusicCluster.objects.extra(select = {'value': extra_column})
+    extra_results = models.SearchMusicCluster.objects.extra(select = {'value': extra_column})
     cluster_songs = extra_results.exclude(song_id__in=listening_songs).extra(order_by=['-value']).values("song")[:1000]
 
     return cluster_songs
@@ -137,8 +137,8 @@ def get_exclude_cluster_songs(listening_songs, emotion):
     """
     上位1000曲
     """
-    emotion_order_map = {1: "-calm", 2: "-tense", 3: "-aggressive", 4: "-lively", 5: "-peaceful"}
-    cluster_songs = models.MusicCluster.objects.exclude(song_id__in=listening_songs).order_by(emotion_order_map[emotion]).values('song')[:1000]
+    emotion_order_map = {1: "-pop", 2: "-ballad", 3: "-rock"}
+    cluster_songs = models.SearchMusicCluster.objects.exclude(song_id__in=listening_songs).order_by(emotion_order_map[emotion]).values('song')[:1000]
 
     return cluster_songs
 
@@ -174,28 +174,20 @@ def get_song_and_tag_map(song_objs):
 def get_upper_songs(emotion, value):
 
     if emotion == 0:
-        return models.MusicCluster.objects.order_by("calm").filter(calm__gte=value).values()
+        return models.SeachMusicCluster.objects.order_by("pop").filter(pop__gte=value).values()
     elif emotion == 1:
-        return models.MusicCluster.objects.order_by("tense").filter(tense__gte=value).values()
-    elif emotion == 2:
-        return models.MusicCluster.objects.order_by("aggressive").filter(aggressive__gte=value).values()
-    elif emotion == 3:
-        return models.MusicCluster.objects.order_by("lively").filter(lively__gte=value).values()
+        return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__gte=value).values()
     else:
-        return models.MusicCluster.objects.order_by("peaceful").filter(peaceful__gte=value).values()
+        return models.SearchMusicCluster.objects.order_by("rock").filter(rock__gte=value).values()
 
 def get_lower_songs(emotion, value):
 
     if emotion == 0:
-        return models.MusicCluster.objects.order_by("calm").filter(calm__lte=value).values()
+        return models.SearchMusicCluster.objects.order_by("pop").filter(pop__lte=value).values()
     elif emotion == 1:
-        return models.MusicCluster.objects.order_by("tense").filter(tense__lte=value).values()
-    elif emotion == 2:
-        return models.MusicCluster.objects.order_by("aggressive").filter(aggressive__lte=value).values()
-    elif emotion == 3:
-        return models.MusicCluster.objects.order_by("lively").filter(lively__lte=value).values()
+        return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__lte=value).values()
     else:
-        return models.MusicCluster.objects.order_by("peaceful").filter(peaceful__lte=value).values()
+        return models.SearchMusicCluster.objects.order_by("rock").filter(rock__lte=value).values()
 
 def get_bound_song_tag_map(emotion, value, k, plus_or_minus):
 
@@ -270,14 +262,14 @@ def write_top_k_songs(user_id, filepass, top_k_songs, feedback_type = ""):
     print "write file"
     f = codecs.open(filepass, "a")
     f.write("user: " + str(user_id) + " feedback_type: " + feedback_type + "\n")
-    f.write("predict_value, song_id, calm, tense, aggressive, lively, peaceful\n")
+    f.write("predict_value, song_id, pop, ballad, rock\n")
     for song in top_k_songs:
         song_obj = get_music_cluster_value(song[1])
-        content = str(song) + "," + str(song_obj["calm"]) + "," + str(song_obj["tense"]) + "," + str(song_obj["aggressive"]) + "," + str(song_obj["lively"]) + "," + str(song_obj["peaceful"]) + "\n"
+        content = str(song) + "," + str(song_obj["pop"]) + "," + str(song_obj["ballad"]) + "," + str(song_obj["rock"]) + "\n"
         f.write(content)
     f.write("\n")
     f.close()
 
 def get_music_cluster_value(song_id):
-    top_song_objs = models.MusicCluster.objects.filter(song_id=int(song_id)).values()[0]
+    top_song_objs = models.SearchMusicCluster.objects.filter(song_id=int(song_id)).values()[0]
     return top_song_objs

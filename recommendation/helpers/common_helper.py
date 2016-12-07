@@ -23,7 +23,7 @@ def get_feedback_dict():
 
 def get_feedback_dict():
 
-    feedbacks = [("calm", "静かな"), ("tense", "緊張した"), ("aggressive", "激しい"), ("lively", "活発な"), ("peaceful", "平和な")]
+    feedbacks = [("calm", "静かな"), ("cheerful", "明るい"), ("aggressive", "激しい")]
     feedback_dict = {}
     for index, feedback in enumerate(feedbacks):
         feedback_dict[index] = feedback
@@ -87,8 +87,8 @@ def delete_user_listening_history(user_id, relevant_type):
 印象語による検索
 """
 def search_by_emotion(emotion):
-    emotion_map = {1: "-calm", 2: "-tense", 3: "-aggressive", 4: "-lively", 5: "-peaceful"}
-    songs = MusicCluster.objects.order_by(emotion_map[emotion])
+    emotion_map = {1: "-pop", 2: "-ballad", 3: "-rock"}
+    songs = SearchMusicCluster.objects.order_by(emotion_map[emotion])
     return songs[:300]
 
 """

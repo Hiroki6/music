@@ -5,11 +5,9 @@
     <label><input type = "radio" name = "situation" value = {{key}}>{{ situation }}</label>
   {% endfor %}
   <h4>この状況に合うと思う印象語を一つ以上選択してください</h4>
-  <label><input type = "checkbox" name = "emotion" value = 1>calm(静かな)</label>
-  <label><input type = "checkbox" name = "emotion" value = 2>tense(緊張した)</label>
-  <label><input type = "checkbox" name = "emotion" value = 3>aggressive(激しい)</label>
-  <label><input type = "checkbox" name = "emotion" value = 4>lively(活発な)</label>
-  <label><input type = "checkbox" name = "emotion" value = 5>peaceful(平和な)</label>
+  <label><input type = "radio" name = "emotion" value = 1>calm(静かな)</label>
+  <label><input type = "radio" name = "emotion" value = 2>cheerful(明るい)</label>
+  <label><input type = "radio" name = "emotion" value = 3>aggressive(激しい)</label>
   <br/>
   <input class = "search-submit" type = "submit" value = "検索する">
 </form>
