@@ -30,9 +30,19 @@ def save_user_song(user_id, song_id, situation, feedback_type):
 """
 モデルから楽曲取得(emotion)
 """
-def get_top_song(user, emotions):
+"""def get_top_song(user, emotions):
     song_ids = exec_functions.get_song_by_emotion(user, emotions)
-    return get_song_objs(song_ids)
+    return get_song_objs(song_ids)"""
+def get_top_song(user, situation, emotions, feedback_type):
+    song_obj = None
+    if SearchSong.objects.filter(user_id=user, situation=situation, feedback_type=feedback_type).exists():
+        song_obj = get_now_search_song(user, situation, feedback_type)
+    else:
+        print "get_top_song"
+        song_ids = exec_functions.get_song_by_emotion(user, emotions)
+        song_obj = get_song_objs(song_ids)
+        save_search_song(user, song_obj[0].id, situation, feedback_type)
+    return song_obj
 
 """
 学習と楽曲の取得(emotion)

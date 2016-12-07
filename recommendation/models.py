@@ -127,10 +127,16 @@ class EmotionEmotionbasedSong(models.Model):
     created_at = models.DateTimeField(default=datetime.now())
     updated_at = models.DateTimeField(default=datetime.now())
 
+"""
+印象語検索用のクラスタモデル
+"""
+class SearchCluster(models.Model):
+    name = models.CharField(max_length=50)
+
 class SituationEmotion(models.Model):
     user = models.ForeignKey(User)
     situation = models.IntegerField(null=False, blank=False)
-    emotion = models.ForeignKey(Cluster)
+    emotion = models.ForeignKey(SearchCluster)
 
 """
 推薦された楽曲
@@ -143,3 +149,23 @@ class SearchSong(models.Model):
     feedback_type = models.IntegerField(null=False, blank=False)
     created_at = models.DateTimeField(default=datetime.now())
     updated_at = models.DateTimeField(default=datetime.now())
+
+"""
+タグとクラスタへの所属度
+"""
+class SearchTag(models.Model):
+    name = models.CharField(max_length=50)
+    pop = models.FloatField(null=True, blank=True)
+    ballad = models.FloatField(null=True, blank=True)
+    rock = models.FloatField(null=True, blank=True)
+
+"""
+楽曲とそれぞれのクラスタの平均値
+"""
+class SearchMusicCluster(models.Model):
+    song = models.ForeignKey(Song)
+    pop = models.FloatField(null=True, blank=True)
+    ballad = models.FloatField(null=True, blank=True)
+    rock = models.FloatField(null=True, blank=True)
+    cluster = models.ForeignKey(SearchCluster, null=True, blank=True)
+

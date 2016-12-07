@@ -88,4 +88,4 @@ def get_top_song_by_baseline(user, emotion):
 if __name__ == "__main__":
     # DB初期化
     init_redis_all_model("emotion")
-    init_redis_all_model("relevance")
+    init_redis_all_model("relevant")

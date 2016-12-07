@@ -13,7 +13,7 @@ def emotion_search(request, emotions, situation, learning=True):
         song_obj = emotion_helper.learning_and_get_song(str(user_id), emotions)
         common_helper.save_search_song(user_id, song_obj[0].id, situation, 1)
     else:
-        song_obj = common_helper.get_top_song(str(user_id), situation, emotions, 1)
+        song_obj = emotion_helper.get_top_song(str(user_id), situation, emotions, 1)
     return song_obj
 
 """
@@ -26,7 +26,7 @@ def relevant_search(request, emotions, situation, learning=True):
         song_obj = relevant_helper.learning_and_get_song(str(user_id), emotions)
         common_helper.save_search_song(user_id, song_obj[0].id, situation, 0)
     else:
-        song_obj = common_helper.get_top_song(str(user_id), situation, emotions, 0)
+        song_obj = relevant_helper.get_top_song(str(user_id), situation, emotions, 0)
     return song_obj
 
 def get_relevant_back_song(user_id, song_id, situation):

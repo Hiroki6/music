@@ -10,6 +10,7 @@ import common_functions as common
 from EmotionFeedback import cy_emotion_feedback as cy_ef
 import sys
 from recommendation import models
+import math
 
 HOST = 'localhost'
 PORT = 6379
@@ -154,6 +155,7 @@ class EmotionFeedback(EmotionBaseline):
         self.top_song = rankings[0][1]
         self.top_matrix = song_tag_map[self.top_song]
         self._save_top_song()
+        song_tags = []
         if hasattr(self, "feedback"):
             common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10], emotion_map[self.feedback])
         else:
@@ -205,4 +207,5 @@ class EmotionFeedback(EmotionBaseline):
         """
         user_feedbacks = models.EmotionEmotionbasedSong.objects.filter(user_id=int(self.user)).values()
         count = len(user_feedbacks)
-        self.bound = bound_map[self.feedback] / pow(2, count-1)
+        #self.bound = bound_map[self.feedback] / pow(2, count-1)
+        self.bound = bound_map[self.feedback] / math.exp(-(count-1))

@@ -270,8 +270,14 @@ def write_top_k_songs(user_id, filepass, top_k_songs, feedback_type = ""):
     print "write file"
     f = codecs.open(filepass, "a")
     f.write("user: " + str(user_id) + " feedback_type: " + feedback_type + "\n")
+    f.write("predict_value, song_id, calm, tense, aggressive, lively, peaceful\n")
     for song in top_k_songs:
-        content = str(song) + "\n"
+        song_obj = get_music_cluster_value(song[1])
+        content = str(song) + "," + str(song_obj["calm"]) + "," + str(song_obj["tense"]) + "," + str(song_obj["aggressive"]) + "," + str(song_obj["lively"]) + "," + str(song_obj["peaceful"]) + "\n"
         f.write(content)
     f.write("\n")
     f.close()
+
+def get_music_cluster_value(song_id):
+    top_song_objs = models.MusicCluster.objects.filter(song_id=int(song_id)).values()[0]
+    return top_song_objs
