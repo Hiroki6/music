@@ -16,7 +16,7 @@ HOST = 'localhost'
 PORT = 6379
 DB = 3
 
-emotion_map = {0: "pop", 1: "ballad", 2: "aggressive"}
+emotion_map = {0: "pop", 1: "ballad", 2: "rock"}
 
 # 境界条件のmap
 bound_map = {0: 0.000233, 1: 0.000953, 2: 0.000361}
@@ -91,7 +91,7 @@ class EmotionBaseline(object):
         フィードバックを受けた楽曲よりもemotionの値が高い楽曲s曲に対してranking学習を行う
         とりあえずその楽曲よりも直近で大きいs曲取得
         """
-        top_song_objs = models.MusicCluster.objects.filter(song_id=int(self.top_song)).values()
+        top_song_objs = models.SearchMusicCluster.objects.filter(song_id=int(self.top_song)).values()
         emotion_value = top_song_objs[0][emotion_map[self.feedback]]
         self.bound_songs, self.bound_song_tag_map = common.get_bound_song_tag_map(emotion_value, self.k, self.plus_or_minus)
 
@@ -193,10 +193,11 @@ class EmotionFeedback(EmotionBaseline):
         減衰定数と境界パラメータを用いてkを動的に決定する
         他の値についても近いものを選ぶ
         """
-        top_song_objs = models.MusicCluster.objects.filter(song_id=int(self.top_song)).values()
+        top_song_objs = models.SearchMusicCluster.objects.filter(song_id=int(self.top_song)).values()
         top_song_obj = top_song_objs[0]
         emotion_value = top_song_objs[0][emotion_map[self.feedback]]
         self._decision_bound()
+        print self.feedback
         self.bound_songs, self.bound_song_tag_map = common.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, emotion_value, self.plus_or_minus, self.bound)
         print self.bound
         print len(self.bound_songs)

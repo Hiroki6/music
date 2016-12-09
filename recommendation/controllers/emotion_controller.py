@@ -19,7 +19,7 @@ sys.dont_write_bytecode = True
 from package import *
 
 emotion_map = {0: "", 1: "calm", 2: "tense", 3: "aggressive", 4: "lively", 5: "peaceful"}
-situation_map = {0: "", 1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "純粋に音楽を聴く時　"}
+situation_map = {0: "", 1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "純粋に音楽を聴く時"}
 """
 印象語検索
 状況の選択
@@ -92,7 +92,7 @@ def emotion_feedback_model(request):
                 # 永続化
                 emotion_helper.save_user_song(user_id, song_id, situation, feedback_type)
                 # 再推薦
-                if feedback_type == "11":
+                if feedback_type == "7":
                     songs = emotion_search(request, emotions, situation, False)
                 # 学習
                 else:

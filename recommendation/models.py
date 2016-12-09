@@ -169,3 +169,20 @@ class SearchMusicCluster(models.Model):
     rock = models.FloatField(null=True, blank=True)
     cluster = models.ForeignKey(SearchCluster, null=True, blank=True)
 
+"""
+ユーザーの状況ごとのベスト楽曲
+"""
+class SearchBestSong(models.Model):
+    user = models.ForeignKey(User)
+    song = models.ForeignKey(Song)
+    situation = models.IntegerField(null=False, blank=False)
+    search_type = models.IntegerField(null=False, blank=False)
+
+"""
+ユーザーの状況ごとで最後に視聴した楽曲
+"""
+class SearchLastSong(models.Model):
+    user = models.ForeignKey(User)
+    song = models.ForeignKey(Song)
+    situation = models.IntegerField(null=False, blank=False)
+    search_type = models.IntegerField(null=False, blank=False)
