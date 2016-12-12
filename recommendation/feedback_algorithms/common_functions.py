@@ -254,14 +254,19 @@ def listtuple_sort_reverse(t):
     t.sort()
     t.reverse()
 
-def write_top_k_songs(user_id, filepass, top_k_songs, feedback_type = ""):
+def write_top_k_songs(user_id, filepass, top_k_songs, emotions, feedback_type = "", plus_or_minus = 0):
     """
     上位k個の楽曲のファイルへの書き込み
     """
 
     print "write file"
     f = codecs.open(filepass, "a")
-    f.write("user: " + str(user_id) + " feedback_type: " + feedback_type + "\n")
+    if plus_or_minus == 1:
+        f.write("user: " + str(user_id) + " feedback_type: ↑" + feedback_type + " emotion: " + emotion_map[int(emotions[0])] + "\n")
+    elif plus_or_minus == -1:
+        f.write("user: " + str(user_id) + " feedback_type: ↓" + feedback_type + " emotion: " + emotion_map[int(emotions[0])] + "\n")
+    else:
+        f.write("user: " + str(user_id) + " feedback_type: " + feedback_type + " emotion: " + emotion_map[int(emotions[0])] + "\n")
     f.write("predict_value, song_id, pop, ballad, rock\n")
     for song in top_k_songs:
         song_obj = get_music_cluster_value(song[1])

@@ -157,9 +157,9 @@ class EmotionFeedback(EmotionBaseline):
         self._save_top_song()
         song_tags = []
         if hasattr(self, "feedback"):
-            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10], emotion_map[self.feedback])
+            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10], self.emotions, emotion_map[self.feedback], self.plus_or_minus)
         else:
-            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10])
+            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10], self.emotions)
 
         return rankings[:k]
 
