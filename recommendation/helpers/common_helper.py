@@ -23,7 +23,7 @@ def get_feedback_dict():
 
 def get_feedback_dict():
 
-    feedbacks = [("calm", "静かな"), ("cheerful", "明るい"), ("aggressive", "激しい")]
+    feedbacks = [("ballad", "静かな"), ("pop", "明るい"), ("rock", "激しい")]
     feedback_dict = {}
     for index, feedback in enumerate(feedbacks):
         feedback_dict[index] = feedback

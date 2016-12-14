@@ -19,7 +19,7 @@ sys.dont_write_bytecode = True
 from package import *
 
 emotion_map = {0: "", 1: "calm", 2: "tense", 3: "aggressive", 4: "lively", 5: "peaceful"}
-situation_map = {0: "", 1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "純粋に音楽を聴く時"}
+situation_map = {0: "", 1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "運転中"}
 """
 印象語検索
 状況の選択
@@ -27,7 +27,7 @@ situation_map = {0: "", 1: "運動中", 2: "起床時", 3: "作業中", 4: "通�
 @login_required
 def index(request):
     error_msg = ""
-    situations = {1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "純粋に音楽を聴く時　"}
+    situations = {1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "運転中"}
     if request.GET.has_key("situation"):
         error_msg = save_search_situation(request)
         if error_msg == "":
