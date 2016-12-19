@@ -95,15 +95,20 @@ class RelevantFeedback:
 
         return error
 
-    def get_top_k_songs(self, k=1):
+    def get_top_k_songs(self, init_flag = False, k=1):
         """
         検索対象の印象語に含まれている楽曲から回帰値の高いk個の楽曲を取得する
         """
         #songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotions)
-        songs, song_tag_map = common.get_not_listening_songs_by_multi_emotion(self.user, self.emotions)
-        rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
-        common.listtuple_sort_reverse(rankings)
-        common.write_top_k_songs(self.user, "relevant_k_song.txt", rankings[:10], self.emotions)
+        # 初期検索の時
+        song_cluster_map = common.get_song_and_cluster()
+        if init_flag:
+            pass
+        else:
+            songs, song_tag_map = common.get_not_listening_songs_by_multi_emotion(self.user, self.emotions)
+            rankings = [(self.cy_obj.predict(tags)*song_cluster_map[song_id][emotion_map[int(self.emotions[0])]], song_id) for song_id, tags in song_tag_map.items()]
+            common.listtuple_sort_reverse(rankings)
+            common.write_top_k_songs(self.user, "relevant_k_song.txt", rankings[:10], self.emotions)
         return rankings[:k]
 
     def _update_params_into_redis(self):

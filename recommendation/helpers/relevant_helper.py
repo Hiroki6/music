@@ -31,6 +31,9 @@ def learning_and_get_song(user, emotion):
     song_ids = exec_functions.learning_and_get_song_by_relevant(user, emotion)
     return get_song_objs(song_ids)
 
+"""
+トップの楽曲取得
+"""
 def get_top_song(user, situation, emotions, feedback_type):
     song_obj = None
     if SearchSong.objects.filter(user_id=user, situation=situation, feedback_type=feedback_type).exists():
