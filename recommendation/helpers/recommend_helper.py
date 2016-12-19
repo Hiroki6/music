@@ -8,7 +8,10 @@ import numpy as np
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from itertools import chain
 import random
-# そのユーザーの好みの楽曲リスト取得
+
+"""
+そのユーザーの好みの楽曲リスト取得
+"""
 def get_user_preference(user_id):
 
     songs = []
@@ -18,7 +21,9 @@ def get_user_preference(user_id):
 
     return songs
 
-# ユーザーがまだ聞いていない楽曲のリスト取得
+"""
+ユーザーがまだ聞いていない楽曲のリスト取得
+"""
 def get_user_not_listening_songs(user_id):
 
     listening_songs = get_user_preference(user_id)

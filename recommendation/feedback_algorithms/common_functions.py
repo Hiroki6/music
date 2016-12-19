@@ -5,10 +5,13 @@ import numpy as np
 from recommendation import models
 import codecs
 import math
+from Calculation import cy_calculation as cy_calc
 
-emotion_map = {0: "pop", 1: "ballad", 2: "rock"}
+emotion_map = {1: "pop", 2: "ballad", 3: "rock"}
 
-bound_ave = 0.0167352
+bound_ave = 1.022828
+
+top_k = 5000
 
 """
 redisからのスカラー値の取得
@@ -80,21 +83,25 @@ def update_redis_key(redis_obj, key, params):
     save_one_dim_array(redis_obj, key, params)
 
 
-def get_not_listening_songs_by_multi_emotion(user, emotions, feedback_type = "relevant"):
+def get_not_listening_songs_by_multi_emotion(user, emotions, feedback_type = "relevant", is_first = False):
     print "未視聴の楽曲取得"
     listening_songs = get_listening_songs_by_feedback_type(user, feedback_type)
-    cluster_songs = extra_cluster_songs(listening_songs, emotions)
+    cluster_songs = extra_cluster_songs(listening_songs, emotions, is_first)
     results = get_song_obj_by_cluster_songs(cluster_songs)
     return get_song_and_tag_map(results)
 
-def extra_cluster_songs(listening_songs, emotions):
+def extra_cluster_songs(listening_songs, emotions, is_first = False):
     # 複数のemotionsを足したextra_column
     extra_column = ""
-    for emotion in emotions:
-        extra_column += emotion_map[int(emotion)-1] + "+"
-    extra_column = extra_column[:-1]
+    # for emotion in emotions:
+    #     extra_column += emotion_map[int(emotion)] + "+"
+    extra_column += emotion_map[int(emotions[0])]
+    #extra_column = extra_column[:-1]
     extra_results = models.SearchMusicCluster.objects.extra(select = {'value': extra_column})
-    cluster_songs = extra_results.exclude(song_id__in=listening_songs).extra(order_by=['-value']).values("song")[:1000]
+    if is_first:
+        cluster_songs = extra_results.exclude(song_id__in=listening_songs).extra(order_by=['-value']).values("song")[:1000]
+    else:
+        cluster_songs = extra_results.exclude(song_id__in=listening_songs).extra(order_by=['-value']).values("song")
 
     return cluster_songs
 
@@ -134,11 +141,8 @@ def get_listening_songs_by_relevant(user):
     return listening_songs
 
 def get_exclude_cluster_songs(listening_songs, emotion):
-    """
-    上位1000曲
-    """
     emotion_order_map = {1: "-pop", 2: "-ballad", 3: "-rock"}
-    cluster_songs = models.SearchMusicCluster.objects.exclude(song_id__in=listening_songs).order_by(emotion_order_map[emotion]).values('song')[:1000]
+    cluster_songs = models.SearchMusicCluster.objects.exclude(song_id__in=listening_songs).order_by(emotion_order_map[emotion]).values('song')
 
     return cluster_songs
 
@@ -153,9 +157,7 @@ def get_listening_songs(user):
 
 def get_song_and_tag_map(song_objs):
 
-    tag_obj = models.Tag.objects.all()
-    tags = [tag.name for tag in tag_obj]
-
+    tags = get_tags()
     song_tag_map = {} # {song_id: List[tag_value]}
     songs = [] # List[song_id]
     for song_obj in song_objs:
@@ -169,32 +171,48 @@ def get_song_and_tag_map(song_objs):
     return songs, song_tag_map
 
 """
+@return(tags): [tag_name]
+"""
+def get_tags():
+
+    tag_obj = models.Tag.objects.all()
+    tags = [tag.name for tag in tag_obj]
+    return tags
+
+def get_song_and_cluster():
+
+    songs = models.SearchMusicCluster.objects.all().values()
+    song_cluster_map = {}
+    for song in songs:
+        song_cluster_map[song["song_id"]] = song
+    return song_cluster_map
+"""
 特定の印象ベクトルが特定の値より大きいものを取得
 """
 def get_upper_songs(emotion, value):
 
     if emotion == 0:
-        return models.SeachMusicCluster.objects.order_by("pop").filter(pop__gte=value).values()
+        return models.SearchMusicCluster.objects.order_by("pop").filter(pop__gte=value)
     elif emotion == 1:
-        return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__gte=value).values()
+        return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__gte=value)
     else:
-        return models.SearchMusicCluster.objects.order_by("rock").filter(rock__gte=value).values()
+        return models.SearchMusicCluster.objects.order_by("rock").filter(rock__gte=value)
 
 def get_lower_songs(emotion, value):
 
     if emotion == 0:
-        return models.SearchMusicCluster.objects.order_by("pop").filter(pop__lte=value).values()
+        return models.SearchMusicCluster.objects.order_by("pop").filter(pop__lte=value)
     elif emotion == 1:
-        return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__lte=value).values()
+        return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__lte=value)
     else:
-        return models.SearchMusicCluster.objects.order_by("rock").filter(rock__lte=value).values()
+        return models.SearchMusicCluster.objects.order_by("rock").filter(rock__lte=value)
 
 def get_bound_song_tag_map(emotion, value, k, plus_or_minus):
 
     songs = get_bound_songs(emotion, value, plus_or_minus)
     song_ids = []
     for song in songs[:k]:
-        song_ids.append(song["song_id"])
+        song_ids.append(song.song_id)
 
     song_objs = models.Song.objects.filter(id__in=song_ids).values()
     return get_song_and_tag_map(song_objs)
@@ -210,26 +228,48 @@ def get_bound_song_tag_map(emotion, value, k, plus_or_minus):
 def get_bound_with_attenuation_song_tag_map(emotion, top_song_obj, value, plus_or_minus, bound):
 
     songs = get_bound_songs(emotion, value, plus_or_minus)
+    tags = get_tags()
     song_ids = []
     count = 0
+    print "top_song emotion value: %.5f" % (value)
+    top_song_map = top_song_obj.song.__dict__
+    print len(songs)
     for song in songs:
-        if abs(song[emotion_map[emotion]] - value) > bound:
-            break
+        if is_upper_bound(song, emotion, value, bound):
+            continue
+        # print "pop: %.5f" % (song.pop)
+        # print "ballad: %.5f" % (song.ballad)
+        # print "rock: %.5f" % (song.rock)
         # 距離を計測する(ユークリッド距離)
-        distances = 0.0
-        for index, emotion_word in emotion_map.items():
-            if index == emotion:
-                continue
-            distances += pow(top_song_obj[emotion_word] - song[emotion_word], 2)
-        distance = math.sqrt(distances) / 4
+        sum_distance = 0.0
+        # dict型のsongオブジェクト取得
+        song_map = song.song.__dict__
+        #distances = cy_calc.euclid_distance_for_dict(song_map, top_song_map, tags)
+        for tag in tags:
+            sum_distance += pow(song_map[tag] - top_song_map[tag], 2)
+        distance = math.sqrt(sum_distance)
         if distance > bound_ave:
             continue
-        song_ids.append(song["song_id"])
+        song_ids.append(song.song_id)
         count += 1
-    print count
 
     song_objs = models.Song.objects.filter(id__in=song_ids).values()
     return get_song_and_tag_map(song_objs)
+
+def is_upper_bound(song_obj, emotion, value, bound):
+
+    if emotion == 1:
+        diff = abs(song_obj.pop - value)
+        # print "diff: %.5f" % (diff)
+        return diff > bound
+    elif emotion == 2:
+        diff = abs(song_obj.ballad - value)
+        # print "diff: %.5f" % (diff)
+        return diff > bound
+    else:
+        diff = abs(song_obj.rock - value)
+        # print "diff: %.5f" % (diff)
+        return diff > bound
 
 def get_bound_songs(emotion, value, plus_or_minus):
 
@@ -254,14 +294,20 @@ def listtuple_sort_reverse(t):
     t.sort()
     t.reverse()
 
-def write_top_k_songs(user_id, filepass, top_k_songs, feedback_type = ""):
+def write_top_k_songs(user_id, filepass, top_k_songs, emotions, feedback_type = "", plus_or_minus = 0):
     """
     上位k個の楽曲のファイルへの書き込み
     """
 
     print "write file"
+    print emotions
     f = codecs.open(filepass, "a")
-    f.write("user: " + str(user_id) + " feedback_type: " + feedback_type + "\n")
+    if plus_or_minus == 1:
+        f.write("user: " + str(user_id) + " feedback_type: ↑" + feedback_type + " emotion: " + emotion_map[int(emotions[0])] + "\n")
+    elif plus_or_minus == -1:
+        f.write("user: " + str(user_id) + " feedback_type: ↓" + feedback_type + " emotion: " + emotion_map[int(emotions[0])] + "\n")
+    else:
+        f.write("user: " + str(user_id) + " feedback_type: " + feedback_type + " emotion: " + emotion_map[int(emotions[0])] + "\n")
     f.write("predict_value, song_id, pop, ballad, rock\n")
     for song in top_k_songs:
         song_obj = get_music_cluster_value(song[1])

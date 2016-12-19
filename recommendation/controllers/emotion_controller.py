@@ -20,6 +20,8 @@ from package import *
 
 emotion_map = {0: "", 1: "calm", 2: "tense", 3: "aggressive", 4: "lively", 5: "peaceful"}
 situation_map = {0: "", 1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "運転中"}
+#situation_map = {0: "", 1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "純粋に音楽を聴く時"}
+
 """
 印象語検索
 状況の選択
@@ -28,12 +30,14 @@ situation_map = {0: "", 1: "運動中", 2: "起床時", 3: "作業中", 4: "通�
 def index(request):
     error_msg = ""
     situations = {1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "運転中"}
+    #situations = {1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "純粋に音楽を聴く時　"}
+    emotions = common_helper.get_search_emotions_dict()
     if request.GET.has_key("situation"):
         error_msg = save_search_situation(request)
         if error_msg == "":
             return redirect("/recommendation/select_search/")
     common_helper.init_all_user_model(str(request.user.id))
-    return render(request, 'emotions/select_situation.html', {"error_msg": error_msg, "search_flag": False, "situations": situations})
+    return render(request, 'emotions/select_situation.html', {"error_msg": error_msg, "search_flag": False, "situations": situations, "emotions": emotions})
 
 """
 検索手法の選択
@@ -52,9 +56,11 @@ def relevant_feedback(request):
     error_msg = ""
     situation = 0
     if request.method == 'POST':
+        # 戻るボタンを押した場合（現在非公開）
         if request.POST.has_key("back"):
             user_id, situation, emotions, song_id = get_back_params(request)
             songs = relevant_helper.get_back_song(user_id, song_id, situation)
+        # フィードバックを受けた場合
         else:
             user_id, situation, emotions, song_id, feedback_type = get_feedback_params(request)
             relevant_helper.save_user_song(int(user_id), int(song_id), int(feedback_type), int(situation))
@@ -78,11 +84,13 @@ def emotion_feedback_model(request):
     songs = []
     error_msg = ""
     situation = 0
-    feedback_dict = common_helper.get_feedback_dict()
+    feedback_dict = emotion_helper.get_feedback_dict()
     if request.method == "POST":
+        # 戻るボタンを押した場合（現在非公開）
         if request.POST.has_key("back"):
             user_id, situation, emotions, song_id = get_back_params(request)
             songs = emotion_helper.get_back_song(user_id, song_id, situation)
+        # フィードバックを受けた場合
         else:
             user_id, situation, emotions, song_id, feedback_type = get_feedback_params(request)
             if feedback_type == "-1":
@@ -109,4 +117,4 @@ def emotion_feedback_baseline(request):
     emotion = 0
     songs = []
     error_msg = ""
-    feedback_dict = common_helper.get_feedback_dict()
+    feedback_dict = emotion_helper.get_feedback_dict()

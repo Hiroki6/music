@@ -66,6 +66,36 @@ cdef class CyEmotionFeedback:
             self.set_margin(X)
         self._repeat_optimization(X)
 
+    def batch_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix):
+        cdef:
+            long song
+            np.ndarray tags
+            np.ndarray X
+            int i
+            double all_error = 0.0
+            long count
+            np.ndarray w
+   
+        self.margin = 0.0
+        w = np.zeros(43)
+        count = 0
+        for i in xrange(1000):
+            all_error = 0.0
+            for song, tags in bound_song_tag_map.items():
+                X = tags - top_matrix
+                self.error = self.calc_error(X)
+                if self.error <= 0:
+                    continue
+                self._update_W(X)
+                w += self.W
+                count += 1
+                all_error += self.error
+            if all_error <= 0:
+                break
+        if count > 0:
+            self.W = w / count
+        return self.W
+
     def _repeat_optimization(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
         
         cdef:

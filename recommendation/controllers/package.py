@@ -29,6 +29,9 @@ def relevant_search(request, emotions, situation, learning=True):
         song_obj = relevant_helper.get_top_song(str(user_id), situation, emotions, 0)
     return song_obj
 
+"""
+戻るボタンを押した時の楽曲取得
+"""
 def get_relevant_back_song(user_id, song_id, situation):
     return relevant_helper.get_back_song(user_id, song_id, situation)
 
@@ -59,6 +62,9 @@ def check_search_request(request, feedback_type):
             songs = relevant_search(request, emotions, situation, False)
     return songs, int(situation), emotions, error_msg
 
+"""
+検索手法別に検索を行う
+"""
 def search_songs(request, feedback_type):
     situation, emotions = common_helper.get_now_search_situation(request.user.id)
     if feedback_type == "emotion":
@@ -67,6 +73,9 @@ def search_songs(request, feedback_type):
         songs = relevant_search(request, emotions, situation, False)
     return songs, situation, emotions
 
+"""
+選択した状況と印象語を永続化する
+"""
 def save_search_situation(request):
     error_msg = ""
     songs = []
@@ -81,27 +90,42 @@ def save_search_situation(request):
         common_helper.save_situation_and_emotion(request.user.id, situation, emotions)
     return error_msg
 
+"""
+特定のユーザーモデルの初期化
+"""
 def refresh(request, feedback_type):
     user_id = request.user.id
     feedback_type = request.POST["search_type"]
     common_helper.init_user_model(user_id, feedback_type)
 
+"""
+すべてのユーザーモデルの初期化
+"""
 def all_refresh(request):
     user_id = request.user.id
     feedback_type = request.POST["search_type"]
 
+"""
+印象語と状況の取得
+"""
 def get_common_params(request):
     emotions = request.POST.getlist("emotion")
     situation = int(request.POST['situation'])
     user_id = request.user.id
     return user_id, situation, emotions
 
+"""
+フィードバックパラメーターの取得
+"""
 def get_feedback_params(request):
     feedback_type = request.POST['select_feedback']
     song_id = int(request.POST['song_id'])
     user_id, situation, emotions = get_common_params(request)
     return user_id, situation, emotions, song_id, feedback_type
 
+"""
+戻るボタンの時のパラメーター取得
+"""
 def get_back_params(request):
     song_id = int(request.POST['back'])
     user_id, situation, emotions = get_common_params(request)

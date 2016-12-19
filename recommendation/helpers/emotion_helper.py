@@ -12,6 +12,18 @@ from recommendation.feedback_algorithms import exec_functions
 from datetime import datetime
 from common_helper import *
 
+"""
+フィードバック用のフィードバック辞書の実装
+"""
+def get_feedback_dict():
+
+    feedbacks = [("pop", "明るい"), ("ballad", "静かな"), ("rock", "激しい")]
+    feedback_dict = {}
+    for index, feedback in enumerate(feedbacks):
+        feedback_dict[index] = feedback
+    
+    return feedback_dict
+
 def get_random_k_songs(k, song_obj):
     k_song_objs = []
     for i in xrange(k):
@@ -19,6 +31,9 @@ def get_random_k_songs(k, song_obj):
         k_song_objs.append(song_obj[index])
     return k_song_objs
 
+"""
+ユーザーのフィードバックの内容と対象楽曲の永続化
+"""
 def save_user_song(user_id, song_id, situation, feedback_type):
     
     now = datetime.now()
