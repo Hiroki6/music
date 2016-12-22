@@ -3,10 +3,10 @@ from recommendation.helpers import emotion_helper, common_helper, relevant_helpe
 import sys
 sys.dont_write_bytecode = True 
 
-"""
-印象語フィードバック用の検索関数
-"""
 def emotion_search(request, emotions, situation, learning=True):
+    """
+    印象語フィードバック用の検索関数
+    """
     song_obj = None
     user_id = request.user.id
     if learning:
@@ -16,10 +16,10 @@ def emotion_search(request, emotions, situation, learning=True):
         song_obj = emotion_helper.get_top_song(str(user_id), situation, emotions, 1)
     return song_obj
 
-"""
-適合性フィードバック用の検索関数
-"""
 def relevant_search(request, emotions, situation, learning=True):
+    """
+    適合性フィードバック用の検索関数
+    """
     song_obj = None
     user_id = request.user.id
     if learning:
@@ -29,22 +29,22 @@ def relevant_search(request, emotions, situation, learning=True):
         song_obj = relevant_helper.get_top_song(str(user_id), situation, emotions, 0)
     return song_obj
 
-"""
-戻るボタンを押した時の楽曲取得
-"""
 def get_relevant_back_song(user_id, song_id, situation):
+    """
+    戻るボタンを押した時の楽曲取得
+    """
     return relevant_helper.get_back_song(user_id, song_id, situation)
 
-"""
-印象語フィードバックのベースライン
-"""
 def baseline_search(request, emotion, feedback=True):
+    """
+    印象語フィードバックのベースライン
+    """
     song_obj = []
 
-"""
-印象語検索におけるチェック
-"""
 def check_search_request(request, feedback_type):
+    """
+    印象語検索におけるチェック
+    """
     error_msg = ""
     songs = []
     situation = 0
@@ -62,10 +62,10 @@ def check_search_request(request, feedback_type):
             songs = relevant_search(request, emotions, situation, False)
     return songs, int(situation), emotions, error_msg
 
-"""
-検索手法別に検索を行う
-"""
 def search_songs(request, feedback_type):
+    """
+    検索手法別に検索を行う
+    """
     situation, emotions = common_helper.get_now_search_situation(request.user.id)
     if feedback_type == "emotion":
         songs = emotion_search(request, emotions, situation, False)
@@ -73,10 +73,10 @@ def search_songs(request, feedback_type):
         songs = relevant_search(request, emotions, situation, False)
     return songs, situation, emotions
 
-"""
-選択した状況と印象語を永続化する
-"""
 def save_search_situation(request):
+    """
+    選択した状況と印象語を永続化する
+    """
     error_msg = ""
     songs = []
     situation = 0
@@ -90,43 +90,67 @@ def save_search_situation(request):
         common_helper.save_situation_and_emotion(request.user.id, situation, emotions)
     return error_msg
 
-"""
-特定のユーザーモデルの初期化
-"""
 def refresh(request, feedback_type):
+    """
+    特定のユーザーモデルの初期化
+    """
     user_id = request.user.id
     feedback_type = request.POST["search_type"]
     common_helper.init_user_model(user_id, feedback_type)
 
-"""
-すべてのユーザーモデルの初期化
-"""
 def all_refresh(request):
+    """
+    すべてのユーザーモデルの初期化
+    """
     user_id = request.user.id
     feedback_type = request.POST["search_type"]
 
-"""
-印象語と状況の取得
-"""
 def get_common_params(request):
+    """
+    印象語と状況の取得
+    """
     emotions = request.POST.getlist("emotion")
     situation = int(request.POST['situation'])
     user_id = request.user.id
     return user_id, situation, emotions
 
-"""
-フィードバックパラメーターの取得
-"""
 def get_feedback_params(request):
+    """
+    フィードバックパラメーターの取得
+    """
     feedback_type = request.POST['select_feedback']
     song_id = int(request.POST['song_id'])
     user_id, situation, emotions = get_common_params(request)
     return user_id, situation, emotions, song_id, feedback_type
 
-"""
-戻るボタンの時のパラメーター取得
-"""
 def get_back_params(request):
+    """
+    戻るボタンの時のパラメーター取得
+    """
     song_id = int(request.POST['back'])
     user_id, situation, emotions = get_common_params(request)
     return user_id, situation, emotions, song_id
+
+def get_search_songs(request, feedback_type):
+    """
+    検索された楽曲の一覧を取得する
+    """
+    situation, emotions = common_helper.get_now_search_situation(request.user.id)
+    song_objs = common_helper.get_search_songs(request.user.id, situation, feedback_type)
+    return situation, song_objs
+
+def get_best_song_param(request):
+    song_id = int(request.POST["best_song"])
+    situation = int(request.POST["situation"])
+    return song_id, situation
+
+def get_next_url(user_id, situation):
+    """
+    次に誘導するページのurlを取得する
+    relevant_feedback_single: 適合性フィードバックのページ
+    emotion_feedback_single: 印象語フィードバックのページ
+    /: 次の状況の検索
+    @return: url
+    """
+    not_feedback_type = common_helper.get_not_feedback_type(user_id, situation)
+    return "/recommendation/" + not_feedback_type

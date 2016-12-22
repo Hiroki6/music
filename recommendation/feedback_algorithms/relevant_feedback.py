@@ -17,6 +17,8 @@ HOST = 'localhost'
 PORT = 6379
 DB = 2
 
+emotion_map = {1: "pop", 2: "ballad", 3: "rock"}
+
 class RelevantFeedback:
     """
     適合性フィードバックによるオンライン学習クラス

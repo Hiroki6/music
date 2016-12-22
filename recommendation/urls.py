@@ -20,9 +20,10 @@ urlpatterns = [
     url(r'^questionnaire/$', recommendation_controller.questionnaire, name = 'questionnaire'),
     url(r'^end/$', recommendation_controller.end, name = 'end'),
     url(r'^$', emotion_controller.index, name = 'index'),
-    url(r'^select_situation/$', emotion_controller.index, name = 'select_search'),
+    url(r'^select_situation/$', emotion_controller.index, name = 'select_situation'),
     url(r'^select_search/$', emotion_controller.select_search, name = 'select_search'),
     url(r'^relevant_feedback_single/$', emotion_controller.relevant_feedback, name = 'relevant_feedback'),
     url(r'^emotion_feedback_single/$', emotion_controller.emotion_feedback_model, name = 'emotion_feedback_model'),
-    url(r'^emotion_feedback_baseline/$', emotion_controller.emotion_feedback_baseline, name = 'emotion_feedback_baseline')
+    url(r'^emotion_feedback_baseline/$', emotion_controller.emotion_feedback_baseline, name = 'emotion_feedback_baseline'),
+    url(r'^searched_songs/(?P<feedback_type>\d+)$', emotion_controller.searched_songs, name = 'searched_songs')
     ]

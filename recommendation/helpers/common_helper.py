@@ -32,10 +32,10 @@ def get_search_emotions_dict():
 
     return emotions
 
-"""
-ユーザーのモデル初期化
-"""
 def init_user_model(user_id, relevant_type):
+    """
+    ユーザーのモデル初期化
+    """
     delete_user_listening_history(user_id, relevant_type)
     exec_functions.init_redis_user_model(str(user_id), relevant_type)
 
@@ -43,11 +43,10 @@ def init_all_user_model(user_id):
     exec_functions.init_redis_user_model(user_id, "emotion")
     exec_functions.init_redis_user_model(user_id, "relevant")
 
-"""
-ユーザーのそのシチュエーションにおける指定した状況の視聴回数を表示する
-"""
 def get_count_listening(user_id, situation, feedback_type):
-
+    """
+    ユーザーのそのシチュエーションにおける指定した状況の視聴回数を表示する
+    """
     listening_count = 0
     if feedback_type == "relevant":
         listening_count = EmotionRelevantSong.objects.filter(user_id=user_id, situation=situation).values("song").distinct().count()
@@ -56,19 +55,17 @@ def get_count_listening(user_id, situation, feedback_type):
 
     return listening_count
 
-"""
-状況と選択した印象語の永続化完了
-"""
 def save_situation_and_emotion(user_id, situation, emotions):
-
+    """
+    状況と選択した印象語の永続化完了
+    """
     for emotion in emotions:
         obj, created = SituationEmotion.objects.get_or_create(user_id=user_id, situation=situation, emotion_id=int(emotion))
 
-"""
-現在のユーザーの検索状況を取得する
-"""
 def get_now_search_situation(user_id):
-
+    """
+    現在のユーザーの検索状況を取得する(emotion一つのみ取得)
+    """
     user_situations = SituationEmotion.objects.filter(user_id=user_id).values()
     situation_count = len(user_situations)
     now_situation = user_situations[situation_count-1]['situation']
@@ -85,34 +82,33 @@ def delete_user_listening_history(user_id, relevant_type):
     else:
         EmotionEmotionbasedSong.objects.filter(user_id=user_id).delete()
 
-"""
-印象語による検索
-"""
 def search_by_emotion(emotion):
+    """
+    印象語による検索
+    """
     emotion_map = {1: "-pop", 2: "-ballad", 3: "-rock"}
     songs = SearchMusicCluster.objects.order_by(emotion_map[emotion])
     return songs[:300]
 
-"""
-楽曲ID集合からSong Object取得
-"""
 def get_song_objs(song_ids):
+    """
+    楽曲ID集合からSong Object取得
+    """
     song_objs = Song.objects.filter(id__in=song_ids)
     return song_objs
 
-"""
-楽曲IDからSong Object取得
-"""
 def get_song_obj(song_id):
+    """
+    楽曲IDからSong Object取得
+    """
     song_obj = Song.objects.filter(id=song_id)
     return song_obj
 
-"""
-推薦した楽曲を保存する
-feedback_type: {0: 適合性, 1: 印象語}
-"""
 def save_search_song(user_id, song_id, situation, feedback_type):
-
+    """
+    推薦した楽曲を保存する
+    feedback_type: {0: 適合性, 1: 印象語}
+    """
     now = datetime.now()
     if SearchSong.objects.filter(user_id=user_id, situation=situation, song_id=song_id, feedback_type=feedback_type).exists():
         SearchSong.objects.filter(user_id=user_id, situation=situation, song_id=song_id, feedback_type=feedback_type).update(updated_at=now)
@@ -124,10 +120,10 @@ def get_now_search_song(user_id, situation, feedback_type):
     now_song_obj = SearchSong.objects.order_by("updated_at").filter(user_id=user_id, situation=situation, feedback_type=feedback_type).reverse().first()
     return get_song_obj(now_song_obj.id)
 
-"""
-この楽曲より前の楽曲が存在するか
-"""
 def is_back_song(user_id, situation, song_id, feedback_type):
+    """
+    この楽曲より前の楽曲が存在するか
+    """
     song_obj = SearchSong.objects.filter(user_id=user_id, situation=situation, song_id=song_id, feedback_type=feedback_type)
     if song_obj:
         is_back_song = SearchSong.objects.filter(user_id=user_id, situation=situation, created_at__lt=song_obj[0].created_at).exists()
@@ -135,10 +131,10 @@ def is_back_song(user_id, situation, song_id, feedback_type):
         is_back_song = False
     return is_back_song
 
-"""
-モデルから楽曲取得
-"""
 def get_top_song(user, situation, emotions, feedback_type):
+    """
+    モデルから楽曲取得
+    """
     song_obj = None
     if SearchSong.objects.filter(user_id=user, situation=situation, feedback_type=feedback_type).exists():
         song_obj = get_now_search_song(user, situation, feedback_type)
@@ -148,3 +144,43 @@ def get_top_song(user, situation, emotions, feedback_type):
         save_search_song(user, song_obj[0].id, situation, feedback_type)
     return song_obj
 
+def get_search_songs(user_id, situation, feedback_type):
+    """
+    検索された楽曲の一覧を取得する
+    """
+    search_song_objs = SearchSong.objects.filter(user_id=user_id, situation=situation, feedback_type=feedback_type)
+    return search_song_objs
+
+def save_best_song(user_id, song_id, situation, feedback_type):
+    """
+    ベスト楽曲の永続化
+    """
+    obj, created = SearchBestSong.objects.get_or_create(user_id=user_id, song_id=song_id, situation=situation, search_type=feedback_type)
+
+def save_last_song(user_id, situation, feedback_type):
+    """
+    最後に視聴した楽曲を取得して永続化する
+    """
+    last_song_id = get_last_song(user_id, situation, feedback_type)
+    obj, created = SearchLastSong.objects.get_or_create(user_id=user_id, song_id=last_song_id, situation=situation, search_type=feedback_type)
+
+def get_last_song(user_id, situation, feedback_type):
+    """
+    user_id, situation, feedback_typeにおける最後に視聴した楽曲を取得する
+    """
+    last_song_id = SearchSong.objects.filter(user_id=user_id, situation=situation, feedback_type=feedback_type).order_by("updated_at").reverse()[0].song_id
+    return last_song_id
+
+def get_not_feedback_type(user_id, situation):
+    """
+    ユーザーがその状況で行っていないフィードバックタイプを返す
+    @return(feedback_type): route
+    """
+    s_b_obj = SearchBestSong.objects.filter(user_id=user_id, situation=situation)
+    if len(s_b_obj) == 2:
+        return ""
+    else:
+        if s_b_obj[0].search_type == 0:
+            return "emotion_feedback_single/"
+        else:
+            return "relevant_feedback_single/"
