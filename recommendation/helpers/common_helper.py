@@ -28,7 +28,8 @@ def get_search_emotions_dict():
     emotions = {}
     tags = Tag.objects.all()
     for tag in tags:
-        emotions[tag.id] = tag.name
+        if tag.search_flag:
+            emotions[tag.id] = (tag.name, tag.japanese)
 
     return emotions
 
@@ -69,11 +70,12 @@ def get_now_search_situation(user_id):
     user_situations = SituationEmotion.objects.filter(user_id=user_id).values()
     situation_count = len(user_situations)
     now_situation = user_situations[situation_count-1]['situation']
-    emotions = [user_situations[situation_count-1]["emotion_id"]]
-    # for i in xrange(situation_count-1, 0, -1):
-    #     if user_situations[i]["situation"] != now_situation:
-    #         break
-    #     emotions.append(user_situations[i]["emotion_id"])
+    emotions = []
+    #emotions = [user_situations[situation_count-1]["emotion_id"]]
+    for i in xrange(situation_count-1, 0, -1):
+        if user_situations[i]["situation"] != now_situation:
+            break
+        emotions.append(user_situations[i]["emotion_id"])
     return now_situation, emotions
 
 def delete_user_listening_history(user_id, relevant_type):

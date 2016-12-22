@@ -32,7 +32,7 @@ class EmotionBaseline(object):
     """
     def __init__(self, user, emotions):
         self.user = user
-        self.emotions = emotions
+        self.emotions = map(int, emotions)
 
     def _save_top_song(self):
         """
@@ -105,6 +105,7 @@ class EmotionFeedback(EmotionBaseline):
         EmotionBaseline.__init__(self, user, emotions)
         self._get_params_by_redis()
         self.cy_obj = cy_ef.CyEmotionFeedback(self.W)
+        self._set_emotion_dict()
 
     def _get_params_by_redis(self):
         self.r = common.get_redis_obj(HOST, PORT, DB)
@@ -153,20 +154,22 @@ class EmotionFeedback(EmotionBaseline):
         """
         検索対象の印象語に含まれている楽曲から回帰値の高いk個の楽曲を取得する
         """
-        #songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotions, "emotion")
-        song_cluster_map = common.get_song_and_cluster()
         if hasattr(self, "feedback"):
-            songs, song_tag_map = common.get_not_listening_songs_by_multi_emotion(self.user, self.emotions, "emotion")
-            rankings = [(self.cy_obj.predict(tags)*song_cluster_map[song_id][emotion_map[int(self.emotions[0])]], song_id) for song_id, tags in song_tag_map.items()]
+            song_map = common.get_song_and_cluster()
+            songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotions, "emotion")
+            rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
+            for ranking in rankings:
+                for emotion in self.emotions:
+                    ranking[0] *= song_map[ranking[1]][self.emotion_map[emotion]]
             common.listtuple_sort_reverse(rankings)
             self.top_song = rankings[0][1]
-            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10], self.emotions, emotion_map[self.feedback], self.plus_or_minus)
+            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10], self.emotion_map, self.emotions, emotion_map[self.feedback], self.plus_or_minus)
         else:
-            songs, song_tag_map = common.get_not_listening_songs_by_multi_emotion(self.user, self.emotions, "emotion", True)
+            songs, song_tag_map = common.get_initial_not_listening_songs(self.user, self.emotion_map, self.emotions, "emotion")
             random_song = random.randint(0,1000)
             self.top_song = songs[random_song]
             rankings = [(song_tag_map[self.top_song] ,self.top_song)]
-            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings, self.emotions)
+            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings, self.emotion_map, self.emotions)
         self.top_matrix = song_tag_map[self.top_song]
         self._save_top_song()
         song_tags = []
@@ -225,3 +228,10 @@ class EmotionFeedback(EmotionBaseline):
         self.bound = bound_map[self.feedback] / pow(2, count-1)
         #self.bound = bound_map[self.feedback] / count
         #self.bound = bound_map[self.feedback] * math.exp(-(count-1))
+
+    def _set_emotion_dict(self):
+        self.emotion_map = {}
+        tags = models.Tag.objects.all()
+        for tag in tags:
+            if tag.search_flag:
+                self.emotion_map[tag.id] = tag.name

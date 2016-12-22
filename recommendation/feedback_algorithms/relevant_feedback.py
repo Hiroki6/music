@@ -26,7 +26,8 @@ class RelevantFeedback:
     def __init__(self, user, emotions):
         self.user = user
         self._get_params_by_redis()
-        self.emotions = emotions
+        self.emotions = map(int, emotions)
+        self._set_emotion_dict()
         self.cy_obj = cy_rf.CyRelevantFeedback(self.W, self.bias, 43)
 
     def _get_params_by_redis(self):
@@ -103,12 +104,15 @@ class RelevantFeedback:
         """
         #songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotions)
         # 初期検索の時
-        song_cluster_map = common.get_song_and_cluster()
         if init_flag:
-            pass
+            songs, song_tag_map = common.get_initial_not_listening_songs(self.user, self.emotion_map, self.emotions)
+            random_song = random.randint(0,1000)
+            rankings = [(song_tag_map[self.top_song] ,self.top_song)]
+            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings, self.emotion_map, self.emotions)
         else:
-            songs, song_tag_map = common.get_not_listening_songs_by_multi_emotion(self.user, self.emotions)
-            rankings = [(self.cy_obj.predict(tags)*song_cluster_map[song_id][emotion_map[int(self.emotions[0])]], song_id) for song_id, tags in song_tag_map.items()]
+            song_map = common.get_song_and_cluster()
+            songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotions)
+            rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
             common.listtuple_sort_reverse(rankings)
             common.write_top_k_songs(self.user, "relevant_k_song.txt", rankings[:10], self.emotions)
         return rankings[:k]
@@ -116,3 +120,10 @@ class RelevantFeedback:
     def _update_params_into_redis(self):
         common.update_redis_key(self.r, "W_" + self.user, self.W)
         common.save_scalar(self.r, "bias", self.user, self.bias)
+
+    def _set_emotion_dict(self):
+        self.emotion_map = {}
+        tags = models.Tag.objects.all()
+        for tag in tags:
+            if tag.search_flag:
+                self.emotion_map[tag.id] = tag.name

@@ -19,7 +19,7 @@ sys.dont_write_bytecode = True
 from package import *
 
 emotion_map = {0: "", 1: "calm", 2: "tense", 3: "aggressive", 4: "lively", 5: "peaceful"}
-situation_map = {0: "", 1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "運転中"}
+situation_map = {0: "", 1: "運動中", 2: "起床時", 3: "作業中", 4: "通勤中", 5: "就寝時", 6: "運転中"}
 #situation_map = {0: "", 1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "純粋に音楽を聴く時"}
 
 @login_required

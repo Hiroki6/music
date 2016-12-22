@@ -14,8 +14,13 @@ class Cluster(models.Model):
     name = models.CharField(max_length=50)
 
 class Tag(models.Model):
+    """
+    japanese: 和訳
+    """
     name = models.CharField(max_length=50)
+    japanese = models.CharField(max_length=50, null=True)
     cluster = models.ForeignKey(Cluster, null=True)
+    search_flag = models.BooleanField(default=True)
 
 class Artist(models.Model):
     name = models.CharField(max_length=255)
@@ -158,6 +163,7 @@ class SearchTag(models.Model):
     pop = models.FloatField(null=True, blank=True)
     ballad = models.FloatField(null=True, blank=True)
     rock = models.FloatField(null=True, blank=True)
+    cluster = models.CharField(max_length=50, null=True, blank=True)
 
 class SearchMusicCluster(models.Model):
     """
