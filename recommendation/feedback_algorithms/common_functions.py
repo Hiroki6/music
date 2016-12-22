@@ -191,18 +191,20 @@ def get_song_and_cluster():
 """
 def get_upper_songs(emotion, value):
 
-    if emotion == 0:
+    if emotion == 1:
+        print "pop"
         return models.SearchMusicCluster.objects.order_by("pop").filter(pop__gte=value)
-    elif emotion == 1:
+    elif emotion == 2:
         return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__gte=value)
     else:
         return models.SearchMusicCluster.objects.order_by("rock").filter(rock__gte=value)
 
 def get_lower_songs(emotion, value):
 
-    if emotion == 0:
+    if emotion == 1:
+        print "pop"
         return models.SearchMusicCluster.objects.order_by("pop").filter(pop__lte=value)
-    elif emotion == 1:
+    elif emotion == 2:
         return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__lte=value)
     else:
         return models.SearchMusicCluster.objects.order_by("rock").filter(rock__lte=value)
