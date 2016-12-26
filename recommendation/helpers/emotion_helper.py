@@ -52,16 +52,16 @@ def get_top_song(user, situation, emotions, feedback_type):
         song_obj = get_now_search_song(user, situation, feedback_type)
     else:
         print "get_top_song"
-        song_ids = exec_functions.get_song_by_emotion(user, emotions)
+        song_ids = exec_functions.get_song_by_emotion(user, emotions, situation)
         song_obj = get_song_objs(song_ids)
         save_search_song(user, song_obj[0].id, situation, feedback_type)
     return song_obj
 
-def learning_and_get_song(user, emotions):
+def learning_and_get_song(user, emotions, situation):
     """
     学習と楽曲の取得(emotion)
     """
-    song_ids = exec_functions.learning_and_get_song_by_emotion(user, emotions, True)
+    song_ids = exec_functions.learning_and_get_song_by_emotion(user, emotions, situation, True)
     return get_song_objs(song_ids)
 
 def get_back_song(user, song_id, situation):

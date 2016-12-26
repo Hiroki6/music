@@ -211,3 +211,10 @@ class EvaluateSearch(models.Model):
     user = models.ForeignKey(User)
     search_type = models.CharField(max_length=50)
     rating = models.IntegerField(null=False, blank=False)
+
+class ComparisonSearchType(models.Model):
+    """
+    どちらの検索タイプが良かったか比較する
+    """
+    user = models.ForeignKey(User)
+    search_type = models.CharField(max_length=50)

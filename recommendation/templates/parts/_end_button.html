@@ -1,0 +1,8 @@
+{% if listening_count < 10 %}
+<form class = "refresh-form" method = "POST" action = "/recommendation/finish_search/">
+  {% csrf_token %}
+  <input type = "hidden" name = "feedback_type" value = {{ feedback_type }}>
+  <input type = "hidden" name = "situation" value = {{ situation }}>
+  <button class = "end-link" type = "submit" name = "finish">終了する</button>
+</form>
+{% endif %}

@@ -77,7 +77,7 @@ cdef class CyEmotionFeedback:
             np.ndarray w
    
         self.margin = 0.0
-        w = np.zeros(43)
+        w = np.zeros(44)
         count = 0
         for i in xrange(1000):
             all_error = 0.0

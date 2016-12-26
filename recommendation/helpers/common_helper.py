@@ -24,7 +24,7 @@ def get_feedback_dict():
 """
 状況に対する印象語選択肢の辞書
 """
-def get_search_emotions_dict():
+def get_search_emotions_map():
     emotions = {}
     tags = Tag.objects.all()
     for tag in tags:
@@ -178,11 +178,84 @@ def get_not_feedback_type(user_id, situation):
     ユーザーがその状況で行っていないフィードバックタイプを返す
     @return(feedback_type): route
     """
-    s_b_obj = SearchBestSong.objects.filter(user_id=user_id, situation=situation)
-    if len(s_b_obj) == 2:
-        return ""
+    sb_obj = SearchLastSong.objects.filter(user_id=user_id, situation=situation)
+    if len(sb_obj) == 2:
+        return 2
     else:
-        if s_b_obj[0].search_type == 0:
-            return "emotion_feedback_single/"
-        else:
-            return "relevant_feedback_single/"
+        return sb_obj[0].search_type
+
+def get_answer_song(user_id, type):
+    """
+    各状況のベストソング辞書取得
+    {situation: [song_obj]}
+    """
+    if type == "best":
+        s_objs = SearchBestSong.objects.filter(user_id=user_id)
+    else:
+        s_objs = SearchLastSong.objects.filter(user_id=user_id)
+    song_map = {}
+    for s_obj in s_objs:
+        situation = s_obj.situation
+        if not song_map.has_key(situation):
+            song_map.setdefault(situation, [])
+        song_map[situation].append(s_obj)
+    
+    return song_map
+
+def get_answers_song(user_id):
+    """
+    ベスト楽曲、ラスト楽曲の両方の取得
+    ({situation: [best_song_obj]}, {situation: [last_song_obj]})
+    """
+    best_song_map = get_answer_song(user_id, "best")
+    last_song_map = get_answer_song(user_id, "last")
+
+    return best_song_map, last_song_map
+
+def get_listening_songs_by_situation(user_id, situation):
+    song_objs = SearchSong.objects.filter(user_id=user_id, situation=situation)
+    return song_objs
+
+def save_best_songs(user_id, situation, song_ids, feedback_types):
+    
+    for song_id, feedback_type in zip(song_ids, feedback_types):
+
+        obj, created = SearchBestSong.objects.get_or_create(user_id=user_id, song_id=song_id, situation=situation, search_type=feedback_type)
+
+def get_url_about_search(user_id):
+    """
+    検索終了かどうかの判定
+    終了ならアンケート画面
+    終了でなければ検索画面へ
+    """
+    searched_situations = SearchBestSong.objects.filter(user_id=user_id).values_list('situation', flat=True).order_by('situation').distinct()
+    if len(searched_situations) >= 2:
+        return "/recommendation/emotion_questionnaire/"
+    else:
+        return "/recommendation/"
+
+def get_searched_situations_by_user(user_id):
+    """
+    ユーザーが既に検索している状況を削除する
+    """
+    user_all_situations = SituationEmotion.objects.filter(user_id=3).values_list("situation", flat=True).order_by("situation").distinct()
+    return user_all_situations
+
+def get_situations_map(user_id):
+
+    situations = {1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "運転中"}
+    user_searched_situations = get_searched_situations_by_user(user_id)
+    for situation in user_searched_situations:
+        situations.pop(situation)
+
+    return situations
+
+def save_emotion_questionnaire(user_id, relevant_rate, emotion_rate, comparison):
+    
+    
+    obj, created = EvaluateSearch.objects.get_or_create(user_id=user_id, search_type="relevant", rating=relevant_rate)
+    obj, created = EvaluateSearch.objects.get_or_create(user_id=user_id, search_type="emotion", rating=emotion_rate)
+    if comparison:
+        obj, created = ComparisonSearchType.objects.get_or_create(user_id=user_id, search_type="emotion")
+    else:
+        obj, created = ComparisonSearchType.objects.get_or_create(user_id=user_id, search_type="relevant")

@@ -21,9 +21,7 @@
   <div class = "another-search">
     <a class = "another-search-link" href = "/recommendation/relevant_feedback_single/">適合性フィードバック検索へ</a>
   </div>
-  {% if listening_count < 10 %}
-    <a href = "/recommendation/searched_songs/1">終了する</a>
-  {% endif %}
+  {% include "parts/_end_button.html" %}
   {% if is_back_song %}
     {% include "parts/_back_button.html" %}
   {% endif %}

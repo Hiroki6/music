@@ -1286,7 +1286,7 @@ static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_s
 static PyObject *__pyx_tp_new_19cy_emotion_feedback_CyEmotionFeedback(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static __Pyx_CachedCFunction __pyx_umethod_PyDict_Type_items = {0, &__pyx_n_s_items, 0, 0, 0};
 static PyObject *__pyx_int_2;
-static PyObject *__pyx_int_43;
+static PyObject *__pyx_int_44;
 static PyObject *__pyx_int_neg_1;
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__2;
@@ -2289,7 +2289,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
  *             np.ndarray w
  * 
  *         self.margin = 0.0             # <<<<<<<<<<<<<<
- *         w = np.zeros(43)
+ *         w = np.zeros(44)
  *         count = 0
  */
   __pyx_v_self->margin = 0.0;
@@ -2297,7 +2297,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
   /* "cy_emotion_feedback.pyx":80
  * 
  *         self.margin = 0.0
- *         w = np.zeros(43)             # <<<<<<<<<<<<<<
+ *         w = np.zeros(44)             # <<<<<<<<<<<<<<
  *         count = 0
  *         for i in xrange(1000):
  */
@@ -2315,7 +2315,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
 
   /* "cy_emotion_feedback.pyx":81
  *         self.margin = 0.0
- *         w = np.zeros(43)
+ *         w = np.zeros(44)
  *         count = 0             # <<<<<<<<<<<<<<
  *         for i in xrange(1000):
  *             all_error = 0.0
@@ -2323,7 +2323,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
   __pyx_v_count = 0;
 
   /* "cy_emotion_feedback.pyx":82
- *         w = np.zeros(43)
+ *         w = np.zeros(44)
  *         count = 0
  *         for i in xrange(1000):             # <<<<<<<<<<<<<<
  *             all_error = 0.0
@@ -5491,11 +5491,11 @@ static int __Pyx_InitCachedConstants(void) {
   /* "cy_emotion_feedback.pyx":80
  * 
  *         self.margin = 0.0
- *         w = np.zeros(43)             # <<<<<<<<<<<<<<
+ *         w = np.zeros(44)             # <<<<<<<<<<<<<<
  *         count = 0
  *         for i in xrange(1000):
  */
-  __pyx_tuple_ = PyTuple_Pack(1, __pyx_int_43); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple_ = PyTuple_Pack(1, __pyx_int_44); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
@@ -5575,7 +5575,7 @@ static int __Pyx_InitGlobals(void) {
   __pyx_umethod_PyDict_Type_items.type = (PyObject*)&PyDict_Type;
   if (__Pyx_InitStrings(__pyx_string_tab) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   __pyx_int_2 = PyInt_FromLong(2); if (unlikely(!__pyx_int_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_int_43 = PyInt_FromLong(43); if (unlikely(!__pyx_int_43)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_int_44 = PyInt_FromLong(44); if (unlikely(!__pyx_int_44)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_int_neg_1 = PyInt_FromLong(-1); if (unlikely(!__pyx_int_neg_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   return 0;
   __pyx_L1_error:;

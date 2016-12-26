@@ -23,12 +23,13 @@ class RelevantFeedback:
     """
     適合性フィードバックによるオンライン学習クラス
     """
-    def __init__(self, user, emotions):
+    def __init__(self, user, situation, emotions):
         self.user = user
+        self.situation = situation
         self._get_params_by_redis()
         self.emotions = map(int, emotions)
         self._set_emotion_dict()
-        self.cy_obj = cy_rf.CyRelevantFeedback(self.W, self.bias, 43)
+        self.cy_obj = cy_rf.CyRelevantFeedback(self.W, self.bias, 44)
 
     def _get_params_by_redis(self):
         self.r = common.get_redis_obj(HOST, PORT, DB)
@@ -40,7 +41,7 @@ class RelevantFeedback:
         """
         学習データの取得
         """
-        relevant_datas = models.EmotionRelevantSong.objects.order_by("id").filter(user_id=int(self.user)).values()
+        relevant_datas = models.EmotionRelevantSong.objects.order_by("id").filter(user_id=int(self.user), situation=self.situation).values()
         self.song_relevant = {} # {song_id: relevant_type}
         if learning_method == "online":
             relevant_datas = relevant_datas.reverse()
@@ -60,7 +61,7 @@ class RelevantFeedback:
 
     def _set_listening_songs(self):
 
-        self.songs, self.song_tag_map = common.get_listening_songs(self.user)
+        self.songs, self.song_tag_map = common.get_listening_songs(self.user, self.emotion_map, self.emotions)
 
     def fit(self):
         """
@@ -105,16 +106,17 @@ class RelevantFeedback:
         #songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotions)
         # 初期検索の時
         if init_flag:
-            songs, song_tag_map = common.get_initial_not_listening_songs(self.user, self.emotion_map, self.emotions)
+            songs, song_tag_map = common.get_initial_not_listening_songs(self.user, self.emotion_map, self.emotions, "relevant")
             random_song = random.randint(0,1000)
+            self.top_song = songs[random_song]
             rankings = [(song_tag_map[self.top_song] ,self.top_song)]
             common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings, self.emotion_map, self.emotions)
         else:
             song_map = common.get_song_and_cluster()
-            songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotions)
+            songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotion_map, self.emotions)
             rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
             common.listtuple_sort_reverse(rankings)
-            common.write_top_k_songs(self.user, "relevant_k_song.txt", rankings[:10], self.emotions)
+            common.write_top_k_songs(self.user, "relevant_k_song.txt", rankings[:10], self.emotion_map, self.emotions)
         return rankings[:k]
 
     def _update_params_into_redis(self):

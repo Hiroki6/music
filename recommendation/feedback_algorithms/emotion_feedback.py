@@ -43,13 +43,18 @@ class EmotionBaseline(object):
         common.save_one_dim_array(self.r, "top_matrix_"+self.user, self.top_matrix)
 
     def get_top_song(self):
-
+        """
+        推薦する楽曲の取得
+        """
         self.top_song = self.bound_songs[0]
         self.top_matrix = self.bound_song_tag_map[self.top_song]
         self._save_top_song()
         return self.top_song
 
     def set_params(self):
+        """
+        パラメータの設定
+        """
         self.k = 1
         self._create_k_bound_songs()
 
@@ -101,15 +106,19 @@ class EmotionFeedback(EmotionBaseline):
     """
     印象語フィードバックによるオンライン学習クラス
     """
-    def __init__(self, user, emotions):
+    def __init__(self, user, emotions, situation):
         EmotionBaseline.__init__(self, user, emotions)
         self._get_params_by_redis()
         self.cy_obj = cy_ef.CyEmotionFeedback(self.W)
         self._set_emotion_dict()
+        self.situation = situation
 
     def _get_params_by_redis(self):
+        """
+        redisからデータ取得
+        """
         self.r = common.get_redis_obj(HOST, PORT, DB)
-        key =  "W_" + self.user
+        key = "W_" + self.user
         self.W = common.get_one_dim_params(self.r, key)
  
     def set_params(self):
@@ -133,18 +142,23 @@ class EmotionFeedback(EmotionBaseline):
         X = self.feedback_matrix - self.top_matrix
         self.cy_obj.fit(X)
         self._update_params_into_redis()
- 
-    def k_fit(self):
+
+    def k_online_fit(self):
         """
         上位k個のランキング学習
         上位K個の決定手法として、範囲アルファ*減衰定数の範囲で取得する
+        オンライン学習
         """
-        """for song, tags in self.bound_song_tag_map.items():
-            #if self.plus_or_minus == 1:
+        for song, tags in self.bound_song_tag_map.items():
             X = tags - self.top_matrix
-            #else:
-            #    X = self.top_matrix - tags
             self.cy_obj.fit(X, True)
+        self._update_params_into_redis()
+
+    def k_batch_fit(self):
+        """
+        上位k個のランキング学習
+        上位K個の決定手法として、範囲アルファ*減衰定数の範囲で取得する
+        バッチ学習
         """
         self.W = self.cy_obj.batch_fit(self.bound_song_tag_map, self.top_matrix)
         print self.W
@@ -156,11 +170,8 @@ class EmotionFeedback(EmotionBaseline):
         """
         if hasattr(self, "feedback"):
             song_map = common.get_song_and_cluster()
-            songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotions, "emotion")
+            songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotion_map, self.emotions, "emotion")
             rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
-            for ranking in rankings:
-                for emotion in self.emotions:
-                    ranking[0] *= song_map[ranking[1]][self.emotion_map[emotion]]
             common.listtuple_sort_reverse(rankings)
             self.top_song = rankings[0][1]
             common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10], self.emotion_map, self.emotions, emotion_map[self.feedback], self.plus_or_minus)
@@ -199,6 +210,9 @@ class EmotionFeedback(EmotionBaseline):
         self.tags = [(tag.id-1, tag.name) for tag in tags]
     
     def _update_params_into_redis(self):
+        """
+        パラメータの更新
+        """
         print "パラメータの更新"
         common.update_redis_key(self.r, "W_" + self.user, self.W)
 
@@ -215,7 +229,7 @@ class EmotionFeedback(EmotionBaseline):
         self._decision_bound()
         print "plus or minus %d" % (self.plus_or_minus)
         print "feedback %s" % (emotion_map[self.feedback])
-        self.bound_songs, self.bound_song_tag_map = common.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, emotion_value, self.plus_or_minus, self.bound)
+        self.bound_songs, self.bound_song_tag_map = common.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, self.emotion_map, self.emotions, emotion_value, self.plus_or_minus, self.bound)
         print "bound %.5f" % (self.bound)
         print "number of bound songs %d" % (len(self.bound_songs))
 
@@ -223,7 +237,8 @@ class EmotionFeedback(EmotionBaseline):
         """
         boundの決定
         """
-        user_feedbacks = models.EmotionEmotionbasedSong.objects.filter(user_id=int(self.user)).values()
+        # situationごとのフィードバックの回数を取得
+        user_feedbacks = models.EmotionEmotionbasedSong.objects.filter(user_id=int(self.user), situation=int(self.situation)).values()
         count = len(user_feedbacks)
         self.bound = bound_map[self.feedback] / pow(2, count-1)
         #self.bound = bound_map[self.feedback] / count
