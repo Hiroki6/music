@@ -39,13 +39,7 @@
     {% endfor %}
   </div>
   <div>
-    <a class = "another-search-link" href = "/recommendation/emotion_feedback_single/">印象語フィードバック検索へ</a>
   </div>
   {% include "parts/_end_button.html" %}
-    <!--<a href = "/recommendation/searched_songs/0">終了する</a>-->
-  {% if is_back_song %}
-    {% include "parts/_back_button.html" %}
-  {% endif %}
-  {% include "parts/_refresh_search_button.html" %}
 </div>
 {% endblock main %}

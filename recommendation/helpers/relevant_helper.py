@@ -62,3 +62,15 @@ def get_back_song(user, song_id, situation):
     if back_song_id:
         SearchSong.objects.filter(user_id=user, situation=situation, song_id=back_song_id, feedback_type=0).update(updated_at=datetime.now())
     return get_song_obj(back_song_id)
+
+def get_last_top_songs(user):
+    """
+    終了後のtop_kの楽曲オブジェクトを取得する
+    """
+    r = get_redis_obj("localhost", 6379, 2)
+    song_ids = get_one_dim_params(r, "top_k_songs_" + str(user))
+    song_objs = []
+    for index, song_id in enumerate(song_ids):
+        song_objs.append((index+1, Song.objects.filter(id=song_id)[0]))
+    return song_objs
+

@@ -23,18 +23,18 @@
       <h2>アンケート</h2>
       <form class = "questionnaire-form" name = "questionnare" method = "POST" action = "/recommendation/emotion_questionnaire/">
         {% csrf_token %}
-        <h4>1.適合性フィードバックを用いた音楽検索システムは</h4>
-        <label><input type = "radio" name = "q1" value = 1>合っていなかった</label>
-        <label><input type = "radio" name = "q1" value = 2>どちらかといえば合っていなかった</label>
+        <h4>1.適合性フィードバックを用いた音楽検索システムは求める楽曲に早くたどり着けましたか？</h4>
+        <label><input type = "radio" name = "q1" value = 1>早くたどり着けなかった</label>
+        <label><input type = "radio" name = "q1" value = 2>あまり早くたどり着けなかった</label>
         <label><input type = "radio" name = "q1" value = 3>どちらともいえない</label>
-        <label><input type = "radio" name = "q1" value = 4>どちらかといえば合っていた</label>
-        <label><input type = "radio" name = "q1" value = 5>合っていた</label>
-        <h4>2.インタラクションを用いた推薦システムの中で一番良かった楽曲はどの程度好みに合っていましたか</h4>
-        <label><input type = "radio" name = "q2" value = 1>合っていなかった</label>
-        <label><input type = "radio" name = "q2" value = 2>どちらかといえば合っていなかった</label>
+        <label><input type = "radio" name = "q1" value = 4>割と早くたどり着けた</label>
+        <label><input type = "radio" name = "q1" value = 5>早くたどり着けた</label>
+        <h4>1.印象語フィードバックを用いた音楽検索システムは求める楽曲に早くたどり着けましたか？</h4>
+        <label><input type = "radio" name = "q2" value = 1>早くたどり着けなかった</label>
+        <label><input type = "radio" name = "q2" value = 2>あまり早くたどり着けなかった</label>
         <label><input type = "radio" name = "q2" value = 3>どちらともいえない</label>
-        <label><input type = "radio" name = "q2" value = 4>どちらかといえば合っていた</label>
-        <label><input type = "radio" name = "q2" value = 5>合っていた</label>
+        <label><input type = "radio" name = "q2" value = 4>割と早くたどり着けた</label>
+        <label><input type = "radio" name = "q2" value = 5>早くたどり着けた</label>
         <h4>3.二つの検索システムはどちらが使いやすかったですか？</h4>
         <label><input type = "radio" name = "q3" value = 0>適合性フィードバックを用いた検索システム</label>
         <label><input type = "radio" name = "q3" value = 1>印象語フィードバックを用いた検索システム</label>

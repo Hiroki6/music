@@ -29,6 +29,7 @@ def index(request):
     状況の選択
     """
     error_msg = ""
+    print request.user.id
     situations = common_helper.get_situations_map(request.user.id)
     emotions = common_helper.get_search_emotions_map()
     if request.GET.has_key("situation"):
@@ -139,17 +140,22 @@ def searched_songs(request, feedback_type):
     return render(request, 'emotions/searched_songs.html', {"songs": songs, "situation": situation, "feedback_type": feedback_type, "autoplay": 0, "error_msg": error_msg})
 
 @login_required
-def finish_search(request):
+def finish_search(request, situation, feedback_type):
     """
     検索終了ボタンが押された時の挙動
+    まず、10曲を表示して、好きな楽曲を複数選択させる
     両方の検索が終了していれば、視聴した楽曲全て取得
     片方の検索が終了していれば、もう一方の検索条件に強制的に飛ばす
     """
-    situation = int(request.POST["situation"])
-    feedback_type = int(request.POST["feedback_type"])
+    error_msg = ""
     common_helper.save_last_song(request.user.id, situation, feedback_type)
-    url = get_next_url_for_all_search(request.user.id, situation)
-    return redirect(url)
+    songs = get_last_top_songs_by_type(request.user.id, int(feedback_type))
+    if request.method == "POST":
+        song_ids, ranks = get_like_songids_and_ranks(request)
+        common_helper.save_rank_songs(request.user.id, situation, song_ids, ranks, feedback_type)
+        url = get_next_url_for_all_search(request.user.id, situation)
+        return redirect(url)
+    return render(request, 'emotions/top_k_songs.html', {"songs": songs, "situation": situation, "feedback_type": feedback_type, "autoplay": 0})
 
 @login_required
 def listening_songs(request, situation):

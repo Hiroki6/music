@@ -117,6 +117,7 @@ class RelevantFeedback:
             rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
             common.listtuple_sort_reverse(rankings)
             common.write_top_k_songs(self.user, "relevant_k_song.txt", rankings[:10], self.emotion_map, self.emotions)
+            self._save_top_k_songs(rankings[:10])
         return rankings[:k]
 
     def _update_params_into_redis(self):
@@ -129,3 +130,13 @@ class RelevantFeedback:
         for tag in tags:
             if tag.search_flag:
                 self.emotion_map[tag.id] = tag.name
+
+    def _save_top_k_songs(self, rankings):
+        """
+        top_kの楽曲をredisに保存
+        """
+        key = "top_k_songs_" + self.user
+        common.delete_redis_key(self.r, key)
+        for ranking in rankings:
+            song_id = ranking[1]
+            self.r.rpush(key, song_id)

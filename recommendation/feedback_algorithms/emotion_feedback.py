@@ -160,7 +160,7 @@ class EmotionFeedback(EmotionBaseline):
         上位K個の決定手法として、範囲アルファ*減衰定数の範囲で取得する
         バッチ学習
         """
-        self.W = self.cy_obj.batch_fit(self.bound_song_tag_map, self.top_matrix)
+        self.W = self.cy_obj.batch_fit(self.bound_song_tag_map, self.top_matrix, 0.005)
         print self.W
         self._update_params_into_redis()
 
@@ -175,6 +175,7 @@ class EmotionFeedback(EmotionBaseline):
             common.listtuple_sort_reverse(rankings)
             self.top_song = rankings[0][1]
             common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10], self.emotion_map, self.emotions, emotion_map[self.feedback], self.plus_or_minus)
+            self._save_top_k_songs(rankings[:10])
         else:
             songs, song_tag_map = common.get_initial_not_listening_songs(self.user, self.emotion_map, self.emotions, "emotion")
             random_song = random.randint(0,1000)
@@ -250,3 +251,13 @@ class EmotionFeedback(EmotionBaseline):
         for tag in tags:
             if tag.search_flag:
                 self.emotion_map[tag.id] = tag.name
+
+    def _save_top_k_songs(self, rankings):
+        """
+        top_kの楽曲をredisに保存
+        """
+        key = "top_k_songs_" + self.user
+        common.delete_redis_key(self.r, key)
+        for ranking in rankings:
+            song_id = ranking[1]
+            self.r.rpush(key, song_id)

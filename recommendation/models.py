@@ -218,3 +218,13 @@ class ComparisonSearchType(models.Model):
     """
     user = models.ForeignKey(User)
     search_type = models.CharField(max_length=50)
+
+class TopKRelevantSong(models.Model):
+    """
+    各検索において最後に提示された１０曲から好きだと言われた楽曲
+    """
+    user = models.ForeignKey(User)
+    search_type = models.CharField(max_length=50)
+    song_rank = models.IntegerField(null=False, blank=False)
+    song = models.ForeignKey(Song)
+    situation = models.IntegerField(null=False, blank=False)

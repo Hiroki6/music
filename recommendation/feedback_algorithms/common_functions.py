@@ -237,7 +237,7 @@ def get_lower_songs(feedback_cluster, value, bound):
     if feedback_cluster == 1:
         return models.SearchMusicCluster.objects.order_by("pop").filter(pop__lte=value, pop__gte=value-bound)
     elif feedback_cluster == 2:
-        return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__lte=value, ballad_gte=value-bound)
+        return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__lte=value, ballad__gte=value-bound)
     else:
         return models.SearchMusicCluster.objects.order_by("rock").filter(rock__lte=value, rock__gte=value-bound)
 
@@ -310,7 +310,7 @@ def get_bound_songs(feedback_cluster, value, bound, plus_or_minus):
         m_objs = get_upper_songs(feedback_cluster, value, bound)
     else:
         m_objs = get_lower_songs(feedback_cluster, value, bound)
-        m_objs = songs.reverse()
+        m_objs = m_objs.reverse()
     
     songs = get_songs_by_musicclusters(feedback_cluster, m_objs)
     return m_objs, songs

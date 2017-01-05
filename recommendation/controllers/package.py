@@ -196,3 +196,24 @@ def process_questionnaire(request):
         return True
     else:
         return False
+
+def get_last_top_songs_by_type(user_id, feedback_type):
+    """
+    終了後のtop_kの楽曲オブジェクトをtypeによって取得する
+    """
+    song_objs = []
+    if feedback_type == 0:
+        song_objs = relevant_helper.get_last_top_songs(user_id)
+    else:
+        song_objs = emotion_helper.get_last_top_songs(user_id)
+    return song_objs
+
+def get_like_songids_and_ranks(request):
+    """
+    選択された好きな楽曲3つを取得
+    """
+    song_ids = request.POST.getlist("best_song")
+    ranks = []
+    for song_id in song_ids:
+        ranks.append(request.POST["rank_" + song_id])
+    return map(int, song_ids), map(int, ranks)

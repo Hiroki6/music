@@ -23,6 +23,8 @@ cdef class CyEmotionFeedback:
         np.ndarray W
         double margin
         double error
+        double C
+        double lmd
 
     def __cinit__(self,
             np.ndarray[DOUBLE, ndim=1, mode="c"] W):
@@ -66,7 +68,7 @@ cdef class CyEmotionFeedback:
             self.set_margin(X)
         self._repeat_optimization(X)
 
-    def batch_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix):
+    def batch_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double C):
         cdef:
             long song
             np.ndarray tags
@@ -77,6 +79,7 @@ cdef class CyEmotionFeedback:
             np.ndarray w
    
         self.margin = 0.0
+        self.C = C
         w = np.zeros(44)
         count = 0
         for i in xrange(1000):
@@ -110,10 +113,56 @@ cdef class CyEmotionFeedback:
                 self._update_W(X)
             self.error = self.calc_error(X)
 
+    def pagasos_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double lmd):
+        """
+        pagasosを用いた学習
+        """
+        cdef:
+            long song
+            np.ndarray tags
+            np.ndarray X
+            int i
+            double all_error = 0.0
+            int count
+   
+        self.lmd = lmd
+        count = 0
+        for i in xrange(1, 1001):
+            all_error = 0.0
+            for song, tags in bound_song_tag_map.items():
+                X = tags - top_matrix
+                self.error = self.calc_error(X)
+                if self.error <= 0:
+                    self._update_W_by_pagasos(X, i, False)
+                    continue
+                self._update_W_by_pagasos(X, i, True)
+                count += 1
+                all_error += self.error
+            if all_error <= 0:
+                print count
+                break
+        return self.W
+
     def _update_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
         
         cdef:
             double tau
 
         tau = self.error / np.linalg.norm(X)
-        self.W += tau * X
+        print "tau: %.5f" % (tau)
+        self.W += min(self.C, tau) * X
+
+    def _update_W_by_pagasos(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X, int iteration, bint is_update):
+        """
+        pagasosを用いた更新
+        """
+        cdef:
+            double eta
+            double new_param
+
+        eta = 1 / (self.lmd * iteration)
+        self.W *= (1 - 1/iteration)
+        if is_update:
+            self.W += eta * self.error * X
+        new_param = (1/math.sqrt(self.lmd))/np.linalg.norm(self.W)
+        self.W = min(1, new_param) * self.W

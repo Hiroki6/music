@@ -179,7 +179,7 @@ def get_not_feedback_type(user_id, situation):
     @return(feedback_type): route
     """
     sb_obj = SearchLastSong.objects.filter(user_id=user_id, situation=situation)
-    if len(sb_obj) == 2:
+    if len(sb_obj) >= 2:
         return 2
     else:
         return sb_obj[0].search_type
@@ -238,11 +238,10 @@ def get_searched_situations_by_user(user_id):
     """
     ユーザーが既に検索している状況を削除する
     """
-    user_all_situations = SituationEmotion.objects.filter(user_id=3).values_list("situation", flat=True).order_by("situation").distinct()
+    user_all_situations = SituationEmotion.objects.filter(user_id=user_id).values_list("situation", flat=True).order_by("situation").distinct()
     return user_all_situations
 
-def get_situations_map(user_id):
-
+def get_situations_map(user_id): 
     situations = {1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "運転中"}
     user_searched_situations = get_searched_situations_by_user(user_id)
     for situation in user_searched_situations:
@@ -259,3 +258,23 @@ def save_emotion_questionnaire(user_id, relevant_rate, emotion_rate, comparison)
         obj, created = ComparisonSearchType.objects.get_or_create(user_id=user_id, search_type="emotion")
     else:
         obj, created = ComparisonSearchType.objects.get_or_create(user_id=user_id, search_type="relevant")
+
+def get_redis_obj(host, port, db):
+    """
+    redisオブジェクトを取得
+    """
+    return redis.Redis(host=host, port=port, db=db)
+
+def get_one_dim_params(redis_obj, key):
+    """
+    redisから一次元配列の取得
+    """
+    params = redis_obj.lrange(key, 0, -1)
+    params = np.array(params, dtype=np.int64)
+    return params
+
+def save_rank_songs(user_id, situation, song_ids, ranks, feedback_type):
+    
+    for song_id, rank in zip(song_ids, ranks):
+
+        obj, created = TopKRelevantSong.objects.get_or_create(user_id=user_id, song_id=song_id, situation=situation, search_type=feedback_type, song_rank=rank)

@@ -27,8 +27,8 @@ urlpatterns = [
     url(r'^emotion_feedback_baseline/$', emotion_controller.emotion_feedback_baseline, name = 'emotion_feedback_baseline'),
     url(r'^searched_songs/(?P<feedback_type>\d+)$', emotion_controller.searched_songs, name = 'searched_songs'),
     url(r'^emotion_questionnaire/$', emotion_controller.questionnaire, name = 'emotion_questionnaire'),
-    #url(r'^finish_search/(?P<situation>\d+)$', emotion_controller.finish_search, name = 'finish_search'),
-    url(r'^finish_search/$', emotion_controller.finish_search, name = 'finish_search'),
+    url(r'^finish_search/(?P<situation>\d+)/(?P<feedback_type>\d+)$', emotion_controller.finish_search, name = 'finish_search'),
+    #url(r'^finish_search/$', emotion_controller.finish_search, name = 'finish_search'),
     url(r'^listening_songs/(?P<situation>\d+)$', emotion_controller.listening_songs, name = 'listening_songs'),
     url(r'^emotion_end/$', emotion_controller.end, name = 'emotion_end'),
     ]
