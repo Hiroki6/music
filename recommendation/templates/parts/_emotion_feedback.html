@@ -1,13 +1,29 @@
-<form class = "feedback-form" name = "feedback" method = "POST" action = "/recommendation/{{ url }}/">
-  {% csrf_token %}
-  <select name="select_feedback">
-    <option value=-1>フィードバックを選択してください</option>
-    {% for index, value in feedback_dict.items %}
-      <option value={{ index }}>{% if index < 5 %}&uarr;{% else %}&darr;{% endif %}{{ value }}</option>
-    {% endfor %}
-    <option value=11>rerecommend</option>
-  </select>
-  <input type = "hidden" name = "song_id" value = {{ song.id }}>
-  {% include "parts/_hidden_search_condition.html" %}
-  <input type = "submit" id = "indicator" value = "フィードバックをする">
-</form>
+<div class = "clearfix">
+  {% for index, value in feedback_dict.items %}
+    <div class = "emotion-feedback">
+      <form class = "feedback-form" name = "feedback" method = "POST" action = "/recommendation/{{ url }}/">
+        {% csrf_token %}
+        <button id = "indicator" name="select_feedback" value="{{ index }}"><i class="fa fa-caret-up" aria-hidden="true"></i></button>
+        <input type = "hidden" name = "song_id" value = {{ song.id }}>
+        {% include "parts/_hidden_search_condition.html" %}
+      </form>
+      <br/>{{ value.0 }}
+      <!--<br/>({{ value.1 }})-->
+      <br/>
+      <form class = "feedback-form" name = "feedback" method = "POST" action = "/recommendation/{{ url }}/">
+        {% csrf_token %}
+        <button class = "down-button" id = "indicator" name="select_feedback" value="{{ index|add:'3' }}"><i class="fa fa-caret-down" aria-hidden="true"></i></button>
+      <input type = "hidden" name = "song_id" value = {{ song.id }}>
+      {% include "parts/_hidden_search_condition.html" %}
+      </form>
+    </div>
+  {% endfor %}
+    <div class = "emotion-feedback">
+      <form class = "feedback-form" name = "feedback" method = "POST" action = "/recommendation/{{ url }}/">
+        {% csrf_token %}
+        <button class = "rerecommend-button" id = "indicator" name="select_feedback" value="7">rerecommend</button>
+        <input type = "hidden" name = "song_id" value = {{ song.id }}>
+          {% include "parts/_hidden_search_condition.html" %}
+      </form>
+    </div>
+</div>

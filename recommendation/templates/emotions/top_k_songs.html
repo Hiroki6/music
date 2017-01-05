@@ -1,0 +1,29 @@
+{% extends 'bases/emotion_base.html' %}
+
+{% block title %}トップ10曲{% endblock title %}
+
+{% block main %}
+
+<div class = "main">
+  <h2>好きな楽曲を複数選択してください</h2>
+  {% if error_msg %}
+    <h3 class = "error-msg">{{ error_msg }}</h3>
+  {% endif %}
+  <div class = "clearfix">
+    <form class = "like-form" name = "like" method = "POST" action = "/recommendation/finish_search/{{situation}}/{{feedback_type}}">
+    {% csrf_token %}
+    {% for index, song in songs %}
+      <div class = "content">
+        {% include "parts/_song_iframe.html" %}
+        <label><input class = "best-song-button" type="checkbox" name="best_song" value={{song.id}}>好き</label>
+        <input type = "hidden" name = "rank_{{ song.id }}" value = {{ index }}>
+      </div>
+    {% endfor %}
+    <input class = "select-song-submit" type = "submit" value = "選んだ曲を送信">
+    </form>
+  </div>
+</div>
+{% endblock main %}
+
+
+
