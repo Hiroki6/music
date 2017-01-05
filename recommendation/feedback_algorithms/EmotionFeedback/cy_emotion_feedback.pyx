@@ -68,7 +68,10 @@ cdef class CyEmotionFeedback:
             self.set_margin(X)
         self._repeat_optimization(X)
 
-    def batch_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double C):
+    def PARank_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double C):
+        """
+        Passive-Aggressive Perceptronアルゴリズムを用いた学習
+        """
         cdef:
             long song
             np.ndarray tags
@@ -89,7 +92,7 @@ cdef class CyEmotionFeedback:
                 self.error = self.calc_error(X)
                 if self.error <= 0:
                     continue
-                self._update_W(X)
+                self._update_W_by_PARank(X)
                 w += self.W
                 count += 1
                 all_error += self.error
@@ -110,7 +113,7 @@ cdef class CyEmotionFeedback:
                     print i
                 break
             else:
-                self._update_W(X)
+                self._update_W_by_PARank(X)
             self.error = self.calc_error(X)
 
     def pagasos_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double lmd):
@@ -143,8 +146,10 @@ cdef class CyEmotionFeedback:
                 break
         return self.W
 
-    def _update_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
-        
+    def _update_W_by_PARank(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
+        """
+        Passive-Aggressive Perceptronアルゴリズムを用いた更新
+        """
         cdef:
             double tau
 

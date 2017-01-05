@@ -939,15 +939,6 @@ static CYTHON_INLINE int __Pyx_IterFinish(void);
 
 static int __Pyx_IternextUnpackEndCheck(PyObject *retval, Py_ssize_t expected);
 
-#if CYTHON_COMPILING_IN_CPYTHON
-static PyObject* __Pyx_PyInt_AddObjC(PyObject *op1, PyObject *op2, long intval, int inplace);
-#else
-#define __Pyx_PyInt_AddObjC(op1, op2, intval, inplace)\
-    (inplace ? PyNumber_InPlaceAdd(op1, op2) : PyNumber_Add(op1, op2))
-#endif
-
-static CYTHON_INLINE void __Pyx_RaiseUnboundLocalError(const char *varname);
-
 static CYTHON_INLINE long __Pyx_div_long(long, long);
 
 #define UNARY_NEG_WOULD_OVERFLOW(x)\
@@ -1242,7 +1233,6 @@ static char __pyx_k_random[] = "random";
 static char __pyx_k_tau_5f[] = "tau: %.5f";
 static char __pyx_k_xrange[] = "xrange";
 static char __pyx_k_predict[] = "predict";
-static char __pyx_k_update_W[] = "_update_W";
 static char __pyx_k_is_update[] = "is_update";
 static char __pyx_k_iteration[] = "iteration";
 static char __pyx_k_ValueError[] = "ValueError";
@@ -1251,6 +1241,7 @@ static char __pyx_k_set_margin[] = "set_margin";
 static char __pyx_k_top_matrix[] = "top_matrix";
 static char __pyx_k_RuntimeError[] = "RuntimeError";
 static char __pyx_k_bound_song_tag_map[] = "bound_song_tag_map";
+static char __pyx_k_update_W_by_PARank[] = "_update_W_by_PARank";
 static char __pyx_k_repeat_optimization[] = "_repeat_optimization";
 static char __pyx_k_update_W_by_pagasos[] = "_update_W_by_pagasos";
 static char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
@@ -1299,7 +1290,7 @@ static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_time;
 static PyObject *__pyx_n_s_top_matrix;
 static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
-static PyObject *__pyx_n_s_update_W;
+static PyObject *__pyx_n_s_update_W_by_PARank;
 static PyObject *__pyx_n_s_update_W_by_pagasos;
 static PyObject *__pyx_n_s_xrange;
 static PyObject *__pyx_n_s_zeros;
@@ -1308,10 +1299,10 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_2predict(str
 static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_4calc_error(struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *__pyx_v_self, PyArrayObject *__pyx_v_X); /* proto */
 static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_6set_margin(struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *__pyx_v_self, PyArrayObject *__pyx_v_X); /* proto */
 static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_8fit(struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *__pyx_v_self, PyArrayObject *__pyx_v_X, int __pyx_v_normal); /* proto */
-static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *__pyx_v_self, PyObject *__pyx_v_bound_song_tag_map, PyArrayObject *__pyx_v_top_matrix, double __pyx_v_C); /* proto */
+static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10PARank_fit(struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *__pyx_v_self, PyObject *__pyx_v_bound_song_tag_map, PyArrayObject *__pyx_v_top_matrix, double __pyx_v_C); /* proto */
 static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_12_repeat_optimization(struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *__pyx_v_self, PyArrayObject *__pyx_v_X); /* proto */
 static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fit(struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *__pyx_v_self, PyObject *__pyx_v_bound_song_tag_map, PyArrayObject *__pyx_v_top_matrix, double __pyx_v_lmd); /* proto */
-static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_16_update_W(struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *__pyx_v_self, PyArrayObject *__pyx_v_X); /* proto */
+static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_16_update_W_by_PARank(struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *__pyx_v_self, PyArrayObject *__pyx_v_X); /* proto */
 static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_18_update_W_by_pagasos(struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *__pyx_v_self, PyArrayObject *__pyx_v_X, int __pyx_v_iteration, int __pyx_v_is_update); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
@@ -2134,7 +2125,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_8fit(struct 
  *             self.set_margin(X)
  *         self._repeat_optimization(X)             # <<<<<<<<<<<<<<
  * 
- *     def batch_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double C):
+ *     def PARank_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double C):
  */
   __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_repeat_optimization); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
@@ -2199,14 +2190,15 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_8fit(struct 
 /* "cy_emotion_feedback.pyx":71
  *         self._repeat_optimization(X)
  * 
- *     def batch_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double C):             # <<<<<<<<<<<<<<
- *         cdef:
- *             long song
+ *     def PARank_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double C):             # <<<<<<<<<<<<<<
+ *         """
+ *         Passive-Aggressive Perceptron
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_11batch_fit(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_11batch_fit(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_11PARank_fit(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_19cy_emotion_feedback_17CyEmotionFeedback_10PARank_fit[] = "\n        Passive-Aggressive Perceptron\343\202\242\343\203\253\343\202\264\343\203\252\343\202\272\343\203\240\343\202\222\347\224\250\343\201\204\343\201\237\345\255\246\347\277\222\n        ";
+static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_11PARank_fit(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_bound_song_tag_map = 0;
   PyArrayObject *__pyx_v_top_matrix = 0;
   double __pyx_v_C;
@@ -2215,7 +2207,7 @@ static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_11batch_fit(
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("batch_fit (wrapper)", 0);
+  __Pyx_RefNannySetupContext("PARank_fit (wrapper)", 0);
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_bound_song_tag_map,&__pyx_n_s_top_matrix,&__pyx_n_s_C,0};
     PyObject* values[3] = {0,0,0};
@@ -2237,16 +2229,16 @@ static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_11batch_fit(
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_top_matrix)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("batch_fit", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("PARank_fit", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_C)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("batch_fit", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("PARank_fit", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "batch_fit") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "PARank_fit") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -2261,15 +2253,15 @@ static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_11batch_fit(
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("batch_fit", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("PARank_fit", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
-  __Pyx_AddTraceback("cy_emotion_feedback.CyEmotionFeedback.batch_fit", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_emotion_feedback.CyEmotionFeedback.PARank_fit", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bound_song_tag_map), (&PyDict_Type), 1, "bound_song_tag_map", 1))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_top_matrix), __pyx_ptype_5numpy_ndarray, 1, "top_matrix", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(((struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *)__pyx_v_self), __pyx_v_bound_song_tag_map, __pyx_v_top_matrix, __pyx_v_C);
+  __pyx_r = __pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10PARank_fit(((struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *)__pyx_v_self), __pyx_v_bound_song_tag_map, __pyx_v_top_matrix, __pyx_v_C);
 
   /* function exit code */
   goto __pyx_L0;
@@ -2280,7 +2272,7 @@ static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_11batch_fit(
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *__pyx_v_self, PyObject *__pyx_v_bound_song_tag_map, PyArrayObject *__pyx_v_top_matrix, double __pyx_v_C) {
+static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10PARank_fit(struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *__pyx_v_self, PyObject *__pyx_v_bound_song_tag_map, PyArrayObject *__pyx_v_top_matrix, double __pyx_v_C) {
   CYTHON_UNUSED long __pyx_v_song;
   PyArrayObject *__pyx_v_tags = 0;
   PyArrayObject *__pyx_v_X = 0;
@@ -2307,7 +2299,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("batch_fit", 0);
+  __Pyx_RefNannySetupContext("PARank_fit", 0);
   __pyx_pybuffer_top_matrix.pybuffer.buf = NULL;
   __pyx_pybuffer_top_matrix.refcount = 0;
   __pyx_pybuffernd_top_matrix.data = NULL;
@@ -2318,7 +2310,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
   }
   __pyx_pybuffernd_top_matrix.diminfo[0].strides = __pyx_pybuffernd_top_matrix.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_top_matrix.diminfo[0].shape = __pyx_pybuffernd_top_matrix.rcbuffer->pybuffer.shape[0];
 
-  /* "cy_emotion_feedback.pyx":77
+  /* "cy_emotion_feedback.pyx":80
  *             np.ndarray X
  *             int i
  *             double all_error = 0.0             # <<<<<<<<<<<<<<
@@ -2327,7 +2319,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
  */
   __pyx_v_all_error = 0.0;
 
-  /* "cy_emotion_feedback.pyx":81
+  /* "cy_emotion_feedback.pyx":84
  *             np.ndarray w
  * 
  *         self.margin = 0.0             # <<<<<<<<<<<<<<
@@ -2336,7 +2328,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
  */
   __pyx_v_self->margin = 0.0;
 
-  /* "cy_emotion_feedback.pyx":82
+  /* "cy_emotion_feedback.pyx":85
  * 
  *         self.margin = 0.0
  *         self.C = C             # <<<<<<<<<<<<<<
@@ -2345,26 +2337,26 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
  */
   __pyx_v_self->C = __pyx_v_C;
 
-  /* "cy_emotion_feedback.pyx":83
+  /* "cy_emotion_feedback.pyx":86
  *         self.margin = 0.0
  *         self.C = C
  *         w = np.zeros(44)             # <<<<<<<<<<<<<<
  *         count = 0
  *         for i in xrange(1000):
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 86; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 86; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 86; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 86; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v_w = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "cy_emotion_feedback.pyx":84
+  /* "cy_emotion_feedback.pyx":87
  *         self.C = C
  *         w = np.zeros(44)
  *         count = 0             # <<<<<<<<<<<<<<
@@ -2373,7 +2365,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
  */
   __pyx_v_count = 0;
 
-  /* "cy_emotion_feedback.pyx":85
+  /* "cy_emotion_feedback.pyx":88
  *         w = np.zeros(44)
  *         count = 0
  *         for i in xrange(1000):             # <<<<<<<<<<<<<<
@@ -2383,7 +2375,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
   for (__pyx_t_3 = 0; __pyx_t_3 < 0x3E8; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "cy_emotion_feedback.pyx":86
+    /* "cy_emotion_feedback.pyx":89
  *         count = 0
  *         for i in xrange(1000):
  *             all_error = 0.0             # <<<<<<<<<<<<<<
@@ -2392,7 +2384,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
  */
     __pyx_v_all_error = 0.0;
 
-    /* "cy_emotion_feedback.pyx":87
+    /* "cy_emotion_feedback.pyx":90
  *         for i in xrange(1000):
  *             all_error = 0.0
  *             for song, tags in bound_song_tag_map.items():             # <<<<<<<<<<<<<<
@@ -2401,17 +2393,17 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
  */
     if (unlikely(__pyx_v_bound_song_tag_map == Py_None)) {
       PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%s'", "items");
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
-    __pyx_t_1 = __Pyx_PyDict_Items(__pyx_v_bound_song_tag_map); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyDict_Items(__pyx_v_bound_song_tag_map); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
       __pyx_t_2 = __pyx_t_1; __Pyx_INCREF(__pyx_t_2); __pyx_t_4 = 0;
       __pyx_t_5 = NULL;
     } else {
-      __pyx_t_4 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_5 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_5 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     for (;;) {
@@ -2419,17 +2411,17 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
         if (likely(PyList_CheckExact(__pyx_t_2))) {
           if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_2)) break;
           #if CYTHON_COMPILING_IN_CPYTHON
-          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           __Pyx_GOTREF(__pyx_t_1);
           #endif
         } else {
           if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_2)) break;
           #if CYTHON_COMPILING_IN_CPYTHON
-          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           __Pyx_GOTREF(__pyx_t_1);
           #endif
         }
@@ -2439,7 +2431,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(exc_type == PyExc_StopIteration || PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+            else {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           }
           break;
         }
@@ -2455,7 +2447,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
         if (unlikely(size != 2)) {
           if (size > 2) __Pyx_RaiseTooManyValuesError(2);
           else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         }
         #if CYTHON_COMPILING_IN_CPYTHON
         if (likely(PyTuple_CheckExact(sequence))) {
@@ -2468,15 +2460,15 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
         __Pyx_INCREF(__pyx_t_6);
         __Pyx_INCREF(__pyx_t_7);
         #else
-        __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_6);
-        __pyx_t_7 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_7 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_7);
         #endif
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       } else {
         Py_ssize_t index = -1;
-        __pyx_t_8 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_8 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         __pyx_t_9 = Py_TYPE(__pyx_t_8)->tp_iternext;
@@ -2484,7 +2476,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
         __Pyx_GOTREF(__pyx_t_6);
         index = 1; __pyx_t_7 = __pyx_t_9(__pyx_t_8); if (unlikely(!__pyx_t_7)) goto __pyx_L7_unpacking_failed;
         __Pyx_GOTREF(__pyx_t_7);
-        if (__Pyx_IternextUnpackEndCheck(__pyx_t_9(__pyx_t_8), 2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (__Pyx_IternextUnpackEndCheck(__pyx_t_9(__pyx_t_8), 2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __pyx_t_9 = NULL;
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         goto __pyx_L8_unpacking_done;
@@ -2492,37 +2484,37 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __pyx_t_9 = NULL;
         if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __pyx_L8_unpacking_done:;
       }
-      __pyx_t_10 = __Pyx_PyInt_As_long(__pyx_t_6); if (unlikely((__pyx_t_10 == (long)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_10 = __Pyx_PyInt_As_long(__pyx_t_6); if (unlikely((__pyx_t_10 == (long)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (!(likely(((__pyx_t_7) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_7, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 87; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (!(likely(((__pyx_t_7) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_7, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __pyx_v_song = __pyx_t_10;
       __Pyx_XDECREF_SET(__pyx_v_tags, ((PyArrayObject *)__pyx_t_7));
       __pyx_t_7 = 0;
 
-      /* "cy_emotion_feedback.pyx":88
+      /* "cy_emotion_feedback.pyx":91
  *             all_error = 0.0
  *             for song, tags in bound_song_tag_map.items():
  *                 X = tags - top_matrix             # <<<<<<<<<<<<<<
  *                 self.error = self.calc_error(X)
  *                 if self.error <= 0:
  */
-      __pyx_t_1 = PyNumber_Subtract(((PyObject *)__pyx_v_tags), ((PyObject *)__pyx_v_top_matrix)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 88; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_1 = PyNumber_Subtract(((PyObject *)__pyx_v_tags), ((PyObject *)__pyx_v_top_matrix)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 91; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_1);
-      if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 88; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 91; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_XDECREF_SET(__pyx_v_X, ((PyArrayObject *)__pyx_t_1));
       __pyx_t_1 = 0;
 
-      /* "cy_emotion_feedback.pyx":89
+      /* "cy_emotion_feedback.pyx":92
  *             for song, tags in bound_song_tag_map.items():
  *                 X = tags - top_matrix
  *                 self.error = self.calc_error(X)             # <<<<<<<<<<<<<<
  *                 if self.error <= 0:
  *                     continue
  */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_calc_error); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 89; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_calc_error); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_7);
       __pyx_t_6 = NULL;
       if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_7))) {
@@ -2535,60 +2527,60 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
         }
       }
       if (!__pyx_t_6) {
-        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_7, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 89; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_7, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_1);
       } else {
-        __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 89; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
         __Pyx_INCREF(((PyObject *)__pyx_v_X));
         __Pyx_GIVEREF(((PyObject *)__pyx_v_X));
         PyTuple_SET_ITEM(__pyx_t_8, 0+1, ((PyObject *)__pyx_v_X));
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 89; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 89; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_v_self->error = __pyx_t_11;
 
-      /* "cy_emotion_feedback.pyx":90
+      /* "cy_emotion_feedback.pyx":93
  *                 X = tags - top_matrix
  *                 self.error = self.calc_error(X)
  *                 if self.error <= 0:             # <<<<<<<<<<<<<<
  *                     continue
- *                 self._update_W(X)
+ *                 self._update_W_by_PARank(X)
  */
       __pyx_t_12 = ((__pyx_v_self->error <= 0.0) != 0);
       if (__pyx_t_12) {
 
-        /* "cy_emotion_feedback.pyx":91
+        /* "cy_emotion_feedback.pyx":94
  *                 self.error = self.calc_error(X)
  *                 if self.error <= 0:
  *                     continue             # <<<<<<<<<<<<<<
- *                 self._update_W(X)
+ *                 self._update_W_by_PARank(X)
  *                 w += self.W
  */
         goto __pyx_L5_continue;
 
-        /* "cy_emotion_feedback.pyx":90
+        /* "cy_emotion_feedback.pyx":93
  *                 X = tags - top_matrix
  *                 self.error = self.calc_error(X)
  *                 if self.error <= 0:             # <<<<<<<<<<<<<<
  *                     continue
- *                 self._update_W(X)
+ *                 self._update_W_by_PARank(X)
  */
       }
 
-      /* "cy_emotion_feedback.pyx":92
+      /* "cy_emotion_feedback.pyx":95
  *                 if self.error <= 0:
  *                     continue
- *                 self._update_W(X)             # <<<<<<<<<<<<<<
+ *                 self._update_W_by_PARank(X)             # <<<<<<<<<<<<<<
  *                 w += self.W
  *                 count += 1
  */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_update_W); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_update_W_by_PARank); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_7);
       __pyx_t_8 = NULL;
       if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_7))) {
@@ -2601,37 +2593,37 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
         }
       }
       if (!__pyx_t_8) {
-        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_7, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_7, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_1);
       } else {
-        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_8); __pyx_t_8 = NULL;
         __Pyx_INCREF(((PyObject *)__pyx_v_X));
         __Pyx_GIVEREF(((PyObject *)__pyx_v_X));
         PyTuple_SET_ITEM(__pyx_t_6, 0+1, ((PyObject *)__pyx_v_X));
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 95; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "cy_emotion_feedback.pyx":93
+      /* "cy_emotion_feedback.pyx":96
  *                     continue
- *                 self._update_W(X)
+ *                 self._update_W_by_PARank(X)
  *                 w += self.W             # <<<<<<<<<<<<<<
  *                 count += 1
  *                 all_error += self.error
  */
-      __pyx_t_1 = PyNumber_InPlaceAdd(((PyObject *)__pyx_v_w), ((PyObject *)__pyx_v_self->W)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 93; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_1 = PyNumber_InPlaceAdd(((PyObject *)__pyx_v_w), ((PyObject *)__pyx_v_self->W)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 96; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_1);
-      if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 93; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 96; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF_SET(__pyx_v_w, ((PyArrayObject *)__pyx_t_1));
       __pyx_t_1 = 0;
 
-      /* "cy_emotion_feedback.pyx":94
- *                 self._update_W(X)
+      /* "cy_emotion_feedback.pyx":97
+ *                 self._update_W_by_PARank(X)
  *                 w += self.W
  *                 count += 1             # <<<<<<<<<<<<<<
  *                 all_error += self.error
@@ -2639,7 +2631,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
  */
       __pyx_v_count = (__pyx_v_count + 1);
 
-      /* "cy_emotion_feedback.pyx":95
+      /* "cy_emotion_feedback.pyx":98
  *                 w += self.W
  *                 count += 1
  *                 all_error += self.error             # <<<<<<<<<<<<<<
@@ -2648,7 +2640,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
  */
       __pyx_v_all_error = (__pyx_v_all_error + __pyx_v_self->error);
 
-      /* "cy_emotion_feedback.pyx":87
+      /* "cy_emotion_feedback.pyx":90
  *         for i in xrange(1000):
  *             all_error = 0.0
  *             for song, tags in bound_song_tag_map.items():             # <<<<<<<<<<<<<<
@@ -2659,7 +2651,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
     }
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "cy_emotion_feedback.pyx":96
+    /* "cy_emotion_feedback.pyx":99
  *                 count += 1
  *                 all_error += self.error
  *             if all_error <= 0:             # <<<<<<<<<<<<<<
@@ -2669,7 +2661,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
     __pyx_t_12 = ((__pyx_v_all_error <= 0.0) != 0);
     if (__pyx_t_12) {
 
-      /* "cy_emotion_feedback.pyx":97
+      /* "cy_emotion_feedback.pyx":100
  *                 all_error += self.error
  *             if all_error <= 0:
  *                 break             # <<<<<<<<<<<<<<
@@ -2678,7 +2670,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
  */
       goto __pyx_L4_break;
 
-      /* "cy_emotion_feedback.pyx":96
+      /* "cy_emotion_feedback.pyx":99
  *                 count += 1
  *                 all_error += self.error
  *             if all_error <= 0:             # <<<<<<<<<<<<<<
@@ -2689,7 +2681,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
   }
   __pyx_L4_break:;
 
-  /* "cy_emotion_feedback.pyx":98
+  /* "cy_emotion_feedback.pyx":101
  *             if all_error <= 0:
  *                 break
  *         if count > 0:             # <<<<<<<<<<<<<<
@@ -2699,26 +2691,26 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
   __pyx_t_12 = ((__pyx_v_count > 0) != 0);
   if (__pyx_t_12) {
 
-    /* "cy_emotion_feedback.pyx":99
+    /* "cy_emotion_feedback.pyx":102
  *                 break
  *         if count > 0:
  *             self.W = w / count             # <<<<<<<<<<<<<<
  *         return self.W
  * 
  */
-    __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v_count); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 99; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v_count); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = __Pyx_PyNumber_Divide(((PyObject *)__pyx_v_w), __pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 99; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyNumber_Divide(((PyObject *)__pyx_v_w), __pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 99; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GIVEREF(__pyx_t_1);
     __Pyx_GOTREF(__pyx_v_self->W);
     __Pyx_DECREF(((PyObject *)__pyx_v_self->W));
     __pyx_v_self->W = ((PyArrayObject *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "cy_emotion_feedback.pyx":98
+    /* "cy_emotion_feedback.pyx":101
  *             if all_error <= 0:
  *                 break
  *         if count > 0:             # <<<<<<<<<<<<<<
@@ -2727,7 +2719,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
  */
   }
 
-  /* "cy_emotion_feedback.pyx":100
+  /* "cy_emotion_feedback.pyx":103
  *         if count > 0:
  *             self.W = w / count
  *         return self.W             # <<<<<<<<<<<<<<
@@ -2742,9 +2734,9 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
   /* "cy_emotion_feedback.pyx":71
  *         self._repeat_optimization(X)
  * 
- *     def batch_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double C):             # <<<<<<<<<<<<<<
- *         cdef:
- *             long song
+ *     def PARank_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double C):             # <<<<<<<<<<<<<<
+ *         """
+ *         Passive-Aggressive Perceptron
  */
 
   /* function exit code */
@@ -2758,7 +2750,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_top_matrix.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("cy_emotion_feedback.CyEmotionFeedback.batch_fit", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_emotion_feedback.CyEmotionFeedback.PARank_fit", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -2772,7 +2764,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_10batch_fit(
   return __pyx_r;
 }
 
-/* "cy_emotion_feedback.pyx":102
+/* "cy_emotion_feedback.pyx":105
  *         return self.W
  * 
  *     def _repeat_optimization(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):             # <<<<<<<<<<<<<<
@@ -2789,7 +2781,7 @@ static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_13_repeat_op
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("_repeat_optimization (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_X), __pyx_ptype_5numpy_ndarray, 1, "X", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_X), __pyx_ptype_5numpy_ndarray, 1, "X", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 105; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_12_repeat_optimization(((struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *)__pyx_v_self), ((PyArrayObject *)__pyx_v_X));
 
   /* function exit code */
@@ -2824,18 +2816,18 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_12_repeat_op
   __pyx_pybuffernd_X.rcbuffer = &__pyx_pybuffer_X;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_19cy_emotion_feedback_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_19cy_emotion_feedback_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 105; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_X.diminfo[0].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_X.diminfo[0].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[0];
 
-  /* "cy_emotion_feedback.pyx":106
+  /* "cy_emotion_feedback.pyx":109
  *         cdef:
  *             int i
  *         self.error = self.calc_error(X)             # <<<<<<<<<<<<<<
  *         for i in xrange(1000):
  *             if self.error <= 0:
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_calc_error); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_calc_error); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -2848,25 +2840,25 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_12_repeat_op
     }
   }
   if (!__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
   } else {
-    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3); __pyx_t_3 = NULL;
     __Pyx_INCREF(((PyObject *)__pyx_v_X));
     __Pyx_GIVEREF(((PyObject *)__pyx_v_X));
     PyTuple_SET_ITEM(__pyx_t_4, 0+1, ((PyObject *)__pyx_v_X));
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_self->error = __pyx_t_5;
 
-  /* "cy_emotion_feedback.pyx":107
+  /* "cy_emotion_feedback.pyx":110
  *             int i
  *         self.error = self.calc_error(X)
  *         for i in xrange(1000):             # <<<<<<<<<<<<<<
@@ -2876,7 +2868,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_12_repeat_op
   for (__pyx_t_6 = 0; __pyx_t_6 < 0x3E8; __pyx_t_6+=1) {
     __pyx_v_i = __pyx_t_6;
 
-    /* "cy_emotion_feedback.pyx":108
+    /* "cy_emotion_feedback.pyx":111
  *         self.error = self.calc_error(X)
  *         for i in xrange(1000):
  *             if self.error <= 0:             # <<<<<<<<<<<<<<
@@ -2886,7 +2878,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_12_repeat_op
     __pyx_t_7 = ((__pyx_v_self->error <= 0.0) != 0);
     if (__pyx_t_7) {
 
-      /* "cy_emotion_feedback.pyx":109
+      /* "cy_emotion_feedback.pyx":112
  *         for i in xrange(1000):
  *             if self.error <= 0:
  *                 if i > 0:             # <<<<<<<<<<<<<<
@@ -2896,19 +2888,19 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_12_repeat_op
       __pyx_t_7 = ((__pyx_v_i > 0) != 0);
       if (__pyx_t_7) {
 
-        /* "cy_emotion_feedback.pyx":110
+        /* "cy_emotion_feedback.pyx":113
  *             if self.error <= 0:
  *                 if i > 0:
  *                     print i             # <<<<<<<<<<<<<<
  *                 break
  *             else:
  */
-        __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 110; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 113; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_1);
-        if (__Pyx_PrintOne(0, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 110; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (__Pyx_PrintOne(0, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 113; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "cy_emotion_feedback.pyx":109
+        /* "cy_emotion_feedback.pyx":112
  *         for i in xrange(1000):
  *             if self.error <= 0:
  *                 if i > 0:             # <<<<<<<<<<<<<<
@@ -2917,16 +2909,16 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_12_repeat_op
  */
       }
 
-      /* "cy_emotion_feedback.pyx":111
+      /* "cy_emotion_feedback.pyx":114
  *                 if i > 0:
  *                     print i
  *                 break             # <<<<<<<<<<<<<<
  *             else:
- *                 self._update_W(X)
+ *                 self._update_W_by_PARank(X)
  */
       goto __pyx_L4_break;
 
-      /* "cy_emotion_feedback.pyx":108
+      /* "cy_emotion_feedback.pyx":111
  *         self.error = self.calc_error(X)
  *         for i in xrange(1000):
  *             if self.error <= 0:             # <<<<<<<<<<<<<<
@@ -2935,15 +2927,15 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_12_repeat_op
  */
     }
 
-    /* "cy_emotion_feedback.pyx":113
+    /* "cy_emotion_feedback.pyx":116
  *                 break
  *             else:
- *                 self._update_W(X)             # <<<<<<<<<<<<<<
+ *                 self._update_W_by_PARank(X)             # <<<<<<<<<<<<<<
  *             self.error = self.calc_error(X)
  * 
  */
     /*else*/ {
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_update_W); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 113; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_update_W_by_PARank); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_4 = NULL;
       if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -2956,16 +2948,16 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_12_repeat_op
         }
       }
       if (!__pyx_t_4) {
-        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 113; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_1);
       } else {
-        __pyx_t_3 = PyTuple_New(1+1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 113; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_3 = PyTuple_New(1+1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_4); __pyx_t_4 = NULL;
         __Pyx_INCREF(((PyObject *)__pyx_v_X));
         __Pyx_GIVEREF(((PyObject *)__pyx_v_X));
         PyTuple_SET_ITEM(__pyx_t_3, 0+1, ((PyObject *)__pyx_v_X));
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 113; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       }
@@ -2973,14 +2965,14 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_12_repeat_op
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     }
 
-    /* "cy_emotion_feedback.pyx":114
+    /* "cy_emotion_feedback.pyx":117
  *             else:
- *                 self._update_W(X)
+ *                 self._update_W_by_PARank(X)
  *             self.error = self.calc_error(X)             # <<<<<<<<<<<<<<
  * 
  *     def pagasos_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double lmd):
  */
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_calc_error); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 114; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_calc_error); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 117; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_3 = NULL;
     if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
@@ -2993,27 +2985,27 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_12_repeat_op
       }
     }
     if (!__pyx_t_3) {
-      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 114; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 117; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_1);
     } else {
-      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 114; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 117; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3); __pyx_t_3 = NULL;
       __Pyx_INCREF(((PyObject *)__pyx_v_X));
       __Pyx_GIVEREF(((PyObject *)__pyx_v_X));
       PyTuple_SET_ITEM(__pyx_t_4, 0+1, ((PyObject *)__pyx_v_X));
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 114; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 117; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     }
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 114; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_1); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 117; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_self->error = __pyx_t_5;
   }
   __pyx_L4_break:;
 
-  /* "cy_emotion_feedback.pyx":102
+  /* "cy_emotion_feedback.pyx":105
  *         return self.W
  * 
  *     def _repeat_optimization(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):             # <<<<<<<<<<<<<<
@@ -3044,7 +3036,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_12_repeat_op
   return __pyx_r;
 }
 
-/* "cy_emotion_feedback.pyx":116
+/* "cy_emotion_feedback.pyx":119
  *             self.error = self.calc_error(X)
  * 
  *     def pagasos_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double lmd):             # <<<<<<<<<<<<<<
@@ -3086,16 +3078,16 @@ static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_15pagasos_fi
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_top_matrix)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("pagasos_fit", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("pagasos_fit", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 119; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_lmd)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("pagasos_fit", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("pagasos_fit", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 119; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "pagasos_fit") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "pagasos_fit") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 119; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -3106,18 +3098,18 @@ static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_15pagasos_fi
     }
     __pyx_v_bound_song_tag_map = ((PyObject*)values[0]);
     __pyx_v_top_matrix = ((PyArrayObject *)values[1]);
-    __pyx_v_lmd = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_lmd == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_lmd = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_lmd == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 119; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("pagasos_fit", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("pagasos_fit", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 119; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("cy_emotion_feedback.CyEmotionFeedback.pagasos_fit", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bound_song_tag_map), (&PyDict_Type), 1, "bound_song_tag_map", 1))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_top_matrix), __pyx_ptype_5numpy_ndarray, 1, "top_matrix", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bound_song_tag_map), (&PyDict_Type), 1, "bound_song_tag_map", 1))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 119; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_top_matrix), __pyx_ptype_5numpy_ndarray, 1, "top_matrix", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 119; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fit(((struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *)__pyx_v_self), __pyx_v_bound_song_tag_map, __pyx_v_top_matrix, __pyx_v_lmd);
 
   /* function exit code */
@@ -3135,7 +3127,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
   PyArrayObject *__pyx_v_X = 0;
   int __pyx_v_i;
   double __pyx_v_all_error;
-  PyObject *__pyx_v_count = NULL;
+  int __pyx_v_count;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_top_matrix;
   __Pyx_Buffer __pyx_pybuffer_top_matrix;
   PyObject *__pyx_r = NULL;
@@ -3164,31 +3156,40 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
   __pyx_pybuffernd_top_matrix.rcbuffer = &__pyx_pybuffer_top_matrix;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_top_matrix.rcbuffer->pybuffer, (PyObject*)__pyx_v_top_matrix, &__Pyx_TypeInfo_nn___pyx_t_19cy_emotion_feedback_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_top_matrix.rcbuffer->pybuffer, (PyObject*)__pyx_v_top_matrix, &__Pyx_TypeInfo_nn___pyx_t_19cy_emotion_feedback_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 119; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_top_matrix.diminfo[0].strides = __pyx_pybuffernd_top_matrix.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_top_matrix.diminfo[0].shape = __pyx_pybuffernd_top_matrix.rcbuffer->pybuffer.shape[0];
 
-  /* "cy_emotion_feedback.pyx":125
+  /* "cy_emotion_feedback.pyx":128
  *             np.ndarray X
  *             int i
  *             double all_error = 0.0             # <<<<<<<<<<<<<<
+ *             int count
  * 
- *         self.lmd = lmd
  */
   __pyx_v_all_error = 0.0;
 
-  /* "cy_emotion_feedback.pyx":127
- *             double all_error = 0.0
+  /* "cy_emotion_feedback.pyx":131
+ *             int count
  * 
  *         self.lmd = lmd             # <<<<<<<<<<<<<<
+ *         count = 0
  *         for i in xrange(1, 1001):
- *             all_error = 0.0
  */
   __pyx_v_self->lmd = __pyx_v_lmd;
 
-  /* "cy_emotion_feedback.pyx":128
+  /* "cy_emotion_feedback.pyx":132
  * 
  *         self.lmd = lmd
+ *         count = 0             # <<<<<<<<<<<<<<
+ *         for i in xrange(1, 1001):
+ *             all_error = 0.0
+ */
+  __pyx_v_count = 0;
+
+  /* "cy_emotion_feedback.pyx":133
+ *         self.lmd = lmd
+ *         count = 0
  *         for i in xrange(1, 1001):             # <<<<<<<<<<<<<<
  *             all_error = 0.0
  *             for song, tags in bound_song_tag_map.items():
@@ -3196,8 +3197,8 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
   for (__pyx_t_1 = 1; __pyx_t_1 < 0x3E9; __pyx_t_1+=1) {
     __pyx_v_i = __pyx_t_1;
 
-    /* "cy_emotion_feedback.pyx":129
- *         self.lmd = lmd
+    /* "cy_emotion_feedback.pyx":134
+ *         count = 0
  *         for i in xrange(1, 1001):
  *             all_error = 0.0             # <<<<<<<<<<<<<<
  *             for song, tags in bound_song_tag_map.items():
@@ -3205,7 +3206,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
  */
     __pyx_v_all_error = 0.0;
 
-    /* "cy_emotion_feedback.pyx":130
+    /* "cy_emotion_feedback.pyx":135
  *         for i in xrange(1, 1001):
  *             all_error = 0.0
  *             for song, tags in bound_song_tag_map.items():             # <<<<<<<<<<<<<<
@@ -3214,17 +3215,17 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
  */
     if (unlikely(__pyx_v_bound_song_tag_map == Py_None)) {
       PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%s'", "items");
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
-    __pyx_t_2 = __Pyx_PyDict_Items(__pyx_v_bound_song_tag_map); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyDict_Items(__pyx_v_bound_song_tag_map); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
     if (likely(PyList_CheckExact(__pyx_t_2)) || PyTuple_CheckExact(__pyx_t_2)) {
       __pyx_t_3 = __pyx_t_2; __Pyx_INCREF(__pyx_t_3); __pyx_t_4 = 0;
       __pyx_t_5 = NULL;
     } else {
-      __pyx_t_4 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_4 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_5 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_5 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     for (;;) {
@@ -3232,17 +3233,17 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
         if (likely(PyList_CheckExact(__pyx_t_3))) {
           if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_3)) break;
           #if CYTHON_COMPILING_IN_CPYTHON
-          __pyx_t_2 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_4); __Pyx_INCREF(__pyx_t_2); __pyx_t_4++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          __pyx_t_2 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_4); __Pyx_INCREF(__pyx_t_2); __pyx_t_4++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           #else
-          __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           __Pyx_GOTREF(__pyx_t_2);
           #endif
         } else {
           if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
           #if CYTHON_COMPILING_IN_CPYTHON
-          __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_4); __Pyx_INCREF(__pyx_t_2); __pyx_t_4++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_4); __Pyx_INCREF(__pyx_t_2); __pyx_t_4++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           #else
-          __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          __pyx_t_2 = PySequence_ITEM(__pyx_t_3, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           __Pyx_GOTREF(__pyx_t_2);
           #endif
         }
@@ -3252,7 +3253,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(exc_type == PyExc_StopIteration || PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+            else {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
           }
           break;
         }
@@ -3268,7 +3269,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
         if (unlikely(size != 2)) {
           if (size > 2) __Pyx_RaiseTooManyValuesError(2);
           else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+          {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         }
         #if CYTHON_COMPILING_IN_CPYTHON
         if (likely(PyTuple_CheckExact(sequence))) {
@@ -3281,15 +3282,15 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
         __Pyx_INCREF(__pyx_t_6);
         __Pyx_INCREF(__pyx_t_7);
         #else
-        __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_6 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_6);
-        __pyx_t_7 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_7 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_7);
         #endif
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       } else {
         Py_ssize_t index = -1;
-        __pyx_t_8 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_8 = PyObject_GetIter(__pyx_t_2); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __pyx_t_9 = Py_TYPE(__pyx_t_8)->tp_iternext;
@@ -3297,7 +3298,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
         __Pyx_GOTREF(__pyx_t_6);
         index = 1; __pyx_t_7 = __pyx_t_9(__pyx_t_8); if (unlikely(!__pyx_t_7)) goto __pyx_L7_unpacking_failed;
         __Pyx_GOTREF(__pyx_t_7);
-        if (__Pyx_IternextUnpackEndCheck(__pyx_t_9(__pyx_t_8), 2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        if (__Pyx_IternextUnpackEndCheck(__pyx_t_9(__pyx_t_8), 2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __pyx_t_9 = NULL;
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         goto __pyx_L8_unpacking_done;
@@ -3305,37 +3306,37 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __pyx_t_9 = NULL;
         if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __pyx_L8_unpacking_done:;
       }
-      __pyx_t_10 = __Pyx_PyInt_As_long(__pyx_t_6); if (unlikely((__pyx_t_10 == (long)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_10 = __Pyx_PyInt_As_long(__pyx_t_6); if (unlikely((__pyx_t_10 == (long)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (!(likely(((__pyx_t_7) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_7, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 130; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (!(likely(((__pyx_t_7) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_7, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __pyx_v_song = __pyx_t_10;
       __Pyx_XDECREF_SET(__pyx_v_tags, ((PyArrayObject *)__pyx_t_7));
       __pyx_t_7 = 0;
 
-      /* "cy_emotion_feedback.pyx":131
+      /* "cy_emotion_feedback.pyx":136
  *             all_error = 0.0
  *             for song, tags in bound_song_tag_map.items():
  *                 X = tags - top_matrix             # <<<<<<<<<<<<<<
  *                 self.error = self.calc_error(X)
  *                 if self.error <= 0:
  */
-      __pyx_t_2 = PyNumber_Subtract(((PyObject *)__pyx_v_tags), ((PyObject *)__pyx_v_top_matrix)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 131; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = PyNumber_Subtract(((PyObject *)__pyx_v_tags), ((PyObject *)__pyx_v_top_matrix)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 136; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
-      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 131; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 136; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_XDECREF_SET(__pyx_v_X, ((PyArrayObject *)__pyx_t_2));
       __pyx_t_2 = 0;
 
-      /* "cy_emotion_feedback.pyx":132
+      /* "cy_emotion_feedback.pyx":137
  *             for song, tags in bound_song_tag_map.items():
  *                 X = tags - top_matrix
  *                 self.error = self.calc_error(X)             # <<<<<<<<<<<<<<
  *                 if self.error <= 0:
  *                     self._update_W_by_pagasos(X, i, False)
  */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_calc_error); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 132; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_calc_error); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 137; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_7);
       __pyx_t_6 = NULL;
       if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_7))) {
@@ -3348,25 +3349,25 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
         }
       }
       if (!__pyx_t_6) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_7, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 132; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_7, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 137; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_2);
       } else {
-        __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 132; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 137; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
         __Pyx_INCREF(((PyObject *)__pyx_v_X));
         __Pyx_GIVEREF(((PyObject *)__pyx_v_X));
         PyTuple_SET_ITEM(__pyx_t_8, 0+1, ((PyObject *)__pyx_v_X));
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_8, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 132; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_8, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 137; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 132; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_11 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_11 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 137; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_v_self->error = __pyx_t_11;
 
-      /* "cy_emotion_feedback.pyx":133
+      /* "cy_emotion_feedback.pyx":138
  *                 X = tags - top_matrix
  *                 self.error = self.calc_error(X)
  *                 if self.error <= 0:             # <<<<<<<<<<<<<<
@@ -3376,16 +3377,16 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
       __pyx_t_12 = ((__pyx_v_self->error <= 0.0) != 0);
       if (__pyx_t_12) {
 
-        /* "cy_emotion_feedback.pyx":134
+        /* "cy_emotion_feedback.pyx":139
  *                 self.error = self.calc_error(X)
  *                 if self.error <= 0:
  *                     self._update_W_by_pagasos(X, i, False)             # <<<<<<<<<<<<<<
  *                     continue
  *                 self._update_W_by_pagasos(X, i, True)
  */
-        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_update_W_by_pagasos); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 134; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_update_W_by_pagasos); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 134; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_8);
         __pyx_t_6 = NULL;
         __pyx_t_13 = 0;
@@ -3399,7 +3400,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
             __pyx_t_13 = 1;
           }
         }
-        __pyx_t_14 = PyTuple_New(3+__pyx_t_13); if (unlikely(!__pyx_t_14)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 134; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_14 = PyTuple_New(3+__pyx_t_13); if (unlikely(!__pyx_t_14)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_14);
         if (__pyx_t_6) {
           __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_6); __pyx_t_6 = NULL;
@@ -3413,13 +3414,13 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
         __Pyx_GIVEREF(Py_False);
         PyTuple_SET_ITEM(__pyx_t_14, 2+__pyx_t_13, Py_False);
         __pyx_t_8 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_14, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 134; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_14, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "cy_emotion_feedback.pyx":135
+        /* "cy_emotion_feedback.pyx":140
  *                 if self.error <= 0:
  *                     self._update_W_by_pagasos(X, i, False)
  *                     continue             # <<<<<<<<<<<<<<
@@ -3428,7 +3429,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
  */
         goto __pyx_L5_continue;
 
-        /* "cy_emotion_feedback.pyx":133
+        /* "cy_emotion_feedback.pyx":138
  *                 X = tags - top_matrix
  *                 self.error = self.calc_error(X)
  *                 if self.error <= 0:             # <<<<<<<<<<<<<<
@@ -3437,16 +3438,16 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
  */
       }
 
-      /* "cy_emotion_feedback.pyx":136
+      /* "cy_emotion_feedback.pyx":141
  *                     self._update_W_by_pagasos(X, i, False)
  *                     continue
  *                 self._update_W_by_pagasos(X, i, True)             # <<<<<<<<<<<<<<
  *                 count += 1
  *                 all_error += self.error
  */
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_update_W_by_pagasos); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 136; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_update_W_by_pagasos); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 141; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_14)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 136; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_i); if (unlikely(!__pyx_t_14)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 141; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_14);
       __pyx_t_8 = NULL;
       __pyx_t_13 = 0;
@@ -3460,7 +3461,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
           __pyx_t_13 = 1;
         }
       }
-      __pyx_t_6 = PyTuple_New(3+__pyx_t_13); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 136; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_6 = PyTuple_New(3+__pyx_t_13); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 141; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_6);
       if (__pyx_t_8) {
         __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_8); __pyx_t_8 = NULL;
@@ -3474,35 +3475,31 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
       __Pyx_GIVEREF(Py_True);
       PyTuple_SET_ITEM(__pyx_t_6, 2+__pyx_t_13, Py_True);
       __pyx_t_14 = 0;
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 136; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 141; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "cy_emotion_feedback.pyx":137
+      /* "cy_emotion_feedback.pyx":142
  *                     continue
  *                 self._update_W_by_pagasos(X, i, True)
  *                 count += 1             # <<<<<<<<<<<<<<
  *                 all_error += self.error
  *             if all_error <= 0:
  */
-      if (unlikely(!__pyx_v_count)) { __Pyx_RaiseUnboundLocalError("count"); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 137; __pyx_clineno = __LINE__; goto __pyx_L1_error;} }
-      __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_v_count, __pyx_int_1, 1, 1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 137; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-      __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_XDECREF_SET(__pyx_v_count, __pyx_t_2);
-      __pyx_t_2 = 0;
+      __pyx_v_count = (__pyx_v_count + 1);
 
-      /* "cy_emotion_feedback.pyx":138
+      /* "cy_emotion_feedback.pyx":143
  *                 self._update_W_by_pagasos(X, i, True)
  *                 count += 1
  *                 all_error += self.error             # <<<<<<<<<<<<<<
  *             if all_error <= 0:
- *                 break
+ *                 print count
  */
       __pyx_v_all_error = (__pyx_v_all_error + __pyx_v_self->error);
 
-      /* "cy_emotion_feedback.pyx":130
+      /* "cy_emotion_feedback.pyx":135
  *         for i in xrange(1, 1001):
  *             all_error = 0.0
  *             for song, tags in bound_song_tag_map.items():             # <<<<<<<<<<<<<<
@@ -3513,49 +3510,61 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "cy_emotion_feedback.pyx":139
+    /* "cy_emotion_feedback.pyx":144
  *                 count += 1
  *                 all_error += self.error
  *             if all_error <= 0:             # <<<<<<<<<<<<<<
+ *                 print count
  *                 break
- *         return self.W
  */
     __pyx_t_12 = ((__pyx_v_all_error <= 0.0) != 0);
     if (__pyx_t_12) {
 
-      /* "cy_emotion_feedback.pyx":140
+      /* "cy_emotion_feedback.pyx":145
  *                 all_error += self.error
  *             if all_error <= 0:
+ *                 print count             # <<<<<<<<<<<<<<
+ *                 break
+ *         return self.W
+ */
+      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_count); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_GOTREF(__pyx_t_3);
+      if (__Pyx_PrintOne(0, __pyx_t_3) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+      /* "cy_emotion_feedback.pyx":146
+ *             if all_error <= 0:
+ *                 print count
  *                 break             # <<<<<<<<<<<<<<
  *         return self.W
  * 
  */
       goto __pyx_L4_break;
 
-      /* "cy_emotion_feedback.pyx":139
+      /* "cy_emotion_feedback.pyx":144
  *                 count += 1
  *                 all_error += self.error
  *             if all_error <= 0:             # <<<<<<<<<<<<<<
+ *                 print count
  *                 break
- *         return self.W
  */
     }
   }
   __pyx_L4_break:;
 
-  /* "cy_emotion_feedback.pyx":141
- *             if all_error <= 0:
+  /* "cy_emotion_feedback.pyx":147
+ *                 print count
  *                 break
  *         return self.W             # <<<<<<<<<<<<<<
  * 
- *     def _update_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
+ *     def _update_W_by_PARank(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(((PyObject *)__pyx_v_self->W));
   __pyx_r = ((PyObject *)__pyx_v_self->W);
   goto __pyx_L0;
 
-  /* "cy_emotion_feedback.pyx":116
+  /* "cy_emotion_feedback.pyx":119
  *             self.error = self.calc_error(X)
  * 
  *     def pagasos_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double lmd):             # <<<<<<<<<<<<<<
@@ -3583,31 +3592,31 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fi
   __pyx_L2:;
   __Pyx_XDECREF((PyObject *)__pyx_v_tags);
   __Pyx_XDECREF((PyObject *)__pyx_v_X);
-  __Pyx_XDECREF(__pyx_v_count);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "cy_emotion_feedback.pyx":143
+/* "cy_emotion_feedback.pyx":149
  *         return self.W
  * 
- *     def _update_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):             # <<<<<<<<<<<<<<
- * 
- *         cdef:
+ *     def _update_W_by_PARank(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):             # <<<<<<<<<<<<<<
+ *         """
+ *         Passive-Aggressive Perceptron
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_17_update_W(PyObject *__pyx_v_self, PyObject *__pyx_v_X); /*proto*/
-static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_17_update_W(PyObject *__pyx_v_self, PyObject *__pyx_v_X) {
+static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_17_update_W_by_PARank(PyObject *__pyx_v_self, PyObject *__pyx_v_X); /*proto*/
+static char __pyx_doc_19cy_emotion_feedback_17CyEmotionFeedback_16_update_W_by_PARank[] = "\n        Passive-Aggressive Perceptron\343\202\242\343\203\253\343\202\264\343\203\252\343\202\272\343\203\240\343\202\222\347\224\250\343\201\204\343\201\237\346\233\264\346\226\260\n        ";
+static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_17_update_W_by_PARank(PyObject *__pyx_v_self, PyObject *__pyx_v_X) {
   CYTHON_UNUSED int __pyx_lineno = 0;
   CYTHON_UNUSED const char *__pyx_filename = NULL;
   CYTHON_UNUSED int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("_update_W (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_X), __pyx_ptype_5numpy_ndarray, 1, "X", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 143; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_r = __pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_16_update_W(((struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *)__pyx_v_self), ((PyArrayObject *)__pyx_v_X));
+  __Pyx_RefNannySetupContext("_update_W_by_PARank (wrapper)", 0);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_X), __pyx_ptype_5numpy_ndarray, 1, "X", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_r = __pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_16_update_W_by_PARank(((struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *)__pyx_v_self), ((PyArrayObject *)__pyx_v_X));
 
   /* function exit code */
   goto __pyx_L0;
@@ -3618,7 +3627,7 @@ static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_17_update_W(
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_16_update_W(struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *__pyx_v_self, PyArrayObject *__pyx_v_X) {
+static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_16_update_W_by_PARank(struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *__pyx_v_self, PyArrayObject *__pyx_v_X) {
   double __pyx_v_tau;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_X;
   __Pyx_Buffer __pyx_pybuffer_X;
@@ -3635,32 +3644,32 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_16_update_W(
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("_update_W", 0);
+  __Pyx_RefNannySetupContext("_update_W_by_PARank", 0);
   __pyx_pybuffer_X.pybuffer.buf = NULL;
   __pyx_pybuffer_X.refcount = 0;
   __pyx_pybuffernd_X.data = NULL;
   __pyx_pybuffernd_X.rcbuffer = &__pyx_pybuffer_X;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_19cy_emotion_feedback_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 143; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_19cy_emotion_feedback_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_X.diminfo[0].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_X.diminfo[0].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[0];
 
-  /* "cy_emotion_feedback.pyx":148
+  /* "cy_emotion_feedback.pyx":156
  *             double tau
  * 
  *         tau = self.error / np.linalg.norm(X)             # <<<<<<<<<<<<<<
  *         print "tau: %.5f" % (tau)
  *         self.W += min(self.C, tau) * X
  */
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->error); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->error); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_linalg); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_linalg); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_norm); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_norm); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -3674,44 +3683,44 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_16_update_W(
     }
   }
   if (!__pyx_t_4) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
   } else {
-    __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
     __Pyx_INCREF(((PyObject *)__pyx_v_X));
     __Pyx_GIVEREF(((PyObject *)__pyx_v_X));
     PyTuple_SET_ITEM(__pyx_t_5, 0+1, ((PyObject *)__pyx_v_X));
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_6 = __pyx_PyFloat_AsDouble(__pyx_t_3); if (unlikely((__pyx_t_6 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_tau = __pyx_t_6;
 
-  /* "cy_emotion_feedback.pyx":149
+  /* "cy_emotion_feedback.pyx":157
  * 
  *         tau = self.error / np.linalg.norm(X)
  *         print "tau: %.5f" % (tau)             # <<<<<<<<<<<<<<
  *         self.W += min(self.C, tau) * X
  * 
  */
-  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_tau); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_tau); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __Pyx_PyString_Format(__pyx_kp_s_tau_5f, __pyx_t_3); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyString_Format(__pyx_kp_s_tau_5f, __pyx_t_3); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (__Pyx_PrintOne(0, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_PrintOne(0, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cy_emotion_feedback.pyx":150
+  /* "cy_emotion_feedback.pyx":158
  *         tau = self.error / np.linalg.norm(X)
  *         print "tau: %.5f" % (tau)
  *         self.W += min(self.C, tau) * X             # <<<<<<<<<<<<<<
@@ -3725,27 +3734,27 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_16_update_W(
   } else {
     __pyx_t_8 = __pyx_t_7;
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_8); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 150; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_8); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_2, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 150; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_2, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyNumber_InPlaceAdd(((PyObject *)__pyx_v_self->W), __pyx_t_3); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 150; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyNumber_InPlaceAdd(((PyObject *)__pyx_v_self->W), __pyx_t_3); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 150; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GIVEREF(__pyx_t_2);
   __Pyx_GOTREF(__pyx_v_self->W);
   __Pyx_DECREF(((PyObject *)__pyx_v_self->W));
   __pyx_v_self->W = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "cy_emotion_feedback.pyx":143
+  /* "cy_emotion_feedback.pyx":149
  *         return self.W
  * 
- *     def _update_W(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):             # <<<<<<<<<<<<<<
- * 
- *         cdef:
+ *     def _update_W_by_PARank(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):             # <<<<<<<<<<<<<<
+ *         """
+ *         Passive-Aggressive Perceptron
  */
 
   /* function exit code */
@@ -3761,7 +3770,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_16_update_W(
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_X.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("cy_emotion_feedback.CyEmotionFeedback._update_W", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("cy_emotion_feedback.CyEmotionFeedback._update_W_by_PARank", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -3772,7 +3781,7 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_16_update_W(
   return __pyx_r;
 }
 
-/* "cy_emotion_feedback.pyx":152
+/* "cy_emotion_feedback.pyx":160
  *         self.W += min(self.C, tau) * X
  * 
  *     def _update_W_by_pagasos(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X, int iteration, bint is_update):             # <<<<<<<<<<<<<<
@@ -3814,16 +3823,16 @@ static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_19_update_W_
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_iteration)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_update_W_by_pagasos", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("_update_W_by_pagasos", 1, 3, 3, 1); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_is_update)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_update_W_by_pagasos", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+          __Pyx_RaiseArgtupleInvalid("_update_W_by_pagasos", 1, 3, 3, 2); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_update_W_by_pagasos") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_update_W_by_pagasos") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -3833,18 +3842,18 @@ static PyObject *__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_19_update_W_
       values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
     }
     __pyx_v_X = ((PyArrayObject *)values[0]);
-    __pyx_v_iteration = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_iteration == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
-    __pyx_v_is_update = __Pyx_PyObject_IsTrue(values[2]); if (unlikely((__pyx_v_is_update == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_iteration = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_iteration == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_is_update = __Pyx_PyObject_IsTrue(values[2]); if (unlikely((__pyx_v_is_update == (int)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_update_W_by_pagasos", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("_update_W_by_pagasos", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("cy_emotion_feedback.CyEmotionFeedback._update_W_by_pagasos", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_X), __pyx_ptype_5numpy_ndarray, 1, "X", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_X), __pyx_ptype_5numpy_ndarray, 1, "X", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_18_update_W_by_pagasos(((struct __pyx_obj_19cy_emotion_feedback_CyEmotionFeedback *)__pyx_v_self), __pyx_v_X, __pyx_v_iteration, __pyx_v_is_update);
 
   /* function exit code */
@@ -3882,11 +3891,11 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_18_update_W_
   __pyx_pybuffernd_X.rcbuffer = &__pyx_pybuffer_X;
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_19cy_emotion_feedback_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_X.rcbuffer->pybuffer, (PyObject*)__pyx_v_X, &__Pyx_TypeInfo_nn___pyx_t_19cy_emotion_feedback_DOUBLE, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS, 1, 0, __pyx_stack) == -1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_pybuffernd_X.diminfo[0].strides = __pyx_pybuffernd_X.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_X.diminfo[0].shape = __pyx_pybuffernd_X.rcbuffer->pybuffer.shape[0];
 
-  /* "cy_emotion_feedback.pyx":160
+  /* "cy_emotion_feedback.pyx":168
  *             double new_param
  * 
  *         eta = 1 / (self.lmd * iteration)             # <<<<<<<<<<<<<<
@@ -3896,11 +3905,11 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_18_update_W_
   __pyx_t_1 = (__pyx_v_self->lmd * __pyx_v_iteration);
   if (unlikely(__pyx_t_1 == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 168; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __pyx_v_eta = (1.0 / __pyx_t_1);
 
-  /* "cy_emotion_feedback.pyx":161
+  /* "cy_emotion_feedback.pyx":169
  * 
  *         eta = 1 / (self.lmd * iteration)
  *         self.W *= (1 - 1/iteration)             # <<<<<<<<<<<<<<
@@ -3909,25 +3918,25 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_18_update_W_
  */
   if (unlikely(__pyx_v_iteration == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "integer division or modulo by zero");
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 169; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   else if (sizeof(long) == sizeof(long) && (!(((int)-1) > 0)) && unlikely(__pyx_v_iteration == (int)-1)  && unlikely(UNARY_NEG_WOULD_OVERFLOW(1))) {
     PyErr_SetString(PyExc_OverflowError, "value too large to perform division");
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 169; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = __Pyx_PyInt_From_long((1 - __Pyx_div_long(1, __pyx_v_iteration))); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyInt_From_long((1 - __Pyx_div_long(1, __pyx_v_iteration))); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 169; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyNumber_InPlaceMultiply(((PyObject *)__pyx_v_self->W), __pyx_t_2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyNumber_InPlaceMultiply(((PyObject *)__pyx_v_self->W), __pyx_t_2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 169; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 169; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GIVEREF(__pyx_t_3);
   __Pyx_GOTREF(__pyx_v_self->W);
   __Pyx_DECREF(((PyObject *)__pyx_v_self->W));
   __pyx_v_self->W = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "cy_emotion_feedback.pyx":162
+  /* "cy_emotion_feedback.pyx":170
  *         eta = 1 / (self.lmd * iteration)
  *         self.W *= (1 - 1/iteration)
  *         if is_update:             # <<<<<<<<<<<<<<
@@ -3937,29 +3946,29 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_18_update_W_
   __pyx_t_4 = (__pyx_v_is_update != 0);
   if (__pyx_t_4) {
 
-    /* "cy_emotion_feedback.pyx":163
+    /* "cy_emotion_feedback.pyx":171
  *         self.W *= (1 - 1/iteration)
  *         if is_update:
  *             self.W += eta * self.error * X             # <<<<<<<<<<<<<<
  *         new_param = (1/math.sqrt(self.lmd))/np.linalg.norm(self.W)
  *         self.W = min(1, new_param) * self.W
  */
-    __pyx_t_3 = PyFloat_FromDouble((__pyx_v_eta * __pyx_v_self->error)); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 163; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = PyFloat_FromDouble((__pyx_v_eta * __pyx_v_self->error)); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 171; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = PyNumber_Multiply(__pyx_t_3, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 163; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = PyNumber_Multiply(__pyx_t_3, ((PyObject *)__pyx_v_X)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 171; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_InPlaceAdd(((PyObject *)__pyx_v_self->W), __pyx_t_2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 163; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = PyNumber_InPlaceAdd(((PyObject *)__pyx_v_self->W), __pyx_t_2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 171; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 163; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 171; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GIVEREF(__pyx_t_3);
     __Pyx_GOTREF(__pyx_v_self->W);
     __Pyx_DECREF(((PyObject *)__pyx_v_self->W));
     __pyx_v_self->W = ((PyArrayObject *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "cy_emotion_feedback.pyx":162
+    /* "cy_emotion_feedback.pyx":170
  *         eta = 1 / (self.lmd * iteration)
  *         self.W *= (1 - 1/iteration)
  *         if is_update:             # <<<<<<<<<<<<<<
@@ -3968,18 +3977,18 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_18_update_W_
  */
   }
 
-  /* "cy_emotion_feedback.pyx":164
+  /* "cy_emotion_feedback.pyx":172
  *         if is_update:
  *             self.W += eta * self.error * X
  *         new_param = (1/math.sqrt(self.lmd))/np.linalg.norm(self.W)             # <<<<<<<<<<<<<<
  *         self.W = min(1, new_param) * self.W
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_math); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_math); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_sqrt); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_sqrt); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->lmd); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_self->lmd); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_6 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && unlikely(PyMethod_Check(__pyx_t_5))) {
@@ -3992,30 +4001,30 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_18_update_W_
     }
   }
   if (!__pyx_t_6) {
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_GOTREF(__pyx_t_3);
   } else {
-    __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
     __Pyx_GIVEREF(__pyx_t_2);
     PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_t_2);
     __pyx_t_2 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   }
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyNumber_Divide(__pyx_int_1, __pyx_t_3); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_PyNumber_Divide(__pyx_int_1, __pyx_t_3); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_linalg); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_linalg); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_norm); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_norm); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -4029,29 +4038,29 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_18_update_W_
     }
   }
   if (!__pyx_t_2) {
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_7, ((PyObject *)__pyx_v_self->W)); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_7, ((PyObject *)__pyx_v_self->W)); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
   } else {
-    __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_2); __pyx_t_2 = NULL;
     __Pyx_INCREF(((PyObject *)__pyx_v_self->W));
     __Pyx_GIVEREF(((PyObject *)__pyx_v_self->W));
     PyTuple_SET_ITEM(__pyx_t_6, 0+1, ((PyObject *)__pyx_v_self->W));
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_6, NULL); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_6, NULL); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   }
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = __Pyx_PyNumber_Divide(__pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_7 = __Pyx_PyNumber_Divide(__pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_t_7); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_v_new_param = __pyx_t_1;
 
-  /* "cy_emotion_feedback.pyx":165
+  /* "cy_emotion_feedback.pyx":173
  *             self.W += eta * self.error * X
  *         new_param = (1/math.sqrt(self.lmd))/np.linalg.norm(self.W)
  *         self.W = min(1, new_param) * self.W             # <<<<<<<<<<<<<<
@@ -4063,19 +4072,19 @@ static PyObject *__pyx_pf_19cy_emotion_feedback_17CyEmotionFeedback_18_update_W_
   } else {
     __pyx_t_9 = __pyx_t_8;
   }
-  __pyx_t_7 = PyFloat_FromDouble(__pyx_t_9); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 165; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_7 = PyFloat_FromDouble(__pyx_t_9); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_7, ((PyObject *)__pyx_v_self->W)); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 165; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_7, ((PyObject *)__pyx_v_self->W)); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 165; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GIVEREF(__pyx_t_3);
   __Pyx_GOTREF(__pyx_v_self->W);
   __Pyx_DECREF(((PyObject *)__pyx_v_self->W));
   __pyx_v_self->W = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "cy_emotion_feedback.pyx":152
+  /* "cy_emotion_feedback.pyx":160
  *         self.W += min(self.C, tau) * X
  * 
  *     def _update_W_by_pagasos(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X, int iteration, bint is_update):             # <<<<<<<<<<<<<<
@@ -6302,10 +6311,10 @@ static PyMethodDef __pyx_methods_19cy_emotion_feedback_CyEmotionFeedback[] = {
   {"calc_error", (PyCFunction)__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_5calc_error, METH_O, __pyx_doc_19cy_emotion_feedback_17CyEmotionFeedback_4calc_error},
   {"set_margin", (PyCFunction)__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_7set_margin, METH_O, __pyx_doc_19cy_emotion_feedback_17CyEmotionFeedback_6set_margin},
   {"fit", (PyCFunction)__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_9fit, METH_VARARGS|METH_KEYWORDS, 0},
-  {"batch_fit", (PyCFunction)__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_11batch_fit, METH_VARARGS|METH_KEYWORDS, 0},
+  {"PARank_fit", (PyCFunction)__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_11PARank_fit, METH_VARARGS|METH_KEYWORDS, __pyx_doc_19cy_emotion_feedback_17CyEmotionFeedback_10PARank_fit},
   {"_repeat_optimization", (PyCFunction)__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_13_repeat_optimization, METH_O, 0},
   {"pagasos_fit", (PyCFunction)__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_15pagasos_fit, METH_VARARGS|METH_KEYWORDS, __pyx_doc_19cy_emotion_feedback_17CyEmotionFeedback_14pagasos_fit},
-  {"_update_W", (PyCFunction)__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_17_update_W, METH_O, 0},
+  {"_update_W_by_PARank", (PyCFunction)__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_17_update_W_by_PARank, METH_O, __pyx_doc_19cy_emotion_feedback_17CyEmotionFeedback_16_update_W_by_PARank},
   {"_update_W_by_pagasos", (PyCFunction)__pyx_pw_19cy_emotion_feedback_17CyEmotionFeedback_19_update_W_by_pagasos, METH_VARARGS|METH_KEYWORDS, __pyx_doc_19cy_emotion_feedback_17CyEmotionFeedback_18_update_W_by_pagasos},
   {0, 0, 0, 0}
 };
@@ -6431,7 +6440,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_time, __pyx_k_time, sizeof(__pyx_k_time), 0, 0, 1, 1},
   {&__pyx_n_s_top_matrix, __pyx_k_top_matrix, sizeof(__pyx_k_top_matrix), 0, 0, 1, 1},
   {&__pyx_kp_u_unknown_dtype_code_in_numpy_pxd, __pyx_k_unknown_dtype_code_in_numpy_pxd, sizeof(__pyx_k_unknown_dtype_code_in_numpy_pxd), 0, 1, 0, 0},
-  {&__pyx_n_s_update_W, __pyx_k_update_W, sizeof(__pyx_k_update_W), 0, 0, 1, 1},
+  {&__pyx_n_s_update_W_by_PARank, __pyx_k_update_W_by_PARank, sizeof(__pyx_k_update_W_by_PARank), 0, 0, 1, 1},
   {&__pyx_n_s_update_W_by_pagasos, __pyx_k_update_W_by_pagasos, sizeof(__pyx_k_update_W_by_pagasos), 0, 0, 1, 1},
   {&__pyx_n_s_xrange, __pyx_k_xrange, sizeof(__pyx_k_xrange), 0, 0, 1, 1},
   {&__pyx_n_s_zeros, __pyx_k_zeros, sizeof(__pyx_k_zeros), 0, 0, 1, 1},
@@ -6439,9 +6448,9 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
 };
 static int __Pyx_InitCachedBuiltins(void) {
   #if PY_MAJOR_VERSION >= 3
-  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_xrange) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 85; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_xrange) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 88; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   #else
-  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_xrange); if (!__pyx_builtin_xrange) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 85; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_xrange); if (!__pyx_builtin_xrange) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 88; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   #endif
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 218; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 231; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -6455,14 +6464,14 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "cy_emotion_feedback.pyx":83
+  /* "cy_emotion_feedback.pyx":86
  *         self.margin = 0.0
  *         self.C = C
  *         w = np.zeros(44)             # <<<<<<<<<<<<<<
  *         count = 0
  *         for i in xrange(1000):
  */
-  __pyx_tuple_ = PyTuple_Pack(1, __pyx_int_44); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple_ = PyTuple_Pack(1, __pyx_int_44); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 86; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
@@ -7745,111 +7754,6 @@ static int __Pyx_IternextUnpackEndCheck(PyObject *retval, Py_ssize_t expected) {
     return 0;
 }
 
-#if CYTHON_USE_PYLONG_INTERNALS
-  #include "longintrepr.h"
-#endif
-
-#if CYTHON_COMPILING_IN_CPYTHON
-static PyObject* __Pyx_PyInt_AddObjC(PyObject *op1, PyObject *op2, CYTHON_UNUSED long intval, CYTHON_UNUSED int inplace) {
-    #if PY_MAJOR_VERSION < 3
-    if (likely(PyInt_CheckExact(op1))) {
-        const long b = intval;
-        long x;
-        long a = PyInt_AS_LONG(op1);
-            x = (long)((unsigned long)a + b);
-            if (likely((x^a) >= 0 || (x^b) >= 0))
-                return PyInt_FromLong(x);
-            return PyLong_Type.tp_as_number->nb_add(op1, op2);
-    }
-    #endif
-    #if CYTHON_USE_PYLONG_INTERNALS && PY_MAJOR_VERSION >= 3
-    if (likely(PyLong_CheckExact(op1))) {
-        const long b = intval;
-        long a, x;
-        const PY_LONG_LONG llb = intval;
-        PY_LONG_LONG lla, llx;
-        const digit* digits = ((PyLongObject*)op1)->ob_digit;
-        const Py_ssize_t size = Py_SIZE(op1);
-        if (likely(__Pyx_sst_abs(size) <= 1)) {
-            a = likely(size) ? digits[0] : 0;
-            if (size == -1) a = -a;
-        } else {
-            switch (size) {
-                case -2:
-                    if (8 * sizeof(long) - 1 > 2 * PyLong_SHIFT) {
-                        a = -(long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    } else if (8 * sizeof(PY_LONG_LONG) - 1 > 2 * PyLong_SHIFT) {
-                        lla = -(PY_LONG_LONG) (((((unsigned PY_LONG_LONG)digits[1]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[0]));
-                        goto long_long;
-                    }
-                case 2:
-                    if (8 * sizeof(long) - 1 > 2 * PyLong_SHIFT) {
-                        a = (long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    } else if (8 * sizeof(PY_LONG_LONG) - 1 > 2 * PyLong_SHIFT) {
-                        lla = (PY_LONG_LONG) (((((unsigned PY_LONG_LONG)digits[1]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[0]));
-                        goto long_long;
-                    }
-                case -3:
-                    if (8 * sizeof(long) - 1 > 3 * PyLong_SHIFT) {
-                        a = -(long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    } else if (8 * sizeof(PY_LONG_LONG) - 1 > 3 * PyLong_SHIFT) {
-                        lla = -(PY_LONG_LONG) (((((((unsigned PY_LONG_LONG)digits[2]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[1]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[0]));
-                        goto long_long;
-                    }
-                case 3:
-                    if (8 * sizeof(long) - 1 > 3 * PyLong_SHIFT) {
-                        a = (long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    } else if (8 * sizeof(PY_LONG_LONG) - 1 > 3 * PyLong_SHIFT) {
-                        lla = (PY_LONG_LONG) (((((((unsigned PY_LONG_LONG)digits[2]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[1]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[0]));
-                        goto long_long;
-                    }
-                case -4:
-                    if (8 * sizeof(long) - 1 > 4 * PyLong_SHIFT) {
-                        a = -(long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    } else if (8 * sizeof(PY_LONG_LONG) - 1 > 4 * PyLong_SHIFT) {
-                        lla = -(PY_LONG_LONG) (((((((((unsigned PY_LONG_LONG)digits[3]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[2]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[1]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[0]));
-                        goto long_long;
-                    }
-                case 4:
-                    if (8 * sizeof(long) - 1 > 4 * PyLong_SHIFT) {
-                        a = (long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0]));
-                        break;
-                    } else if (8 * sizeof(PY_LONG_LONG) - 1 > 4 * PyLong_SHIFT) {
-                        lla = (PY_LONG_LONG) (((((((((unsigned PY_LONG_LONG)digits[3]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[2]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[1]) << PyLong_SHIFT) | (unsigned PY_LONG_LONG)digits[0]));
-                        goto long_long;
-                    }
-                default: return PyLong_Type.tp_as_number->nb_add(op1, op2);
-            }
-        }
-                x = a + b;
-            return PyLong_FromLong(x);
-        long_long:
-                llx = lla + llb;
-            return PyLong_FromLongLong(llx);
-    }
-    #endif
-    if (PyFloat_CheckExact(op1)) {
-        const long b = intval;
-        double a = PyFloat_AS_DOUBLE(op1);
-            double result;
-            PyFPE_START_PROTECT("add", return NULL)
-            result = ((double)a) + (double)b;
-            PyFPE_END_PROTECT(result)
-            return PyFloat_FromDouble(result);
-    }
-    return (inplace ? PyNumber_InPlaceAdd : PyNumber_Add)(op1, op2);
-}
-#endif
-
-static CYTHON_INLINE void __Pyx_RaiseUnboundLocalError(const char *varname) {
-    PyErr_Format(PyExc_UnboundLocalError, "local variable '%s' referenced before assignment", varname);
-}
-
 static CYTHON_INLINE long __Pyx_div_long(long a, long b) {
     long q = a / b;
     long r = a - q*b;
@@ -8294,6 +8198,10 @@ static void __Pyx_ReleaseBuffer(Py_buffer *view) {
         }\
         return (target_type) value;\
     }
+
+#if CYTHON_USE_PYLONG_INTERNALS
+  #include "longintrepr.h"
+#endif
 
 static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {
     const int neg_one = (int) -1, const_zero = (int) 0;
