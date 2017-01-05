@@ -277,13 +277,15 @@ def get_bound_with_attenuation_song_tag_map(feedback_cluster, top_song_obj, emot
         """
         sum_distance = 0.0
         distance = cy_calc.get_euclid_distance(song, top_song, degree)
+        print distance
         if distance > bound_ave:
             continue
         song_ids.append(m_obj.song_id)
         count += 1
 
     extra_column = get_extra_column(emotion_map, emotions)
-    song_objs = models.Song.objects.filter(id__in=song_ids).extra(select = {'value': extra_column}).values()[:top_k]
+    s = models.Song.objects.filter(id__in=song_ids).extra(select = {'value': extra_column})
+    song_objs = s.extra(order_by=["-value"]).values()[:top_k]
     return get_song_and_tag_map(song_objs)
 
 def is_upper_bound(song_obj, emotion, value, bound):

@@ -160,7 +160,7 @@ class EmotionFeedback(EmotionBaseline):
         上位K個の決定手法として、範囲アルファ*減衰定数の範囲で取得する
         バッチ学習
         """
-        self.W = self.cy_obj.batch_fit(self.bound_song_tag_map, self.top_matrix, 0.005)
+        self.W = self.cy_obj.PARank_fit(self.bound_song_tag_map, self.top_matrix, 0.005)
         print self.W
         self._update_params_into_redis()
 
