@@ -84,3 +84,8 @@ def get_top_song_by_baseline(user, emotion):
     e_obj.set_params()
     top_song = e_obj.get_top_song()
     return [top_song]
+
+if __name__ == "__main__":
+    # DB初期化
+    init_redis_all_model("emotion")
+    init_redis_all_model("relevance")

@@ -278,14 +278,18 @@ body{
     }
     .feedback-explanation {
       float: right;
-      padding-right: 200px;
+      /*padding-right: 200px;*/
       padding-top: 80px;
       font-size: 25px;
+      width: 50%;
       ul {
         list-style: none;
         padding: 10px;
         border-radius: 10px;
+      }
+      .blue {
         background-color: #afeeee;
+        width: 50%;
       }
     }
     input{
@@ -324,6 +328,15 @@ body{
         border-radius: 10px;
         margin: 0px 10px;
       }
+    }
+    .another-search {
+      margin-top: 40px;
+    }
+    .another-search-link {
+      background-color: #ff7f50;
+      padding: 5px;
+      color: #fff;
+      border-radius: 5px;
     }
   }
   .pagination{

@@ -209,14 +209,17 @@ body {
       display: inline-block; }
     body .main .feedback-explanation {
       float: right;
-      padding-right: 200px;
+      /*padding-right: 200px;*/
       padding-top: 80px;
-      font-size: 25px; }
+      font-size: 25px;
+      width: 50%; }
       body .main .feedback-explanation ul {
         list-style: none;
         padding: 10px;
-        border-radius: 10px;
-        background-color: #afeeee; }
+        border-radius: 10px; }
+      body .main .feedback-explanation .blue {
+        background-color: #afeeee;
+        width: 50%; }
     body .main input {
       margin-left: 20px;
       background-color: #00bfff;
@@ -246,6 +249,13 @@ body {
         font-size: 20px;
         border-radius: 10px;
         margin: 0px 10px; }
+    body .main .another-search {
+      margin-top: 40px; }
+    body .main .another-search-link {
+      background-color: #ff7f50;
+      padding: 5px;
+      color: #fff;
+      border-radius: 5px; }
   body .pagination {
     float: right; }
   body footer {
