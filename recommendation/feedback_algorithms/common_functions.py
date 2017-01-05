@@ -377,4 +377,3 @@ def write_top_k_songs(user_id, filepass, top_k_songs, emotion_map, emotions, fee
 def get_music_cluster_value(song_id):
     top_song_objs = models.SearchMusicCluster.objects.filter(song_id=int(song_id)).values()[0]
     return top_song_objs
-
