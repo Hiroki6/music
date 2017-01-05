@@ -1,9 +1,9 @@
-{% if listening_count > 1 %}
+{% if listening_count > 5 %}
 <!--<form class = "refresh-form" method = "POST" action = "/recommendation/finish_search/{{ situation }}/{{ feedback_type }}">
   {% csrf_token %}
   <input type = "hidden" name = "feedback_type" value = {{ feedback_type }}>
   <input type = "hidden" name = "situation" value = {{ situation }}>
   <button class = "end-link" type = "submit" name = "finish">終了する</button>
   </form>-->
-  <a href = "/recommendation/finish_search/{{ situation }}/{{ feedback_type }}">終了する</a>
+  <a class = "end-link" href = "/recommendation/finish_search/{{ situation }}/{{ feedback_type }}">終了する</a>
 {% endif %}
