@@ -21,7 +21,7 @@
     <div class = "emotion-feedback">
       <form class = "feedback-form" name = "feedback" method = "POST" action = "/recommendation/{{ url }}/">
         {% csrf_token %}
-        <button class = "rerecommend-button" id = "indicator" name="select_feedback" value="7">no feedback</button>
+        <button class = "rerecommend-button" id = "indicator" name="select_feedback" value="7">再推薦</button>
         <input type = "hidden" name = "song_id" value = {{ song.id }}>
           {% include "parts/_hidden_search_condition.html" %}
       </form>
