@@ -21,6 +21,9 @@ emotion_map = {1: "pop", 2: "ballad", 3: "rock"}
 
 # 境界条件のmap
 bound_map = {1: 0.015283, 2: 0.030881, 3: 0.019013}
+ave_map = {1: 0.125574, 2: 0.128966, 3: 0.099840}
+max_map = {1: 0.16459, 2: 0.19948, 3: 0.14737}
+min_map = {1: 0.07261, 2: 0.06131, 3: 0.05837}
 
 class EmotionBaseline(object):
     """
@@ -175,7 +178,7 @@ class EmotionFeedback(EmotionBaseline):
             common.listtuple_sort_reverse(rankings)
             self.top_song = rankings[0][1]
             common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10], self.emotion_map, self.emotions, emotion_map[self.feedback], self.plus_or_minus)
-            self._save_top_k_songs(rankings[:10])
+            self._save_top_k_songs(rankings[:5])
         else:
             songs, song_tag_map = common.get_initial_not_listening_songs(self.user, self.emotion_map, self.emotions, "emotion")
             random_song = random.randint(0,1000)
@@ -227,21 +230,32 @@ class EmotionFeedback(EmotionBaseline):
         top_song_objs = models.SearchMusicCluster.objects.filter(song_id=int(self.top_song))
         top_song_obj = top_song_objs[0]
         emotion_value = top_song_objs[0].__dict__[emotion_map[self.feedback]]
-        self._decision_bound()
+        self._decision_bound(emotion_value)
         print "plus or minus %d" % (self.plus_or_minus)
         print "feedback %s" % (emotion_map[self.feedback])
         self.bound_songs, self.bound_song_tag_map = common.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, self.emotion_map, self.emotions, emotion_value, self.plus_or_minus, self.bound)
-        print "bound %.5f" % (self.bound)
         print "number of bound songs %d" % (len(self.bound_songs))
 
-    def _decision_bound(self):
+    def _decision_bound(self, emotion_value):
         """
         boundの決定
+        moreの時は最大値に近ければ近いほど、boundは小さくなる
+        lessの時は最小値に近ければ近いほど、boundは小さくなる
         """
         # situationごとのフィードバックの回数を取得
         user_feedbacks = models.EmotionEmotionbasedSong.objects.filter(user_id=int(self.user), situation=int(self.situation)).values()
+        diff = 0
+        if self.plus_or_minus == 1:
+            max_value = max_map[self.feedback]
+            diff = max_value - emotion_value
+            bound = bound_map[self.feedback] * diff / max_value
+        else:
+            min_value = min_map[self.feedback]
+            diff = emotion_value - min_value
+            bound = bound_map[self.feedback] * diff / emotion_value
         count = len(user_feedbacks)
-        self.bound = bound_map[self.feedback] / pow(2, count-1)
+        self.bound = bound / pow(2, count-1)
+        print "bound %.5f" % (self.bound)
         #self.bound = bound_map[self.feedback] / count
         #self.bound = bound_map[self.feedback] * math.exp(-(count-1))
 

@@ -4,6 +4,13 @@ import codecs
 import sys
 sys.dont_write_bytecode = True 
 
+def init_search(request, emotions, situation):
+    """
+    初期の検索
+    """
+    song_objs = common_helper.get_init_search_songs(request.user.id, situation, emotions)
+    return song_objs
+
 def emotion_search(request, emotions, situation, learning=True):
     """
     印象語フィードバック用の検索関数
@@ -215,7 +222,7 @@ def get_last_top_songs_by_type(user_id, feedback_type):
 
 def get_like_songids_and_ranks(request):
     """
-    選択された好きな楽曲3つを取得
+    選択された楽曲とrankを取得
     """
     song_ids = request.POST.getlist("best_song")
     ranks = []

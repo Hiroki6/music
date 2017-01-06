@@ -155,7 +155,7 @@ cdef class CyEmotionFeedback:
 
         tau = self.error / np.linalg.norm(X) # PA-I
         #tau = self.error / (np.linalg.norm(X)+1/(2*self.C)) # PA-II
-        print "tau: %.5f" % (tau)
+        #print "tau: %.8f" % (tau)
         self.W += min(self.C, tau) * X
         #self.W += tau * X
 

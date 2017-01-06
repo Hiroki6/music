@@ -225,6 +225,7 @@ def get_upper_songs(feedback_cluster, value, bound):
     """
     特定の印象ベクトルが特定の値より大きいものを取得
     """
+    print "feedback is plus"
     if feedback_cluster == 1:
         return models.SearchMusicCluster.objects.order_by("pop").filter(pop__gte=value, pop__lte=value+bound)
     elif feedback_cluster == 2:
@@ -233,7 +234,7 @@ def get_upper_songs(feedback_cluster, value, bound):
         return models.SearchMusicCluster.objects.order_by("rock").filter(rock__gte=value, rock__lte=value+bound)
 
 def get_lower_songs(feedback_cluster, value, bound):
-
+    print "feedback is minus"
     if feedback_cluster == 1:
         return models.SearchMusicCluster.objects.order_by("pop").filter(pop__lte=value, pop__gte=value-bound)
     elif feedback_cluster == 2:
@@ -367,12 +368,15 @@ def write_top_k_songs(user_id, filepass, top_k_songs, emotion_map, emotions, fee
     print "write file"
     print emotions
     f = codecs.open(filepass, "a")
+    user_id = str(user_id).encode('utf-8')
+    feedback_type = feedback_type.encode('utf-8')
+    emotion = emotion_map[emotions[0]].encode('utf-8')
     if plus_or_minus == 1:
-        f.write("user: " + str(user_id) + " feedback_type: ↑" + feedback_type + " emotion: " + emotion_map[emotions[0]] + "\n")
+        f.write("user: " + user_id + " feedback_type: ↑" + feedback_type + " emotion: " + emotion + "\n")
     elif plus_or_minus == -1:
-        f.write("user: " + str(user_id) + " feedback_type: ↓" + feedback_type + " emotion: " + emotion_map[emotions[0]] + "\n")
+        f.write("user: " + user_id + " feedback_type: ↓" + feedback_type + " emotion: " + emotion + "\n")
     else:
-        f.write("user: " + str(user_id) + " feedback_type: " + feedback_type + " emotion: " + emotion_map[emotions[0]] + "\n")
+        f.write("user: " + user_id + " feedback_type: " + feedback_type + " emotion: " + emotion + "\n")
     f.write("predict_value, song_id, pop, ballad, rock\n")
     for song in top_k_songs:
         song_obj = get_music_cluster_value(song[1])
