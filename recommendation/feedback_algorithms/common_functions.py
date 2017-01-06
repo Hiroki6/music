@@ -225,6 +225,7 @@ def get_upper_songs(feedback_cluster, value, bound):
     """
     特定の印象ベクトルが特定の値より大きいものを取得
     """
+    print "feedback is plus"
     if feedback_cluster == 1:
         return models.SearchMusicCluster.objects.order_by("pop").filter(pop__gte=value, pop__lte=value+bound)
     elif feedback_cluster == 2:
@@ -233,7 +234,7 @@ def get_upper_songs(feedback_cluster, value, bound):
         return models.SearchMusicCluster.objects.order_by("rock").filter(rock__gte=value, rock__lte=value+bound)
 
 def get_lower_songs(feedback_cluster, value, bound):
-
+    print "feedback is minus"
     if feedback_cluster == 1:
         return models.SearchMusicCluster.objects.order_by("pop").filter(pop__lte=value, pop__gte=value-bound)
     elif feedback_cluster == 2:
@@ -269,23 +270,27 @@ def get_bound_with_attenuation_song_tag_map(feedback_cluster, top_song_obj, emot
     print len(songs)
     song_ids = []
     degree = len(songs[0])
-    for m_obj, song in zip(m_objs, songs):
+    """
+    feedback_clusterに所属するタグ以外のタグ間の距離を比較する
+    全てのタグを比較してしまうと、feedback_clusterに該当する値の離れた楽曲が外れてしまうため
+    """
+    distances = [(cy_calc.get_euclid_distance(song, top_song, degree), m_obj.song_id) for m_obj, song in zip(m_objs, songs)]
+    """for m_obj, song in zip(m_objs, songs):
         # 距離を計測する(ユークリッド距離)
-        """
-        feedback_clusterに所属するタグ以外のタグ間の距離を比較する
-        全てのタグを比較してしまうと、feedback_clusterに該当する値の離れた楽曲が外れてしまうため
-        """
-        sum_distance = 0.0
         distance = cy_calc.get_euclid_distance(song, top_song, degree)
         print distance
         if distance > bound_ave:
             continue
         song_ids.append(m_obj.song_id)
-        count += 1
-
+        count += 1"""
+    distances.sort()
+    for i, distance in enumerate(distances):
+        if i == 100:
+            break
+        song_ids.append(distance[1])
     extra_column = get_extra_column(emotion_map, emotions)
-    s = models.Song.objects.filter(id__in=song_ids).extra(select = {'value': extra_column})
-    song_objs = s.extra(order_by=["-value"]).values()[:top_k]
+    song_objs = models.Song.objects.filter(id__in=song_ids).extra(select = {'value': extra_column}).values()
+    #song_objs = s.extra(order_by=["-value"]).values()[:top_k]
     return get_song_and_tag_map(song_objs)
 
 def is_upper_bound(song_obj, emotion, value, bound):
@@ -350,6 +355,9 @@ def change_list_into_numpy(target_map):
         target_map[key] = np.array(values)
 
 def listtuple_sort_reverse(t):
+    """
+    タプルを要素として持つリストのソートして逆順にする
+    """
     t.sort()
     t.reverse()
 
@@ -360,12 +368,15 @@ def write_top_k_songs(user_id, filepass, top_k_songs, emotion_map, emotions, fee
     print "write file"
     print emotions
     f = codecs.open(filepass, "a")
+    user_id = str(user_id).encode('utf-8')
+    feedback_type = feedback_type.encode('utf-8')
+    emotion = emotion_map[emotions[0]].encode('utf-8')
     if plus_or_minus == 1:
-        f.write("user: " + str(user_id) + " feedback_type: ↑" + feedback_type + " emotion: " + emotion_map[emotions[0]] + "\n")
+        f.write("user: " + user_id + " feedback_type: ↑" + feedback_type + " emotion: " + emotion + "\n")
     elif plus_or_minus == -1:
-        f.write("user: " + str(user_id) + " feedback_type: ↓" + feedback_type + " emotion: " + emotion_map[emotions[0]] + "\n")
+        f.write("user: " + user_id + " feedback_type: ↓" + feedback_type + " emotion: " + emotion + "\n")
     else:
-        f.write("user: " + str(user_id) + " feedback_type: " + feedback_type + " emotion: " + emotion_map[emotions[0]] + "\n")
+        f.write("user: " + user_id + " feedback_type: " + feedback_type + " emotion: " + emotion + "\n")
     f.write("predict_value, song_id, pop, ballad, rock\n")
     for song in top_k_songs:
         song_obj = get_music_cluster_value(song[1])
@@ -377,4 +388,3 @@ def write_top_k_songs(user_id, filepass, top_k_songs, emotion_map, emotions, fee
 def get_music_cluster_value(song_id):
     top_song_objs = models.SearchMusicCluster.objects.filter(song_id=int(song_id)).values()[0]
     return top_song_objs
-

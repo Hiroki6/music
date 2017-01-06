@@ -153,9 +153,11 @@ cdef class CyEmotionFeedback:
         cdef:
             double tau
 
-        tau = self.error / np.linalg.norm(X)
-        print "tau: %.5f" % (tau)
+        tau = self.error / np.linalg.norm(X) # PA-I
+        #tau = self.error / (np.linalg.norm(X)+1/(2*self.C)) # PA-II
+        #print "tau: %.8f" % (tau)
         self.W += min(self.C, tau) * X
+        #self.W += tau * X
 
     def _update_W_by_pagasos(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X, int iteration, bint is_update):
         """

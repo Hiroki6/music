@@ -276,5 +276,16 @@ def get_one_dim_params(redis_obj, key):
 def save_rank_songs(user_id, situation, song_ids, ranks, feedback_type):
     
     for song_id, rank in zip(song_ids, ranks):
-
         obj, created = TopKRelevantSong.objects.get_or_create(user_id=user_id, song_id=song_id, situation=situation, search_type=feedback_type, song_rank=rank)
+
+def get_init_search_songs(user, situation, emotions):
+    song_ids = exec_functions.get_init_search_songs(user, situation, emotions)
+    song_objs = []
+    for index, song_id in enumerate(song_ids):
+        song_objs.append((index+1, Song.objects.filter(id=song_id)[0]))
+    return song_objs
+
+def save_init_rank_songs(user_id, situation, song_ids, ranks):
+    for song_id, rank in zip(song_ids, ranks):
+       obj, created = InitTopKRelevantSong.objects.get_or_create(user_id=user_id, song_id=song_id, situation=situation, song_rank=rank)
+   

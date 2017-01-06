@@ -223,6 +223,7 @@ body {
         body .main .refresh-form .refresh-button:hover {
           background-color: #32cd32; }
     body .main .end-link {
+      padding: 5px;
       margin-left: 10px;
       background-color: #00ff7f;
       color: #fff;
