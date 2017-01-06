@@ -1,4 +1,4 @@
-{% if listening_count > 5 %}
+{% if listening_count >= 5 %}
 <!--<form class = "refresh-form" method = "POST" action = "/recommendation/finish_search/{{ situation }}/{{ feedback_type }}">
   {% csrf_token %}
   <input type = "hidden" name = "feedback_type" value = {{ feedback_type }}>

@@ -269,23 +269,27 @@ def get_bound_with_attenuation_song_tag_map(feedback_cluster, top_song_obj, emot
     print len(songs)
     song_ids = []
     degree = len(songs[0])
-    for m_obj, song in zip(m_objs, songs):
+    """
+    feedback_clusterに所属するタグ以外のタグ間の距離を比較する
+    全てのタグを比較してしまうと、feedback_clusterに該当する値の離れた楽曲が外れてしまうため
+    """
+    distances = [(cy_calc.get_euclid_distance(song, top_song, degree), m_obj.song_id) for m_obj, song in zip(m_objs, songs)]
+    """for m_obj, song in zip(m_objs, songs):
         # 距離を計測する(ユークリッド距離)
-        """
-        feedback_clusterに所属するタグ以外のタグ間の距離を比較する
-        全てのタグを比較してしまうと、feedback_clusterに該当する値の離れた楽曲が外れてしまうため
-        """
-        sum_distance = 0.0
         distance = cy_calc.get_euclid_distance(song, top_song, degree)
         print distance
         if distance > bound_ave:
             continue
         song_ids.append(m_obj.song_id)
-        count += 1
-
+        count += 1"""
+    distances.sort()
+    for i, distance in enumerate(distances):
+        if i == 100:
+            break
+        song_ids.append(distance[1])
     extra_column = get_extra_column(emotion_map, emotions)
-    s = models.Song.objects.filter(id__in=song_ids).extra(select = {'value': extra_column})
-    song_objs = s.extra(order_by=["-value"]).values()[:top_k]
+    song_objs = models.Song.objects.filter(id__in=song_ids).extra(select = {'value': extra_column}).values()
+    #song_objs = s.extra(order_by=["-value"]).values()[:top_k]
     return get_song_and_tag_map(song_objs)
 
 def is_upper_bound(song_obj, emotion, value, bound):
@@ -350,6 +354,9 @@ def change_list_into_numpy(target_map):
         target_map[key] = np.array(values)
 
 def listtuple_sort_reverse(t):
+    """
+    タプルを要素として持つリストのソートして逆順にする
+    """
     t.sort()
     t.reverse()
 
