@@ -1,7 +1,15 @@
 # -*- coding:utf-8 -*-
 from recommendation.helpers import emotion_helper, common_helper, relevant_helper
+import codecs
 import sys
 sys.dont_write_bytecode = True 
+
+def init_search(request, emotions, situation):
+    """
+    初期の検索
+    """
+    song_objs = common_helper.get_init_search_songs(request.user.id, situation, emotions)
+    return song_objs
 
 def emotion_search(request, emotions, situation, learning=True):
     """
@@ -192,7 +200,11 @@ def process_questionnaire(request):
         relevant_rate = request.POST['q1']
         emotion_rate = request.POST['q2']
         comparison = request.POST['q3']
+        free_content = request.POST['free_content']
         common_helper.save_emotion_questionnaire(request.user.id, relevant_rate, emotion_rate, comparison)
+        # free_contentがあれば保存
+        if len(free_content) > 0:
+            _write_free_content(request.user.id, free_content)
         return True
     else:
         return False
@@ -210,10 +222,19 @@ def get_last_top_songs_by_type(user_id, feedback_type):
 
 def get_like_songids_and_ranks(request):
     """
-    選択された好きな楽曲3つを取得
+    選択された楽曲とrankを取得
     """
     song_ids = request.POST.getlist("best_song")
     ranks = []
     for song_id in song_ids:
         ranks.append(request.POST["rank_" + song_id])
     return map(int, song_ids), map(int, ranks)
+
+def _write_free_content(user_id, free_content):
+    print "test"
+    f = codecs.open("free_content.txt", "a")
+    f.write("user: " + str(user_id) + "\n")
+    f.write(free_content + "\n")
+    f.write("\n")
+    f.close()
+

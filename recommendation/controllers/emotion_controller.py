@@ -44,7 +44,16 @@ def select_search(request):
     """
     検索手法の選択
     """
-    return render(request, 'emotions/select_search.html')
+    is_init = True
+    situation, emotions = common_helper.get_now_search_situation(request.user.id)
+    songs = []
+    if request.method == 'POST':
+        song_ids, ranks = get_like_songids_and_ranks(request)
+        common_helper.save_init_rank_songs(request.user.id, situation, song_ids, ranks)
+        is_init = False
+    if is_init:
+        songs = init_search(request, emotions, situation)
+    return render(request, 'emotions/select_search.html', {"is_init": is_init, "songs": songs})
 
 @login_required
 def relevant_feedback(request):

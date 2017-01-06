@@ -5,6 +5,7 @@ helperから呼ばれる各オブジェクト実行用の関数
 """
 import relevant_feedback as r_f
 import emotion_feedback as e_f
+import init_search as i_s
 import init_redis
 
 """
@@ -93,6 +94,15 @@ def get_top_song_by_baseline(user, emotion):
     e_obj.set_params()
     top_song = e_obj.get_top_song()
     return [top_song]
+
+"""
+各状況の最初の検索
+"""
+def get_init_search_songs(user, situation, emotions):
+    i_obj = i_s.InitSearch(user, situation, emotions)
+    top_k_songs = i_obj.get_top_k_songs()
+    song_ids = [song[1] for song in top_k_songs]
+    return song_ids
 
 if __name__ == "__main__":
     # DB初期化
