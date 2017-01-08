@@ -234,6 +234,7 @@ def _write_free_content(user_id, free_content):
     print "test"
     f = codecs.open("free_content.txt", "a")
     f.write("user: " + str(user_id) + "\n")
+    free_content = free_content.encode("utf-8")
     f.write(free_content + "\n")
     f.write("\n")
     f.close()
