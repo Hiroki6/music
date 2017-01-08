@@ -174,8 +174,8 @@ def listening_songs(request, situation):
     error_msg = ""
     if request.POST.has_key("best_song"):
         song_ids, feedback_types = get_like_songids_and_types(request)
-        if len(song_ids) != 3:
-            error_msg = "楽曲を３つ選択してください"
+        if len(song_ids) < 3:
+            error_msg = "楽曲を３つ以上選択してください"
         else:
             common_helper.save_best_songs(request.user.id, situation, song_ids, feedback_types)
             url = common_helper.get_url_about_search(request.user.id)
