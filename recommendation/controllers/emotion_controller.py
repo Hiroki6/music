@@ -106,13 +106,13 @@ def emotion_feedback_model(request):
                 error_msg = "フィードバックを選択してください"
                 songs, situation, emotions = emotion_search(request, emotions, situation, False)
             else:
-                # 永続化
-                emotion_helper.save_user_song(user_id, song_id, situation, feedback_type)
                 # 再推薦
                 if feedback_type == "7":
                     songs = emotion_search(request, emotions, situation, False)
                 # 学習
                 else:
+                    # EmotionEmotionBasedSongにデータを永続化
+                    emotion_helper.save_user_song(user_id, song_id, situation, feedback_type)
                     songs = emotion_search(request, emotions, situation)
     if request.method == 'GET':
         songs, situation, emotions = search_songs(request, "emotion")
