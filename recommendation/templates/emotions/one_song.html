@@ -1,0 +1,15 @@
+{% extends 'bases/emotion_base.html' %}
+
+{% block title %}楽曲表示{% endblock title %}
+
+{% block main %}
+  
+<div class = "main">
+  <h2>{{ songs.0.name }}を表示中</h2>
+    {% for song in songs %}
+      <div class = "content">
+        {% include "parts/_song_iframe.html" %}
+      </div>
+    {% endfor %}
+</div>
+{% endblock main %}

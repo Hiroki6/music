@@ -36,12 +36,12 @@ def learning_and_get_song(user, situation, emotion):
 """
 def get_top_song(user, situation, emotions, feedback_type):
     song_obj = None
-    if SearchSong.objects.filter(user_id=user, situation=situation, feedback_type=feedback_type).exists():
-        song_obj = get_now_search_song(user, situation, feedback_type)
-    else:
-        song_ids = exec_functions.get_song_by_relevant(user, situation, emotions)
-        song_obj = get_song_objs(song_ids)
-        save_search_song(user, song_obj[0].id, situation, feedback_type)
+    # if SearchSong.objects.filter(user_id=user, situation=situation, feedback_type=feedback_type).exists():
+    #     song_obj = get_now_search_song(user, situation, feedback_type)
+    # else:
+    song_ids = exec_functions.get_song_by_relevant(user, situation, emotions)
+    song_obj = get_song_objs(song_ids)
+    save_search_song(user, song_obj[0].id, situation, feedback_type)
     return song_obj
 
 """

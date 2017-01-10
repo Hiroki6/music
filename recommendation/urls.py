@@ -31,4 +31,5 @@ urlpatterns = [
     #url(r'^finish_search/$', emotion_controller.finish_search, name = 'finish_search'),
     url(r'^listening_songs/(?P<situation>\d+)$', emotion_controller.listening_songs, name = 'listening_songs'),
     url(r'^emotion_end/$', emotion_controller.end, name = 'emotion_end'),
+    url(r'^one_song/(?P<song_id>\d+)$', emotion_controller.one_song, name = 'one_song')
     ]

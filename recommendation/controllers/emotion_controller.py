@@ -72,10 +72,10 @@ def relevant_feedback(request):
         # フィードバックを受けた場合
         else:
             user_id, situation, emotions, song_id, feedback_type = get_feedback_params(request)
-            relevant_helper.save_user_song(int(user_id), int(song_id), int(feedback_type), int(situation))
             if feedback_type == "0":
                 songs = relevant_search(request, emotions, situation, False)
             else:
+                relevant_helper.save_user_song(int(user_id), int(song_id), int(feedback_type), int(situation))
                 songs = relevant_search(request, emotions, situation)
     if request.method == 'GET':
         songs, situation, emotions = search_songs(request, "relevant")
@@ -197,3 +197,11 @@ def questionnaire(request):
 def end(request):
     return render(request, 'emotions/end.html')
 
+@login_required
+def one_song(request, song_id):
+    """
+    song_idを持つ楽曲を表示する
+    主にその楽曲が再生されるかどうかなどのチェックに行う
+    """
+    songs = common_helper.get_song_obj(song_id)
+    return render(request, 'emotions/one_song.html', {"songs": songs})
