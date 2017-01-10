@@ -27,9 +27,22 @@ def save_user_song(user_id, song_id, relevant_type, situation):
 """
 学習と楽曲の取得(relevant)
 """
-def learning_and_get_song(user, emotion):
-    song_ids = exec_functions.learning_and_get_song_by_relevant(user, emotion)
+def learning_and_get_song(user, situation, emotion):
+    song_ids = exec_functions.learning_and_get_song_by_relevant(user, situation, emotion)
     return get_song_objs(song_ids)
+
+"""
+トップの楽曲取得
+"""
+def get_top_song(user, situation, emotions, feedback_type):
+    song_obj = None
+    if SearchSong.objects.filter(user_id=user, situation=situation, feedback_type=feedback_type).exists():
+        song_obj = get_now_search_song(user, situation, feedback_type)
+    else:
+        song_ids = exec_functions.get_song_by_relevant(user, situation, emotions)
+        song_obj = get_song_objs(song_ids)
+        save_search_song(user, song_obj[0].id, situation, feedback_type)
+    return song_obj
 
 """
 一つ前の楽曲取得
@@ -49,3 +62,15 @@ def get_back_song(user, song_id, situation):
     if back_song_id:
         SearchSong.objects.filter(user_id=user, situation=situation, song_id=back_song_id, feedback_type=0).update(updated_at=datetime.now())
     return get_song_obj(back_song_id)
+
+def get_last_top_songs(user):
+    """
+    終了後のtop_kの楽曲オブジェクトを取得する
+    """
+    r = get_redis_obj("localhost", 6379, 2)
+    song_ids = get_one_dim_params(r, "top_k_songs_" + str(user))
+    song_objs = []
+    for index, song_id in enumerate(song_ids):
+        song_objs.append((index+1, Song.objects.filter(id=song_id)[0]))
+    return song_objs
+

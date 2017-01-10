@@ -133,6 +133,10 @@ body{
       float: right;
       margin: 10px 10px 5px;
     }
+    .emotion-label {
+      width: 30%;
+      float: left;
+    }
   }
   select{
     border: none;
@@ -290,6 +294,17 @@ body{
         &:hover{
           background-color: #32cd32;
         }
+      }
+    }
+    .end-link {
+      padding: 5px;
+      margin-left: 10px;
+      background-color: #00ff7f;
+      color: #fff;
+      border-radius: 5px;
+      border: none;
+      &:hover{
+        background-color: #32cd32;
       }
     }
     .questionnaire{

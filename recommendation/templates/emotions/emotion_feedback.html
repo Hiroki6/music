@@ -17,13 +17,8 @@
         {% include "parts/_emotion_feedback.html" %}
       </div>
     {% endfor %}
+  {% include "parts/_feedback_explanation.html" %}
   </div>
-  <div class = "another-search">
-    <a class = "another-search-link" href = "/recommendation/relevant_feedback_single/">適合性フィードバック検索へ</a>
-  </div>
-  {% if is_back_song %}
-    {% include "parts/_back_button.html" %}
-  {% endif %}
-  {% include "parts/_refresh_search_button.html" %}
+  {% include "parts/_end_button.html" %}
 </div>
 {% endblock main %}

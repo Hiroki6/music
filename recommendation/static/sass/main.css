@@ -100,6 +100,9 @@ body {
       body .search-form .search-submit:hover {
         color: #0000cd;
         background-color: #fff; }
+    body .search-form .emotion-label {
+      width: 30%;
+      float: left; }
   body select {
     border: none;
     background-color: #fff;
@@ -219,6 +222,15 @@ body {
         margin-right: 5px; }
         body .main .refresh-form .refresh-button:hover {
           background-color: #32cd32; }
+    body .main .end-link {
+      padding: 5px;
+      margin-left: 10px;
+      background-color: #00ff7f;
+      color: #fff;
+      border-radius: 5px;
+      border: none; }
+      body .main .end-link:hover {
+        background-color: #32cd32; }
     body .main .questionnaire {
       margin-top: 30px;
       background-color: #f0f8ff;
@@ -286,4 +298,4 @@ body {
       text-align: center;
       margin: 0; }
 
-/*# sourceMappingURL=../../../../../../../../static/sass/main.css.map */
+/*# sourceMappingURL=../../../../../../../static/sass/main.css.map */

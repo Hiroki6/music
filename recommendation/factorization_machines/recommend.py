@@ -190,7 +190,7 @@ class RecommendFm(object):
         song_index = self.labels[song_label_name]
         self.feedback_matrix[song_index] = 0.0
         self.top_matrix[song_index] = 0.0
-        alpha = 0.1 if self.plus_or_minus == 1 else -0.1 # フィードバックによって+-を分ける
+        alpha = 0.2 if self.plus_or_minus == 1 else -0.1 # フィードバックによって+-を分ける
         user_index = self.labels["user="+str(self.user)]
         for i, tag in enumerate(self.tags):
             index = tag[0]

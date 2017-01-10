@@ -5,10 +5,27 @@
 {% block main %}
 <h2>印象語による楽曲検索システムへようこそ</h2>
 <div class = "main">
-  <h3>検索方法を以下の二つから選んでください</h3>
-  <div class = "search-type">
-    <p><a href = "/recommendation/relevant_feedback_single/">適合性フィードバックによる検索システム</a></p>
-    <p><a href = "/recommendation/emotion_feedback_single/">印象語フィードバックによる検索システム</a></p>
-  </div>
+  {% if is_init %}
+    <h3>好きな楽曲を全て選択してください</h3>
+      <div class = "clearfix">
+      <form class = "like-form" name = "like" method = "POST" action = "/recommendation/select_search/">
+      {% csrf_token %}
+      {% for index, song in songs %}
+        <div class = "content">
+          {% include "parts/_song_iframe.html" %}
+          <label><input class = "best-song-button" type="checkbox" name="best_song" value={{song.id}}>好き</label>
+          <input type = "hidden" name = "rank_{{ song.id }}" value = {{ index }}>
+        </div>
+      {% endfor %}
+      <input class = "select-song-submit" type = "submit" value = "選んだ曲を送信">
+      </form>
+    </div>
+  {% else %}
+    <h3>検索方法を以下の二つから選んでください</h3>
+    <div class = "search-type">
+      <p><a href = "/recommendation/relevant_feedback_single/">適合性フィードバックによる検索システム</a></p>
+      <p><a href = "/recommendation/emotion_feedback_single/">印象語フィードバックによる検索システム</a></p>
+    </div>
+  {% endif %}
 </div>
 {% endblock main %}

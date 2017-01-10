@@ -1,0 +1,52 @@
+{% load sass_tags %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel = "stylesheet" type = "text/css" href = "{% static 'bootstrap/bootstrap-theme.min.css' %}"/>
+  <link rel = "stylesheet" type = "text/css" href = "{% static 'bootstrap/bootstrap.min.css' %}" />
+  <link rel = "stylesheet" type = "text/css" href = "{% static 'css/font-awesome.min.css' %}" />
+  <link rel = "stylesheet" href = "{% sass_src 'sass/main.scss' %}" />
+</head>
+<body>
+  <header>
+    <a href = "/recommendation/"><h1>印象語検索システム</h1></a>
+  </header>
+  <div class = "main">
+    <h2>アンケートにお答えください</h2>
+    {% if error_msg %}
+      <h3 class = "error-msg">{{ error_msg }}</h3>
+    {% endif %}
+    <div class = "questionnaire">
+      <h2>アンケート</h2>
+      <form class = "questionnaire-form" name = "questionnare" method = "POST" action = "/recommendation/emotion_questionnaire/">
+        {% csrf_token %}
+        <h4>1.適合性フィードバックを用いた音楽検索システムは求める楽曲に早くたどり着けましたか？</h4>
+        <label><input type = "radio" name = "q1" value = 1>早くたどり着けなかった</label>
+        <label><input type = "radio" name = "q1" value = 2>あまり早くたどり着けなかった</label>
+        <label><input type = "radio" name = "q1" value = 3>どちらともいえない</label>
+        <label><input type = "radio" name = "q1" value = 4>割と早くたどり着けた</label>
+        <label><input type = "radio" name = "q1" value = 5>早くたどり着けた</label>
+        <h4>1.印象語フィードバックを用いた音楽検索システムは求める楽曲に早くたどり着けましたか？</h4>
+        <label><input type = "radio" name = "q2" value = 1>早くたどり着けなかった</label>
+        <label><input type = "radio" name = "q2" value = 2>あまり早くたどり着けなかった</label>
+        <label><input type = "radio" name = "q2" value = 3>どちらともいえない</label>
+        <label><input type = "radio" name = "q2" value = 4>割と早くたどり着けた</label>
+        <label><input type = "radio" name = "q2" value = 5>早くたどり着けた</label>
+        <h4>3.二つの検索システムはどちらが使いやすかったですか？</h4>
+        <label><input type = "radio" name = "q3" value = 0>適合性フィードバックを用いた検索システム</label>
+        <label><input type = "radio" name = "q3" value = 1>印象語フィードバックを用いた検索システム</label>
+        <h4>4.ご自由にお書きください</h4>
+        <textarea name = "free_content" cols = 120 rows = 5>
+        </textarea>
+        <input type = "submit" value = "アンケートを送信する">
+      </form>
+    </div>
+  </div>
+  <footer>
+    <p>&copy; hasida_lab All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

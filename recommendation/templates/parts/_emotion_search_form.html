@@ -1,16 +1,19 @@
-<h2>状況とその状況に合うと思う印象語を選択してください</h2>
+<h2>状況とその状況で聴きたいと思う楽曲を表す印象語を選択してください</h2>
 <form class = "search-form" action = "/recommendation/" method = "get">
   <h4>状況を選択してください</h4>
   {% for key, situation in situations.items %}
-    <label><input type = "radio" name = "situation" value = {{key}}>{{ situation }}</label>
+    <label><input type = "radio" name = "situation" value = {{key}}> {{ situation }}</label>
   {% endfor %}
-  <h4>この状況に合うと思う印象語を一つ以上選択してください</h4>
-  <label><input type = "checkbox" name = "emotion" value = 1>calm(静かな)</label>
-  <label><input type = "checkbox" name = "emotion" value = 2>tense(緊張した)</label>
-  <label><input type = "checkbox" name = "emotion" value = 3>aggressive(激しい)</label>
-  <label><input type = "checkbox" name = "emotion" value = 4>lively(活発な)</label>
-  <label><input type = "checkbox" name = "emotion" value = 5>peaceful(平和な)</label>
+  <h4>この状況で聴きたいと思う楽曲を表す印象語を一つ以上選択してください</h4>
+  {% for key, emotion in emotions.items %}
+  <div class = "emotion-label">
+    <label><input type = "checkbox" name = "emotion" value = {{key}}> {{ emotion.0 }} ({{ emotion.1 }})</label>
+  </div>
+  {% endfor %}
+  <!--<label><input type = "radio" name = "emotion" value = 1>pop</label>
+  <label><input type = "radio" name = "emotion" value = 2>ballad</label>
+  <label><input type = "radio" name = "emotion" value = 3>rock</label>-->
   <br/>
-  <input class = "search-submit" type = "submit" value = "検索する">
+  <input class = "search-submit" type = "submit" value = "search">
 </form>
 
