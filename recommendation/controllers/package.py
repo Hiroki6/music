@@ -197,9 +197,9 @@ def get_like_songids_and_types(request):
 
 def process_questionnaire(request):
     if request.POST.has_key('q1') and request.POST.has_key('q2') and request.POST.has_key('q3'):
-        relevant_rate = request.POST['q1']
-        emotion_rate = request.POST['q2']
-        comparison = request.POST['q3']
+        relevant_rate = int(request.POST['q1'])
+        emotion_rate = int(request.POST['q2'])
+        comparison = int(request.POST['q3'])
         free_content = request.POST['free_content']
         common_helper.save_emotion_questionnaire(request.user.id, relevant_rate, emotion_rate, comparison)
         # free_contentがあれば保存

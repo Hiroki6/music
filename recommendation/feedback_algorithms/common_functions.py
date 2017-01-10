@@ -367,8 +367,9 @@ def write_top_k_songs(user_id, filepass, top_k_songs, emotion_map, emotions, fee
     """
     print "write file"
     print emotions
-    f = codecs.open(filepass, "a")
     user_id = str(user_id).encode('utf-8')
+    filepass = user_id + "_" + filepass
+    f = codecs.open(filepass, "a")
     feedback_type = feedback_type.encode('utf-8')
     emotion = emotion_map[emotions[0]].encode('utf-8')
     if plus_or_minus == 1:
