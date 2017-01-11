@@ -23,6 +23,7 @@ cdef class CyEmotionFeedback:
         np.ndarray W
         double margin
         double error
+        double C
 
     def __cinit__(self,
             np.ndarray[DOUBLE, ndim=1, mode="c"] W):
@@ -66,7 +67,7 @@ cdef class CyEmotionFeedback:
             self.set_margin(X)
         self._repeat_optimization(X)
 
-    def batch_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix):
+    def batch_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double C):
         cdef:
             long song
             np.ndarray tags
@@ -77,6 +78,7 @@ cdef class CyEmotionFeedback:
             np.ndarray w
    
         self.margin = 0.0
+        self.C = C
         w = np.zeros(43)
         count = 0
         for i in xrange(1000):
@@ -116,4 +118,4 @@ cdef class CyEmotionFeedback:
             double tau
 
         tau = self.error / np.linalg.norm(X)
-        self.W += tau * X
+        self.W += min(self.C, tau) * X
