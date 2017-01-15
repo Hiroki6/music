@@ -17,7 +17,7 @@ def get_feedback_dict():
     """
     フィードバック用のフィードバック辞書の実装
     """
-    feedbacks = [("pop", "明るい"), ("ballad", "静かな"), ("rock", "激しい")]
+    feedbacks = [("cheerful & lively", "明るい"), ("calm & peaceful", "静かな"), ("aggressive & harsh", "激しい")]
     feedback_dict = {}
     for index, feedback in enumerate(feedbacks):
         feedback_dict[index] = feedback

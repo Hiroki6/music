@@ -17,7 +17,7 @@ HOST = 'localhost'
 PORT = 6379
 DB = 3
 
-emotion_map = {1: "pop", 2: "ballad", 3: "rock"}
+emotion_map = {1: "pop", 2: "ballad", 3: "rock", 7: "no feedback"}
 
 # 境界条件のmap
 bound_map = {1: 0.015283, 2: 0.030881, 3: 0.019013}
@@ -36,6 +36,8 @@ class EmotionBaseline(object):
     def __init__(self, user, emotions):
         self.user = user
         self.emotions = map(int, emotions)
+        self._get_last_feedback()
+        self.plus_or_minus = 0
 
     def _save_top_song(self):
         """
@@ -66,7 +68,6 @@ class EmotionBaseline(object):
         フィードバックの印象ベクトルの上位k個の学習データ作成
         """
         self._get_last_song()
-        self._get_last_feedback()
         self._transform_feedback()
         self._get_bound_songs()
 
@@ -167,32 +168,26 @@ class EmotionFeedback(EmotionBaseline):
         print self.W
         self._update_params_into_redis()
 
+    def get_init_songs(self):
+        songs = common.get_init_songs_by_redis("init_songs_" + str(self.user))
+        return songs[:1]
+
     def get_top_k_songs(self, k=1):
         """
         検索対象の印象語に含まれている楽曲から回帰値の高いk個の楽曲を取得する
         """
-        if hasattr(self, "feedback"):
-            song_map = common.get_song_and_cluster()
-            songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotion_map, self.emotions, "emotion")
-            rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
-            common.listtuple_sort_reverse(rankings)
-            self.top_song = rankings[0][1]
-            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings[:10], self.emotion_map, self.emotions, emotion_map[self.feedback], self.plus_or_minus)
-            self._save_top_k_songs(rankings[:5])
-        else:
-            songs, song_tag_map = common.get_initial_not_listening_songs(self.user, self.emotion_map, self.emotions, "emotion")
-            random_song = random.randint(0,1000)
-            self.top_song = songs[random_song]
-            rankings = [(song_tag_map[self.top_song] ,self.top_song)]
-            common.write_top_k_songs(self.user, "emotion_k_song.txt", rankings, self.emotion_map, self.emotions)
+        song_map = common.get_song_and_cluster()
+        songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotion_map, self.emotions, "emotion")
+        rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
+        common.listtuple_sort_reverse(rankings)
+        self.top_song = rankings[0][1]
+        common.write_top_k_songs_emotion(self.user, "emotion_k_song.txt", rankings[:10], self.emotion_map, self.emotions, emotion_map[self.feedback], self.plus_or_minus)
+        self._save_top_k_songs(rankings[:5])
         self.top_matrix = song_tag_map[self.top_song]
         self._save_top_song()
         song_tags = []
 
-        if hasattr(self, "feedback"):
-            return rankings[:k]
-        else:
-            return rankings
+        return rankings[:k]
 
     def _create_feedback_matrix(self):
         """

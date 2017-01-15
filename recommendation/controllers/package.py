@@ -4,6 +4,10 @@ import codecs
 import sys
 sys.dont_write_bytecode = True 
 
+"""
+requestとDB部分を繋ぐpackage
+"""
+
 def init_search(request, emotions, situation):
     """
     初期の検索
@@ -19,9 +23,9 @@ def emotion_search(request, emotions, situation, learning=True):
     user_id = request.user.id
     if learning:
         song_obj = emotion_helper.learning_and_get_song(str(user_id), emotions, situation)
-        common_helper.save_search_song(user_id, song_obj[0].id, situation, 1)
     else:
         song_obj = emotion_helper.get_top_song(str(user_id), situation, emotions, 1)
+    common_helper.save_search_song(user_id, song_obj[0].id, situation, 1)
     return song_obj
 
 def relevant_search(request, emotions, situation, learning=True):
@@ -32,9 +36,9 @@ def relevant_search(request, emotions, situation, learning=True):
     user_id = request.user.id
     if learning:
         song_obj = relevant_helper.learning_and_get_song(str(user_id), situation, emotions)
-        common_helper.save_search_song(user_id, song_obj[0].id, situation, 0)
     else:
         song_obj = relevant_helper.get_top_song(str(user_id), situation, emotions, 0)
+    common_helper.save_search_song(user_id, song_obj[0].id, situation, 0)
     return song_obj
 
 def get_relevant_back_song(user_id, song_id, situation):
@@ -79,6 +83,19 @@ def search_songs(request, feedback_type):
         songs = emotion_search(request, emotions, situation, False)
     else:
         songs = relevant_search(request, emotions, situation, False)
+    return songs, situation, emotions
+
+def get_now_search_songs(request, feedback_type):
+    """
+    検索手法別に検索を行う
+    GETによる処理の際の検索で、SearchSongObjectから取得する
+    """
+    situation, emotions = common_helper.get_now_search_situation(request.user.id)
+    if feedback_type == "emotion":
+        songs = common_helper.get_now_search_songs(request.user.id, situation, 1)
+    else:
+        songs = common_helper.get_now_search_songs(request.user.id, situation, 0)
+
     return songs, situation, emotions
 
 def save_search_situation(request):
@@ -231,7 +248,9 @@ def get_like_songids_and_ranks(request):
     return map(int, song_ids), map(int, ranks)
 
 def _write_free_content(user_id, free_content):
-    print "test"
+    """
+    free_contentの書き込み
+    """
     f = codecs.open("free_content.txt", "a")
     f.write("user: " + str(user_id) + "\n")
     free_content = free_content.encode("utf-8")

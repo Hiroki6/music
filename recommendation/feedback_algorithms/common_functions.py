@@ -40,6 +40,15 @@ def get_two_dim_by_redis(redis_obj, pre_key, n, m):
     V = np.array(V, dtype=np.float64)
     return V.T.copy(order='C')
 
+def get_init_songs_by_redis(key):
+    """
+    redisから初期検索の楽曲配列を取得
+    """
+    redis_obj = get_redis_obj('localhost', 6379, 1)
+    params = redis_obj.lrange(key, 0, -1)
+    params = np.array(params, dtype=np.int64)
+    return params
+
 def save_scalar(redis_obj, key, field, value):
     """
     スカラー値の保存
@@ -197,6 +206,26 @@ def get_song_and_tag_map(song_objs):
 
     change_list_into_numpy(song_tag_map)
     return songs, song_tag_map
+
+def get_song_tag_map_by_song_ids(song_ids, emotion_map, emotions):
+    """
+    楽曲のid配列から{song: tags}の辞書配列取得
+    """
+    # tags = get_tags()
+    # song_tag_map = {} # {song_id: List[tag_value]}
+    # for song_id in song_ids:
+    #     song_obj = models.Song.objects.filter(id=song_id).values()[0]
+    #     song_tag_map.setdefault(song_id, [])
+    #     for tag in tags:
+    #         song_tag_map[song_id].append(song_obj[tag])
+    #     # クエリに関する特徴量を追加
+    #     song_tag_map[song_id].append(song_obj["value"])
+    #
+    # change_list_into_numpy(song_tag_map)
+    # return song_tag_map
+    extra_column = get_extra_column(emotion_map, emotions)
+    results = models.Song.objects.filter(id__in=song_ids).extra(select = {'value': extra_column}).values()
+    return get_song_and_tag_map(results)
 
 def get_tags():
     """
@@ -361,12 +390,11 @@ def listtuple_sort_reverse(t):
     t.sort()
     t.reverse()
 
-def write_top_k_songs(user_id, filepass, top_k_songs, emotion_map, emotions, feedback_type = "", plus_or_minus = 0):
+def write_top_k_songs_emotion(user_id, filepass, top_k_songs, emotion_map, emotions, feedback_type = "", plus_or_minus = 0):
     """
     上位k個の楽曲のファイルへの書き込み
     """
-    print "write file"
-    print emotions
+    print "write emotion songs"
     user_id = str(user_id).encode('utf-8')
     filepass = user_id + "_" + filepass
     f = codecs.open("file/" + filepass, "a")
@@ -381,6 +409,45 @@ def write_top_k_songs(user_id, filepass, top_k_songs, emotion_map, emotions, fee
     f.write("predict_value, song_id, pop, ballad, rock\n")
     for song in top_k_songs:
         song_obj = get_music_cluster_value(song[1])
+        content = str(song) + "," + str(song_obj["pop"]) + "," + str(song_obj["ballad"]) + "," + str(song_obj["rock"]) + "\n"
+        f.write(content)
+    f.write("\n")
+    f.close()
+
+def write_top_k_songs_relevance(user_id, filepass, top_k_songs, emotion_map, emotions, feedback):
+    """
+    適合性フィードバックにおける上位k曲のファイルへの書き込み
+    """
+    print "write relevance songs"
+    user_id = str(user_id).encode('utf-8')
+    feedback = str(feedback).encode('utf-8')
+    filepass = user_id + "_" + filepass
+    f = codecs.open("file/" + filepass, "a")
+    f.write("user: " + user_id + " feedback_type:" + feedback + " emotions: ")
+    for emotion in emotions:
+        f.write(emotion_map[emotion] + ",")
+    f.write("\n")
+    for song in top_k_songs:
+        song_obj = get_music_cluster_value(song[1])
+        content = str(song) + "," + str(song_obj["pop"]) + "," + str(song_obj["ballad"]) + "," + str(song_obj["rock"]) + "\n"
+        f.write(content)
+    f.write("\n")
+    f.close()
+
+def write_top_k_songs_init(user_id, filepass, top_k_songs, emotion_map, emotions):
+    """
+    初期検索時のtop_5楽曲保存
+    """
+    print "write init songs"
+    user_id = str(user_id).encode('utf-8')
+    filepass = user_id + "_" + filepass
+    f = codecs.open("file/" + filepass, "a")
+    f.write("user: " + user_id +  " emotions: ")
+    for emotion in emotions:
+        f.write(emotion_map[emotion] + ",")
+    f.write("\n")
+    for song in top_k_songs:
+        song_obj = get_music_cluster_value(song)
         content = str(song) + "," + str(song_obj["pop"]) + "," + str(song_obj["ballad"]) + "," + str(song_obj["rock"]) + "\n"
         f.write(content)
     f.write("\n")

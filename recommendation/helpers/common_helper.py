@@ -72,10 +72,9 @@ def get_now_search_situation(user_id):
     now_situation = user_situations[situation_count-1]['situation']
     emotions = []
     #emotions = [user_situations[situation_count-1]["emotion_id"]]
-    for i in xrange(situation_count-1, 0, -1):
-        if user_situations[i]["situation"] != now_situation:
-            break
-        emotions.append(user_situations[i]["emotion_id"])
+    for i in xrange(situation_count-1, -1, -1):
+        if user_situations[i]["situation"] == now_situation:
+            emotions.append(user_situations[i]["emotion_id"])
     return now_situation, emotions
 
 def delete_user_listening_history(user_id, relevant_type):
@@ -117,10 +116,19 @@ def save_search_song(user_id, song_id, situation, feedback_type):
     else:
         SearchSong.objects.create(user_id=user_id, song_id=song_id, situation=situation, feedback_type=feedback_type, created_at=now, updated_at=now)
 
-def get_now_search_song(user_id, situation, feedback_type):
+
+def save_search_song_both_type(user_id, song_id, situation):
+    """
+    推薦した楽曲を永続化する（両方の検索タイプ）
+    """
+    now = datetime.now()
+    for feedback_type in xrange(2):
+        SearchSong.objects.get_or_create(user_id=user_id, song_id=song_id, situation=situation, feedback_type=feedback_type, created_at=now, updated_at=now)
+
+def get_now_search_songs(user_id, situation, feedback_type):
     
     now_song_obj = SearchSong.objects.order_by("updated_at").filter(user_id=user_id, situation=situation, feedback_type=feedback_type).reverse().first()
-    return get_song_obj(now_song_obj.id)
+    return get_song_obj(now_song_obj.song_id)
 
 def is_back_song(user_id, situation, song_id, feedback_type):
     """

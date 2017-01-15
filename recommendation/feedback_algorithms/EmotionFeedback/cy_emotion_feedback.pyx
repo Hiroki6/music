@@ -100,6 +100,7 @@ cdef class CyEmotionFeedback:
                 break
         if count > 0:
             self.W = w / count
+        print self.W
         return self.W
 
     def _repeat_optimization(self, np.ndarray[DOUBLE, ndim=1, mode="c"] X):
