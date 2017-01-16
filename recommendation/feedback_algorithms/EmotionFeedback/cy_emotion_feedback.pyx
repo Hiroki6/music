@@ -99,6 +99,7 @@ cdef class CyEmotionFeedback:
             if all_error <= 0:
                 break
         if count > 0:
+            print count
             self.W = w / count
         print self.W
         return self.W

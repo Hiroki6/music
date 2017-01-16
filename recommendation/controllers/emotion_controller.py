@@ -49,6 +49,8 @@ def select_search(request):
     if request.method == 'POST':
         song_ids, ranks = get_like_songids_and_ranks(request)
         common_helper.save_init_rank_songs(request.user.id, situation, song_ids, ranks)
+        search_url = get_search_type_by_random()
+        return redirect(search_url)
         is_init = False
     if is_init:
         songs = init_search(request, emotions, situation)

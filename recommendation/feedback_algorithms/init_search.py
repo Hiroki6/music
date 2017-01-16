@@ -33,20 +33,29 @@ class InitSearch:
         """
         songs, song_tag_map = common.get_initial_not_listening_songs(self.user, self.emotion_map, self.emotions, "relevant")
         top_k_songs = []
-        random_indexes = []
+        #random_indexes = []
+        max_value = sum([song_tag_map[song][43] for song in songs])
+        count = 0
         for i in xrange(100):
-            random_index = random.randint(0,1000)
-            if random_index not in random_indexes:
-                random_indexes.append(random_index)
-                song = songs[random_index]
+            song = common.select_initial_song(max_value, songs, song_tag_map)
+            if song not in top_k_songs:
                 top_k_songs.append(song)
-            if len(top_k_songs) == 5:
+                count += 1
+            if count == 5:
                 break
+        # for i in xrange(100):
+        #     random_index = random.randint(0,1000)
+        #     if random_index not in random_indexes:
+        #         random_indexes.append(random_index)
+        #         song = songs[random_index]
+        #         top_k_songs.append(song)
+        #     if len(top_k_songs) == 5:
+        #         break
         # redisに保存
         common.update_redis_key(self.r, "init_songs_" + str(self.user), top_k_songs)
         self._save_top_matrixes(top_k_songs)
         # ファイルに書き込み
-        common.write_top_k_songs_init(self.user, "init_song.txt", top_k_songs, self.emotion_map, self.emotions)
+        common.write_top_k_songs_init(self.user, "init_song.txt", top_k_songs, self.emotion_map, self.situation, self.emotions)
         return top_k_songs
 
     def _set_emotion_dict(self):

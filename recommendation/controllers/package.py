@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 from recommendation.helpers import emotion_helper, common_helper, relevant_helper
 import codecs
+import random
 import sys
 sys.dont_write_bytecode = True 
 
@@ -258,3 +259,9 @@ def _write_free_content(user_id, free_content):
     f.write("\n")
     f.close()
 
+def get_search_type_by_random():
+    random_value = random.randint(0, 1)
+    if random_value:
+        return "/recommendation/emotion_feedback_single/"
+    else:
+        return "/recommendation/relevant_feedback_single/"

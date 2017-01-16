@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 from libc.math cimport pow, sqrt
 import numpy as np
+import random
 cimport numpy as np
 cimport cython
 

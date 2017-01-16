@@ -164,8 +164,8 @@ class EmotionFeedback(EmotionBaseline):
         上位K個の決定手法として、範囲アルファ*減衰定数の範囲で取得する
         バッチ学習
         """
-        self.W = self.cy_obj.PARank_fit(self.bound_song_tag_map, self.top_matrix, 0.005)
         print self.W
+        self.W = self.cy_obj.PARank_fit(self.bound_song_tag_map, self.top_matrix, 0.005)
         self._update_params_into_redis()
 
     def get_init_songs(self):
@@ -228,7 +228,11 @@ class EmotionFeedback(EmotionBaseline):
         self._decision_bound(emotion_value)
         print "plus or minus %d" % (self.plus_or_minus)
         print "feedback %s" % (emotion_map[self.feedback])
-        self.bound_songs, self.bound_song_tag_map = common.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, self.emotion_map, self.emotions, emotion_value, self.plus_or_minus, self.bound)
+        for i in xrange(10):
+            self.bound_songs, self.bound_song_tag_map = common.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, self.emotion_map, self.emotions, emotion_value, self.plus_or_minus, self.bound)
+            if len(self.bound_songs) >= 1:
+                break
+            self.bound *= 2
         print "number of bound songs %d" % (len(self.bound_songs))
 
     def _decision_bound(self, emotion_value):
@@ -238,7 +242,7 @@ class EmotionFeedback(EmotionBaseline):
         lessの時は最小値に近ければ近いほど、boundは小さくなる
         """
         # situationごとのフィードバックの回数を取得
-        user_feedbacks = models.EmotionEmotionbasedSong.objects.filter(user_id=int(self.user), situation=int(self.situation)).values()
+        user_feedbacks = models.EmotionEmotionbasedSong.objects.filter(user_id=int(self.user), situation=int(self.situation)).exclude(feedback_type=7).values()
         diff = 0
         if self.plus_or_minus == 1:
             max_value = max_map[self.feedback]
@@ -249,6 +253,7 @@ class EmotionFeedback(EmotionBaseline):
             diff = emotion_value - min_value
             bound = bound_map[self.feedback] * diff / emotion_value
         count = len(user_feedbacks)
+        print "feedback_count: %d" % count
         self.bound = bound / pow(2, count-1)
         print "bound %.5f" % (self.bound)
         #self.bound = bound_map[self.feedback] / count
@@ -270,3 +275,21 @@ class EmotionFeedback(EmotionBaseline):
         for ranking in rankings:
             song_id = ranking[1]
             self.r.rpush(key, song_id)
+
+    def _save_bound_song(self):
+        """
+        フィードバック対象の楽曲のidを持つkeyに学習用idを保存
+        あまりにも速度が遅い場合はファイルに保存してもいいかもしれない
+        """
+        common.save_one_dim_array(self.r, "train_data_" + str(self.top_song), self.bound_songs)
+
+    def _get_train_songs(self):
+        """
+        今までの学習に用いたデータを取得
+        """
+        # train_datas: {song_id: [train_ids]}
+        self.train_datas = {}
+        feedback_songs = EmotionEmotionbasedSong.objects.filter(user_id=self.user_id, situation=self.situation)
+        for feedback_song in feedback_songs:
+            song_id = feedback_song.song_id
+            self.train_datas[song_id] = common.get_one_dim_params_int(self.r, "train_data_" + str(self.song_id))
