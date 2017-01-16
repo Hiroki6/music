@@ -76,6 +76,7 @@ class InitRedis(object):
         """
         印象語フィードバック用のモデルの作成
         """
+        seed = random.randint(20, 40)
         np.random.seed(seed=self.seed)
         W = np.random.normal(scale=self.init_stdev,size=(self.N))
         return W
