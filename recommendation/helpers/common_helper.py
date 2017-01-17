@@ -231,9 +231,10 @@ def get_answers_song(user_id):
     return best_song_map, last_song_map
 
 def get_listening_songs_by_situation(user_id, situation):
-    song_ids = SearchSong.objects.values_list('song_id', flat=True).order_by("song_id").filter(user_id=user_id, situation=situation).distinct()
-    song_objs = SearchSong.objects.filter(song_id__in=song_ids)
-    return song_objs
+    #song_ids = SearchSong.objects.values_list('song_id', flat=True).order_by("song_id").filter(user_id=user_id, situation=situation).distinct()
+    song_objs = SearchSong.objects.filter(user_id=user_id, situation=situation).distinct()
+    #song_objs = SearchSong.objects.filter(song_id__in=song_ids)
+    return song_objs[1:]
 
 def save_best_songs(user_id, situation, song_ids, feedback_types):
     

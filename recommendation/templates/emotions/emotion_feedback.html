@@ -14,7 +14,9 @@
     {% for song in songs %}
       <div class = "content">
         {% include "parts/_song_iframe.html" %}
-        {% include "parts/_emotion_feedback.html" %}
+        {% if listening_count < 14 %}
+          {% include "parts/_emotion_feedback.html" %}
+        {% endif %}
       </div>
     {% endfor %}
   {% include "parts/_feedback_explanation.html" %}
