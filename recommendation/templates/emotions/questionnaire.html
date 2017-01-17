@@ -21,8 +21,8 @@
     {% endif %}
     <div class = "questionnaire">
       <h2>アンケート</h2>
-      <p>適合性フィードバック: 「聴きたい」or 「聴きたくない」などのフィードバック</p>
-      <p>印象語フィードバック: 「calm & relaxed」などのフィードバック</p>
+      <p class = "red">※適合性フィードバック: 「聴きたい」or 「聴きたくない」などのフィードバック</p>
+      <p class = "red">※印象語フィードバック: 「calm & relaxed」などのフィードバック</p>
       <form class = "questionnaire-form" name = "questionnare" method = "POST" action = "/recommendation/emotion_questionnaire/">
         {% csrf_token %}
         <h4>1.適合性フィードバックを用いた音楽検索システムは求める楽曲に早くたどり着けましたか？</h4>
