@@ -6,4 +6,8 @@
   <button class = "end-link" type = "submit" name = "finish">終了する</button>
   </form>-->
   <a class = "end-link" href = "/recommendation/finish_search/{{ situation }}/{{ feedback_type }}">終了する</a>
+  <p class = "end-description">
+  {{ search_situation }}に聴きたいと思う楽曲が提示された時点で終了してください。 <br/>
+    １５曲目まで聴いて頂いて、その時点で{{ search_situation }}に聴きたいと思う楽曲が提示されない場合も終了してください。
+  </p>
 {% endif %}

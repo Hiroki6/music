@@ -56,6 +56,16 @@ def get_count_listening(user_id, situation, feedback_type):
 
     return listening_count
 
+def get_init_flag(user_id, situation, feedback_type):
+    """
+    フィードバックを一回以上行っているかどうか
+    """
+    if feedback_type == "relevant":
+        listening_count = EmotionRelevantSong.objects.filter(user_id=user_id, situation=situation).values("song").exclude(relevant_type=0).distinct().count()
+    else:
+        listening_count = EmotionEmotionbasedSong.objects.filter(user_id=user_id, situation=situation).values("song").exclude(feedback_type=7).distinct().count()
+    return listening_count == 0
+
 def save_situation_and_emotion(user_id, situation, emotions):
     """
     状況と選択した印象語の永続化完了
@@ -221,7 +231,8 @@ def get_answers_song(user_id):
     return best_song_map, last_song_map
 
 def get_listening_songs_by_situation(user_id, situation):
-    song_objs = SearchSong.objects.filter(user_id=user_id, situation=situation)
+    song_ids = SearchSong.objects.values_list('song_id', flat=True).order_by("song_id").filter(user_id=user_id, situation=situation).distinct()
+    song_objs = Song.objects.filter(id__in=song_ids)
     return song_objs
 
 def save_best_songs(user_id, situation, song_ids, feedback_types):
@@ -259,7 +270,6 @@ def get_situations_map(user_id):
 
 def save_emotion_questionnaire(user_id, relevant_rate, emotion_rate, comparison):
     
-    
     obj, created = EvaluateSearch.objects.get_or_create(user_id=user_id, search_type="relevant", rating=relevant_rate)
     obj, created = EvaluateSearch.objects.get_or_create(user_id=user_id, search_type="emotion", rating=emotion_rate)
     if comparison:
@@ -292,6 +302,12 @@ def get_init_search_songs(user, situation, emotions):
     for index, song_id in enumerate(song_ids):
         song_objs.append((index+1, Song.objects.filter(id=song_id)[0]))
     return song_objs
+
+def get_next_song(user, situation, emotions, listening_count, feedback_type):
+    next_song = exec_functions.get_next_song(user, situation, emotions, listening_count)
+    save_search_song(user, next_song, situation, feedback_type)
+    song_obj = Song.objects.filter(id=next_song)
+    return song_obj
 
 def save_init_rank_songs(user_id, situation, song_ids, ranks):
     for song_id, rank in zip(song_ids, ranks):

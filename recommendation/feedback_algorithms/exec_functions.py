@@ -110,6 +110,11 @@ def get_init_search_songs(user, situation, emotions):
     top_k_songs = i_obj.get_top_k_songs()
     return top_k_songs
 
+def get_next_song(user, situation, emotions, listening_count):
+    i_obj = i_s.InitSearch(user, situation, emotions)
+    next_song = i_obj.get_next_song(listening_count)
+    return next_song
+
 if __name__ == "__main__":
     # DB初期化
     init_redis_all_model("emotion")

@@ -67,24 +67,23 @@ def relevant_feedback(request):
     error_msg = ""
     situation = 0
     if request.method == 'POST':
-        # 戻るボタンを押した場合（現在非公開）
-        if request.POST.has_key("back"):
-            user_id, situation, emotions, song_id = get_back_params(request)
-            songs = relevant_helper.get_back_song(user_id, song_id, situation)
-        # フィードバックを受けた場合
-        else:
-            user_id, situation, emotions, song_id, feedback_type = get_feedback_params(request)
-            relevant_helper.save_user_song(int(user_id), int(song_id), int(feedback_type), int(situation))
-            if feedback_type == "0":
-                songs = relevant_search(request, emotions, situation, False)
+        user_id, situation, emotions, song_id, feedback_type = get_feedback_params(request)
+        relevant_helper.save_user_song(int(user_id), int(song_id), int(feedback_type), int(situation))
+        listening_count = common_helper.get_count_listening(user_id, int(situation), "relevant")
+        if feedback_type == "0":
+            init_flag = common_helper.get_init_flag(user_id, situation, "relevant")
+            if init_flag:
+                songs = common_helper.get_next_song(user_id, situation, emotions, listening_count, 0)
             else:
-                songs = relevant_search(request, emotions, situation)
+                songs = relevant_search(request, emotions, situation, False)
+        else:
+            songs = relevant_search(request, emotions, situation)
     if request.method == 'GET':
         songs, situation, emotions = get_now_search_songs(request, "relevant")
+        listening_count = common_helper.get_count_listening(request.user.id, int(situation), "relevant")
     search_situation = situation_map[situation]
-    is_back_song = common_helper.is_back_song(request.user.id, situation, songs[0].id, 0)
-    listening_count = common_helper.get_count_listening(request.user.id, int(situation), "relevant")
-    return render(request, 'emotions/relevant_feedback.html', {'songs': songs, 'url': "relevant_feedback_single", 'error_msg': error_msg, "emotions": emotions, "search_situation": search_situation, "situation": situation, "search_type": "relevant", "listening_count": listening_count, "is_back_song": is_back_song, "autoplay": 1, "feedback_type": 0})
+    #is_back_song = common_helper.is_back_song(request.user.id, situation, songs[0].id, 0)
+    return render(request, 'emotions/relevant_feedback.html', {'songs': songs, 'url': "relevant_feedback_single", 'error_msg': error_msg, "emotions": emotions, "search_situation": search_situation, "situation": situation, "search_type": "relevant", "listening_count": listening_count, "autoplay": 1, "feedback_type": 0})
 
 @login_required
 def emotion_feedback_model(request):
@@ -97,31 +96,26 @@ def emotion_feedback_model(request):
     situation = 0
     feedback_dict = emotion_helper.get_feedback_dict()
     if request.method == "POST":
-        # 戻るボタンを押した場合（現在非公開）
-        if request.POST.has_key("back"):
-            user_id, situation, emotions, song_id = get_back_params(request)
-            songs = emotion_helper.get_back_song(user_id, song_id, situation)
-        # フィードバックを受けた場合
-        else:
-            user_id, situation, emotions, song_id, feedback_type = get_feedback_params(request)
-            if feedback_type == "-1":
-                error_msg = "フィードバックを選択してください"
-                songs, situation, emotions = emotion_search(request, emotions, situation, False)
+        user_id, situation, emotions, song_id, feedback_type = get_feedback_params(request)
+        # 再推薦
+        emotion_helper.save_user_song(user_id, song_id, situation, feedback_type)
+        listening_count = common_helper.get_count_listening(user_id, int(situation), "emotion")
+        if feedback_type == "7":
+            init_flag = common_helper.get_init_flag(user_id, situation, "emotion")
+            if init_flag:
+                songs = common_helper.get_next_song(user_id, situation, emotions, listening_count, 1)
             else:
-                # 再推薦
-                emotion_helper.save_user_song(user_id, song_id, situation, feedback_type)
-                if feedback_type == "7":
-                    songs = emotion_search(request, emotions, situation, False)
-                # 学習
-                else:
-                    # EmotionEmotionBasedSongにデータを永続化
-                    songs = emotion_search(request, emotions, situation)
+                songs = emotion_search(request, emotions, situation, False)
+        # 学習
+        else:
+            # EmotionEmotionBasedSongにデータを永続化
+            songs = emotion_search(request, emotions, situation)
     if request.method == 'GET':
         songs, situation, emotions = get_now_search_songs(request, "emotion")
+        listening_count = common_helper.get_count_listening(request.user.id, int(situation), "emotion")
     search_situation = situation_map[situation]
-    is_back_song = common_helper.is_back_song(request.user.id, situation, songs[0].id, 1)
-    listening_count = common_helper.get_count_listening(request.user.id, int(situation), "emotion")
-    return render(request, 'emotions/emotion_feedback.html', {'songs': songs, 'error_msg': error_msg, "emotions": emotions, "search_situation": search_situation, "url": "emotion_feedback_single", 'feedback_dict': feedback_dict, "situation": situation, "search_type": "emotion", "search_flag": True, "listening_count": listening_count, "is_back_song": is_back_song, "autoplay": 1, "feedback_type": 1})
+    #is_back_song = common_helper.is_back_song(request.user.id, situation, songs[0].id, 1)
+    return render(request, 'emotions/emotion_feedback.html', {'songs': songs, 'error_msg': error_msg, "emotions": emotions, "search_situation": search_situation, "url": "emotion_feedback_single", 'feedback_dict': feedback_dict, "situation": situation, "search_type": "emotion", "search_flag": True, "listening_count": listening_count, "autoplay": 1, "feedback_type": 1})
 
 @login_required
 def emotion_feedback_baseline(request):

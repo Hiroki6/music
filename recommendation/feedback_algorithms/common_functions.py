@@ -86,6 +86,12 @@ def get_one_dim_params_int(redis_obj, key):
 def get_redis_obj(host, port, db):
     return redis.Redis(host=host, port=port, db=db)
 
+def get_next_elem_by_pop(redis_obj, key, listening_count):
+    """
+    まず前の分をpopして捨てる
+    """
+    return redis_obj.lindex(key, listening_count)
+
 def delete_redis_keys(redis_obj, keys):
     for key in keys:
         delete_redis_key(redis_obj, key)

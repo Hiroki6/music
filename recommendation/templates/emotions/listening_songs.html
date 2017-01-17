@@ -14,7 +14,7 @@
       {% csrf_token %}
       {% for song in songs %}
         <div class = "content">
-          {% include "parts/_song_iframe_ref.html" %}
+          {% include "parts/_song_iframe.html" %}
             <label><input class = "best-song-button" type="checkbox" name="best_song" value={{song.song.id}} > この曲が好き</label>
             <input type = "hidden" name = "feedback_type_{{ song.song.id }}" value = {{ song.feedback_type }}>
         </div>

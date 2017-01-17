@@ -147,7 +147,8 @@ body {
       float: left; }
       body .main .content .emotion-feedback {
         float: left;
-        text-align: center; }
+        text-align: center;
+        margin: 5px; }
         body .main .content .emotion-feedback .feedback-form {
           display: inline; }
           body .main .content .emotion-feedback .feedback-form .indicator {
@@ -231,6 +232,9 @@ body {
       border: none; }
       body .main .end-link:hover {
         background-color: #32cd32; }
+    body .main .end-description {
+      margin-top: 5px;
+      color: #000080; }
     body .main .questionnaire {
       margin-top: 30px;
       background-color: #f0f8ff;

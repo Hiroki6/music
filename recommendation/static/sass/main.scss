@@ -195,6 +195,7 @@ body{
       .emotion-feedback {
         float: left;
         text-align: center;
+        margin: 0 5px;
         .feedback-form{
           display: inline;
           .indicator{
@@ -306,6 +307,10 @@ body{
       &:hover{
         background-color: #32cd32;
       }
+    }
+    .end-description {
+      margin-top: 5px;
+      color: #000080;
     }
     .questionnaire{
       margin-top: 30px;

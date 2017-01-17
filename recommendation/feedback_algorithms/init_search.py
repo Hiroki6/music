@@ -25,7 +25,6 @@ class InitSearch:
         self.emotions = map(int, emotions)
         self._set_emotion_dict()
         self.r = common.get_redis_obj(HOST, PORT, INIT_DB)
-        print self.emotions
     
     def get_top_k_songs(self):
         """
@@ -53,10 +52,20 @@ class InitSearch:
         #         break
         # redisに保存
         common.update_redis_key(self.r, "init_songs_" + str(self.user), top_k_songs)
-        self._save_top_matrixes(top_k_songs)
+        self._save_top_matrixes(top_k_songs[0])
         # ファイルに書き込み
         common.write_top_k_songs_init(self.user, "init_song.txt", top_k_songs, self.emotion_map, self.situation, self.emotions)
         return top_k_songs
+    
+    def get_next_song(self, listening_count):
+        """
+        redisから次の楽曲を取得する
+        """
+        next_song = int(common.get_next_elem_by_pop(self.r, "init_songs_" + str(self.user), listening_count))
+        self._save_top_matrixes(next_song)
+        # ファイルに書き込み
+        common.write_top_k_songs_init(self.user, "init_song.txt", [next_song], self.emotion_map, self.situation, self.emotions)
+        return next_song
 
     def _set_emotion_dict(self):
         """
@@ -68,13 +77,13 @@ class InitSearch:
             if tag.search_flag:
                 self.emotion_map[tag.id] = tag.name
 
-    def _save_top_matrixes(self, top_k_songs):
+    def _save_top_matrixes(self, top_song):
         """
         印象語フィードバック用にtop_songとtop_matrix(44)を保存する
         """
         r = common.get_redis_obj(HOST, PORT, EMOTION_DB)
-        common.save_scalar(r, "top_song", str(self.user), top_k_songs[0])
-        self._get_top_matrix(top_k_songs[0])
+        common.save_scalar(r, "top_song", str(self.user), top_song)
+        self._get_top_matrix(top_song)
         common.update_redis_key(r, "top_matrix_" + str(self.user), self.top_matrix)
 
     def _get_top_matrix(self, song_id):
