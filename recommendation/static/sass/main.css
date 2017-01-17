@@ -148,7 +148,7 @@ body {
       body .main .content .emotion-feedback {
         float: left;
         text-align: center;
-        margin: 5px; }
+        margin: 0 5px; }
         body .main .content .emotion-feedback .feedback-form {
           display: inline; }
           body .main .content .emotion-feedback .feedback-form .indicator {

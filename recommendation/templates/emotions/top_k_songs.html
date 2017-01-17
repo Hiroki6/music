@@ -1,11 +1,11 @@
 {% extends 'bases/emotion_base.html' %}
 
-{% block title %}トップ10曲{% endblock title %}
+{% block title %}トップ５曲{% endblock title %}
 
 {% block main %}
 
 <div class = "main">
-  <h2>好きな楽曲を複数選択してください</h2>
+  <h2>{{ search_situation }}に聴きたいと思う楽曲を全て選択してください</h2>
   {% if error_msg %}
     <h3 class = "error-msg">{{ error_msg }}</h3>
   {% endif %}

@@ -16,7 +16,7 @@ emotionのパラメータ: Wのみ
 """
 class InitRedis(object):
 
-    def __init__(self, seed=20, init_stdev=0.01, feedback_type = "relevant"):
+    def __init__(self, seed=20, init_stdev=0.0001, feedback_type = "relevant"):
         self.seed = seed
         self.init_stdev = 0.01
         self.N = 44
@@ -68,7 +68,7 @@ class InitRedis(object):
         """
         seed = random.randint(20, 40)
         np.random.seed(seed=seed)
-        W = np.random.normal(scale=self.init_stdev,size=(self.N))
+        W = np.random.normal(loc=0.0, scale=self.init_stdev, size=(self.N))
         bias = 0.0
         return W, bias
     
@@ -78,7 +78,7 @@ class InitRedis(object):
         """
         seed = random.randint(20, 40)
         np.random.seed(seed=self.seed)
-        W = np.random.normal(scale=self.init_stdev,size=(self.N))
+        W = np.random.normal(loc=0.0, scale=self.init_stdev, size=(self.N))
         return W
 
     def save_user_relevant_into_redis(self, user, W, bias):

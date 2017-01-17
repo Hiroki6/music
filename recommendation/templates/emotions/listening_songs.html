@@ -5,7 +5,7 @@
 {% block main %}
 <div class = "main">
   <h2>推薦された楽曲</h2>
-  <h2>好きな楽曲を３つ以上選択してください</h2>
+  <h2>{{ search_situation }}に聴きたいと思う楽曲を３つ以上選択してください</h2>
   {% if error_msg %}
     <h3 class = "error-msg">{{ error_msg }}</h3>
   {% endif %}
@@ -14,7 +14,7 @@
       {% csrf_token %}
       {% for song in songs %}
         <div class = "content">
-          {% include "parts/_song_iframe.html" %}
+          {% include "parts/_song_iframe_ref.html" %}
             <label><input class = "best-song-button" type="checkbox" name="best_song" value={{song.song.id}} > この曲が好き</label>
             <input type = "hidden" name = "feedback_type_{{ song.song.id }}" value = {{ song.feedback_type }}>
         </div>

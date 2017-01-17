@@ -55,7 +55,8 @@ def select_search(request):
     if is_init:
         songs = init_search(request, emotions, situation)
         common_helper.save_search_song_both_type(request.user.id, songs[0][1].id, situation)
-    return render(request, 'emotions/select_search.html', {"is_init": is_init, "songs": songs})
+    search_situation = situation_map[situation]
+    return render(request, 'emotions/select_search.html', {"is_init": is_init, "songs": songs, "search_situation": search_situation})
 
 @login_required
 def relevant_feedback(request):
@@ -160,7 +161,8 @@ def finish_search(request, situation, feedback_type):
         common_helper.save_rank_songs(request.user.id, situation, song_ids, ranks, feedback_type)
         url = get_next_url_for_all_search(request.user.id, situation)
         return redirect(url)
-    return render(request, 'emotions/top_k_songs.html', {"songs": songs, "situation": situation, "feedback_type": feedback_type, "autoplay": 0})
+    search_situation = situation_map[int(situation)]
+    return render(request, 'emotions/top_k_songs.html', {"songs": songs, "situation": situation, "feedback_type": feedback_type, "autoplay": 0, "search_situation": search_situation})
 
 @login_required
 def listening_songs(request, situation):
@@ -177,7 +179,8 @@ def listening_songs(request, situation):
             url = common_helper.get_url_about_search(request.user.id)
             return redirect(url)
     songs = common_helper.get_listening_songs_by_situation(request.user.id, situation)
-    return render(request, 'emotions/listening_songs.html', {"situation": situation, "songs": songs, "error_msg": error_msg})
+    search_situation = situation_map[int(situation)]
+    return render(request, 'emotions/listening_songs.html', {"situation": situation, "songs": songs, "error_msg": error_msg, "search_situation": search_situation})
 
 @login_required
 def questionnaire(request):

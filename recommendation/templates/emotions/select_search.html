@@ -6,7 +6,7 @@
 <h2>印象語による楽曲検索システムへようこそ</h2>
 <div class = "main">
   {% if is_init %}
-    <h3>好きな楽曲を全て選択してください</h3>
+    <h3>{{ search_situation }}に聴きたいと思う楽曲を全て選択してください</h3>
       <div class = "clearfix">
       <form class = "like-form" name = "like" method = "POST" action = "/recommendation/select_search/">
       {% csrf_token %}
