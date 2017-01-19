@@ -7,6 +7,7 @@
 import numpy as np
 import redis
 import common_functions as common
+import redis_functions as redis_f
 from RelevantFeedback import cy_relevant_feedback as cy_rf
 import sys
 from recommendation import models
@@ -19,11 +20,11 @@ DB = 2
 
 emotion_map = {1: "pop", 2: "ballad", 3: "rock"}
 
-class RelevantFeedback:
+class RelevantFeedback(object):
     """
     適合性フィードバックによるオンライン学習クラス
     """
-    def __init__(self, user, situation, emotions):
+    def __init__(self, user, situation, emotions, cf_obj):
         self.user = user
         self.situation = situation
         self._get_params_by_redis()
@@ -31,12 +32,13 @@ class RelevantFeedback:
         self.emotions = map(int, emotions)
         self._set_emotion_dict()
         self.cy_obj = cy_rf.CyRelevantFeedback(self.W, self.bias, 44)
+        self.cf_obj = cf_obj
 
     def _get_params_by_redis(self):
-        self.r = common.get_redis_obj(HOST, PORT, DB)
+        self.r = redis_f.get_redis_obj(HOST, PORT, DB)
         key =  "W_" + self.user
-        self.W = common.get_one_dim_params(self.r, key)
-        self.bias = common.get_scalar(self.r, "bias", self.user)
+        self.W = redis_f.get_one_dim_params(self.r, key)
+        self.bias = redis_f.get_scalar(self.r, "bias", self.user)
 
     def _get_learning_data(self, learning_method):
         """
@@ -69,7 +71,7 @@ class RelevantFeedback:
 
     def _set_listening_songs(self):
 
-        self.songs, self.song_tag_map = common.get_listening_songs(self.user, self.emotion_map, self.emotions)
+        self.songs, self.song_tag_map = self.cf_obj.get_listening_songs(self.emotion_map, self.emotions)
 
     def fit(self):
         """
@@ -110,7 +112,7 @@ class RelevantFeedback:
         return error
 
     def get_init_songs(self):
-        songs = common.get_init_songs_by_redis("init_songs_" + str(self.user))
+        songs = redis_f.get_init_songs_by_redis("init_songs_" + str(self.user))
         return songs[:1]
 
     def get_top_k_songs(self, k=1):
@@ -118,17 +120,17 @@ class RelevantFeedback:
         検索対象の印象語に含まれている楽曲から回帰値の高いk個の楽曲を取得する
         """
         # 初期検索の時
-        song_map = common.get_song_and_cluster()
-        songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotion_map, self.emotions)
+        song_map = self.cf_obj.get_song_and_cluster()
+        songs, song_tag_map = self.cf_obj.get_not_listening_songs(self.emotion_map, self.emotions)
         rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
-        common.listtuple_sort_reverse(rankings)
-        common.write_top_k_songs_relevance(self.user, "relevant_k_song.txt", rankings[:10], self.emotion_map, self.emotions, self.now_feedback)
+        self.cf_obj.listtuple_sort_reverse(rankings)
+        self.cf_obj.write_top_k_songs_relevance("relevant_k_song.txt", rankings[:10], self.emotion_map, self.emotions, self.now_feedback)
         self._save_top_k_songs(rankings[:5])
         return rankings[:k]
 
     def _update_params_into_redis(self):
-        common.update_redis_key(self.r, "W_" + self.user, self.W)
-        common.save_scalar(self.r, "bias", self.user, self.bias)
+        redis_f.update_redis_key(self.r, "W_" + self.user, self.W)
+        redis_f.save_scalar(self.r, "bias", self.user, self.bias)
 
     def _set_emotion_dict(self):
         self.emotion_map = {}
@@ -142,7 +144,17 @@ class RelevantFeedback:
         top_kの楽曲をredisに保存
         """
         key = "top_k_songs_" + self.user
-        common.delete_redis_key(self.r, key)
+        redis_f.delete_redis_key(self.r, key)
         for ranking in rankings:
             song_id = ranking[1]
             self.r.rpush(key, song_id)
+
+
+class RelevantFeedbackRandom(RelevantFeedback):
+    """
+    適合性フィードバックによるオンライン学習クラス
+    状況のみの検索を行うため、emotionsは用いない
+    """
+    def __init__(self, user, situation, cf_obj):
+        RelevantFeedback.__init__(self, user, situation, None, cf_obj)
+

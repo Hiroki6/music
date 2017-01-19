@@ -7,6 +7,7 @@
 import numpy as np
 import redis
 import common_functions as common
+import redis_functions as redis_f
 from EmotionFeedback import cy_emotion_feedback as cy_ef
 import sys
 from recommendation import models
@@ -32,20 +33,21 @@ class EmotionBaseline(object):
     モデルは持たずにランダムに楽曲を検索し、そこからフィードバックを受けて新しい楽曲を推薦していく
     user: ログインユーザーID
     emotions: 検索語に選択した印象語配列
+    cf_obj: 共通の関数を扱うクラス
     """
-    def __init__(self, user, emotions):
+    def __init__(self, user, cf_obj):
         self.user = user
-        self.emotions = map(int, emotions)
         self._get_last_feedback()
         self.plus_or_minus = 0
+        self.cf_obj = cf_obj
 
     def _save_top_song(self):
         """
         top_songの保存
         """
-        common.delete_redis_key(self.r, "top_matrix_" + self.user)
-        common.save_scalar(self.r, "top_song", self.user, self.top_song)
-        common.save_one_dim_array(self.r, "top_matrix_"+self.user, self.top_matrix)
+        redis_f.delete_redis_key(self.r, "top_matrix_" + self.user)
+        redis_f.save_scalar(self.r, "top_song", self.user, self.top_song)
+        redis_f.save_one_dim_array(self.r, "top_matrix_"+self.user, self.top_matrix)
 
     def get_top_song(self):
         """
@@ -75,8 +77,8 @@ class EmotionBaseline(object):
         """
         最後にフィードバックを受けた楽曲のidと印象ベクトル取得
         """
-        self.top_song = common.get_scalar(self.r, "top_song", self.user)
-        self.top_matrix = common.get_one_dim_params(self.r, "top_matrix_"+self.user)
+        self.top_song = redis_f.get_scalar(self.r, "top_song", self.user)
+        self.top_matrix = redis_f.get_one_dim_params(self.r, "top_matrix_"+self.user)
 
     def _get_last_feedback(self):
         """
@@ -104,14 +106,15 @@ class EmotionBaseline(object):
         """
         top_song_objs = models.SearchMusicCluster.objects.filter(song_id=int(self.top_song)).values()
         emotion_value = top_song_objs[0][emotion_map[self.feedback]]
-        self.bound_songs, self.bound_song_tag_map = common.get_bound_song_tag_map(emotion_value, self.k, self.plus_or_minus)
+        self.bound_songs, self.bound_song_tag_map = self.cf_obj.get_bound_song_tag_map(emotion_value, self.k, self.plus_or_minus)
 
 class EmotionFeedback(EmotionBaseline):
     """
     印象語フィードバックによるオンライン学習クラス
     """
-    def __init__(self, user, emotions, situation):
-        EmotionBaseline.__init__(self, user, emotions)
+    def __init__(self, user, situation, emotions, cf_obj):
+        EmotionBaseline.__init__(self, user, cf_obj)
+        self.emotions = map(int, emotions)
         self._get_params_by_redis()
         self.cy_obj = cy_ef.CyEmotionFeedback(self.W)
         self._set_emotion_dict()
@@ -121,9 +124,9 @@ class EmotionFeedback(EmotionBaseline):
         """
         redisからデータ取得
         """
-        self.r = common.get_redis_obj(HOST, PORT, DB)
+        self.r = redis_f.get_redis_obj(HOST, PORT, DB)
         key = "W_" + self.user
-        self.W = common.get_one_dim_params(self.r, key)
+        self.W = redis_f.get_one_dim_params(self.r, key)
  
     def set_params(self):
         """
@@ -169,19 +172,19 @@ class EmotionFeedback(EmotionBaseline):
         self._update_params_into_redis()
 
     def get_init_songs(self):
-        songs = common.get_init_songs_by_redis("init_songs_" + str(self.user))
+        songs = self.cf_obj.get_init_songs_by_redis("init_songs_" + str(self.user))
         return songs[:1]
 
     def get_top_k_songs(self, k=1):
         """
         検索対象の印象語に含まれている楽曲から回帰値の高いk個の楽曲を取得する
         """
-        song_map = common.get_song_and_cluster()
-        songs, song_tag_map = common.get_not_listening_songs(self.user, self.emotion_map, self.emotions, "emotion")
+        song_map = self.cf_obj.get_song_and_cluster()
+        songs, song_tag_map = self.cf_obj.get_not_listening_songs(self.emotion_map, self.emotions, "emotion")
         rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
-        common.listtuple_sort_reverse(rankings)
+        self.cf_obj.listtuple_sort_reverse(rankings)
         self.top_song = rankings[0][1]
-        common.write_top_k_songs_emotion(self.user, "emotion_k_song.txt", rankings[:10], self.emotion_map, self.emotions, emotion_map[self.feedback], self.plus_or_minus)
+        self.cf_obj.write_top_k_songs_emotion("emotion_k_song.txt", rankings[:10], self.emotion_map, self.emotions, emotion_map[self.feedback], self.plus_or_minus)
         self._save_top_k_songs(rankings[:5])
         self.top_matrix = song_tag_map[self.top_song]
         self._save_top_song()
@@ -213,7 +216,7 @@ class EmotionFeedback(EmotionBaseline):
         パラメータの更新
         """
         print "パラメータの更新"
-        common.update_redis_key(self.r, "W_" + self.user, self.W)
+        redis_f.update_redis_key(self.r, "W_" + self.user, self.W)
 
     def _get_bound_songs(self):
         """
@@ -229,7 +232,7 @@ class EmotionFeedback(EmotionBaseline):
         print "plus or minus %d" % (self.plus_or_minus)
         print "feedback %s" % (emotion_map[self.feedback])
         for i in xrange(10):
-            self.bound_songs, self.bound_song_tag_map = common.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, self.emotion_map, self.emotions, emotion_value, self.plus_or_minus, self.bound)
+            self.bound_songs, self.bound_song_tag_map = self.cf_obj.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, self.emotion_map, self.emotions, emotion_value, self.plus_or_minus, self.bound)
             if len(self.bound_songs) >= 1:
                 break
             self.bound *= 2
@@ -271,7 +274,7 @@ class EmotionFeedback(EmotionBaseline):
         top_kの楽曲をredisに保存
         """
         key = "top_k_songs_" + self.user
-        common.delete_redis_key(self.r, key)
+        redis_f.delete_redis_key(self.r, key)
         for ranking in rankings:
             song_id = ranking[1]
             self.r.rpush(key, song_id)
@@ -281,7 +284,7 @@ class EmotionFeedback(EmotionBaseline):
         フィードバック対象の楽曲のidを持つkeyに学習用idを保存
         あまりにも速度が遅い場合はファイルに保存してもいいかもしれない
         """
-        common.save_one_dim_array(self.r, "train_data_" + str(self.top_song), self.bound_songs)
+        redis_f.save_one_dim_array(self.r, "train_data_" + str(self.top_song), self.bound_songs)
 
     def _get_train_songs(self):
         """
@@ -292,4 +295,51 @@ class EmotionFeedback(EmotionBaseline):
         feedback_songs = EmotionEmotionbasedSong.objects.filter(user_id=self.user_id, situation=self.situation)
         for feedback_song in feedback_songs:
             song_id = feedback_song.song_id
-            self.train_datas[song_id] = common.get_one_dim_params_int(self.r, "train_data_" + str(self.song_id))
+            self.train_datas[song_id] = self.cf_obj.get_one_dim_params_int(self.r, "train_data_" + str(self.song_id))
+
+class EmotionFeedbackRandom(EmotionFeedback):
+    """
+    印象語フィードバックによるオンライン学習クラス
+    状況のみの検索を行うため、emotionsは用いない
+    """
+    def __init__(self, user, situation, cf_obj):
+        EmotionFeedback.__init__(self, user, situation, None, cf_obj)
+
+    def get_top_k_songs(self, k=1):
+        """
+        検索対象の印象語に含まれている楽曲から回帰値の高いk個の楽曲を取得する
+        """
+        song_map = self.cf_obj.get_song_and_cluster()
+        songs, song_tag_map = self.cf_obj.get_not_listening_songs(self.user, self.emotion_map, self.emotions, "emotion")
+        rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
+        self.cf_obj.listtuple_sort_reverse(rankings)
+        self.top_song = rankings[0][1]
+        self.cf_obj.write_top_k_songs_emotion(self.user, "emotion_k_song.txt", rankings[:10], self.emotion_map, self.emotions, emotion_map[self.feedback], self.plus_or_minus)
+        self._save_top_k_songs(rankings[:5])
+        self.top_matrix = song_tag_map[self.top_song]
+        self._save_top_song()
+        song_tags = []
+
+        return rankings[:k]
+
+    def _get_bound_songs(self):
+        """
+        _get_bound_songsをオーバーライド
+        その印象に関するフィードバックの回数を取得して減衰定数を決定する
+        減衰定数と境界パラメータを用いてkを動的に決定する
+        他の値についても近いものを選ぶ
+        """
+        top_song_objs = models.SearchMusicCluster.objects.filter(song_id=int(self.top_song))
+        top_song_obj = top_song_objs[0]
+        emotion_value = top_song_objs[0].__dict__[emotion_map[self.feedback]]
+        self._decision_bound(emotion_value)
+        print "plus or minus %d" % (self.plus_or_minus)
+        print "feedback %s" % (emotion_map[self.feedback])
+        # 学習データが０だった場合は繰り返し
+        for i in xrange(10):
+            self.bound_songs, self.bound_song_tag_map = self.cf_obj.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, self.emotion_map, self.emotions, emotion_value, self.plus_or_minus, self.bound)
+            if len(self.bound_songs) >= 1:
+                break
+            self.bound *= 2
+        print "number of bound songs %d" % (len(self.bound_songs))
+

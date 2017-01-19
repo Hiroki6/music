@@ -1,7 +1,7 @@
 # -*- coding:utf^8 -*-
 
 import numpy as np
-import common_functions as common
+import redis_functions as redis_f
 from .. import models
 import random
 
@@ -20,7 +20,7 @@ class InitRedis(object):
         self.seed = seed
         self.init_stdev = 0.01
         self.N = 44
-        self.r = common.get_redis_obj("localhost", 6379, feedback_map[feedback_type])
+        self.r = redis_f.get_redis_obj("localhost", 6379, feedback_map[feedback_type])
         self.feedback_type = feedback_type
 
     def init_all_user_model(self):
@@ -36,7 +36,7 @@ class InitRedis(object):
         """
         ユーザーの更新
         """
-        common.delete_redis_key(self.r, "W_" + user)
+        redis_f.delete_redis_key(self.r, "W_" + user)
         self.init_user_model(user)
 
     def init_user_model(self, user):
@@ -85,14 +85,14 @@ class InitRedis(object):
         """
         特定のユーザーの適合性フィードバック用のモデルのredisへの保存
         """
-        common.save_one_dim_array(self.r, "W_" + user, W)
-        common.save_scalar(self.r, "bias", user, bias)
+        redis_f.save_one_dim_array(self.r, "W_" + user, W)
+        redis_f.save_scalar(self.r, "bias", user, bias)
 
     def save_user_emotion_into_redis(self, user, W):
         """
         印象語フィードバック用のモデルのredisへの保存
         """
-        common.save_one_dim_array(self.r, "W_" + user, W)
+        redis_f.save_one_dim_array(self.r, "W_" + user, W)
 
     def flush_db(self):
         """

@@ -40,7 +40,8 @@ def learning_and_get_song_by_relevant(user, situation, emotion, l_rate = 0.005, 
     return get_top_song_by_relevance(r_obj)
 
 def get_r_obj(user, situation, emotion):
-    return r_f.RelevantFeedback(user, situation, emotion)
+    cf_obj = common.CommonFunctions(user)
+    return r_f.RelevantFeedback(user, situation, emotion, cf_obj)
 
 def get_song_by_emotion(user, emotions, situation):
     """
@@ -63,7 +64,8 @@ def learning_and_get_song_by_emotion(user, emotions, situation, is_k_ranking = F
     return get_top_song_by_emotion(e_obj)
 
 def get_e_obj(user, emotions, situation):
-    return e_f.EmotionFeedback(user, emotions, situation)
+    cf_obj = common.CommonFunctions(user)
+    return e_f.EmotionFeedback(user, situation, emotions, cf_obj)
 
 def learning_by_emotion_rankings(e_obj):
     e_obj.set_params_k_rankings()
@@ -106,14 +108,18 @@ def get_top_song_by_baseline(user, emotion):
 各状況の最初の検索
 """
 def get_init_search_songs(user, situation, emotions):
-    i_obj = i_s.InitSearch(user, situation, emotions)
+    i_obj = get_i_obj(user)
     top_k_songs = i_obj.get_top_k_songs()
     return top_k_songs
 
 def get_next_song(user, situation, emotions, listening_count):
-    i_obj = i_s.InitSearch(user, situation, emotions)
+    i_obj = get_i_obj(user)
     next_song = i_obj.get_next_song(listening_count)
     return next_song
+
+def get_i_obj(user):
+    cf_obj = common.CommonFunctions(user)
+    return i_s.InitSearch(user, situation, emotions, cf_obj)
 
 if __name__ == "__main__":
     # DB初期化
