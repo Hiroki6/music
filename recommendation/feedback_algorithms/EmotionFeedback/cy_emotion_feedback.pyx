@@ -84,10 +84,7 @@ cdef class CyEmotionFeedback:
         for i in xrange(1000):
             all_error = 0.0
             for song, tags in bound_song_tag_map.items():
-                if plus_or_minus == 1:
-                    X = tags - top_matrix
-                else:
-                    X = top_matrix - tags
+                X = tags - top_matrix
                 self.error = self.calc_error(X)
                 if self.error <= 0:
                     continue

@@ -158,6 +158,7 @@ class SearchTag(models.Model):
     pop = models.FloatField(null=True, blank=True)
     ballad = models.FloatField(null=True, blank=True)
     rock = models.FloatField(null=True, blank=True)
+    cluster = models.CharField(max_length=50, null=True, blank=True)
 
 """
 楽曲とそれぞれのクラスタの平均値

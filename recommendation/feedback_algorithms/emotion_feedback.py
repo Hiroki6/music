@@ -212,7 +212,11 @@ class EmotionFeedback(EmotionBaseline):
         self._decision_bound()
         print "plus or minus %d" % (self.plus_or_minus)
         print "feedback %s" % (emotion_map[self.feedback])
-        self.bound_songs, self.bound_song_tag_map = common.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, emotion_value, self.plus_or_minus, self.bound)
+        for i in xrange(10):
+            self.bound_songs, self.bound_song_tag_map = common.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, emotion_value, self.plus_or_minus, self.bound)
+            if len(self.bound_songs) >= 1:
+                break
+            self.bound *= 2
         print "bound %.5f" % (self.bound)
         print "number of bound songs %d" % (len(self.bound_songs))
 

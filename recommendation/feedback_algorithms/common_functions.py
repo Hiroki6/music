@@ -9,9 +9,11 @@ from Calculation import cy_calculation as cy_calc
 
 emotion_map = {1: "pop", 2: "ballad", 3: "rock"}
 
+cluster_map = {1: "pop", 2: "ballad", 3: "rock"}
+
 bound_ave = 1.022828
 
-top_k = 5000
+top_k = 100
 
 """
 redisからのスカラー値の取得
@@ -189,29 +191,29 @@ def get_song_and_cluster():
 """
 特定の印象ベクトルが特定の値より大きいものを取得
 """
-def get_upper_songs(emotion, value):
+def get_upper_songs(emotion, value, bound):
 
     if emotion == 1:
         print "pop"
-        return models.SearchMusicCluster.objects.order_by("pop").filter(pop__gte=value)
+        return models.SearchMusicCluster.objects.order_by("pop").filter(pop__gte=value, pop__lte=value+bound)
     elif emotion == 2:
         print "ballad"
-        return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__gte=value)
+        return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__gte=value, ballad__lte=value+bound)
     else:
         print "rock"
-        return models.SearchMusicCluster.objects.order_by("rock").filter(rock__gte=value)
+        return models.SearchMusicCluster.objects.order_by("rock").filter(rock__gte=value, rock__lte=value+bound)
 
-def get_lower_songs(emotion, value):
+def get_lower_songs(emotion, value, bound):
 
     if emotion == 1:
         print "pop"
-        return models.SearchMusicCluster.objects.order_by("pop").filter(pop__lte=value)
+        return models.SearchMusicCluster.objects.order_by("pop").filter(pop__lte=value, pop__gte=value-bound)
     elif emotion == 2:
         print "ballad"
-        return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__lte=value)
+        return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__lte=value, ballad__gte=value-bound)
     else:
         print "rock"
-        return models.SearchMusicCluster.objects.order_by("rock").filter(rock__lte=value)
+        return models.SearchMusicCluster.objects.order_by("rock").filter(rock__lte=value, rock__gte=value-bound)
 
 def get_bound_song_tag_map(emotion, value, k, plus_or_minus):
 
@@ -231,34 +233,43 @@ def get_bound_song_tag_map(emotion, value, k, plus_or_minus):
 @params(bound): 境界の値
 対象楽曲のクラスタの値も必要
 """
-def get_bound_with_attenuation_song_tag_map(emotion, top_song_obj, value, plus_or_minus, bound):
+def get_bound_with_attenuation_song_tag_map(feedback_cluster, top_song_obj, value, plus_or_minus, bound):
 
-    songs = get_bound_songs(emotion, value, plus_or_minus)
+    m_objs, songs = get_bound_songs(feedback_cluster, value, bound, plus_or_minus)
     tags = get_tags()
     song_ids = []
     count = 0
     print "top_song emotion value: %.5f" % (value)
-    top_song_map = top_song_obj.song.__dict__
+    top_song = get_song_by_musiccluster(top_song_obj)
     print len(songs)
-    for song in songs:
-        if is_upper_bound(song, emotion, value, bound):
-            continue
-        # print "pop: %.5f" % (song.pop)
-        # print "ballad: %.5f" % (song.ballad)
-        # print "rock: %.5f" % (song.rock)
-        # 距離を計測する(ユークリッド距離)
-        sum_distance = 0.0
-        # dict型のsongオブジェクト取得
-        song_map = song.song.__dict__
-        #distances = cy_calc.euclid_distance_for_dict(song_map, top_song_map, tags)
-        for tag in tags:
-            sum_distance += pow(song_map[tag] - top_song_map[tag], 2)
-        distance = math.sqrt(sum_distance)
-        if distance > bound_ave:
-            continue
-        song_ids.append(song.song_id)
-        count += 1
-
+    song_ids = []
+    degree = len(songs[0])
+    #for m_obj, song in zip(m_objs, songs):
+        # distance = cy_calc.get_euclid_distance(song, top_song, degree)
+        # if distance > bound_ave:
+        #     continue
+        # song_ids.append(m_obj.song_id)
+        # count += 1
+    if plus_or_minus == 1:
+        distances = [(m_obj.__dict__[cluster_map[feedback_cluster]] / cy_calc.get_euclid_distance(song, top_song, degree), m_obj.song_id) for m_obj, song in zip(m_objs, songs)]
+        distances.sort()
+        distances.reverse()
+    else:
+        distances = [(m_obj.__dict__[cluster_map[feedback_cluster]] * cy_calc.get_euclid_distance(song, top_song, degree), m_obj.song_id) for m_obj, song in zip(m_objs, songs)]
+        distances.sort()
+    # count = 0
+    # max_value = sum([d[0] for d in distances])
+    # for i in xrange(100):
+    #     song_id = select_train_song(max_value, distances)
+    #     if song_id not in song_ids:
+    #         song_ids.append(song_id)
+    #         count += 1
+    #     if count == 10:
+    #         break
+    for i, distance in enumerate(distances):
+        if i == top_k:
+            break
+        song_ids.append(distance[1])
     song_objs = models.Song.objects.filter(id__in=song_ids).values()
     return get_song_and_tag_map(song_objs)
 
@@ -277,16 +288,50 @@ def is_upper_bound(song_obj, emotion, value, bound):
         # print "diff: %.5f" % (diff)
         return diff > bound
 
-def get_bound_songs(emotion, value, plus_or_minus):
+def get_bound_songs(feedback_cluster, value, bound, plus_or_minus):
 
     if plus_or_minus == 1:
-        songs = get_upper_songs(emotion, value)
+        m_objs = get_upper_songs(feedback_cluster, value, bound)
         #songs = songs.reverse()
     else:
-        songs = get_lower_songs(emotion, value)
-        songs = songs.reverse()
+        m_objs = get_lower_songs(feedback_cluster, value, bound)
+        m_objs = songs.reverse()
+
+    songs = get_songs_by_musicclusters(feedback_cluster, m_objs)
+    return m_objs, songs
+
+def get_songs_by_musicclusters(feedback_cluster, m_objs):
+    """
+    SearchMusicClusterからsong_tags配列取得
+    """
+    tags = get_tags_exclude_cluster(feedback_cluster)
+    songs = np.zeros((len(m_objs), len(tags)))
+    for m_index, m_obj in enumerate(m_objs):
+        song_obj = m_obj.song.__dict__
+        for index, tag in enumerate(tags):
+            songs[m_index][index] = song_obj[tag]
 
     return songs
+
+def get_tags_exclude_cluster(cluster):
+    """
+    clusterに所属しないタグのみ取得
+    """
+    tag_obj = models.SearchTag.objects.exclude(cluster=cluster_map[cluster])
+    tags = [tag.name for tag in tag_obj]
+    return tags
+
+def get_song_by_musiccluster(m_obj):
+    """
+    SearchMusicClusterオブジェクトから{song: tags[]}取得
+    """
+    tags = get_tags()
+    song = np.zeros(43)
+    song_obj = m_obj.song.__dict__
+    for index, tag in enumerate(tags):
+        song[index] = song_obj[tag]
+
+    return song
 
 """
 listを持つdictをnumpy.arrayに変換
