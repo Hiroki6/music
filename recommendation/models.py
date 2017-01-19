@@ -236,3 +236,7 @@ class InitTopKRelevantSong(models.Model):
     song = models.ForeignKey(Song)
     situation = models.IntegerField(null=False, blank=False)
 
+class Situation(models.Model):
+    user = models.ForeignKey(User)
+    situation = models.IntegerField(null=False, blank=False)
+
