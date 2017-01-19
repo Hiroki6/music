@@ -312,9 +312,13 @@ def get_bound_with_attenuation_song_tag_map(feedback_cluster, top_song_obj, emot
     feedback_clusterに所属するタグ以外のタグ間の距離を比較する
     全てのタグを比較してしまうと、feedback_clusterに該当する値の離れた楽曲が外れてしまうため
     """
-    distances = [(m_obj.__dict__[cluster_map[feedback_cluster]] / cy_calc.get_euclid_distance(song, top_song, degree), m_obj.song_id) for m_obj, song in zip(m_objs, songs)]
-    distances.sort()
-    distances.reverse()
+    if plus_or_minus == 1:
+        distances = [(m_obj.__dict__[cluster_map[feedback_cluster]] / cy_calc.get_euclid_distance(song, top_song, degree), m_obj.song_id) for m_obj, song in zip(m_objs, songs)]
+        distances.sort()
+        distances.reverse()
+    else:
+        distances = [(m_obj.__dict__[cluster_map[feedback_cluster]] * cy_calc.get_euclid_distance(song, top_song, degree), m_obj.song_id) for m_obj, song in zip(m_objs, songs)]
+        distances.sort()
     # count = 0
     # max_value = sum([d[0] for d in distances])
     # for i in xrange(100):
