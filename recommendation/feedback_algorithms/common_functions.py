@@ -195,8 +195,10 @@ def get_upper_songs(emotion, value):
         print "pop"
         return models.SearchMusicCluster.objects.order_by("pop").filter(pop__gte=value)
     elif emotion == 2:
+        print "ballad"
         return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__gte=value)
     else:
+        print "rock"
         return models.SearchMusicCluster.objects.order_by("rock").filter(rock__gte=value)
 
 def get_lower_songs(emotion, value):
@@ -205,8 +207,10 @@ def get_lower_songs(emotion, value):
         print "pop"
         return models.SearchMusicCluster.objects.order_by("pop").filter(pop__lte=value)
     elif emotion == 2:
+        print "ballad"
         return models.SearchMusicCluster.objects.order_by("ballad").filter(ballad__lte=value)
     else:
+        print "rock"
         return models.SearchMusicCluster.objects.order_by("rock").filter(rock__lte=value)
 
 def get_bound_song_tag_map(emotion, value, k, plus_or_minus):
