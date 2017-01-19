@@ -244,14 +244,15 @@ class EmotionFeedback(EmotionBaseline):
         # situationごとのフィードバックの回数を取得
         user_feedbacks = models.EmotionEmotionbasedSong.objects.filter(user_id=int(self.user), situation=int(self.situation)).exclude(feedback_type=7).values()
         diff = 0
+        max_diff = max_map[self.feedback] - min_map[self.feedback]
         if self.plus_or_minus == 1:
             max_value = max_map[self.feedback]
             diff = max_value - emotion_value
-            bound = bound_map[self.feedback] * diff / max_value
+            bound = bound_map[self.feedback] * diff / max_diff
         else:
             min_value = min_map[self.feedback]
             diff = emotion_value - min_value
-            bound = bound_map[self.feedback] * diff / emotion_value
+            bound = bound_map[self.feedback] * diff / max_diff
         count = len(user_feedbacks)
         print "feedback_count: %d" % count
         self.bound = bound / pow(2, count-1)
