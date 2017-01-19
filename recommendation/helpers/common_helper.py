@@ -297,15 +297,15 @@ def save_rank_songs(user_id, situation, song_ids, ranks, feedback_type):
     for song_id, rank in zip(song_ids, ranks):
         obj, created = TopKRelevantSong.objects.get_or_create(user_id=user_id, song_id=song_id, situation=situation, search_type=feedback_type, song_rank=rank)
 
-def get_init_search_songs(user, situation, emotions):
-    song_ids = exec_functions.get_init_search_songs(user, situation, emotions)
+def get_init_search_songs(user, situation):
+    song_ids = exec_functions.get_init_search_songs(user, situation)
     song_objs = []
     for index, song_id in enumerate(song_ids):
         song_objs.append((index+1, Song.objects.filter(id=song_id)[0]))
     return song_objs
 
-def get_next_song(user, situation, emotions, listening_count, feedback_type):
-    next_song = exec_functions.get_next_song(user, situation, emotions, listening_count)
+def get_next_song(user, situation, listening_count, feedback_type):
+    next_song = exec_functions.get_next_song(user, situation, listening_count)
     save_search_song(user, next_song, situation, feedback_type)
     song_obj = Song.objects.filter(id=next_song)
     return song_obj
@@ -313,4 +313,17 @@ def get_next_song(user, situation, emotions, listening_count, feedback_type):
 def save_init_rank_songs(user_id, situation, song_ids, ranks):
     for song_id, rank in zip(song_ids, ranks):
        obj, created = InitTopKRelevantSong.objects.get_or_create(user_id=user_id, song_id=song_id, situation=situation, song_rank=rank)
-   
+  
+def get_now_situation(user_id):
+    """
+    現在のユーザーの状況を取得する
+    """
+    now_situation = Situation.objects.order_by("id").filter(user_id=user_id).last().values()["situation"]
+    return now_situation
+
+def save_situation(user_id, situatioin):
+    """
+    状況の永続化完了
+    """
+    obj, created = Situation.objects.get_or_create(user_id=user_id, situation=situation)
+

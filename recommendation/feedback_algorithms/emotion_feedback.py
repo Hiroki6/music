@@ -310,11 +310,11 @@ class EmotionFeedbackRandom(EmotionFeedback):
         検索対象の印象語に含まれている楽曲から回帰値の高いk個の楽曲を取得する
         """
         song_map = self.cf_obj.get_song_and_cluster()
-        songs, song_tag_map = self.cf_obj.get_not_listening_songs(self.user, self.emotion_map, self.emotions, "emotion")
+        songs, song_tag_map = self.cf_obj.get_not_listening_songs("emotion")
         rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
         self.cf_obj.listtuple_sort_reverse(rankings)
         self.top_song = rankings[0][1]
-        self.cf_obj.write_top_k_songs_emotion(self.user, "emotion_k_song.txt", rankings[:10], self.emotion_map, self.emotions, emotion_map[self.feedback], self.plus_or_minus)
+        self.cf_obj.write_top_k_songs_emotion(self.user, "emotion_k_song.txt", rankings[:10], {}, [], emotion_map[self.feedback], self.plus_or_minus)
         self._save_top_k_songs(rankings[:5])
         self.top_matrix = song_tag_map[self.top_song]
         self._save_top_song()
@@ -337,7 +337,7 @@ class EmotionFeedbackRandom(EmotionFeedback):
         print "feedback %s" % (emotion_map[self.feedback])
         # 学習データが０だった場合は繰り返し
         for i in xrange(10):
-            self.bound_songs, self.bound_song_tag_map = self.cf_obj.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, self.emotion_map, self.emotions, emotion_value, self.plus_or_minus, self.bound)
+            self.bound_songs, self.bound_song_tag_map = self.cf_obj.get_bound_with_attenuation_song_tag_map(self.feedback, top_song_obj, emotion_value, self.plus_or_minus, self.bound)
             if len(self.bound_songs) >= 1:
                 break
             self.bound *= 2

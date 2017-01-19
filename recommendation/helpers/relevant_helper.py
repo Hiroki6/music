@@ -27,19 +27,19 @@ def save_user_song(user_id, song_id, relevant_type, situation):
 """
 学習と楽曲の取得(relevant)
 """
-def learning_and_get_song(user, situation, emotion):
-    song_ids = exec_functions.learning_and_get_song_by_relevant(user, situation, emotion)
+def learning_and_get_song(user, situation):
+    song_ids = exec_functions.learning_and_get_song_by_relevant(user, situation)
     return get_song_objs(song_ids)
 
 """
 トップの楽曲取得
 """
-def get_top_song(user, situation, emotions, feedback_type):
+def get_top_song(user, situation, feedback_type):
     song_obj = None
     # if SearchSong.objects.filter(user_id=user, situation=situation, feedback_type=feedback_type).exists():
     #     song_obj = get_now_search_song(user, situation, feedback_type)
     # else:
-    song_ids = exec_functions.get_song_by_relevant(user, situation, emotions)
+    song_ids = exec_functions.get_song_by_relevant(user, situation)
     song_obj = get_song_objs(song_ids)
     save_search_song(user, song_obj[0].id, situation, feedback_type)
     return song_obj

@@ -19,7 +19,7 @@ class InitRedis(object):
     def __init__(self, seed=20, init_stdev=0.0001, feedback_type = "relevant"):
         self.seed = seed
         self.init_stdev = 0.01
-        self.N = 44
+        self.N = 43
         self.r = redis_f.get_redis_obj("localhost", 6379, feedback_map[feedback_type])
         self.feedback_type = feedback_type
 

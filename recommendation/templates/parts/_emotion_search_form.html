@@ -4,12 +4,6 @@
   {% for key, situation in situations.items %}
     <label><input type = "radio" name = "situation" value = {{key}}> {{ situation }}</label>
   {% endfor %}
-  <h4>この状況で聴きたいと思う楽曲を表す印象語を一つ以上選択してください</h4>
-  {% for key, emotion in emotions.items %}
-  <div class = "emotion-label">
-    <label><input type = "checkbox" name = "emotion" value = {{key}}> {{ emotion.0 }} ({{ emotion.1 }})</label>
-  </div>
-  {% endfor %}
   <!--<label><input type = "radio" name = "emotion" value = 1>pop</label>
   <label><input type = "radio" name = "emotion" value = 2>ballad</label>
   <label><input type = "radio" name = "emotion" value = 3>rock</label>-->

@@ -83,7 +83,7 @@ cdef class CyEmotionFeedback:
    
         self.margin = 0.0
         self.C = C
-        w = np.zeros(44)
+        w = np.zeros(43)
         count = 0
         for i in xrange(1000):
             all_error = 0.0

@@ -158,3 +158,16 @@ class RelevantFeedbackRandom(RelevantFeedback):
     def __init__(self, user, situation, cf_obj):
         RelevantFeedback.__init__(self, user, situation, None, cf_obj)
 
+    def get_top_k_songs(self, k=1):
+        """
+        検索対象の印象語に含まれている楽曲から回帰値の高いk個の楽曲を取得する
+        """
+        # 初期検索の時
+        song_map = self.cf_obj.get_song_and_cluster()
+        songs, song_tag_map = self.cf_obj.get_not_listening_songs()
+        rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
+        self.cf_obj.listtuple_sort_reverse(rankings)
+        self.cf_obj.write_top_k_songs_relevance("relevant_k_song.txt", rankings[:10], {}, [], self.now_feedback)
+        self._save_top_k_songs(rankings[:5])
+        return rankings[:k]
+

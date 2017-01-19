@@ -40,32 +40,31 @@ def learning_and_get_song_by_relevant(user, situation, emotion, l_rate = 0.005, 
     return get_top_song_by_relevance(r_obj)
 
 def get_r_obj(user, situation, emotion):
-    cf_obj = common.CommonFunctions(user)
-    return r_f.RelevantFeedback(user, situation, emotion, cf_obj)
+    cf_obj = common.CommonRandomFunctions(user)
+    return r_f.RelevantFeedbackRandom(user, situation, emotion, cf_obj)
 
-def get_song_by_emotion(user, emotions, situation):
+def get_song_by_emotion(user, situation):
     """
     emotion
     """
-    e_obj = get_e_obj(user, emotions, situation)
-    #return get_init_songs(e_obj)
+    e_obj = get_e_obj(user, situation)
     return get_top_song_by_emotion(e_obj)
 
 def learning_by_emotion(e_obj):
     e_obj.set_params()
     e_obj.fit()
 
-def learning_and_get_song_by_emotion(user, emotions, situation, is_k_ranking = False):
-    e_obj = get_e_obj(user, emotions, situation)
+def learning_and_get_song_by_emotion(user, situation, is_k_ranking = False):
+    e_obj = get_e_obj(user, situation)
     if is_k_ranking:
         learning_by_emotion_rankings(e_obj)
     else:
         learning_by_emotion(e_obj)
     return get_top_song_by_emotion(e_obj)
 
-def get_e_obj(user, emotions, situation):
-    cf_obj = common.CommonFunctions(user)
-    return e_f.EmotionFeedback(user, situation, emotions, cf_obj)
+def get_e_obj(user, situation):
+    cf_obj = common.CommonRandomFunctions(user)
+    return e_f.EmotionFeedbackRandom(user, situation, cf_obj)
 
 def learning_by_emotion_rankings(e_obj):
     e_obj.set_params_k_rankings()
@@ -107,19 +106,19 @@ def get_top_song_by_baseline(user, emotion):
 """
 各状況の最初の検索
 """
-def get_init_search_songs(user, situation, emotions):
-    i_obj = get_i_obj(user)
+def get_init_search_songs(user, situation):
+    i_obj = get_i_obj(user, situation)
     top_k_songs = i_obj.get_top_k_songs()
     return top_k_songs
 
-def get_next_song(user, situation, emotions, listening_count):
-    i_obj = get_i_obj(user)
+def get_next_song(user, situation, listening_count):
+    i_obj = get_i_obj(user, situation)
     next_song = i_obj.get_next_song(listening_count)
     return next_song
 
 def get_i_obj(user):
-    cf_obj = common.CommonFunctions(user)
-    return i_s.InitSearch(user, situation, emotions, cf_obj)
+    cf_obj = common.CommonRandomFunctions(user)
+    return i_s.InitRandomSearch(user, situation, cf_obj)
 
 if __name__ == "__main__":
     # DB初期化

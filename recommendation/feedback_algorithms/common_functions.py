@@ -357,8 +357,9 @@ class CommonFunctions(object):
             f.write("user: " + user_id + " feedback_type: ↓" + feedback_type + " emotion: ")
         else:
             f.write("user: " + user_id + " feedback_type: " + feedback_type + " emotion: ")
-        for emotion in emotions:
-            f.write(emotion_map[emotion] + ",")
+        if emotions != None:
+            for emotion in emotions:
+                f.write(emotion_map[emotion] + ",")
         f.write("\n")
         f.write("predict_value, song_id, pop, ballad, rock\n")
         for song in top_k_songs:
@@ -378,8 +379,9 @@ class CommonFunctions(object):
         filepass = user_id + "_" + filepass
         f = codecs.open("file/" + filepass, "a")
         f.write("user: " + user_id + " feedback_type:" + feedback + " emotions: ")
-        for emotion in emotions:
-            f.write(emotion_map[emotion] + ",")
+        if emotions != None:
+            for emotion in emotions:
+                f.write(emotion_map[emotion] + ",")
         f.write("\n")
         for song in top_k_songs:
             song_obj = self._get_music_cluster_value(song[1])
@@ -398,8 +400,9 @@ class CommonFunctions(object):
         filepass = user_id + "_" + filepass
         f = codecs.open("file/" + filepass, "a")
         f.write("user: " + user_id +  " situation: " + situation + " emotions: ")
-        for emotion in emotions:
-            f.write(emotion_map[emotion] + ",")
+        if emotions != None:
+            for emotion in emotions:
+                f.write(emotion_map[emotion] + ",")
         f.write("\n")
         for song in top_k_songs:
             song_obj = self._get_music_cluster_value(song)
@@ -419,3 +422,92 @@ class CommonRandomFunctions(CommonFunctions):
     """
     def __init__(self, user):
         CommonFunctions.__init__(self, user)
+
+    def _set_listening_songs(self):
+        self.songs, self.song_tag_map = self.cf_obj.get_listening_songs()
+
+    def get_initial_not_listening_songs(self, emotion_map, feedback_type):
+        """
+        未視聴の楽曲を取得
+        初期検索時に使用
+        """
+        print "未視聴の楽曲取得"
+        listening_songs = self._get_listening_songs_by_feedback_type(feedback_type)
+        song_objs = models.Song.objects.exclude(id__in=listening_songs).values()
+        return self._get_song_and_tag_map(song_objs)
+
+    def get_not_listening_songs(self, feedback_type = "relevant"):
+        """
+        未視聴の楽曲を取得
+        初期検索以降の際に使用
+        """
+        print "未視聴の楽曲取得"
+        listening_songs = self._get_listening_songs_by_feedback_type(feedback_type)
+        cluster_songs = models.SearchMusicCluster.objects.exclude(song_id__in=listening_songs).values("song")
+        results = self._get_song_obj_by_cluster_songs(cluster_songs)
+        return self._get_song_and_tag_map(results)
+    
+    def _get_song_obj_by_cluster_songs(self, cluster_songs):
+        for song in cluster_songs:
+            top_k_songs.append(song["song"])
+            
+        results = models.Song.objects.filter(id__in=top_k_songs).values()
+        
+        return results
+
+    def get_bound_with_attenuation_song_tag_map(self, feedback_cluster, top_song_obj, value, plus_or_minus, bound):
+        """
+        @params(feedback_cluster): 印象タグ
+        @params(top_song_obj): 対象楽曲のmusic cluster object
+        @params(value): 対象楽曲の印象ベクトルの値
+        @params(plus_or_minus): 上界か下界か
+        @params(bound): 境界の値
+        @returns(bound_songs): song_id配列
+        @returns(bound_tag_map): song_idとtagの辞書(song_id: tags[])
+        対象楽曲のクラスタの値も必要
+        """
+        m_objs, songs = self._get_bound_songs(feedback_cluster, value, bound, plus_or_minus)
+        count = 0
+        print "top_song feedback_cluster value: %.5f" % (value)
+        top_song = self._get_song_by_musiccluster(top_song_obj)
+        print len(songs)
+        song_ids = []
+        degree = len(songs[0])
+        """
+        feedback_clusterに所属するタグ以外のタグ間の距離を比較する
+        全てのタグを比較してしまうと、feedback_clusterに該当する値の離れた楽曲が外れてしまうため
+        """
+        distances = [(m_obj.__dict__[cluster_map[feedback_cluster]] / cy_calc.get_euclid_distance(song, top_song, degree), m_obj.song_id) for m_obj, song in zip(m_objs, songs)]
+        distances.sort()
+        distances.reverse()
+        for i, distance in enumerate(distances):
+            if i == top_k:
+                break
+            song_ids.append(distance[1])
+        song_objs = models.Song.objects.filter(id__in=song_ids).values()
+        return self._get_song_and_tag_map(song_objs)
+
+    def _get_song_and_tag_map(self, song_objs):
+
+        tags = self._get_tags()
+        song_tag_map = {} # {song_id: List[tag_value]}
+        songs = [] # List[song_id]
+        for song_obj in song_objs:
+            song_id = song_obj['id']
+            songs.append(song_id)
+            song_tag_map.setdefault(song_id, [])
+            for tag in tags:
+                song_tag_map[song_id].append(song_obj[tag])
+            # クエリに関する特徴量を追加
+
+        self._change_list_into_numpy(song_tag_map)
+        return songs, song_tag_map
+
+    def get_listening_songs(self):
+        """
+        視聴済みの楽曲取得
+        """
+        listening_songs = models.EmotionRelevantSong.objects.filter(user=self.user).values('song')
+        results = models.Song.objects.filter(id__in=listening_songs).values()
+        return self._get_song_and_tag_map(results)
+
