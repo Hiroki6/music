@@ -165,7 +165,7 @@ class EmotionFeedback(EmotionBaseline):
         バッチ学習
         """
         print self.W
-        self.W = self.cy_obj.PARank_fit(self.bound_song_tag_map, self.top_matrix, 0.005)
+        self.W = self.cy_obj.PARank_fit(self.bound_song_tag_map, self.top_matrix, 0.005, self.plus_or_minus)
         self._update_params_into_redis()
 
     def get_init_songs(self):
