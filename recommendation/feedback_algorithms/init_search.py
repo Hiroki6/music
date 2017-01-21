@@ -91,7 +91,7 @@ class InitRandomSearch(InitSearch):
     検索条件なし
     """
     def __init__(self, user, situation, cf_obj):
-        InitSearch.__init__(self, user, situation, None, cf_obj)
+        InitSearch.__init__(self, user, situation, [], cf_obj)
 
     def get_top_k_songs(self):
         """
@@ -123,6 +123,10 @@ class InitRandomSearch(InitSearch):
         next_song = int(self.cf_obj.get_next_elem_by_pop(self.r, "init_songs_" + str(self.user), listening_count))
         self._save_top_matrixes(next_song)
         # ファイルに書き込み
-        self.cf_obj.write_top_k_songs_init("init_song.txt", [next_song], {}, self.situation, [])
+        self.cf_obj.write_top_k_songs_init("random_init_song.txt", [next_song], {}, self.situation, [])
         return next_song
+
+    def _get_top_matrix(self, song_id):
+        song_tag_map = self.cf_obj.get_song_tag_map_by_song_ids([song_id])
+        self.top_matrix = song_tag_map[1][song_id]
 

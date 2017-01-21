@@ -156,7 +156,7 @@ class RelevantFeedbackRandom(RelevantFeedback):
     状況のみの検索を行うため、emotionsは用いない
     """
     def __init__(self, user, situation, cf_obj):
-        RelevantFeedback.__init__(self, user, situation, None, cf_obj)
+        RelevantFeedback.__init__(self, user, situation, [], cf_obj)
 
     def get_top_k_songs(self, k=1):
         """
@@ -167,7 +167,7 @@ class RelevantFeedbackRandom(RelevantFeedback):
         songs, song_tag_map = self.cf_obj.get_not_listening_songs()
         rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
         self.cf_obj.listtuple_sort_reverse(rankings)
-        self.cf_obj.write_top_k_songs_relevance("relevant_k_song.txt", rankings[:10], {}, [], self.now_feedback)
+        self.cf_obj.write_top_k_songs_relevance("random_relevant_k_song.txt", rankings[:10], {}, [], self.now_feedback)
         self._save_top_k_songs(rankings[:5])
         return rankings[:k]
 

@@ -9,7 +9,7 @@ sys.dont_write_bytecode = True
 requestとDB部分を繋ぐpackage
 """
 
-def init_search(request, emotions, situation):
+def init_search(request, situation):
     """
     初期の検索
     """
@@ -97,7 +97,7 @@ def get_now_search_songs(request, feedback_type):
     else:
         songs = common_helper.get_now_search_songs(request.user.id, situation, 0)
 
-    return songs, situation, emotions
+    return songs, situation
 
 def save_search_situation_emotions(request):
     """

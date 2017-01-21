@@ -6,6 +6,7 @@ helperから呼ばれる各オブジェクト実行用の関数
 import relevant_feedback as r_f
 import emotion_feedback as e_f
 import init_search as i_s
+import common_functions as common
 import init_redis
 
 def init_redis_all_model(feedback_type):
@@ -116,7 +117,7 @@ def get_next_song(user, situation, listening_count):
     next_song = i_obj.get_next_song(listening_count)
     return next_song
 
-def get_i_obj(user):
+def get_i_obj(user, situation):
     cf_obj = common.CommonRandomFunctions(user)
     return i_s.InitRandomSearch(user, situation, cf_obj)
 

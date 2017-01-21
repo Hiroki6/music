@@ -511,3 +511,10 @@ class CommonRandomFunctions(CommonFunctions):
         results = models.Song.objects.filter(id__in=listening_songs).values()
         return self._get_song_and_tag_map(results)
 
+    def get_song_tag_map_by_song_ids(self, song_ids):
+        """
+        楽曲のid配列から{song: tags}の辞書配列取得
+        """
+        results = models.Song.objects.filter(id__in=song_ids).values()
+        return self._get_song_and_tag_map(results)
+

@@ -318,10 +318,10 @@ def get_now_situation(user_id):
     """
     現在のユーザーの状況を取得する
     """
-    now_situation = Situation.objects.order_by("id").filter(user_id=user_id).last().values()["situation"]
+    now_situation = Situation.objects.order_by("id").filter(user_id=user_id).last().situation
     return now_situation
 
-def save_situation(user_id, situatioin):
+def save_situation(user_id, situation):
     """
     状況の永続化完了
     """

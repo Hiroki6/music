@@ -303,7 +303,7 @@ class EmotionFeedbackRandom(EmotionFeedback):
     状況のみの検索を行うため、emotionsは用いない
     """
     def __init__(self, user, situation, cf_obj):
-        EmotionFeedback.__init__(self, user, situation, None, cf_obj)
+        EmotionFeedback.__init__(self, user, situation, [], cf_obj)
 
     def get_top_k_songs(self, k=1):
         """
@@ -314,7 +314,7 @@ class EmotionFeedbackRandom(EmotionFeedback):
         rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
         self.cf_obj.listtuple_sort_reverse(rankings)
         self.top_song = rankings[0][1]
-        self.cf_obj.write_top_k_songs_emotion(self.user, "emotion_k_song.txt", rankings[:10], {}, [], emotion_map[self.feedback], self.plus_or_minus)
+        self.cf_obj.write_top_k_songs_emotion(self.user, "random_emotion_k_song.txt", rankings[:10], {}, [], emotion_map[self.feedback], self.plus_or_minus)
         self._save_top_k_songs(rankings[:5])
         self.top_matrix = song_tag_map[self.top_song]
         self._save_top_song()
