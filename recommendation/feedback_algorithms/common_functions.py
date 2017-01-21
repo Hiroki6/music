@@ -350,7 +350,7 @@ class CommonFunctions(object):
         filepass = user_id + "_" + filepass
         f = codecs.open("file/" + filepass, "a")
         feedback_type = feedback_type.encode('utf-8')
-        emotion = emotion_map[emotions[0]].encode('utf-8')
+        #emotion = emotion_map[emotions[0]].encode('utf-8')
         if plus_or_minus == 1:
             f.write("user: " + user_id + " feedback_type: ↑" + feedback_type + " emotion: ")
         elif plus_or_minus == -1:
@@ -448,6 +448,7 @@ class CommonRandomFunctions(CommonFunctions):
         return self._get_song_and_tag_map(results)
     
     def _get_song_obj_by_cluster_songs(self, cluster_songs):
+        top_k_songs = []
         for song in cluster_songs:
             top_k_songs.append(song["song"])
             

@@ -168,7 +168,7 @@ class EmotionFeedback(EmotionBaseline):
         バッチ学習
         """
         print self.W
-        self.W = self.cy_obj.PARank_fit(self.bound_song_tag_map, self.top_matrix, 0.005, self.plus_or_minus)
+        self.W = self.cy_obj.PARank_fit(self.bound_song_tag_map, self.top_matrix, 0.005)
         self._update_params_into_redis()
 
     def get_init_songs(self):
@@ -257,8 +257,8 @@ class EmotionFeedback(EmotionBaseline):
             bound = bound_map[self.feedback] * diff / emotion_value
         count = len(user_feedbacks)
         print "feedback_count: %d" % count
-        #self.bound = bound / pow(2, count-1)
-        self.bound = bound_map[self.feedback] / count
+        self.bound = bound / pow(2, count-1)
+        #self.bound = bound_map[self.feedback] / count
         print "bound %.5f" % (self.bound)
         #self.bound = bound_map[self.feedback] * math.exp(-(count-1))
 
@@ -314,9 +314,9 @@ class EmotionFeedbackRandom(EmotionFeedback):
         rankings = [(self.cy_obj.predict(tags), song_id) for song_id, tags in song_tag_map.items()]
         self.cf_obj.listtuple_sort_reverse(rankings)
         self.top_song = rankings[0][1]
-        self.cf_obj.write_top_k_songs_emotion(self.user, "random_emotion_k_song.txt", rankings[:10], {}, [], emotion_map[self.feedback], self.plus_or_minus)
+        self.cf_obj.write_top_k_songs_emotion("random_emotion_k_song.txt", rankings[:10], {}, [], emotion_map[self.feedback], self.plus_or_minus)
         self._save_top_k_songs(rankings[:5])
-        self._save_top_k_songs_now_order(rankings[:5])
+        #self._save_top_k_songs_now_order(rankings[:5])
         self.top_matrix = song_tag_map[self.top_song]
         self._save_top_song()
         song_tags = []
@@ -348,7 +348,7 @@ class EmotionFeedbackRandom(EmotionFeedback):
         """
         現在の順番のインタラクションの時のtop_k_songsをredisに保存する
         """
-        count = cf_obj.get_now_order(self.situation, 1)
+        count = self.cf_obj.get_now_order(self.situation, 1)
         key = "top_k_songs_" + self.user + "_" + str(count)
         redis_f.delete_redis_key(self.r, key)
         for ranking in rankings:

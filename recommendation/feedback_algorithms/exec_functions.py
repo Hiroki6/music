@@ -23,11 +23,11 @@ def init_redis_user_model(user_id, feedback_type):
     init_obj = init_redis.InitRedis(feedback_type = feedback_type)
     init_obj.update_user_model(user_id)
 
-def get_song_by_relevant(user, situation, emotion):
+def get_song_by_relevant(user, situation):
     """
     relevant
     """         
-    r_obj = get_r_obj(user, situation, emotion)
+    r_obj = get_r_obj(user, situation)
     #return get_init_songs(r_obj)
     return get_top_song_by_relevance(r_obj)
 
@@ -35,14 +35,14 @@ def learning_by_relevant(r_obj, l_rate, beta):
     r_obj.set_learning_params(l_rate, beta, "batch")
     r_obj.fit()
 
-def learning_and_get_song_by_relevant(user, situation, emotion, l_rate = 0.005, beta = 0.02):
-    r_obj = get_r_obj(user, situation, emotion)
+def learning_and_get_song_by_relevant(user, situation, l_rate = 0.005, beta = 0.02):
+    r_obj = get_r_obj(user, situation)
     learning_by_relevant(r_obj, l_rate, beta)
     return get_top_song_by_relevance(r_obj)
 
-def get_r_obj(user, situation, emotion):
+def get_r_obj(user, situation):
     cf_obj = common.CommonRandomFunctions(user)
-    return r_f.RelevantFeedbackRandom(user, situation, emotion, cf_obj)
+    return r_f.RelevantFeedbackRandom(user, situation, cf_obj)
 
 def get_song_by_emotion(user, situation):
     """

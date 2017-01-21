@@ -120,7 +120,7 @@ class InitRandomSearch(InitSearch):
         """
         redisから次の楽曲を取得する
         """
-        next_song = int(self.cf_obj.get_next_elem_by_pop(self.r, "init_songs_" + str(self.user), listening_count))
+        next_song = int(redis_f.get_next_elem_by_pop(self.r, "init_songs_" + str(self.user), listening_count))
         self._save_top_matrixes(next_song)
         # ファイルに書き込み
         self.cf_obj.write_top_k_songs_init("random_init_song.txt", [next_song], {}, self.situation, [])

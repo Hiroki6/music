@@ -91,7 +91,8 @@ def get_now_search_songs(request, feedback_type):
     検索手法別に検索を行う
     GETによる処理の際の検索で、SearchSongObjectから取得する
     """
-    situation, emotions = common_helper.get_now_search_situation(request.user.id)
+    #situation, emotions = common_helper.get_now_search_situation(request.user.id)
+    situation = common_helper.get_now_situation(request.user.id)
     if feedback_type == "emotion":
         songs = common_helper.get_now_search_songs(request.user.id, situation, 1)
     else:
@@ -174,7 +175,8 @@ def get_search_songs(request, feedback_type):
     """
     feedback_typeを満たす検索で視聴した楽曲の一覧を取得する
     """
-    situation, emotions = common_helper.get_now_search_situation(request.user.id)
+    #situation, emotions = common_helper.get_now_search_situation(request.user.id)
+    situation = common_helper.get_now_situation(request.user.id)
     song_objs = common_helper.get_search_songs(request.user.id, situation, feedback_type)
     return situation, song_objs
 

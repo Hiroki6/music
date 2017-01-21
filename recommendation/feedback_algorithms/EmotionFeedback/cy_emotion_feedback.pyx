@@ -68,7 +68,7 @@ cdef class CyEmotionFeedback:
             self.set_margin(X)
         self._repeat_optimization(X)
 
-    def PARank_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double C, int plus_or_minus):
+    def PARank_fit(self, dict bound_song_tag_map, np.ndarray[DOUBLE, ndim=1, mode="c"] top_matrix, double C):
         """
         Passive-Aggressive Perceptronアルゴリズムを用いた学習
         """
@@ -88,10 +88,7 @@ cdef class CyEmotionFeedback:
         for i in xrange(1000):
             all_error = 0.0
             for song, tags in bound_song_tag_map.items():
-                if plus_or_minus == 1:
-                    X = tags - top_matrix
-                else:
-                    X = top_matrix - tags
+                X = tags - top_matrix
                 self.error = self.calc_error(X)
                 if self.error <= 0:
                     continue
