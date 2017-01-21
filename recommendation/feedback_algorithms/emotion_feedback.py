@@ -257,9 +257,9 @@ class EmotionFeedback(EmotionBaseline):
             bound = bound_map[self.feedback] * diff / emotion_value
         count = len(user_feedbacks)
         print "feedback_count: %d" % count
-        self.bound = bound / pow(2, count-1)
+        #self.bound = bound / pow(2, count-1)
+        self.bound = bound_map[self.feedback] / count
         print "bound %.5f" % (self.bound)
-        #self.bound = bound_map[self.feedback] / count
         #self.bound = bound_map[self.feedback] * math.exp(-(count-1))
 
     def _set_emotion_dict(self):
@@ -271,13 +271,13 @@ class EmotionFeedback(EmotionBaseline):
 
     def _save_top_k_songs(self, rankings):
         """
-        top_kの楽曲をredisに保存
+        現在のtop_kの楽曲をredisに保存
         """
         key = "top_k_songs_" + self.user
         redis_f.delete_redis_key(self.r, key)
         for ranking in rankings:
             song_id = ranking[1]
-            self.r.rpush(key, song_id)
+            redis_f.rpush_redis_key(self.r, key, song_id)
 
     def _save_bound_song(self):
         """
@@ -316,6 +316,7 @@ class EmotionFeedbackRandom(EmotionFeedback):
         self.top_song = rankings[0][1]
         self.cf_obj.write_top_k_songs_emotion(self.user, "random_emotion_k_song.txt", rankings[:10], {}, [], emotion_map[self.feedback], self.plus_or_minus)
         self._save_top_k_songs(rankings[:5])
+        self._save_top_k_songs_now_order(rankings[:5])
         self.top_matrix = song_tag_map[self.top_song]
         self._save_top_song()
         song_tags = []
@@ -343,3 +344,13 @@ class EmotionFeedbackRandom(EmotionFeedback):
             self.bound *= 2
         print "number of bound songs %d" % (len(self.bound_songs))
 
+    def _save_top_k_songs_now_order(self, rankings):
+        """
+        現在の順番のインタラクションの時のtop_k_songsをredisに保存する
+        """
+        count = cf_obj.get_now_order(self.situation, 1)
+        key = "top_k_songs_" + self.user + "_" + str(count)
+        redis_f.delete_redis_key(self.r, key)
+        for ranking in rankings:
+            song_id = ranking[1]
+            redis_f.rpush_redis_key(self.r, key, song_id)

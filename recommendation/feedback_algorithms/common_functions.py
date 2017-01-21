@@ -517,4 +517,10 @@ class CommonRandomFunctions(CommonFunctions):
         """
         results = models.Song.objects.filter(id__in=song_ids).values()
         return self._get_song_and_tag_map(results)
-
+    
+    def get_now_order(self, situation, feedback_type):
+        """
+        現在何曲目かを取得
+        """
+        count = models.SearchSong.objects.filter(user_id=self.user, situation=situation, feedback_type=feedback_type).count()
+        return count+1

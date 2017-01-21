@@ -45,6 +45,11 @@ def select_search(request):
     is_init = True
     situation = common_helper.get_now_situation(request.user.id)
     songs = []
+    songs = init_search(request, situation)
+    common_helper.save_search_song_both_type(request.user.id, songs[0][1].id, situation)
+    search_url = get_search_type_by_random()
+    return redirect(search_url)
+    """
     if request.method == 'POST':
         song_ids, ranks = get_like_songids_and_ranks(request)
         common_helper.save_init_rank_songs(request.user.id, situation, song_ids, ranks)
@@ -56,6 +61,7 @@ def select_search(request):
         common_helper.save_search_song_both_type(request.user.id, songs[0][1].id, situation)
     search_situation = situation_map[situation]
     return render(request, 'emotions/select_search.html', {"is_init": is_init, "songs": songs, "search_situation": search_situation})
+    """
 
 @login_required
 def relevant_feedback(request):

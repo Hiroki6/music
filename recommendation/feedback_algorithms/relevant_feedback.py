@@ -147,8 +147,7 @@ class RelevantFeedback(object):
         redis_f.delete_redis_key(self.r, key)
         for ranking in rankings:
             song_id = ranking[1]
-            self.r.rpush(key, song_id)
-
+            redis_f.rpush_redis_key(self.r, key, song_id)
 
 class RelevantFeedbackRandom(RelevantFeedback):
     """
@@ -169,5 +168,16 @@ class RelevantFeedbackRandom(RelevantFeedback):
         self.cf_obj.listtuple_sort_reverse(rankings)
         self.cf_obj.write_top_k_songs_relevance("random_relevant_k_song.txt", rankings[:10], {}, [], self.now_feedback)
         self._save_top_k_songs(rankings[:5])
+        self._save_top_k_songs_now_order(rankings[:5])
         return rankings[:k]
 
+    def _save_top_k_songs_now_order(self, rankings):
+        """
+        現在の順番のインタラクションの時のtop_k_songsをredisに保存する
+        """
+        count = cf_obj.get_now_order(self.situation, 0)
+        key = "top_k_songs_" + self.user + "_" + str(count)
+        redis_f.delete_redis_key(self.r, key)
+        for ranking in rankings:
+            song_id = ranking[1]
+            redis_f.rpush_redis_key(self.r, key, song_id)

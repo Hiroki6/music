@@ -91,3 +91,5 @@ def update_redis_key(redis_obj, key, params):
     delete_redis_key(redis_obj, key)
     save_one_dim_array(redis_obj, key, params)
 
+def rpush_redis_key(redis_obj, key, elem):
+    redis_obj.rpush(key, elem)

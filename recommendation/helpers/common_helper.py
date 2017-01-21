@@ -254,16 +254,17 @@ def get_url_about_search(user_id):
     else:
         return "/recommendation/"
 
-def get_searched_situations_by_user(user_id):
+def get_except_searched_situations_by_user(user_id):
     """
     ユーザーが既に検索している状況を削除する
     """
-    user_all_situations = SituationEmotion.objects.filter(user_id=user_id).values_list("situation", flat=True).order_by("situation").distinct()
+    #user_all_situations = SituationEmotion.objects.filter(user_id=user_id).values_list("situation", flat=True).order_by("situation").distinct()
+    user_all_situations = Situation.objects.filter(user_id=user_id).values_list("situation", flat=True).order_by("situation").distinct()
     return user_all_situations
 
 def get_situations_map(user_id): 
     situations = {1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "運転中"}
-    user_searched_situations = get_searched_situations_by_user(user_id)
+    user_searched_situations = get_except_searched_situations_by_user(user_id)
     for situation in user_searched_situations:
         situations.pop(situation)
 
