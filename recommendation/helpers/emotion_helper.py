@@ -84,3 +84,9 @@ def get_back_song(user, song_id, situation):
     if back_song_id:
         SearchSong.objects.filter(user_id=user, situation=situation, song_id=back_song_id, feedback_type=1).update(updated_at=datetime.now())
     return get_song_obj(back_song_id)
+
+"""
+そのユーザーの視聴した楽曲を全て削除する
+"""
+def delete_user_listen_song(user_id):
+    EmotionEmotionbasedSong.objects.filter(user_id=user_id).delete()

@@ -1,10 +1,10 @@
 <h2>状況とその状況に合うと思う印象語を選択してください</h2>
 <form class = "search-form" action = "/recommendation/" method = "get">
-  <h4>select situation</h4>
+  <!--<h4>select situation</h4>
   {% for key, situation in situations.items %}
     <label><input type = "radio" name = "situation" value = {{key}}>{{ situation }}</label>
-  {% endfor %}
-  <h4>select emotion word related with this situation</h4>
+    {% endfor %}-->
+  <h4>select genre related with now situation</h4>
   <label><input type = "radio" name = "emotion" value = 1>pop</label>
   <label><input type = "radio" name = "emotion" value = 2>ballad</label>
   <label><input type = "radio" name = "emotion" value = 3>rock</label>

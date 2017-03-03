@@ -75,19 +75,18 @@ def search_songs(request, feedback_type):
 
 """
 選択した状況と印象語を永続化する
+ここでは状況を0として永続化する
 """
 def save_search_situation(request):
     error_msg = ""
     songs = []
-    situation = 0
-    situation = request.GET['situation']
+    #situation = 0
+    #situation = request.GET['situation']
     emotions = request.GET.getlist("emotion")
-    if situation == "0":
-        error_msg = "状況を選択してください"
-    elif len(emotions) <= 0:
+    if len(emotions) <= 0:
         error_msg = "印象語を少なくとも一つ選んでください"
     else:
-        common_helper.save_situation_and_emotion(request.user.id, situation, emotions)
+        common_helper.save_situation_and_emotion(request.user.id, 0, emotions)
     return error_msg
 
 """

@@ -147,4 +147,3 @@ def get_top_song(user, situation, emotions, feedback_type):
         song_obj = get_song_objs(song_ids)
         save_search_song(user, song_obj[0].id, situation, feedback_type)
     return song_obj
-

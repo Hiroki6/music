@@ -25,6 +25,7 @@ situation_map = {0: "", 1: "during exercise", 2: "waking", 3: "working", 4: "Com
 """
 印象語検索
 状況の選択
+印象語フィードバックに自動的にリダイレクトする
 """
 @login_required
 def index(request):
@@ -32,10 +33,12 @@ def index(request):
     situations = {1: "during exercise", 2: "waking", 3: "working", 4: "commuting", 5: "bedtime", 6:"driving"}
     #situations = {1: "運動中", 2: "起床時", 3: "作業中", 4: "通学中", 5: "就寝時", 6: "純粋に音楽を聴く時　"}
     emotions = common_helper.get_search_emotions_dict()
-    if request.GET.has_key("situation"):
+    if request.GET.has_key("emotion"):
         error_msg = save_search_situation(request)
         if error_msg == "":
-            return redirect("/recommendation/select_search/")
+            return redirect("/recommendation/emotion_feedback_single/")
+    if request.POST.has_key("refresh"):
+        emotion_helper.delete_user_listen_song(request.user.id) # ユーザーの視聴した楽曲を全て削除
     common_helper.init_all_user_model(str(request.user.id))
     return render(request, 'emotions/select_situation.html', {"error_msg": error_msg, "search_flag": False, "situations": situations, "emotions": emotions})
 

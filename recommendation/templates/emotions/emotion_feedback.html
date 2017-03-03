@@ -3,13 +3,12 @@
 {% block title %}印象語フィードバック{% endblock title %}
 
 {% block main %}
-<h2>印象語フィードバックによる楽曲検索システムへようこそ</h2>
+<h2>exploration music system by impression-based feedback</h2>
 <div class = "main">
   {% if error_msg %}
     <h3 class = "error-msg">{{ error_msg }}</h3>
   {% endif %}
-  <h2>{{ search_situation }}に聴く楽曲の検索結果</h2>
-  <h3>{{ listening_count|add:"1" }}曲目の視聴</h3>
+  <h3>{{ listening_count|add:"1" }} th song</h3>
   <div class = "clearfix">
     {% for song in songs %}
       <div class = "content">
@@ -18,9 +17,9 @@
       </div>
     {% endfor %}
   </div>
-  <div class = "another-search">
+  <!--<div class = "another-search">
     <a class = "another-search-link" href = "/recommendation/relevant_feedback_single/">適合性フィードバック検索へ</a>
-  </div>
+    </div>-->
   {% include "parts/_refresh_search_button.html" %}
 </div>
 {% endblock main %}
