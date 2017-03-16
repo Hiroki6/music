@@ -145,6 +145,7 @@ class EmotionFeedback(EmotionBaseline):
             #    X = self.top_matrix - tags
             self.cy_obj.fit(X, True)
         """
+        print self.top_matrix
         self.W = self.cy_obj.batch_fit(self.bound_song_tag_map, self.top_matrix, 0.005, self.plus_or_minus)
         print self.W
         self._update_params_into_redis()

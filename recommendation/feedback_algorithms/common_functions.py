@@ -98,6 +98,7 @@ def extra_cluster_songs(listening_songs, emotions, is_first = False):
     # for emotion in emotions:
     #     extra_column += emotion_map[int(emotion)] + "+"
     extra_column += emotion_map[int(emotions[0])]
+    print emotion_map[int(emotions[0])]
     #extra_column = extra_column[:-1]
     extra_results = models.SearchMusicCluster.objects.extra(select = {'value': extra_column})
     if is_first:
@@ -295,7 +296,7 @@ def get_bound_songs(feedback_cluster, value, bound, plus_or_minus):
         #songs = songs.reverse()
     else:
         m_objs = get_lower_songs(feedback_cluster, value, bound)
-        m_objs = songs.reverse()
+        m_objs = m_objs.reverse()
 
     songs = get_songs_by_musicclusters(feedback_cluster, m_objs)
     return m_objs, songs

@@ -16,7 +16,7 @@
 
 			//インジケータ表示
 			var indicator = this.indicator({
-				message: '<h2>フィードバックを反映しています。</h2>',
+				message: '<h2>reflecting the feedback</h2>',
 				target : document.body
 			}).show();
 

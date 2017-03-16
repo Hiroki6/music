@@ -90,3 +90,6 @@ def get_back_song(user, song_id, situation):
 """
 def delete_user_listen_song(user_id):
     EmotionEmotionbasedSong.objects.filter(user_id=user_id).delete()
+    SearchSong.objects.filter(user_id=user_id).delete()
+    RecommendSong.objects.filter(user_id=user_id).delete()
+    SituationEmotion.objects.filter(user_id=user_id).delete()
